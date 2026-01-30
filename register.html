@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - BookFast</title>
+    <link rel="stylesheet" href="./src/styles/base.css">
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        body {
+            background: radial-gradient(circle at top left, #2a2a2a, #1a1a1a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .auth-card {
+            background: rgba(30, 30, 30, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .auth-card h1 {
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            background: linear-gradient(45deg, #fff, #a8a29e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .auth-card p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.2s;
+            box-sizing: border-box;
+            /* Ensure padding doesn't affect width */
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            /* Using primary from variables if defined, else fallback */
+            border-color: #646cff;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #646cff 0%, #535bf2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(100, 108, 255, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .auth-link {
+            margin-top: 1.5rem;
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .auth-link a {
+            color: #646cff;
+            text-decoration: none;
+        }
+
+        .auth-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .success-message {
+            color: #4ade80;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-card">
+        <h1>Create Account</h1>
+        <p>Join BookFast nicely today</p>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" required placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="john@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn-primary" id="submitBtn">Sign Up</button>
+
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+        </form>
+
+        <span class="auth-link">
+            Already have an account? <a href="/login.html">Log in</a>
+        </span>
+        <span class="auth-link">
+            <a href="/">Back to Home</a>
+        </span>
+    </div>
+
+    <script type="module" src="/src/register.js"></script>
+</body>
+
+</html>
