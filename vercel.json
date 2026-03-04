@@ -1,6 +1,14 @@
 {
   "headers": [
     {
+      "source": "/embed.js",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, max-age=300" },
+        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" }
+      ]
+    },
+    {
       "source": "/dashboard",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
@@ -50,6 +58,7 @@
     }
   ],
   "rewrites": [
+    { "source": "/embed.js", "destination": "/embed.js" },
     { "source": "/login.html", "destination": "/login.html" },
     { "source": "/register.html", "destination": "/register.html" },
     { "source": "/forgot-password.html", "destination": "/forgot-password.html" },
