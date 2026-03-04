@@ -3,7 +3,25 @@ import { supabase } from './lib/supabaseClient.js'
 const loginForm = document.getElementById('loginForm')
 const errorMessage = document.getElementById('errorMessage')
 const submitBtn = document.getElementById('submitBtn')
+const googleBtn = document.getElementById('googleBtn')
 
+// Social Login
+async function handleSocialLogin(provider) {
+    try {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: provider,
+            options: {
+                redirectTo: window.location.origin + '/dashboard/bookings'
+            }
+        })
+        if (error) throw error
+    } catch (error) {
+        errorMessage.textContent = error.message
+        errorMessage.style.display = 'block'
+    }
+}
+
+googleBtn.addEventListener('click', () => handleSocialLogin('google'))
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault()
 

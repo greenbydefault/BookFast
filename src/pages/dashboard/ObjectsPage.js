@@ -3,33 +3,63 @@
  * Following workflow: /create-dashboard-page
  */
 import { getState, setNestedState } from '../../lib/store.js';
-import { fetchEntities, createEntity, updateEntity, deleteEntity } from '../../lib/dataLayer.js';
+import { fetchEntities, deleteEntity, invalidateCache } from '../../lib/dataLayer.js';
 import { getIconString } from '../../components/Icons/Icon.js';
 import { createButton } from '../../components/Button/Button.js';
+import { createActionMenu } from '../../components/ActionMenu/ActionMenu.js';
 import { openCreateObjectModal } from './modals/CreateObjectModal.js';
+import { openDeleteConfirmModal } from './modals/DeleteConfirmModal.js';
+import { renderLinkedItems, ENTITY_STATUS_TABS, initFilterToggle } from '../../lib/uiHelpers.js';
+import { navigateWithParams, getNavigationGeneration } from '../../lib/router.js';
+import { renderEmptyState, renderPageLoading } from '../../components/EmptyState/EmptyState.js';
 
 // Status options for filter tabs
-const FILTER_TABS = [
-  { id: 'all', label: 'Alle', icon: '📋' },
-  { id: 'active', label: 'Aktiv', icon: '✓' },
-  { id: 'draft', label: 'Entwurf', icon: '📝' },
-  { id: 'inactive', label: 'Inaktiv', icon: '⏸' },
-  { id: 'archived', label: 'Archiviert', icon: '📦' }
-];
+const FILTER_TABS = ENTITY_STATUS_TABS;
+
+const EMPTY_STATE_CONFIG = {
+  title: 'Noch keine Objekte vorhanden.',
+  description: 'Erstellen Sie Ihr erstes Objekt, damit Gäste buchen können. Kapazität, Ausstattung und verknüpfte Services können Sie später anpassen.',
+  primaryLabel: '+ Objekt erstellen',
+  secondaryLabel: 'Mehr über Objekte erfahren'
+};
 
 /**
  * Fetch objects using dataLayer
  */
 const fetchObjects = async () => {
+  const mainContent = document.getElementById('main-content');
+  const dataTableWrapper = document.querySelector('.data-table-wrapper');
+  const topBarActions = document.getElementById('top-bar-actions');
   const state = getState();
   const { filter, page, perPage } = state.objects;
 
+  const currentGen = getNavigationGeneration();
+
   const result = await fetchEntities('objects', { filter, page, perPage });
+
+  if (currentGen !== getNavigationGeneration()) {
+    return;
+  }
 
   setNestedState('objects', {
     items: result.items,
     totalPages: result.totalPages
   });
+
+  if (result.items.length === 0) {
+    renderEmptyState(mainContent, {
+      ...EMPTY_STATE_CONFIG,
+      onPrimaryClick: handleAddObject,
+      secondaryHref: '#'
+    });
+    if (topBarActions) topBarActions.innerHTML = '';
+    return;
+  }
+
+  const tableBody = document.getElementById('objects-table-body');
+  if (!tableBody) {
+    renderObjectsLayout(mainContent);
+  }
 
   renderTable();
   renderPagination();
@@ -50,16 +80,14 @@ const renderTable = () => {
   }
 
   container.innerHTML = items.map(item => `
-    <tr>
-      <td>
-        ${getIconString('package')}
-        ${item.name || 'Unbenannt'}
-      </td>
+    <tr class="clickable-row" data-row-id="${item.id}">
+      <td>${item.name || 'Unbenannt'}</td>
       <td>${item.capacity || '-'}</td>
       <td>
         <span class="status-badge status-${item.status}">${item.status || 'draft'}</span>
       </td>
       <td class="cell-muted">${item.description?.substring(0, 50) || '-'}${item.description?.length > 50 ? '...' : ''}</td>
+      <td>${renderLinkedItems(item.services, 'service')}</td>
       <td>
         <button class="action-btn" data-object-id="${item.id}">⋮</button>
       </td>
@@ -118,24 +146,119 @@ const handlePageClick = (page) => {
  */
 const handleAddObject = () => {
   openCreateObjectModal(() => {
-    fetchObjects();
+    renderObjectsPage();
   });
 };
 
 /**
- * Handle object action
+ * Handle object action menu
  */
-const handleObjectAction = (objectId) => {
-  // TODO: Implement action menu (edit, delete, activate)
-  const action = prompt('Aktion: edit / delete / activate');
+const handleObjectAction = (objectId, buttonElement) => {
+  const state = getState();
+  const object = state.objects.items.find(o => o.id === objectId);
 
-  if (action === 'delete') {
-    if (confirm('Objekt wirklich löschen?')) {
-      deleteEntity('objects', objectId).then(fetchObjects);
+  if (!object) return;
+
+  const actions = [
+    {
+      label: 'Bearbeiten',
+      iconName: 'pencil',
+      action: () => {
+        navigateWithParams('object-detail', { id: objectId });
+      }
+    },
+    {
+      label: 'Löschen',
+      iconName: 'trash',
+      action: () => {
+        openDeleteConfirmModal({
+          title: 'Objekt löschen',
+          subtitle: 'Möchtest du dieses Objekt wirklich löschen?',
+          entityName: object.name,
+          entityType: 'Objekt',
+          onConfirm: async () => {
+            try {
+              await deleteEntity('objects', objectId);
+              invalidateCache('objects');
+              await fetchObjects();
+            } catch (error) {
+              console.error('Failed to delete object:', error);
+              alert('Fehler beim Löschen des Objekts.');
+            }
+          }
+        });
+      },
+      variant: 'danger'
     }
-  } else if (action === 'activate') {
-    updateEntity('objects', objectId, { status: 'active' }).then(fetchObjects);
+  ];
+
+  createActionMenu({
+    trigger: buttonElement,
+    actions
+  });
+};
+
+const renderObjectsLayout = (mainContent) => {
+  const state = getState();
+
+  const topBarActions = document.getElementById('top-bar-actions');
+  if (topBarActions) {
+    topBarActions.innerHTML = '';
+    const addBtn = createButton('+ Neues Objekt', handleAddObject, 'btn-primary');
+    topBarActions.appendChild(addBtn);
   }
+
+  mainContent.innerHTML = `
+    <!-- Zone 1: Tabs -->
+    <div class="zone-tabs">
+      <div class="tabs-list">
+        ${FILTER_TABS.map(tab => `
+          <button class="filter-tab ${state.objects.filter === tab.id ? 'active' : ''}" data-filter="${tab.id}">
+            ${tab.label}
+          </button>
+        `).join('')}
+      </div>
+      <div class="tabs-actions">
+        <button class="filter-toggle-btn" id="filter-toggle-btn">
+          ${getIconString('funnel')} Filter
+        </button>
+      </div>
+    </div>
+
+    <!-- Zone 3: Search / Filters -->
+    <div class="zone-filters">
+      <div class="filter-search-wrapper">
+        ${getIconString('search')}
+        <input type="text" class="search-input" placeholder="Objekte suchen..." id="object-search">
+      </div>
+      
+      <button class="search-filter">Kapazität ▾</button>
+      <button class="search-filter">Status ▾</button>
+    </div>
+
+    <!-- Zone 4: Content -->
+    <div class="data-table-wrapper">
+      <div class="data-table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name ${getIconString('arrow-up-down')}</th>
+              <th>Kapazität ${getIconString('arrow-up-down')}</th>
+              <th>Status ${getIconString('arrow-up-down')}</th>
+              <th>Beschreibung</th>
+              <th>Verknüpfte Services</th>
+              <th>Aktion</th>
+            </tr>
+          </thead>
+          <tbody id="objects-table-body">
+            <tr><td colspan="6" class="table-empty-state">Laden...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination" id="objects-pagination"></div>
+    </div>
+  `;
+  initFilterToggle();
 };
 
 /**
@@ -147,54 +270,22 @@ export const renderObjectsPage = () => {
 
   const state = getState();
 
-  mainContent.innerHTML = `
-    <div class="page-header">
-      <div class="breadcrumb"><a href="#">Home</a> / Objekte</div>
-      <h1 class="page-title">Objekte</h1>
-      
-      <div class="filter-tabs">
-        ${FILTER_TABS.map(tab => `
-          <button class="filter-tab ${state.objects.filter === tab.id ? 'active' : ''}" data-filter="${tab.id}">
-            ${tab.icon} ${tab.label}
-          </button>
-        `).join('')}
-        
-        <div class="header-actions">
-          <div id="add-object-btn"></div>
-        </div>
-      </div>
-    </div>
+  // Update top bar breadcrumb
+  const topBarBreadcrumb = document.getElementById('top-bar-breadcrumb');
+  if (topBarBreadcrumb) {
+    topBarBreadcrumb.innerHTML = `<span class="breadcrumb-item">${getIconString('home')} <a href="#" class="breadcrumb-link" data-nav="home">Home</a></span> <span class="breadcrumb-separator">${getIconString('arrow-down')}</span> <span class="breadcrumb-item">${getIconString('package')} Objekte</span>`;
+  }
 
-    <div class="search-bar">
-      🔍
-      <input type="text" class="search-input" placeholder="Objekte suchen..." id="object-search">
-    </div>
+  // Add main action button to top bar (Clear initially during loading)
+  const topBarActions = document.getElementById('top-bar-actions');
+  if (topBarActions) {
+    topBarActions.innerHTML = '';
+  }
 
-    <div class="data-table-wrapper">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>${getIconString('package')} Name ⇅</th>
-            <th>Kapazität ⇅</th>
-            <th>Status ⇅</th>
-            <th>Beschreibung</th>
-            <th>Aktion</th>
-          </tr>
-        </thead>
-        <tbody id="objects-table-body">
-          <tr><td colspan="5" class="table-empty-state">Laden...</td></tr>
-        </tbody>
-      </table>
-      <div class="pagination" id="objects-pagination"></div>
-    </div>
-  `;
-
-  // Add button
-  const addBtn = createButton('+ Neues Objekt', handleAddObject, 'btn-primary');
-  document.querySelector('#add-object-btn').appendChild(addBtn);
+  renderPageLoading(mainContent);
 
   // Event delegation
-  mainContent.addEventListener('click', (e) => {
+  const handleMainContentClick = (e) => {
     const filterTab = e.target.closest('.filter-tab');
     if (filterTab) {
       handleFilterClick(filterTab.dataset.filter);
@@ -209,11 +300,25 @@ export const renderObjectsPage = () => {
 
     const actionBtn = e.target.closest('[data-object-id]');
     if (actionBtn) {
-      handleObjectAction(actionBtn.dataset.objectId);
+      handleObjectAction(actionBtn.dataset.objectId, actionBtn);
       return;
     }
-  });
+
+    // Row click → navigate to detail page
+    const row = e.target.closest('.clickable-row[data-row-id]');
+    if (row) {
+      navigateWithParams('object-detail', { id: row.dataset.rowId });
+      return;
+    }
+  };
+  mainContent.addEventListener('click', handleMainContentClick);
 
   // Load data
   fetchObjects();
+
+  return () => {
+    if (mainContent) {
+      mainContent.removeEventListener('click', handleMainContentClick);
+    }
+  };
 };

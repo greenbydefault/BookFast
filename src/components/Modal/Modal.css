@@ -6,7 +6,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
+    
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -22,12 +22,12 @@
 }
 
 .modal-container {
-    background-color: var(--color-stone-50);
+    background-color: #fff;
     width: 100%;
     max-width: 600px;
     max-height: 90vh;
-    border-radius: 12px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-radius: var(--space-12);
+    
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -41,7 +41,7 @@
 
 /* Header */
 .modal-header {
-    padding: var(--space-24) var(--space-32);
+    padding: var(--space-24);
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -51,7 +51,7 @@
 }
 
 .modal-title-group h2 {
-    font-size: 1.25rem;
+    font-size: var(--space-18);
     font-weight: 600;
     margin: 0;
     color: var(--stone-900);
@@ -59,9 +59,9 @@
 }
 
 .modal-title-group p {
-    font-size: 0.875rem;
-    color: var(--stone-500);
-    margin: 4px 0 0 0;
+    font-size: var(--space-14);
+    color: var(--color-stone-500);
+   margin: 0;
 }
 
 .modal-close-btn {
@@ -86,12 +86,14 @@
 .modal-content {
     flex: 1;
     overflow-y: auto;
-    padding: var(--space-32);
+    
 }
+
+@import '../../styles/modal-form.css';
 
 /* Footer */
 .modal-footer {
-    padding: var(--space-24) var(--space-32);
+    padding: var(--space-24);
     border-top: 1px solid var(--border-color, #e7e5e4);
     display: flex;
     align-items: center;
@@ -108,148 +110,15 @@
     gap: var(--space-12);
 }
 
-/* Form Elements for Modals */
-.modal-form-input {
-    width: 100%;
-    padding: var(--space-8) var(--space-8);
-    border: 1px solid var(--border-color);
-    border-radius: var(--space-8);
-    font-family: var(--font-main, sans-serif);
-    font-size: var(--space-16);
-    transition: border-color 0.2s;
-    outline: none;
-    background: transparent;
-    color: var(--stone-800);
-}
-
-.modal-form-input:focus {
-    border-color: var(--primary, #747bff);
-}
-
-.modal-input-large {
-    font-size: 1.1rem;
-    padding: var(--space-12) 0;
-    border: none;
-    border-bottom: 2px solid var(--border-color);
-    border-radius: 0;
-    margin-bottom: var(--space-16);
-}
-
-.modal-input-large:focus {
-    border-bottom-color: var(--primary);
-}
-
-.modal-separator {
-    height: 0;
-    border-bottom: 2px dotted var(--border-color, #e7e5e4);
-    margin: var(--space-24) 0;
-    width: 100%;
-}
-
-.modal-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--space-16);
-    gap: var(--space-16);
-}
-
-.modal-label {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-    color: var(--stone-700);
-    font-size: 0.9rem;
-    min-width: 160px;
-}
-
-.modal-label i,
-.modal-label svg {
-    color: var(--icon-color);
-    width: var(--space-24);
-    height: var(--space-24);
-}
-
-.modal-controls {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: var(--space-8);
-}
-
-/* Day Toggles */
-.day-toggles {
-    display: flex;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-.day-toggle {
-    background: none;
-    border: none;
-    padding: 6px 10px;
-    font-size: 0.85rem;
-    border-right: 1px solid var(--border-color);
-    cursor: pointer;
-    color: var(--text-muted);
-}
-
-.day-toggle:last-child {
-    border-right: none;
-}
-
-.day-toggle.active {
-    background-color: var(--color-stone-100);
-    color: var(--primary);
-    font-weight: 600;
-}
-
-/* Time Input Group */
-.time-group {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    background: var(--color-stone-50);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 2px 6px;
-}
-
-.time-group span {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
-
-.time-group input {
-    border: none;
-    background: transparent;
-    width: 50px;
-    text-align: center;
-    font-size: 0.9rem;
-    outline: none;
-    color: var(--stone-800);
-}
-
-.time-remove {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-muted);
-    font-size: 1rem;
-    padding: 0 2px;
-    display: flex;
-    align-items: center;
-}
-
 /* Number Input */
 .number-control {
     display: flex;
     align-items: center;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: var(--space-8);
     overflow: hidden;
+    padding: var(--space-8) 0;
+    font-size: var(--space-16);
 }
 
 .number-input {
@@ -263,25 +132,27 @@
     color: var(--stone-800);
 }
 
-/* Helper Classes to replace inline styles */
-.modal-form-label {
+.modal-form-error {
+    display: none;
+    color: var(--error, #dc2626);
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.modal-form-error.visible {
     display: block;
-    font-size: var(--space-18);
-    margin-bottom: 4px;
-    font-weight: 300;
-    color: var(--stone-900);
 }
 
-.modal-label-optional {
-    font-weight: 400;
-    color: var(--text-muted);
+.modal-info-box {
+    padding: var(--space-12);
+    background: var(--color-majorelle-blue-50);
+    border-radius: 6px;
 }
 
-.modal-controls-column {
-    flex-direction: column;
-    align-items: flex-end !important;
-    /* Override default align-items: center */
-    gap: 8px;
+.modal-info-text {
+    color: var(--color-vulcan-500);
+    line-height: 1.5;
+    font-size: 0.9rem;
 }
 
 .control-group-row {
@@ -308,12 +179,12 @@
 .draft-toggle {
     display: flex;
     align-items: center;
-    gap: var(--space-8);
+    gap: var(--space-4);
     cursor: pointer;
-    color: var(--stone-800);
+    color: var(--color-vulcan-900);
     font-size: 0.9rem;
     user-select: none;
-    opacity: 0.7;
+    
     transition: opacity 0.2s;
 }
 
@@ -354,4 +225,1468 @@
 .number-btn svg {
     width: 12px;
     height: 12px;
+}
+
+/* Addon Price Controls - Inline Layout */
+.addon-price-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.price-amount-input {
+    width: 60px;
+    padding: 6px 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    text-align: right;
+    outline: none;
+    color: var(--stone-800);
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.price-amount-input::-webkit-outer-spin-button,
+.price-amount-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.price-currency {
+    font-size: 0.9rem;
+    color: var(--stone-600);
+}
+
+.price-type-select {
+    padding: 6px 28px 6px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--bg-surface, #fff);
+    font-size: 0.85rem;
+    color: var(--stone-700);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+}
+
+/* Modal Section Header */
+.modal-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-16);
+}
+
+.add-content-btn {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--color-stone-50);
+    color: var(--stone-600);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.add-content-btn:hover {
+    background: var(--color-stone-100);
+    border-color: var(--stone-400);
+}
+
+/* Content Items Container */
+.content-items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.content-item {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--color-stone-50);
+    overflow: hidden;
+}
+
+.content-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    gap: 12px;
+}
+
+.content-item-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.content-item-name {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    color: var(--stone-800);
+    outline: none;
+    padding: 4px 0;
+}
+
+.content-item-name::placeholder {
+    color: var(--text-muted);
+}
+
+.content-item-expand {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: white;
+    color: var(--stone-500);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s;
+}
+
+.content-item-expand:hover {
+    background: var(--color-stone-100);
+}
+
+.content-item-expand svg {
+    width: 14px;
+    height: 14px;
+}
+
+.content-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.content-item-delete {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: white;
+    color: var(--color-stone-400);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+
+.content-item-delete:hover {
+    background: var(--color-red-50, #fef2f2);
+    border-color: var(--color-red-200, #fecaca);
+    color: var(--color-red-500, #ef4444);
+}
+
+.content-item-delete svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Selection Mode & Body */
+.content-item-body {
+    padding: 0 12px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.content-item-mode {
+    display: flex;
+    gap: 12px;
+    padding: 4px 0;
+}
+
+.content-mode-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--color-stone-600);
+    cursor: pointer;
+}
+
+.content-mode-option input[type="radio"] {
+    margin: 0;
+    accent-color: var(--color-primary, #2563eb);
+}
+
+/* Variants Section */
+.content-item-variants {
+    padding: 0 12px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.variant-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+.variant-icon {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.variant-name {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    color: var(--stone-800);
+    outline: none;
+}
+
+.variant-name::placeholder {
+    color: var(--text-muted);
+}
+
+.variant-delete {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: color 0.15s, background-color 0.15s;
+}
+
+.variant-delete:hover {
+    color: var(--color-danger, #ef4444);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.variant-delete svg {
+    width: 16px;
+    height: 16px;
+}
+
+.add-variant-btn {
+    padding: 10px;
+    border: 1px dashed var(--border-color);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.add-variant-btn:hover {
+    background: var(--color-stone-100);
+    border-color: var(--stone-400);
+    color: var(--stone-700);
+}
+
+/* ========================================
+   SERVICE MODAL - TAB-BASED LAYOUT
+   ======================================== */
+
+/* Modal Tabs */
+.modal-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: var(--space-24);
+}
+
+.modal-tab {
+    padding: 10px 16px;
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.15s;
+}
+
+.modal-tab:hover {
+    color: var(--stone-700);
+}
+
+.modal-tab.active {
+    color: var(--stone-900);
+    font-weight: 500;
+}
+
+.modal-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--primary, #8b5cf6);
+}
+
+/* Textarea styling */
+.modal-textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+/* Time Input Group */
+.time-input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+    background: white;
+}
+
+.time-input {
+    border: none;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    color: var(--stone-800);
+    outline: none;
+    width: 80px;
+}
+
+.time-clear {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    padding: 6px 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.15s;
+}
+
+.time-clear:hover {
+    color: var(--color-danger, #ef4444);
+}
+
+/* Inline labels */
+.label-inline {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0 6px;
+}
+
+/* Disabled input styling */
+.disabled-input {
+    background: var(--color-stone-100) !important;
+    color: var(--text-muted) !important;
+    cursor: not-allowed;
+}
+
+.disabled-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-stone-300);
+    transition: 0.2s;
+    border-radius: 24px;
+}
+
+.toggle-slider::before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.2s;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked+.toggle-slider {
+    background-color: var(--color-majorelle-blue-900);
+}
+
+.toggle-switch input:checked+.toggle-slider::before {
+    transform: translateX(20px);
+}
+
+/* Help icon */
+.help-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-stone-200);
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    margin-left: 4px;
+    cursor: help;
+}
+
+/* Stacked modal row */
+.modal-row-stacked {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.modal-controls-stacked {
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+    gap: 8px;
+}
+
+.buffer-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.buffer-row .label-inline {
+    min-width: 50px;
+    text-align: right;
+}
+
+/* Modal Select styling */
+.modal-select {
+    padding: 6px 28px 6px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: white;
+    font-size: 0.9rem;
+    color: var(--stone-700);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    min-width: 140px;
+}
+
+.modal-select:focus {
+    outline: none;
+    border-color: var(--primary, #8b5cf6);
+}
+
+/* Toggle sub-row (shown when toggle is enabled) */
+.toggle-sub-row {
+    margin-top: -8px;
+    padding-left: 20px;
+}
+
+/* ========================================
+   STAFF MODAL - IMAGE UPLOAD
+   ======================================== */
+
+.image-upload-container {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: var(--space-16);
+}
+
+.image-upload-preview {
+    width: 60px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-stone-100);
+    border-right: 1px solid var(--border-color);
+    color: var(--text-muted);
+}
+
+.image-upload-preview svg {
+    width: 24px;
+    height: 24px;
+}
+
+.image-upload-preview .image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-upload-btn {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    background: transparent;
+    font-size: 0.95rem;
+    color: var(--stone-700);
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.15s;
+}
+
+.image-upload-btn:hover {
+    background: var(--color-stone-50);
+}
+
+/* ========================================
+   VOUCHER MODAL - SPECIFIC STYLES
+   ======================================== */
+
+/* Voucher Code Input with Generate Button */
+.voucher-code-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--space-16);
+}
+
+.voucher-code-input {
+    flex: 1;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    letter-spacing: 0.05em;
+}
+
+.voucher-generate-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--color-stone-50);
+    color: var(--stone-600);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.voucher-generate-btn:hover {
+    background: var(--color-stone-100);
+    border-color: var(--stone-400);
+}
+
+.voucher-generate-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Stepper Input (for max uses fields) */
+.stepper-input {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.stepper-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--color-stone-50);
+    color: var(--stone-600);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s;
+}
+
+.stepper-btn:hover {
+    background: var(--color-stone-100);
+}
+
+.stepper-btn:first-child {
+    border-right: 1px solid var(--border-color);
+}
+
+.stepper-btn:last-child {
+    border-left: 1px solid var(--border-color);
+}
+
+.stepper-value {
+    width: 50px;
+    height: 32px;
+    border: none;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--stone-800);
+    outline: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.stepper-value::-webkit-outer-spin-button,
+.stepper-value::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.stepper-value::placeholder {
+    color: var(--text-muted);
+}
+
+/* Date Input Group */
+.date-input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+    background: white;
+}
+
+.date-input {
+    border: none;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    color: var(--stone-800);
+    outline: none;
+    width: 140px;
+}
+
+.date-clear {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    padding: 6px 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.15s;
+}
+
+.date-clear:hover {
+    color: var(--color-danger, #ef4444);
+}
+
+/* Voucher Code Badge for Table */
+.voucher-code {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 0.85rem;
+    background: var(--color-stone-100);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--stone-700);
+    letter-spacing: 0.05em;
+}
+
+/* ========================================
+   REJECT BOOKING MODAL
+   ======================================== */
+
+.reject-booking-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    padding: var(--space-16);
+    background: var(--color-stone-100);
+    border-radius: 8px;
+    margin-bottom: var(--space-8);
+}
+
+.reject-booking-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+}
+
+.reject-booking-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.reject-booking-label svg {
+    width: 18px;
+    height: 18px;
+}
+
+.reject-booking-value {
+    font-weight: 500;
+    color: var(--stone-800);
+    font-size: 0.95rem;
+}
+
+/* ========================================
+   DELETE CONFIRM MODAL
+   ======================================== */
+
+.delete-confirm-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    padding: var(--space-16);
+    background: var(--color-stone-100);
+    border-radius: 8px;
+    margin-bottom: var(--space-16);
+}
+
+.delete-confirm-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+}
+
+.delete-confirm-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.delete-confirm-label svg {
+    width: 18px;
+    height: 18px;
+}
+
+.delete-confirm-value {
+    font-weight: 500;
+    color: var(--stone-800);
+    font-size: 0.95rem;
+}
+
+.delete-confirm-warning {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    color: var(--color-danger, #ef4444);
+    font-size: 0.9rem;
+    margin: 0;
+    padding: var(--space-12);
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 6px;
+}
+
+.delete-confirm-warning svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* ========================================
+   LINKED SERVICES (Object Edit Modal)
+   ======================================== */
+
+.linked-services-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.linked-service-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: var(--color-stone-50);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.linked-service-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+}
+
+.linked-service-info svg {
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+}
+
+.linked-service-name {
+    font-size: 0.9rem;
+    color: var(--stone-800);
+}
+
+.linked-service-delete {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: color 0.15s, background-color 0.15s;
+}
+
+.linked-service-delete:hover {
+    color: var(--color-danger, #ef4444);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.linked-service-delete svg {
+    width: 16px;
+    height: 16px;
+}
+
+.linked-services-empty {
+    padding: var(--space-16);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    background: var(--color-stone-50);
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+}
+
+/* ========================================
+   CUSTOM HOURS - Day-specific time windows
+   ======================================== */
+
+.custom-hours-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+    margin-bottom: var(--space-16);
+}
+
+.custom-hours-toggle-label {
+    font-size: 0.85rem;
+    color: var(--stone-600);
+}
+
+.custom-hours-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: var(--space-16);
+}
+
+.custom-hours-row {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.custom-hours-row-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.custom-hours-day-toggles {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    overflow: hidden;
+    flex: 1;
+}
+
+.custom-hours-day-toggle {
+    background: white;
+    border: none;
+    padding: 4px 7px;
+    font-size: 0.75rem;
+    border-right: 1px solid var(--border-color);
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.custom-hours-day-toggle:last-child {
+    border-right: none;
+}
+
+.custom-hours-day-toggle.active {
+    background-color: var(--primary, #8b5cf6);
+    color: white;
+    font-weight: 500;
+}
+
+.custom-hours-delete {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: color 0.15s, background-color 0.15s;
+    flex-shrink: 0;
+}
+
+.custom-hours-delete:hover {
+    color: var(--color-danger, #ef4444);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.custom-hours-delete svg {
+    width: 16px;
+    height: 16px;
+}
+
+.custom-hours-time-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    padding-left: 4px;
+}
+
+.custom-hours-time-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.custom-hours-time-row .label-above {
+    font-size: 0.8rem;
+    color: var(--color-stone-500);
+}
+
+.custom-hours-time-row .label-inline {
+    font-size: 0.8rem;
+    color: var(--color-vulcan-900);
+    min-width: 24px;
+}
+
+.custom-hours-time-row .time-input {
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--color-stone-200);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--color-vulcan-900);
+    outline: none;
+    background: white;
+    box-sizing: border-box;
+}
+
+.custom-hours-time-row .time-input:focus {
+    border-color: var(--primary, #8b5cf6);
+}
+
+.custom-hours-add-btn {
+    padding: 10px;
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.custom-hours-add-btn:hover {
+    background: var(--color-majorelle-blue-50);
+    border-color: var(--color-majorelle-blue-500);
+    color: var(--stone-700);
+}
+
+/* Custom hours in detail page preview */
+.custom-hours-preview-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+}
+
+.custom-hours-preview-days {
+    font-size: 0.85rem;
+    color: var(--stone-600);
+    font-weight: 500;
+}
+
+.custom-hours-preview-time {
+    font-size: 0.85rem;
+    color: var(--stone-800);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ========================================
+   CREATE BOOKING MODAL
+   ======================================== */
+
+
+.modal-container--date-step {
+    max-width: 760px;
+}
+
+.cb-modal-header {
+    display: block;
+    position: relative;
+}
+
+.cb-modal-header .modal-close-btn {
+    position: absolute;
+    top: var(--space-24);
+    right: var(--space-24);
+}
+
+.cb-progress-track {
+    margin-top: var(--space-16);
+    width: 100%;
+    height: 8px;
+    background: var(--color-stone-200);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.cb-progress-bar {
+    height: 100%;
+    width: 0;
+    background: var(--primary);
+    transition: width 0.25s ease;
+}
+
+.cb-loading {
+    text-align: center;
+    color: var(--color-stone-500);
+    padding: var(--space-32) 0;
+}
+
+.cb-section {
+    padding: var(--space-24);
+}
+
+.cb-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-12);
+    
+}
+
+.cb-search-input {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+}
+
+.cb-search-input svg {
+    width: 18px;
+    height: 18px;
+    color: var(--color-stone-500);
+}
+
+.cb-option-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    padding: var(--space-24);
+}
+
+.modal-option-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-12);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: var(--space-12);
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s;
+}
+
+.modal-option-card:hover {
+    border-color: var(--color-majorelle-blue-500);
+    background: var(--color-majorelle-blue-50);
+}
+
+.modal-option-card input {
+    margin-top: 2px;
+}
+
+.modal-option-card--selected {
+    border-color: var(--color-majorelle-blue-500);
+    background: var(--color-majorelle-blue-50);
+}
+
+.cb-option-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-12);
+}
+
+.cb-option-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-vulcan-900);
+}
+
+.cb-option-subtitle {
+    margin-top: 4px;
+    color: var(--color-stone-500);
+    font-size: 0.85rem;
+}
+
+.cb-addon-config {
+    margin-top: -4px;
+    margin-bottom: var(--space-8);
+    padding: var(--space-12);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--color-stone-50);
+}
+
+.cb-addon-config-section+.cb-addon-config-section {
+    margin-top: var(--space-12);
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--border-color);
+}
+
+.cb-addon-config-section h5 {
+    margin: 0 0 var(--space-8) 0;
+    font-size: 0.85rem;
+    color: var(--color-stone-700);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.cb-addon-config-row {
+    display: grid;
+    grid-template-columns: 1fr 170px;
+    gap: var(--space-8);
+    align-items: center;
+    margin-bottom: var(--space-8);
+}
+
+.cb-addon-config-row:last-child {
+    margin-bottom: 0;
+}
+
+.cb-addon-qty-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+}
+
+.cb-addon-qty-row input[type="number"] {
+    width: 64px;
+}
+
+.cb-addon-qty-row select {
+    flex: 1;
+    min-width: 0;
+}
+
+.cb-addon-config-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cb-addon-config-label strong {
+    font-size: 0.9rem;
+    color: var(--color-vulcan-900);
+}
+
+.cb-addon-config-label span {
+    font-size: 0.78rem;
+    color: var(--color-stone-500);
+}
+
+.cb-addon-guest-group {
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+    padding: var(--space-8);
+    margin-bottom: var(--space-8);
+}
+
+.cb-addon-guest-group:last-child {
+    margin-bottom: 0;
+}
+
+.cb-addon-guest-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-stone-700);
+    margin-bottom: var(--space-8);
+}
+
+.cb-muted-text {
+    color: var(--color-stone-500);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.cb-footer-actions {
+    display: flex;
+    gap: var(--space-8);
+}
+
+.cb-hidden {
+    visibility: hidden;
+}
+
+.cb-date-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--space-16);
+    padding: var(--space-24);
+}
+
+.cb-calendar {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: white;
+    padding: var(--space-12);
+}
+
+.cb-cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-12);
+}
+
+.cb-cal-nav {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+}
+
+.cb-cal-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+.cb-cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-size: 0.8rem;
+    color: var(--color-stone-500);
+    text-align: center;
+}
+
+.cb-cal-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.cb-calendar-loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--color-stone-500);
+    padding: var(--space-16);
+}
+
+.cb-day {
+    min-height: 42px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: white;
+    color: var(--color-vulcan-900);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.cb-day:hover:not(:disabled) {
+    border-color: var(--color-stone-400);
+}
+
+.cb-day:disabled {
+    cursor: not-allowed;
+}
+
+.cb-day--other-month {
+    opacity: 0.25;
+}
+
+.cb-day--blocked {
+    background: var(--color-stone-100);
+    color: var(--color-stone-500);
+    text-decoration: line-through;
+}
+
+.cb-day--selected {
+    border-color: var(--color-majorelle-blue-500);
+    background: var(--color-majorelle-blue-50);
+    font-weight: 600;
+}
+
+.cb-day--in-range {
+    background: var(--color-stone-50);
+}
+
+.cb-day--today {
+    outline: 2px solid var(--color-majorelle-blue-500);
+}
+
+.cb-day-number {
+    line-height: 1;
+}
+
+.cb-day-booked-dot {
+    font-size: 0.7rem;
+    color: var(--color-stone-600);
+}
+
+.cb-date-side {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+
+.cb-date-side-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+.cb-slots-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-8);
+}
+
+.cb-slot {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: white;
+    color: var(--color-stone-700);
+    padding: var(--space-8);
+    font-size: 0.85rem;
+}
+
+.cb-slot--selected {
+    border-color: var(--color-majorelle-blue-500);
+    background: var(--color-majorelle-blue-50);
+    color: var(--color-vulcan-900);
+}
+
+.cb-slot--disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.cb-avail-status {
+    border-radius: 8px;
+    padding: var(--space-8);
+    font-size: 0.85rem;
+    border: 1px solid transparent;
+}
+
+.cb-avail-ok {
+    background: #eef7f2;
+    border-color: #b8dfc7;
+    color: #1d6e3b;
+}
+
+.cb-avail-nok {
+    background: #fcf1f1;
+    border-color: #edc2c2;
+    color: #9a2f2f;
+}
+
+.cb-guest-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-24);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--color-stone-100);
+    margin-bottom: var(--space-16);
+}
+
+.cb-summary-card {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--color-stone-100);
+    padding: var(--space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+.cb-summary-row,
+.cb-summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-8);
+}
+
+.cb-summary-total {
+    margin-top: var(--space-8);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--border-color);
+}
+
+.cb-checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    margin-top: var(--space-12);
+}
+
+@media (max-width: 900px) {
+    .cb-date-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .cb-grid-2 {
+        grid-template-columns: 1fr;
+    }
 }

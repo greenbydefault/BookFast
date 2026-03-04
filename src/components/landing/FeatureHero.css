@@ -1,0 +1,154 @@
+/* ============================================================
+   Feature Hero — centered layout with gradient card zone
+   Zone 1: White top  (breadcrumb → illustration → text)
+   Zone 2: Gradient bottom (decorative accents + demo card)
+   ============================================================ */
+
+.feature-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- Zone 1: White top --- */
+.feature-hero__top {
+  background: #fff;
+  padding: 3rem 0 2.5rem;
+  text-align: center;
+}
+
+.feature-hero__breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--color-stone-400, #a8a29e);
+  margin-bottom: 2rem;
+}
+
+.feature-hero__breadcrumb a {
+  color: var(--color-stone-400, #a8a29e);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.feature-hero__breadcrumb a:hover {
+  color: var(--color-vulcan-900, #12111F);
+}
+
+.feature-hero__breadcrumb-sep {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-stone-400, #a8a29e);
+  opacity: 0.7;
+}
+
+.feature-hero__breadcrumb-sep .feature-hero__breadcrumb-icon {
+  width: 12px;
+  height: 12px;
+  transform: rotate(-90deg);
+}
+
+.feature-hero__illustration {
+  display: flex;
+  justify-content: center;
+  
+}
+
+.feature-hero__illustration img {
+  max-width: 240px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Headline + Subheadline: hero-new__headline / hero-new__subheadline (shared with Startseite) */
+
+/* --- Zone 2: Gradient bottom with card --- */
+.feature-hero__bottom {
+  position: relative;
+  padding: var(--space-24);
+  max-width: 680px;
+  margin: 0 auto;
+  border-radius: var(--space-12);
+}
+
+.feature-hero__gradient-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  pointer-events: none;
+  border-radius: var(--space-12);
+}
+
+.feature-hero__card-area {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.feature-hero__card-frame {
+  max-width: 732px;
+}
+
+.feature-hero__hint {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--color-stone-400, #a8a29e);
+  margin: 1.25rem 0 0;
+  padding: 0 1.5rem;
+}
+
+/* Decorative accents on both sides */
+.feature-hero__decor {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.feature-hero__decor--left {
+  left: 8%;
+  top: 0;
+  transform: translateY(-30%);
+}
+
+.feature-hero__decor--right {
+  right: 8%;
+  top: 0;
+  transform: translateY(-30%) scaleX(-1);
+}
+
+.feature-hero__decor svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.35;
+  color: var(--color-majorelle-blue-900, #7660F1);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .feature-hero__top {
+    padding: 2rem 0 1.5rem;
+  }
+
+  .feature-hero__illustration img {
+    max-width: 180px;
+  }
+
+  .feature-hero__bottom {
+    padding: 2.5rem 0 3rem;
+  }
+
+  .feature-hero__card-frame {
+    padding: 8px;
+    border-radius: 20px;
+  }
+
+  .feature-hero__decor--left,
+  .feature-hero__decor--right {
+    display: none;
+  }
+}
+

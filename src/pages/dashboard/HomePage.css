@@ -1,0 +1,250 @@
+/**
+ * Home Page - Setup Checklist Styles
+ */
+
+/* Page container */
+.home-page {
+    width: 33.125em;
+    margin: 0 auto;
+
+    padding-bottom: 120px;
+    /* Space for the bottom fade */
+}
+
+/* Dashboard Bottom Fade */
+.dashboard-scroll-fade {
+    position: fixed;
+    bottom: 0;
+    left: 255px;
+    /* Sidebar width */
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.home-page__title {
+    margin: var(--space-48) 0 var(--space-8) 0;
+    font-size: var(--space-24);
+    font-weight: 400;
+}
+
+.home-page__subtitle {
+    color: var(--color-stone-500);
+    margin: 0 0 var(--space-24) 0;
+}
+
+/* Loading state */
+.home-page__loading {
+    text-align: center;
+    padding: var(--space-64);
+    color: var(--color-stone-400);
+}
+
+/* Checklist Group Title */
+.checklist-group-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-vulcan-900);
+    margin-bottom: var(--space-16);
+    margin-top: var(--space-32);
+}
+
+.checklist-group-title:first-child {
+    margin-top: 0;
+}
+
+/* Checklist card */
+.home-checklist-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-24);
+
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--space-24);
+}
+
+.home-checklist-header {
+    margin-bottom: var(--space-24);
+}
+
+.home-checklist-header__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 var(--space-4) 0;
+}
+
+.home-checklist-header__subtitle {
+    color: var(--color-stone-500);
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.home-checklist-header__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.home-checklist-header__percent {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-stone-600);
+}
+
+
+/* Segmented Progress bar - Granular Version */
+.home-checklist-progress-segments {
+    display: flex;
+    gap: 2px;
+    height: var(--space-28);
+    /* Smaller gap for granular look */
+    margin-top: var(--space-12);
+}
+
+.progress-segment {
+    flex: 1;
+    height: 6px;
+    /* Slightly thinner */
+    background-color: var(--color-stone-100);
+    border-radius: 2px;
+    height: 100%;
+}
+
+
+/* Checklist section */
+.checklist-section {
+    margin-top: 0;
+}
+
+.checklist-steps {
+    display: flex;
+    flex-direction: column;
+
+
+}
+
+/* Step row */
+.home-checklist-step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+    padding: var(--space-18) 0;
+    border-bottom: 1px solid var(--border-color);
+    background: transparent;
+    cursor: pointer;
+
+    /* Indicate clickable row if we make whole row clickable */
+    transition: background-color 0.2s;
+}
+
+.home-checklist-step:last-child {
+    border-bottom: none;
+}
+
+.home-checklist-step:hover {
+    background-color: var(--color-stone-25);
+    /* Slight hover effect */
+}
+
+/* Icon box */
+.home-checklist-step__icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-lg);
+    background: white;
+    /* Or light gray */
+    border: 1px solid var(--color-stone-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-stone-500);
+    flex-shrink: 0;
+}
+
+/* Ensure svg inside fits nicely */
+.home-checklist-step__icon-box svg {
+    width: 20px;
+    height: 20px;
+}
+
+.home-checklist-step__icon-box--done {
+    /* If we want to change icon style when done? Maybe green border/icon? */
+    /* The prompt implies specific icons always visible. */
+    color: var(--color-emerald-600);
+    border-color: var(--color-emerald-200);
+    background: var(--color-emerald-50);
+}
+
+
+.home-checklist-step__content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+    min-width: 0;
+}
+
+.home-checklist-step__text-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+}
+
+.home-checklist-step__label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0;
+    color: var(--color-vulcan-900);
+    width: 100%;
+}
+
+.home-checklist-step__subtext {
+    margin: 0;
+    font-size: var(--space-14);
+    color: var(--color-stone-500);
+}
+
+/* Status Badge */
+
+
+.status-badge--open {
+    background: #FFF7ED;
+    /* Orange 50 */
+    color: #C2410C;
+    /* Orange 700 */
+    border-color: #C2410C;
+    /* Orange 100 */
+}
+
+.status-badge--done {
+    background: #F7FFEE;
+    /* Emerald 50 */
+    color: #3D5323;
+    /* Emerald 700 */
+    border-color: #3D5323;
+    /* Emerald 100 */
+}
+
+/* Success banner */
+.home-checklist-success {
+    margin-top: var(--space-32);
+    padding: var(--space-24);
+    background: var(--color-emerald-50);
+    border: 1px solid var(--color-emerald-200);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.home-checklist-success__title {
+    color: var(--color-emerald-800);
+    margin-bottom: var(--space-8);
+}
+
+.home-checklist-success__text {
+    color: var(--color-emerald-700);
+    margin: 0;
+}

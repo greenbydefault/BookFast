@@ -19,14 +19,33 @@ export const formatDate = (dateStr) => {
 
 /**
  * Format a date range (start - end) in German locale
+ * For same-day bookings (hourly), shows time as well
  * @param {string|Date} start - Start date
  * @param {string|Date} end - End date
  * @returns {string} Formatted date range
  */
 export const formatDateRange = (start, end) => {
+    if (!start) return '-';
+    
+    const startD = new Date(start);
+    const endD = end ? new Date(end) : null;
+    
     const startDate = formatDate(start);
-    const endDate = formatDate(end);
-    if (startDate === endDate) return startDate;
+    const endDate = end ? formatDate(end) : null;
+    
+    // Same day = hourly booking → show times
+    if (startDate === endDate) {
+        const startTime = formatTime(start);
+        const endTime = end ? formatTime(end) : null;
+        
+        if (endTime && startTime !== endTime) {
+            return `${startDate}, ${startTime} – ${endTime}`;
+        }
+        return `${startDate}, ${startTime}`;
+    }
+    
+    // Multi-day = daily/overnight → only dates
+    if (!endDate) return startDate;
     return `${startDate} – ${endDate}`;
 };
 

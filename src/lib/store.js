@@ -3,6 +3,24 @@
  * Simple pub/sub pattern for shared state management
  */
 
+const createEntitySlice = (filter = 'all') => ({
+    items: [],
+    filter,
+    page: 1,
+    perPage: 10,
+    totalPages: 1
+});
+
+const createEntitySlices = () => ({
+    bookings: createEntitySlice('pending_approval'),
+    objects: createEntitySlice(),
+    services: createEntitySlice(),
+    addons: createEntitySlice(),
+    staff: createEntitySlice(),
+    customers: createEntitySlice(),
+    vouchers: createEntitySlice()
+});
+
 // Initial state
 const initialState = {
     workspaces: [],
@@ -10,27 +28,13 @@ const initialState = {
     sites: [],
     currentPage: 'bookings',
     user: null,
-    bookings: {
-        items: [],
-        filter: 'all',
-        page: 1,
-        perPage: 10,
-        totalPages: 1
+    ...createEntitySlices(),
+    insights: {
+        activeTab: 'overview',
+        timePeriod: '1',
+        data: null
     },
-    objects: {
-        items: [],
-        filter: 'all',
-        page: 1,
-        perPage: 10,
-        totalPages: 1
-    },
-    services: {
-        items: [],
-        filter: 'all',
-        page: 1,
-        perPage: 10,
-        totalPages: 1
-    }
+    isDemoMode: false
 };
 
 // Create a copy of initial state

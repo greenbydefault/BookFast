@@ -1,0 +1,670 @@
+/* ===== Generic Detail Layout (2-Column) ===== */
+/* Center Preview | Side Card (edit fields + meta + actions) */
+
+/* ── Main Content Layout ── */
+
+.detail-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    overflow: hidden;
+    background: var(--content-body-bg);
+}
+
+.detail-preview-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    margin: var(--space-24) auto var(--space-8);
+    background: var(--color-stone-50);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-vulcan-900);
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.detail-preview-btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.detail-center {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: var(--space-24);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* ── Preview Card (Center) ── */
+
+.detail-preview-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    max-width: 41.5em;
+    width: 100%;
+}
+
+.detail-preview-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-bottom: var(--space-12);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--space-24) var(--space-24);
+}
+
+.detail-preview-card__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-vulcan-900);
+}
+
+.detail-preview-card__badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.detail-preview-card__badge--active {
+    background: #F7FFEE;
+    color: #3D5323;
+    border: 1px solid #3D5323;
+}
+
+.detail-preview-card__badge--draft {
+    background: var(--color-stone-100);
+    color: var(--color-stone-600);
+}
+
+.detail-preview-card__badge--archived {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Preview block - section wrapper with border separator */
+.detail-preview-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    border-bottom: 2px dotted var(--border-color);
+    padding: var(--space-24) var(--space-24);
+    min-width: 0;
+}
+.detail-preview-block:last-child {
+    border-bottom: none;
+}
+
+
+/* Description block - independent wrapper for the Beschreibung section */
+.detail-preview-block--description {
+    border-bottom: 2px dotted var(--border-color);
+    padding: var(--space-24) var(--space-24);
+}
+
+/* Preview sections */
+.detail-preview-section {
+    padding: var(--space-24);
+    border-bottom: 1px dotted var(--border-color);
+}
+
+.detail-preview-section:last-child {
+    border-bottom: none;
+}
+
+.detail-preview-section__title-optional {
+    font-weight: 400;
+    color: var(--color-stone-400);
+}
+
+/* Icon + Label + Controls row (matches modal-row pattern) */
+.detail-preview-icon-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: var(--space-16);
+}
+
+.detail-preview-icon-row .modal-label {
+    min-width: auto;
+}
+
+.detail-preview-icon-row .modal-controls {
+    flex: 0 0 auto;
+}
+
+.detail-preview-icon-row .day-toggles {
+    pointer-events: none;
+}
+
+.detail-preview-icon-row .time-group input {
+    pointer-events: none;
+}
+
+.detail-preview-icon-row .time-remove {
+    display: none;
+}
+
+.detail-preview-icon-row .number-input {
+    pointer-events: none;
+}
+
+.detail-preview-section__title {
+    font-size: var(--space-14);
+    color: var(--color-stone-700);
+   margin: 0;
+
+}
+
+.detail-preview-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: var(--space-4) 0;
+    gap: var(--space-12);
+}
+
+.detail-preview-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: var(--space-8) var(--space-12);
+    border-left: 1px solid var(--color-stone-300);
+    gap: var(--space-12);
+    min-width: 0;
+}
+
+.detail-preview-row:last-child {
+    border-bottom: none;
+}
+
+.detail-preview-description {
+    padding: var(--space-8) 0;
+    font-size: 0.85rem;
+    color: var(--color-vulcan-900);
+}
+
+.detail-preview-label {
+    font-size: 0.85rem;
+    color: var(--color-stone-400);
+    flex-shrink: 0;
+}
+
+.detail-preview-value {
+    font-size: 0.85rem;
+    color: var(--color-vulcan-900);
+    text-align: right;
+    word-break: break-word;
+    min-width: 0;
+    overflow-wrap: break-word;
+}
+
+.detail-preview-value--left {
+    text-align: left;
+
+}
+
+/* ── Side Card (Right) ── */
+
+.detail-sidecard {
+    width: 24em;
+    flex-shrink: 0;
+    overflow-y: auto;
+    border-left: 1px solid var(--border-color);
+    background: white;
+}
+
+.detail-sidecard-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Back button inside side card */
+.detail-nav-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--color-stone-500);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0.4rem var(--space-16);
+    padding-top: var(--space-16);
+    transition: color 0.15s;
+    font-family: inherit;
+}
+
+.detail-nav-back:hover {
+    color: var(--color-stone-700);
+}
+
+.detail-nav-back svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Side card header (icon + title) */
+.detail-sidecard__header {
+    display: flex;
+    align-items: center;
+
+    height: var(--space-56);
+    padding: var(--space-12);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.detail-sidecard__title {
+    font-size: var(--space-14);
+    font-weight: 500;
+    margin: 0;
+    color: var(--color-vulcan-900);
+}
+
+.detail-sidecard__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-stone-50);
+    color: var(--color-stone-600);
+    flex-shrink: 0;
+}
+
+.detail-sidecard__icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Scrollable body of side card (edit fields + meta) */
+.detail-sidecard__body {
+    flex: 1;
+    overflow-y: auto;
+   
+}
+
+/* ── Side card tabs ── */
+.detail-sidecard__tabs {
+    display: flex;
+    gap: var(--space-16);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 var(--space-12);
+    flex-shrink: 0;
+}
+
+.detail-sidecard__tab {
+    padding: var(--space-24) 0;
+    border: none;
+    background: transparent;
+    font-size: 0.85rem;
+    color: var(--color-stone-500);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.15s;
+    font-family: inherit;
+}
+
+.detail-sidecard__tab:hover {
+    color: var(--color-stone-700);
+}
+
+.detail-sidecard__tab.active {
+    color: var(--color-vulcan-900);
+    font-weight: 500;
+}
+
+.detail-sidecard__tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--color-vulcan-900);
+}
+
+.detail-sidecard__tab-panel {
+    display: none;
+    padding: 0;
+}
+
+.detail-sidecard__tab-panel.detail-sidecard__tab-panel--active {
+    display: block;
+}
+
+/* ── Form Fields (inside side card) ── */
+
+.detail-nav-section {
+    padding: var(--space-16);
+    border-bottom: 1px solid var(--color-stone-200);
+}
+.detail-nav-section:last-child {
+  
+    border-bottom: none;
+}
+
+.detail-nav-section__title {
+    
+    margin-bottom: var(--space-8);
+    font-size: var(--space-12);
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--color-stone-500);
+}
+
+.detail-nav-section .detail-nav-field {
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 0.75rem;
+}
+
+.detail-nav-section .detail-nav-field:last-child {
+    margin-bottom: 0;
+}
+
+.detail-nav-section .detail-nav-field-row {
+    margin-bottom: 0.75rem;
+}
+
+.detail-nav-section .detail-nav-field-row:last-child {
+    margin-bottom: 0;
+}
+
+.detail-nav-section .detail-nav-field-row .detail-nav-field {
+    margin-bottom: 0;
+}
+
+.detail-nav-divider {
+    display: none;
+}
+
+.detail-nav-field {
+    padding: var(--space-16);
+    border-bottom: 1px solid var(--color-stone-200);
+}
+
+.detail-nav-field label {
+    display: block;
+    font-size: var(--space-12);
+    font-weight: 500;
+    color: var(--color-stone-500);
+    margin-bottom: 0.3rem;
+}
+
+.detail-nav-field input,
+.detail-nav-field select,
+.detail-nav-field textarea {
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    font-size: 0.85rem;
+    border: 1px solid var(--color-stone-200);
+    border-radius: 6px;
+    background: white;
+    color: var(--color-vulcan-900);
+    font-family: inherit;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+    
+}
+
+.detail-nav-field input:focus,
+.detail-nav-field select:focus,
+.detail-nav-field textarea:focus {
+    outline: none;
+    border-color: var(--color-stone-400);
+}
+
+.detail-nav-field textarea {
+    resize: vertical;
+    min-height: var(--space-120) !important;
+}
+
+/* Read-only value display (non-editable field) */
+.detail-nav-readonly {
+    padding: 0.5rem 0.75rem;
+    background-color: var(--color-stone-100);
+    border-radius: var(--radius-md);
+    color: var(--color-stone-600);
+    font-size: 0.9rem;
+}
+
+/* ── Inline Field Row (two fields side by side) ── */
+
+.detail-nav-field-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.detail-nav-field-row>.detail-nav-field {
+    flex: 1;
+    min-width: 0;
+}
+
+/* ── Checkbox label (day toggles in staff etc.) ── */
+
+.detail-nav-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--color-stone-700);
+    cursor: pointer;
+}
+
+.detail-nav-checkbox input[type="checkbox"] {
+    accent-color: var(--color-vulcan-900);
+}
+
+/* ── Dashed add button (inside sections) ── */
+
+.detail-nav-add-btn {
+    margin-top: 8px;
+    background: var(--color-stone-50);
+    border: 1px dashed var(--border-color);
+    border-radius: 6px;
+    padding: 8px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--color-stone-500);
+    font-family: inherit;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.detail-nav-add-btn:hover {
+    background: var(--color-stone-100);
+    border-color: var(--color-stone-300);
+}
+
+/* ── Spacing between link groups (e.g. addons + staff) ── */
+
+.detail-nav-link-group {
+    margin-top: 0.75rem;
+}
+
+/* ── Info rows (read-only meta) ── */
+
+.detail-sidecard__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-12);
+    padding: var(--space-12) 0;
+    border-bottom: 1px solid var(--color-stone-100);
+}
+
+.detail-sidecard__row:last-child {
+    border-bottom: none;
+}
+
+.detail-sidecard__label {
+    font-size: var(--space-14);
+    color: var(--color-stone-400);
+    flex-shrink: 0;
+    min-width: 100px;
+}
+
+.detail-sidecard__value {
+    font-size: var(--space-14);
+    color: var(--color-vulcan-900);
+    text-align: right;
+    word-break: break-word;
+}
+
+/* Tags in side card */
+.detail-sidecard__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: flex-end;
+    
+}
+
+.detail-sidecard__tag {
+    display: inline-block;
+    padding: var(--space-8);
+    background: var(--color-majorelle-blue-50);
+    color: var(--color-stone-700);
+    border-radius: var(--space-4);
+    font-size: var(--space-14);
+    font-weight: 400;
+    white-space: nowrap;
+
+}
+
+.detail-sidecard__tag--highlight {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+/* Side card footer actions */
+.detail-sidecard__footer {
+    display: flex;
+    gap: var(--space-8);
+    padding: var(--space-16);
+    border-top: 1px solid var(--border-color);
+}
+
+.detail-sidecard__footer-btn {
+    flex: 1;
+}
+
+/* Danger zone in side card */
+.detail-sidecard__danger {
+    padding: var(--space-12);
+    margin: var(--space-8) 0;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fef2f2;
+}
+
+.detail-sidecard__danger-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #dc2626;
+    background: white;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+}
+
+.detail-sidecard__danger-btn:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+}
+
+.detail-sidecard__danger-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ── Loading & Error States ── */
+
+.detail-loading,
+.detail-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    text-align: center;
+    color: var(--color-stone-500);
+}
+
+.detail-error h3 {
+    margin-bottom: var(--space-8);
+    color: var(--color-stone-700);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 900px) {
+    .detail-sidecard {
+        display: none;
+    }
+
+    .detail-center {
+        padding: var(--space-16);
+    }
+}
+
+/* ── Auto-save Status Indicator ── */
+
+.autosave-status {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-stone-500);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    /* margin-left: auto; Removed for flexible positioning */
+}
+
+.autosave-status.visible {
+    opacity: 1;
+}
+
+.autosave-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--color-stone-200);
+    border-top-color: var(--color-stone-500);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

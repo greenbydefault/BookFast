@@ -1,0 +1,138 @@
+/**
+ * Product Overview Page
+ */
+import { createHero } from '../../components/landing/Hero.js';
+import { createFeatureGrid } from '../../components/landing/FeatureCard.js';
+import { createFeatureSection } from '../../components/landing/FeatureSection.js';
+import { createFAQAccordion, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
+import { createCTASection } from '../../components/landing/CTASection.js';
+import { setPageMeta, setFAQSchema } from '../../lib/seoHelper.js';
+
+const FAQ = [
+  { question: 'Was genau ist das BookFast-Widget?', answer: 'Ein Buchungsformular, das nativ in deiner Website lebt – kein iFrame, kein Redirect. Deine Kunden bleiben auf deiner Seite und buchen direkt dort.' },
+  { question: 'Wie unterscheidet sich BookFast von Calendly oder Acuity?', answer: 'BookFast ist speziell für Webflow gebaut. Es lebt nativ in deiner Seite, erhebt keine Provision und bietet Analytics, automatische Rechnungen und Multi-Workspace – Features, die klassische Scheduling-Tools nicht haben.' },
+  { question: 'Kann ich Stunden-, Tages- und Übernachtungsbuchungen anbieten?', answer: 'Ja. Du konfigurierst pro Service, ob es sich um eine Stundenbuchung, Tagesbuchung oder Übernachtung handelt – inklusive Check-in/Check-out, Mindestaufenthalt und Reinigungspuffer.' },
+  { question: 'Werden Rechnungen automatisch erstellt?', answer: 'Ja. Nach Bestätigung oder Abschluss einer Buchung generiert BookFast automatisch eine Rechnung mit deinen Firmendaten. Deine Kunden können sie im Kundenportal einsehen.' },
+  { question: 'Wie erhalte ich meine Zahlungen?', answer: 'Über Stripe Connect. Deine Kunden zahlen direkt – das Geld wird automatisch auf dein Bankkonto ausgezahlt. Du hast volle Kontrolle über Auszahlungen und Rückerstattungen.' },
+];
+
+export const renderProductPage = () => {
+  const content = document.getElementById('landing-content');
+  if (!content) return;
+
+  setPageMeta('Produkt', 'BookFast – Das Buchungssystem für Webflow. Widget + Dashboard für Buchungen, Zahlungen, Rechnungen und Analytics.');
+  setFAQSchema(FAQ);
+
+  content.innerHTML = `
+    ${createHero({
+      headline: 'Alles an einem Ort – Buchungen, Zahlungen, Rechnungen.',
+      subheadline: 'BookFast ist Booking-Widget + Operator-Dashboard in einem. Für Webflow-Nutzer, die Buchungen, Zahlungen und Rechnungen ohne iFrames und Provision verwalten wollen.',
+      variant: 'split',
+      imageHTML: '<div style="background: var(--color-stone-100); border-radius: 16px; height: 400px; display: flex; align-items: center; justify-content: center; font-size: 4rem;"><img src="/src/svg/ICON/calender-days-date.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /></div>',
+    })}
+
+    <section class="landing-section landing-section-alt">
+      <div class="landing-container text-center">
+        <p class="landing-label">Das Problem</p>
+        <h2 class="landing-h2 text-balance">Redirects, iFrames, fehlende Daten – das muss nicht sein.</h2>
+        <p class="landing-text" style="max-width: 700px; margin: 1rem auto 0;">
+          Externe Scheduling-Tools redirecten deine Kunden weg von deiner Website. iFrames passen nicht ins Design. 
+          Du hast keine Kontrolle über den Booking-Flow und keine Daten darüber, wo Kunden abspringen.
+          Die meisten Tools nehmen dazu noch eine Provision pro Buchung.
+        </p>
+      </div>
+    </section>
+
+    <section class="landing-section">
+      <div class="landing-container">
+        ${createFeatureSection({
+          title: 'Die Lösung: Alles an einem Ort.',
+          description: 'BookFast gibt dir die volle Kontrolle über Buchungen, Zahlungen und Kundendaten – direkt in deiner Webflow-Seite.',
+          bullets: [
+            'Webflow-natives Widget, kein iFrame oder Redirect.',
+            'Zahlung vor Termin mit Stripe Connect.',
+            'Automatische Rechnungen nach Bestätigung.',
+            'Analytics-Dashboard mit Conversion-Funnel und Drop-off-Daten.',
+          ],
+        })}
+      </div>
+    </section>
+
+    <section class="landing-section landing-section-alt">
+      <div class="landing-container text-center">
+        <p class="landing-label">Features</p>
+        <h2 class="landing-h2">Alles was du brauchst.</h2>
+        <div style="margin-top: 2.5rem;">
+          ${createFeatureGrid([
+            { icon: '<img src="/src/svg/ICON/list.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Buchungen', description: 'Status-Filter, Kalender/Liste, Bestätigen, Ablehnen, Stornieren.', link: '/features/buchungen' },
+            { icon: '<img src="/src/svg/ICON/Bank-card.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Zahlungen', description: 'Stripe Connect, Anzahlung, Refunds, automatische Auszahlungen.', link: '/features/zahlungen' },
+            { icon: '<img src="/src/svg/ICON/receipt-euro.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Rechnungen', description: 'Automatisch generiert nach Bestätigung oder Abschluss.', link: '/features/rechnungen' },
+            { icon: '<img src="/src/svg/ICON/chart.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Analytics', description: 'Funnel, Drop-offs, Conversion-Rates, Revenue-Tracking.', link: '/features/analytics' },
+            { icon: '<img src="/src/svg/ICON/home.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Objekte & Services', description: 'Räume, Stunden-/Tages-/Übernachtungsbuchungen.', link: '/features/objekte' },
+            { icon: '<img src="/src/svg/ICON/users-2.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Mitarbeiter', description: 'Zuordnung zu Services, Verfügbarkeiten, Kalender.', link: '/features/mitarbeiter' },
+            { icon: '<img src="/src/svg/ICON/ticket-percent.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Add-ons & Gutscheine', description: 'Upsells, Rabattcodes, Nutzungslimits.', link: '/features/addons' },
+            { icon: '<img src="/src/svg/ICON/Building-comapny.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Multi-Workspace', description: 'Mehrere Standorte oder Marken in einem Account.', link: '/features/workspaces' },
+            { icon: '<img src="/src/svg/ICON/lock.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Approval-Flow', description: 'Erst zahlen, dann bestätigen. Du behältst die Kontrolle.', link: '/features/approval' },
+          ])}
+        </div>
+      </div>
+    </section>
+
+    <section class="landing-section">
+      <div class="landing-container">
+        ${createFeatureSection({
+          title: 'Was BookFast anders macht.',
+          description: 'Im Vergleich zu anderen Webflow-Booking-Tools bietet BookFast:',
+          bullets: [
+            'Multi-Workspace als Kernkonzept – nicht nachträglich drangeklatscht.',
+            'Analytics für Drop-offs und Payment-Completion – Daten die andere nicht zeigen.',
+            'Regel-Engine für Buffer, Overnight und Approval-Flow – klar konfigurierbar.',
+            'Webflow-first UX: Template-Copy statt iFrame-Gefühl.',
+          ],
+          reverse: true,
+        })}
+      </div>
+    </section>
+
+    <section class="landing-section landing-section-alt">
+      <div class="landing-container text-center">
+        <h2 class="landing-h2">Typische Szenarien</h2>
+        <div class="landing-grid landing-grid-2" style="margin-top: 2rem; max-width: 800px; margin-left: auto; margin-right: auto; text-align: left;">
+          <div style="padding: 1.5rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200);">
+            <h3 class="landing-h4"><img src="/src/svg/ICON/home.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> Ferienwohnung vermieten</h3>
+            <p class="landing-text-sm">Übernachtungen mit Check-in/out, Reinigungspuffer, Anzahlung und automatischer Rechnung.</p>
+          </div>
+          <div style="padding: 1.5rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200);">
+            <h3 class="landing-h4"><img src="/src/svg/ICON/sprout.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> Yoga-Kurse anbieten</h3>
+            <p class="landing-text-sm">Kursbuchungen mit Trainer-Auswahl, Gutscheinen und Add-ons wie Yogamatten.</p>
+          </div>
+          <div style="padding: 1.5rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200);">
+            <h3 class="landing-h4"><img src="/src/svg/ICON/luggage.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> Coworking-Räume buchen</h3>
+            <p class="landing-text-sm">Stunden- oder Tagesmiete für Meeting-Rooms und Schreibtische.</p>
+          </div>
+          <div style="padding: 1.5rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200);">
+            <h3 class="landing-h4"><img src="/src/svg/ICON/user.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> Friseur-Termine buchen</h3>
+            <p class="landing-text-sm">Service-Auswahl, Mitarbeiter-Buchung, verschiedene Zeitslots.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="landing-section">
+      <div class="landing-container">
+        <div class="text-center" style="margin-bottom: 2.5rem;">
+          <p class="hero-new__tagline">FAQ</p>
+          <h2 class="landing-h2">Häufige Fragen zum Produkt.</h2>
+        </div>
+        ${createFAQAccordion(FAQ)}
+      </div>
+    </section>
+
+    ${createCTASection({
+      headline: 'Buchungen auf deiner Website – in 5 Minuten eingerichtet.',
+      subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
+    })}
+  `;
+
+  initFAQAccordion(content);
+};

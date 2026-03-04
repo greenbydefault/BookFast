@@ -2,6 +2,7 @@
     /* Stone Color Palette */
     --color-stone-50: #fafaf9;
     --color-stone-100: #f5f5f4;
+    --color-stone-150: #f2f0ef;
     --color-stone-200: #e7e5e4;
     --color-stone-300: #d6d3d1;
     --color-stone-400: #a8a29e;
@@ -11,37 +12,89 @@
     --color-stone-800: #292524;
     --color-stone-900: #1c1917;
 
-    --border-color: var(--color-stone-300);
+    --border-color: var(--color-stone-200);
     --icon-color: var(--color-stone-700);
 
     /* Semantic Theme Colors */
-    --primary: var(--color-stone-900);
-    --primary-hover: var(--color-stone-800);
-    --bg-dark: var(--color-stone-900);
-    --bg-card: var(--color-stone-800);
+    --primary: var(--color-vulcan-900);
+    --primary-hover: var(--color-vulcan-900);
+    --bg-dark: var(--color-vulcan-900);
+    --bg-card: var(--color-vulcan-900);
     --text-light: var(--color-stone-50);
     --text-muted: var(--color-stone-300);
 
+    --color-blue-100: #F4F6FA;
+    --soft-ice-blue: #F7FAF9;
+    --content-body-bg: #F5F6F5;
+
+    --dark-blue: #1e293b;
+
+    /* Emerald (success) */
+    --color-emerald-25: #E8FFF2;
+    --color-emerald-50: #ecfdf5;
+    --color-emerald-100: #d1fae5;
+    --color-emerald-200: #a7f3d0;
+    --color-emerald-600: #059669;
+    --color-emerald-700: #047857;
+    --color-emerald-800: #065f46;
+
+    /* Indigo (accent) */
+    --color-indigo-600: #4f46e5;
+
+    /* Majorelle Blue */
+    --color-majorelle-blue-900: #7660F1;
+    --color-majorelle-blue-800: #8470F2;
+    --color-majorelle-blue-700: #9180F4;
+    --color-majorelle-blue-600: #9F90F5;
+    --color-majorelle-blue-500: #ADA0F7;
+    --color-majorelle-blue-400: #BAAFF8;
+    --color-majorelle-blue-300: #C8BFF9;
+    --color-majorelle-blue-200: #D6CFFB;
+    --color-majorelle-blue-100: #E4DFFC;
+    --color-majorelle-blue-50: #F8F7FE;
+
+    /* Vulcan */
+    --color-vulcan-500: #717079;
+    --color-vulcan-900: #12111F;
+
+    /* Radius */
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+
+    /* Shadow */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
     /* Spacing System */
-    --space-4: 4px;
-    --space-8: 8px;
-    --space-12: 12px;
-    --space-14: 14px;
-    --space-16: 16px;
-    --space-18: 18px;
-    --space-22: 22px;
-    --space-24: 24px;
-    --space-28: 28px;
-    --space-32: 32px;
-    --space-40: 40px;
-    --space-44: 44px;
-    --space-48: 48px;
-    --space-64: 64px;
-    --space-70: 70px;
-    --space-72: 72px;
-    --space-96: 96px;
-    --space-120: 120px;
-    --space-128: 128px;
+    --space-4: 0.25em;
+    --space-8: 0.5em;
+    --space-10: 0.625em;
+    --space-12: 0.75em;
+    --space-14: 0.875em;
+    --space-16: 1em;
+    --space-18: 1.125em;
+    --space-20: 1.25em;
+    --space-22: 1.375em;
+    --space-24: 1.5em;
+    --space-26: 1.625em;
+    --space-28: 1.75em;
+    --space-32: 2em;
+    --space-34: 2.125em;
+    --space-36: 2.25em;
+    --space-38: 2.375em;
+    --space-40: 2.5em;
+    --space-42: 2.625em;
+    --space-44: 2.75em;
+    --space-46: 2.875em;
+    --space-48: 3em;
+    --space-52: 3.25em;
+    --space-56: 3.5em;
+    --space-64: 4em;
+    --space-70: 4.375em;
+    --space-72: 4.5em;
+    --space-96: 6em;
+    --space-120: 7.5em;
+    --space-128: 8em;
 
     /* T-Shirt Size Aliases */
     --space-3xs: var(--space-4);

@@ -30,3 +30,14 @@ yarn-error.log*
 # Temporary files
 *.tmp
 .cache/
+
+# Debug/utility scripts
+inspect_rpc.mjs
+check_tables.mjs
+schema_dump.sql
+
+# Internal docs
+AGENT_GUIDE.md
+STRIPE_SETUP.md
+Knowlage/
+.agent/

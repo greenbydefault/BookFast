@@ -1,29 +1,118 @@
 .btn {
     border-radius: 8px;
     border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
+    padding: var(--space-2xs) var(--space-xs);
+    font-size: var(--space-14);
+    font-weight: 300;
     font-family: inherit;
-    background-color: var(--bg-card);
+
     color: var(--text-light);
     cursor: pointer;
-    transition: border-color 0.25s, transform 0.1s;
+    transition: border-color 0.25s, transform 0.1s, opacity 0.2s;
 }
 
-.btn:hover {
-    border-color: var(--primary);
-}
+.btn:hover {}
 
 .btn:active {
     transform: scale(0.98);
 }
 
 .btn-primary {
-    background-color: var(--primary);
+    background-color: var(--color-majorelle-blue-900);
     color: white;
 }
 
-.btn-primary:hover {
-    background-color: var(--primary-hover);
+
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--color-stone-700);
+    border: 1px solid var(--border-color);
+}
+
+.btn-outline:hover {
+    background-color: var(--color-stone-100);
+    border-color: var(--color-stone-300);
+}
+
+/* Action Button Styles */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.btn-action .icon {
+    width: 18px;
+    height: 18px;
+}
+
+.btn-action .btn-text {
+    white-space: nowrap;
+}
+
+/* Loading State */
+.btn-action.is-loading {
+    cursor: not-allowed;
+    opacity: 0.85;
+}
+
+.btn-action.is-loading:hover {
+    transform: none;
+}
+
+/* Loading Dots */
+.btn-loading-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-right: 4px;
+}
+
+.btn-loading-dots .dot {
+    width: 5px;
+    height: 5px;
+    background-color: currentColor;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: dot-pulse 1.2s ease-in-out infinite;
+}
+
+.btn-loading-dots .dot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.btn-loading-dots .dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.btn-loading-dots .dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dot-pulse {
+
+    0%,
+    60%,
+    100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+
+    30% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Button disabled state */
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn:disabled:hover {
+    border-color: transparent;
+    transform: none;
 }

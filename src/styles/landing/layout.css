@@ -1,0 +1,31 @@
+/* --- Grid --- */
+.landing-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.landing-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.landing-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.landing-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 1024px) {
+  .landing-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .landing-grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .landing-grid-2,
+  .landing-grid-3,
+  .landing-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Flex helpers --- */
+.landing-flex { display: flex; }
+.landing-flex-col { flex-direction: column; }
+.landing-flex-center { align-items: center; justify-content: center; }
+.landing-flex-between { justify-content: space-between; }
+.landing-gap-sm { gap: 0.75rem; }
+.landing-gap-md { gap: 1.5rem; }
+.landing-gap-lg { gap: 2.5rem; }

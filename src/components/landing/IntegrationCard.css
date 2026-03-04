@@ -1,0 +1,47 @@
+/* Integration card */
+.landing-integration-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid var(--color-stone-200);
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.landing-integration-card:hover {
+  border-color: var(--color-stone-300);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.landing-integration-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: var(--color-stone-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.landing-integration-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.landing-integration-badge.active {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+.landing-integration-badge.coming-soon {
+  background: var(--color-stone-100);
+  color: var(--color-stone-500);
+}

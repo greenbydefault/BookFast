@@ -1,0 +1,200 @@
+/**
+ * Shared modal form styles – used by Modal (Dashboard) and feature demo cards (Landing).
+ * Ensures 1:1 visual match between dashboard forms and demo.
+ *
+ * Gruppierung: Nutze modal-content-section für logische Blöcke. Jede Section hat
+ * border-bottom (außer :last-child). Kein separater Trenner – die Section-Grenze
+ * ist die visuelle Trennung. Für zukünftige Module einheitlich nutzen.
+ */
+@import './day-toggles.css';
+
+/* Section – Gruppierung mit border-bottom zwischen Blöcken */
+.modal-content-section {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-24);
+  border-bottom: 1px dashed var(--color-stone-200);
+  gap: var(--space-18);
+}
+
+.modal-content-section:last-child {
+  border-bottom: none;
+}
+
+/* Form inputs */
+.modal-form-input {
+  width: 100%;
+  padding: var(--space-8) var(--space-8);
+  border: 1px solid var(--border-color);
+  border-radius: var(--space-8);
+  font-family: var(--font-main, sans-serif);
+  font-size: var(--space-14);
+  transition: border-color 0.2s;
+  outline: none;
+  background: transparent;
+  color: var(--stone-800);
+}
+
+.modal-form-input:focus {
+  border-color: var(--primary, #747bff);
+}
+
+.modal-input-large {
+  font-size: var(--space-16);
+  color: var(--color-vulcan-900);
+  border: none;
+  border-left: 1px solid var(--color-stone-300);
+  border-radius: 0;
+  padding: 0;
+  padding-left: var(--space-8);
+  height: var(--space-44);
+}
+
+.modal-input-large:focus {
+  border-bottom-color: var(--primary);
+}
+
+.modal-separator {
+  height: 0;
+  border-bottom: 2px dotted var(--border-color, #e7e5e4);
+  margin: var(--space-24) 0;
+  width: 100%;
+}
+
+/* Row layout */
+.modal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+}
+
+.modal-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--color-vulcan-900);
+  font-size: var(--space-14);
+  font-weight: 400;
+}
+
+.modal-label i,
+.modal-label svg,
+.modal-label .icon {
+  color: var(--icon-color);
+  width: var(--space-24);
+  height: var(--space-24);
+}
+
+.modal-controls {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-8);
+}
+
+.modal-controls-stretch {
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.modal-controls-stretch > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.modal-controls-column {
+  flex-direction: column;
+  align-items: flex-end !important;
+  gap: 8px;
+}
+
+/* Form field */
+.modal-form-field {
+  margin-bottom: var(--space-16);
+}
+
+.modal-form-field:last-child {
+  margin-bottom: 0;
+}
+
+.modal-form-label {
+  display: block;
+  font-size: var(--space-14);
+  margin-bottom: 4px;
+  font-weight: 300;
+  color: var(--stone-900);
+}
+
+.modal-label-optional {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* Time group */
+.time-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  background: var(--color-stone-50);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
+.time-group span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.time-group input {
+  border: none;
+  background: transparent;
+  min-width: 90px;
+  text-align: center;
+  font-size: 0.9rem;
+  outline: none;
+  color: var(--stone-800);
+}
+
+.time-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 1rem;
+  padding: 0 2px;
+  display: flex;
+  align-items: center;
+}
+
+/* Staff form wrapper – contains modal-content-section groups (border-bottom between sections) */
+.staff-form-fields {
+  display: flex;
+  flex-direction: column;
+}
+
+.staff-form-fields__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.staff-form-fields__status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--color-stone-500);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: default;
+}
+
+.staff-form-fields__status-badge .icon {
+  width: 14px;
+  height: 14px;
+}

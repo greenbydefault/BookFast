@@ -173,7 +173,7 @@ export const renderSitesPage = () => {
   document.querySelector('#add-site-btn').appendChild(addSiteBtn);
 
   // Event delegation
-  mainContent.addEventListener('click', (e) => {
+  const handleMainContentClick = (e) => {
     const checkBtn = e.target.closest('.check-connection-btn');
     if (checkBtn) {
       checkConnection(checkBtn.dataset.workspaceId);
@@ -193,8 +193,15 @@ export const renderSitesPage = () => {
       viewSiteDetails(viewBtn.dataset.siteId);
       return;
     }
-  });
+  };
+  mainContent.addEventListener('click', handleMainContentClick);
 
   // Load sites
   fetchSites();
+
+  return () => {
+    if (mainContent) {
+      mainContent.removeEventListener('click', handleMainContentClick);
+    }
+  };
 };

@@ -1,0 +1,74 @@
+/**
+ * Empty State Component
+ * Full-page empty state with illustration (26em), title, description and CTAs.
+ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 400px;
+  width: 100%;
+  padding: var(--space-48, 3rem) var(--space-24, 1.5rem);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.empty-state-illustration {
+  width: 20em;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  margin-bottom: var(--space-32, 2rem);
+  flex-shrink: 0;
+}
+
+.empty-state-title {
+  font-size: var(--space-18);
+  font-weight: 600;
+  color: var(--color-vulcan-900);
+  margin: 0 0 var(--space-8) 0;
+}
+
+.empty-state-description {
+  font-size: var(--space-16);
+  color: var(--color-vulcan-500);
+  line-height: 1.5;
+  max-width: 420px;
+  font-weight: 400;
+  margin: 0 0 var(--space-32, 2rem);
+}
+
+.empty-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12, 0.75rem);
+  justify-content: center;
+}
+
+.empty-state-actions .btn {
+  flex-shrink: 0;
+}
+
+/* Plain text link – no border, only underline on hover */
+.empty-state-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--color-stone-600);
+  text-decoration: none;
+  cursor: pointer;
+  font-size: var(--space-16);
+}
+
+.empty-state-link:hover {
+  color: var(--color-stone-800);
+  text-decoration: underline;
+}
+
+.empty-state-link-btn {
+  appearance: none;
+}

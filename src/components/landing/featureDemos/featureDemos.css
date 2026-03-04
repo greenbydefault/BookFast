@@ -1,0 +1,493 @@
+/* Feature Demo Cards – Landing-only styles.
+   Uses modal-form.css for 1:1 match with dashboard form styling. */
+@import '../../../styles/modal-form.css';
+
+/* Card shell */
+.feature-demo-card {
+  background: #fff;
+  border-radius: var(--space-12);
+  border: 1px solid var(--color-stone-200);
+  box-shadow: 0 12px 34px rgba(19, 17, 31, 0.08);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 712px;
+  margin: 0 auto;
+}
+
+.feature-demo-card__header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-8);
+  padding: var(--space-24);
+  border-bottom: 1px solid var(--color-stone-200);
+}
+
+.feature-demo-card__title-group {
+  min-width: 0;
+  gap: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.feature-demo-card__title {
+  margin: 0;
+  font-size: var(--space-20);
+  line-height: 1.2;
+  font-weight: 400;
+  color: var(--color-vulcan-900);
+}
+
+.feature-demo-card__subtitle {
+  margin: 0;
+  font-size:var(--space-14);
+  color: var(--color-vulcan-500);
+}
+
+.feature-demo-card__close {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-vulcan-900);
+  cursor: default;
+  padding: 0;
+  margin-top: 2px;
+}
+
+.feature-demo-card__footer {
+  border-top: 1px solid var(--color-stone-200);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px 16px;
+}
+
+.feature-demo-card__footer-btn {
+  border: 1px solid var(--color-stone-200);
+  background: #fff;
+  color: var(--color-vulcan-900);
+  border-radius: 8px;
+  height: 34px;
+  padding: 0 12px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  cursor: default;
+}
+
+.feature-demo-card__footer-btn--primary {
+  border-color: transparent;
+  background: var(--color-majorelle-blue-900);
+  color: #fff;
+}
+
+/* Multi-select: hide label when used in demo (label is in modal-row) */
+.feature-demo-card .multi-select-label {
+  display: none;
+}
+
+/* Mirror required modal primitives inside landing demo card */
+.feature-demo-card .number-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: var(--space-8);
+  overflow: hidden;
+  padding: var(--space-8) 0;
+  font-size: var(--space-16);
+}
+
+.feature-demo-card .number-input {
+  width: 56px;
+  text-align: center;
+  border: none;
+  outline: none;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  color: var(--stone-800);
+  background: transparent;
+}
+
+.feature-demo-card .number-input::-webkit-outer-spin-button,
+.feature-demo-card .number-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.feature-demo-card .control-group-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feature-demo-card .text-small-muted {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.feature-demo-card .text-small {
+  font-size: 0.9rem;
+}
+
+.feature-demo-card .toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.feature-demo-card .toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.feature-demo-card .toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-stone-300);
+  transition: 0.2s;
+  border-radius: 24px;
+}
+
+.feature-demo-card .toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #fff;
+  transition: 0.2s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.feature-demo-card .toggle-switch input:checked + .toggle-slider {
+  background-color: var(--color-majorelle-blue-900);
+}
+
+.feature-demo-card .toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+.feature-demo-card .custom-hours-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: var(--space-16);
+}
+
+.feature-demo-card .custom-hours-row {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feature-demo-card .custom-hours-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.feature-demo-card .custom-hours-day-toggles {
+  display: flex;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.feature-demo-card .custom-hours-day-toggle {
+  background: #fff;
+  border: none;
+  padding: 4px 7px;
+  font-size: 0.75rem;
+  border-right: 1px solid var(--border-color);
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.feature-demo-card .custom-hours-day-toggle:last-child {
+  border-right: none;
+}
+
+.feature-demo-card .custom-hours-day-toggle.active {
+  background-color: var(--primary, #8b5cf6);
+  color: #fff;
+  font-weight: 500;
+}
+
+.feature-demo-card .custom-hours-delete {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 0.15s, background-color 0.15s;
+  flex-shrink: 0;
+}
+
+.feature-demo-card .custom-hours-delete:hover {
+  color: var(--color-danger, #ef4444);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.feature-demo-card .custom-hours-delete svg {
+  width: 16px;
+  height: 16px;
+}
+
+.feature-demo-card .custom-hours-time-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding-left: 4px;
+}
+
+.feature-demo-card .custom-hours-time-row .label-inline {
+  font-size: 0.8rem;
+  color: var(--color-vulcan-900);
+  min-width: 24px;
+}
+
+.feature-demo-card .custom-hours-time-row .time-input {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--color-stone-200);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--color-vulcan-900);
+  outline: none;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.feature-demo-card .custom-hours-time-row .time-input:focus {
+  border-color: var(--primary, #8b5cf6);
+}
+
+.feature-demo-card .custom-hours-add-btn {
+  padding: 10px;
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.feature-demo-card .custom-hours-add-btn:hover {
+  background: var(--color-majorelle-blue-50);
+  border-color: var(--color-majorelle-blue-500);
+  color: var(--stone-700);
+}
+
+/* ── Service Preview Card: Tabs ── */
+
+.svc-demo-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border-color);
+  padding: 0 var(--space-24);
+}
+
+.svc-demo-tab {
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s;
+}
+
+.svc-demo-tab:hover {
+  color: var(--stone-700);
+}
+
+.svc-demo-tab.active {
+  color: var(--stone-900);
+  font-weight: 500;
+}
+
+.svc-demo-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-majorelle-blue-900);
+  border-radius: 2px 2px 0 0;
+}
+
+/* ── Service Preview Card: Price controls ── */
+
+.svc-demo-price-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.svc-demo-price-input {
+  width: 60px;
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: right;
+  outline: none;
+  color: var(--stone-800);
+  background: transparent;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.svc-demo-price-input::-webkit-outer-spin-button,
+.svc-demo-price-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.svc-demo-price-input:focus {
+  border-color: var(--primary, #747bff);
+}
+
+.svc-demo-price-currency {
+  font-size: 0.9rem;
+  color: var(--stone-600);
+}
+
+.svc-demo-price-unit {
+  font-size: 0.85rem;
+  color: var(--stone-600);
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-surface, #fff);
+}
+
+/* ── Service Preview Card: Time inputs ── */
+
+.svc-demo-time-input {
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+  color: var(--stone-800);
+  background: #fff;
+  min-width: 90px;
+}
+
+.svc-demo-time-input:focus {
+  border-color: var(--primary, #747bff);
+}
+
+.svc-demo-label-inline {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0 6px;
+}
+
+/* ── Service Preview Card: Object tags ── */
+
+.svc-demo-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.svc-demo-tag {
+  padding: 4px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: #fff;
+  font-size: 0.8rem;
+  color: var(--stone-600);
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.svc-demo-tag.active {
+  background: var(--color-majorelle-blue-50, #f0edff);
+  border-color: var(--color-majorelle-blue-500, #8b5cf6);
+  color: var(--color-majorelle-blue-900, #4c1d95);
+  font-weight: 500;
+}
+
+.svc-demo-tag:hover:not(.active) {
+  border-color: var(--stone-400);
+}
+
+@media (max-width: 768px) {
+  .feature-demo-card .modal-content-section {
+    padding: var(--space-16);
+  }
+
+  .feature-demo-card .modal-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .feature-demo-card .modal-controls {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .feature-demo-card .modal-controls-column {
+    align-items: flex-start !important;
+  }
+
+  .feature-demo-card .day-toggles {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .feature-demo-card .day-toggle {
+    margin-left: 0;
+    border-radius: var(--radius-md);
+  }
+
+  .feature-demo-card .custom-hours-time-row {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .svc-demo-tabs {
+    padding: 0 var(--space-16);
+  }
+
+  .svc-demo-tab {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+
+  .svc-demo-price-controls {
+    flex-wrap: wrap;
+  }
+}

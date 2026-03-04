@@ -1,0 +1,512 @@
+/* ===== Booking Detail Page Layout ===== */
+
+.booking-detail-layout {
+    display: flex;
+    gap: var(--space-24);
+    height: 100%;
+    overflow: hidden;
+    background: var(--content-body-bg);
+
+}
+
+.booking-detail-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-24);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    align-self: flex-start;
+    /* Start from top when inside detail-center */
+}
+
+.booking-detail-sidebar {
+    width: 24em;
+    flex-shrink: 0;
+    overflow-y: auto;
+    border-left: 1px solid var(--border-color);
+    background: white;
+}
+
+/* Loading & Error states */
+.booking-detail-loading,
+.booking-detail-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    text-align: center;
+    color: var(--color-stone-500);
+}
+
+.booking-detail-error h3 {
+    margin-bottom: var(--space-8);
+    color: var(--color-stone-700);
+}
+
+/* ===== Invoice Container (Paper Look) ===== */
+
+.invoice-container {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--space-12);
+    padding: var(--space-32) var(--space-40);
+    max-width: 760px;
+}
+
+/* Invoice Header */
+.invoice-header {
+    margin-bottom: var(--space-24);
+}
+
+.invoice-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-16);
+}
+
+.invoice-logo-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-stone-200);
+}
+
+.invoice-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.invoice-badge--paid {
+    background: #F7FFEE;
+    color: #3D5323;
+    border: 1px solid #518366;
+}
+
+.invoice-badge--unpaid {
+    background: var(--color-stone-100);
+    color: var(--color-stone-600);
+}
+
+.invoice-badge--refunded {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.invoice-badge--failed {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.invoice-title {
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin: 0 0 var(--space-4) 0;
+    color: var(--color-vulcan-900);
+}
+
+.invoice-number {
+    font-size: 0.85rem;
+    color: var(--color-vulcan-900);
+    margin: 0;
+}
+
+/* Invoice Meta Row (number left, dates right) */
+.invoice-meta-row {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+/* Invoice Dates */
+.invoice-dates {
+    display: flex;
+    gap: var(--space-24);
+}
+
+.invoice-date-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.invoice-date-label {
+    font-size: var(--space-12);
+    color: var(--color-stone-500);
+ 
+}
+
+.invoice-date-value {
+    font-size: 0.85rem;
+    color: var(--color-stone-700);
+    font-weight: 500;
+}
+
+/* Invoice Addresses */
+.invoice-addresses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-24);
+    margin: var(--space-24) 0;
+    
+    border: 1px solid var(--border-color);
+    border-radius: var(--space-8);
+}
+
+.invoice-address-label {
+    font-size: 0.7rem;
+    color: var(--color-stone-400);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    display: block;
+    margin-bottom: var(--space-4);
+}
+.invoice-address-block {
+    padding: var(--space-16);
+
+}
+.invoice-address-block:first-child {
+    border-right: 1px solid var(--color-stone-200);
+
+}
+.invoice-address-block p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-stone-600);
+    line-height: 1.5;
+}
+
+.invoice-address-name {
+    font-weight: 600;
+    color: var(--color-vulcan-900) !important;
+}
+
+/* Invoice Items Table */
+.invoice-table-wrapper {
+    border: 1px solid var(--color-stone-200);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    margin: var(--space-24) 0 0 0;
+}
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.invoice-table thead {
+    background: var(--color-majorelle-blue-50);
+    border-bottom: 1px solid var(--color-stone-200);
+}
+
+.invoice-table th {
+    padding: var(--space-16) var(--space-22);
+    font-size: var(--space-12);
+    font-weight: 400;
+    color: var(--color-stone-700);
+    text-align: left;
+}
+
+.invoice-th-qty,
+.invoice-th-price {
+    text-align: right;
+    border-left: 1px solid var(--color-stone-200);
+}
+
+.invoice-table tbody tr {
+    border-top: 1px solid var(--color-stone-200);
+}
+
+.invoice-table tbody tr:first-child {
+    border-top: none;
+}
+
+.invoice-table td {
+    padding: var(--space-22);
+    font-size: var(--space-14);
+    color: var(--color-vulcan-900);
+    font-weight: 400;
+}
+
+.invoice-item-name {
+    font-weight: 500;
+}
+
+.invoice-item-qty {
+    text-align: right;
+    color: var(--color-stone-500);
+    border-left: 1px solid var(--color-stone-200);
+}
+
+.invoice-item-price {
+    text-align: right;
+    font-weight: 500;
+    border-left: 1px solid var(--color-stone-200);
+}
+
+/* Invoice Summary */
+.invoice-summary {
+    margin-top: var(--space-16);
+    border: 1px solid var(--color-stone-200);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.invoice-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.invoice-summary-row td {
+    padding: var(--space-22);
+    font-size: var(--space-14);
+    color: var(--color-vulcan-900);
+}
+
+.invoice-summary-row td:first-child {
+    text-align: left;
+    
+}
+
+.invoice-summary-row td:last-child {
+    text-align: right;
+    border-left: 1px solid var(--color-stone-200);
+}
+
+.invoice-summary-row+.invoice-summary-row {
+    border-top: 1px solid var(--color-stone-200);
+}
+
+.invoice-summary-total {
+    border-top: 1px solid var(--color-stone-200);
+}
+
+.invoice-summary-total td {
+    
+   
+    color: var(--color-vulcan-900);
+}
+
+/* Invoice Footer (Company Details — 4 columns) */
+.invoice-footer {
+    margin-top: var(--space-32);
+    padding-top: var(--space-16);
+   
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-24);
+    font-size: var(--space-12);
+    color: var(--color-stone-500);
+}
+
+.invoice-footer-col p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.invoice-footer-missing {
+    color: var(--color-stone-300);
+    font-style: italic;
+    font-size: 0.75rem;
+}
+
+/* ===== Booking Sidebar ===== */
+
+.sidebar-copy-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-4) var(--space-8);
+    color: var(--color-stone-400);
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    font-family: inherit;
+}
+
+.sidebar-copy-btn:hover {
+    background: var(--color-stone-100);
+    color: var(--color-stone-600);
+}
+
+.sidebar-copy-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ===== Magic Link Section ===== */
+
+.sidebar-magic-link {
+    padding: var(--space-16);
+    margin: var(--space-8) 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--color-stone-50);
+}
+
+.sidebar-magic-link-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-8);
+}
+
+.sidebar-magic-link-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.sidebar-magic-link-badge--active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.sidebar-magic-link-badge--expired {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.sidebar-magic-link-info {
+    font-size: 0.75rem;
+    color: var(--color-stone-500);
+    margin: 0 0 var(--space-8) 0;
+}
+
+.btn-magic-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-vulcan-900);
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    justify-content: center;
+}
+
+.btn-magic-link:hover:not(:disabled) {
+    background: var(--color-stone-100);
+    border-color: var(--color-stone-300);
+}
+
+.btn-magic-link:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-magic-link svg {
+    width: 14px;
+    height: 14px;
+}
+
+.btn-magic-link--small {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+}
+
+.sidebar-magic-link-url {
+    display: flex;
+    gap: 4px;
+    margin-bottom: var(--space-8);
+}
+
+.sidebar-magic-link-input {
+    flex: 1;
+    min-width: 0;
+    padding: 6px 8px;
+    font-size: 0.72rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: white;
+    color: var(--color-stone-600);
+    font-family: monospace;
+}
+
+.sidebar-magic-link-actions {
+    display: flex;
+    gap: var(--space-8);
+    align-items: center;
+}
+
+.btn-magic-link-revoke {
+    background: none;
+    border: none;
+    font-size: 0.75rem;
+    color: var(--color-stone-400);
+    cursor: pointer;
+    padding: 4px 8px;
+    font-family: inherit;
+    text-decoration: underline;
+}
+
+.btn-magic-link-revoke:hover {
+    color: #dc2626;
+}
+
+.btn-storno {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #dc2626;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-storno:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+}
+
+.btn-storno svg {
+    width: 14px;
+    height: 14px;
+}
+
+
+
+.btn-cancel {
+    flex: 1;
+    padding: var(--space-8) var(--space-16);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-stone-600);
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-cancel:hover {
+    background: var(--color-stone-50);
+    border-color: var(--color-stone-300);
+}
+
+/* ── PDF Export Overrides ── */
+.invoice-container.pdf-exporting {
+    box-shadow: none;
+    border: none;
+    background: white;
+}

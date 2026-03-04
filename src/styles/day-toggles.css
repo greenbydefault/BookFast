@@ -1,0 +1,44 @@
+/* Shared day-toggles – used by Modal (Dashboard), StaffFormFields (Demo), CreateObjectModal, etc. */
+.day-toggles {
+  display: flex;
+  border: none;
+  border-radius: var(--radius-md);
+  overflow: visible;
+}
+
+.day-toggle {
+  background: none;
+  border: 1px solid var(--border-color);
+  padding: var(--space-4) var(--space-8);
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  margin-left: -1px;
+}
+
+.day-toggle:first-child {
+  margin-left: 0;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.day-toggle:last-child {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.day-toggle.active {
+  background-color: var(--color-majorelle-blue-50);
+  color: var(--primary);
+  font-weight: 400;
+  border: 1px solid var(--color-majorelle-blue-400);
+  position: relative;
+  z-index: 1;
+}
+
+.day-toggle.active + .day-toggle.active {
+}
+
+.day-toggle:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}

@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/login.html", "destination": "/login.html" },
+    { "source": "/register.html", "destination": "/register.html" },
+    { "source": "/forgot-password.html", "destination": "/forgot-password.html" },
+    { "source": "/update-password.html", "destination": "/update-password.html" },
+    { "source": "/private-policies.html", "destination": "/private-policies.html" },
+    { "source": "/datenschutzbestimmungen.html", "destination": "/datenschutzbestimmungen.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

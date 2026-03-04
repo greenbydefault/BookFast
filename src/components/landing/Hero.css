@@ -1,0 +1,70 @@
+/* Hero */
+.landing-hero {
+  padding: 6rem 0 4rem;
+}
+
+.landing-hero-centered {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.landing-hero-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .landing-hero-split {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .landing-hero {
+    padding: 3rem 0 2rem;
+  }
+}
+
+.landing-hero-ctas {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.landing-hero-centered .landing-hero-ctas {
+  justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .landing-hero-ctas {
+    flex-direction: column;
+  }
+}
+
+.landing-trust-claims {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.landing-hero-centered .landing-trust-claims {
+  justify-content: center;
+}
+
+.landing-trust-claim {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--color-stone-500);
+}
+
+.landing-trust-claim svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-majorelle-blue-900);
+  flex-shrink: 0;
+}

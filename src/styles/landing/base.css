@@ -1,0 +1,55 @@
+/* --- Reset for landing pages --- */
+body.landing-active {
+  overflow: auto;
+  display: block;
+}
+
+body.landing-active #app {
+  height: auto;
+  min-height: 100vh;
+}
+
+/* --- Container --- */
+.landing-container {
+  max-width: 120rem;
+  margin: 0 auto;
+  
+  
+}
+
+.landing-container-narrow {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* --- Sections --- */
+.landing-section {
+  padding: 15rem var(--space-120);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.landing-section-sm {
+  padding: 3rem 0;
+}
+
+.landing-section-lg {
+  padding: 7rem 0;
+}
+
+.landing-section-alt {
+  
+}
+
+/* Reusable frosted frame for interactive cards/modules */
+.landing-frosted-frame {
+  width: 100%;
+  border-radius:var(--space-12);
+  padding: var(--space-12);
+  background: rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
