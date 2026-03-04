@@ -24,13 +24,30 @@ function updatePasswordRequirements() {
         return
     }
     passwordRequirements.classList.remove('password-requirements--hidden')
-    const { allMet } = checkPasswordStrength(pw)
+    const { hasLower, hasUpper, hasDigit, hasSymbol, allMet } = checkPasswordStrength(pw)
     if (allMet) {
         passwordRequirements.classList.add('password-requirements--valid')
         passwordRequirementsText.textContent = 'Das Passwort erfüllt die vorausgesetzten Kriterien'
     } else {
         passwordRequirements.classList.remove('password-requirements--valid')
-        passwordRequirementsText.textContent = 'Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen (empfohlen)'
+        passwordRequirementsText.textContent = ''
+        const items = [
+            { label: 'Kleinbuchstaben', met: hasLower },
+            { label: 'Großbuchstaben', met: hasUpper },
+            { label: 'Ziffern', met: hasDigit },
+            { label: 'Sonderzeichen', met: hasSymbol }
+        ]
+        items.forEach((item, i) => {
+            const span = document.createElement('span')
+            span.className = 'password-requirement' + (item.met ? ' password-requirement--met' : '')
+            span.textContent = item.label
+            passwordRequirementsText.appendChild(span)
+            if (i < items.length - 2) {
+                passwordRequirementsText.appendChild(document.createTextNode(', '))
+            } else if (i === items.length - 2) {
+                passwordRequirementsText.appendChild(document.createTextNode(' und '))
+            }
+        })
     }
 }
 
@@ -75,7 +92,7 @@ form.addEventListener('submit', async (e) => {
     }
     const { allMet } = checkPasswordStrength(password)
     if (!allMet) {
-        errorMessage.textContent = 'Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen (empfohlen) werden benötigt'
+        errorMessage.textContent = 'Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen werden benötigt'
         errorMessage.style.display = 'block'
         return
     }

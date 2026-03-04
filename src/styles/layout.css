@@ -559,7 +559,10 @@
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.55s ease;
+}
 
+.filter-toggle-btn .icon {
+    color: inherit;
 }
 
 .filter-toggle-btn:hover {
@@ -1035,9 +1038,9 @@
     align-items: center;
     justify-content: center;
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: var(--space-56);
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 200;
     color: var(--color-stone-700);
     background: var(--color-stone-100);
     border: 1px solid var(--color-stone-200);

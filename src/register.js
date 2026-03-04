@@ -16,7 +16,7 @@ const emailInput = document.getElementById('email')
 const fullNameInput = document.getElementById('fullName')
 const passwordInput = document.getElementById('password')
 const passwordToggleBtn = document.getElementById('passwordToggleBtn')
-const passwordToggleIconUse = document.getElementById('passwordToggleIconUse')
+const passwordToggleIcon = passwordToggleBtn?.querySelector('.auth-password-toggle-icon')
 const passwordRequirements = document.getElementById('passwordRequirements')
 const passwordRequirementsText = passwordRequirements?.querySelector('.password-requirements__text')
 
@@ -37,13 +37,30 @@ function updatePasswordRequirements() {
         return
     }
     passwordRequirements.classList.remove('password-requirements--hidden')
-    const { allMet } = checkPasswordStrength(pw)
+    const { hasLower, hasUpper, hasDigit, hasSymbol, allMet } = checkPasswordStrength(pw)
     if (allMet) {
         passwordRequirements.classList.add('password-requirements--valid')
         passwordRequirementsText.textContent = 'Das Passwort erfüllt die vorausgesetzten Kriterien'
     } else {
         passwordRequirements.classList.remove('password-requirements--valid')
-        passwordRequirementsText.textContent = 'Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen (empfohlen)'
+        passwordRequirementsText.textContent = ''
+        const items = [
+            { label: 'Kleinbuchstaben', met: hasLower },
+            { label: 'Großbuchstaben', met: hasUpper },
+            { label: 'Ziffern', met: hasDigit },
+            { label: 'Sonderzeichen', met: hasSymbol }
+        ]
+        items.forEach((item, i) => {
+            const span = document.createElement('span')
+            span.className = 'password-requirement' + (item.met ? ' password-requirement--met' : '')
+            span.textContent = item.label
+            passwordRequirementsText.appendChild(span)
+            if (i < items.length - 2) {
+                passwordRequirementsText.appendChild(document.createTextNode(', '))
+            } else if (i === items.length - 2) {
+                passwordRequirementsText.appendChild(document.createTextNode(' und '))
+            }
+        })
     }
 }
 
@@ -54,11 +71,14 @@ function resetPasswordRequirements() {
     passwordRequirementsText.textContent = ''
 }
 
+const SVG_EYE = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+const SVG_EYE_OFF = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+
 function updatePasswordToggleUI(isVisible) {
-    if (!passwordToggleBtn || !passwordToggleIconUse) return
+    if (!passwordToggleBtn || !passwordToggleIcon) return
     passwordToggleBtn.setAttribute('aria-pressed', String(isVisible))
     passwordToggleBtn.setAttribute('aria-label', isVisible ? 'Passwort ausblenden' : 'Passwort anzeigen')
-    passwordToggleIconUse.setAttribute('href', isVisible ? '#icon-eye' : '#icon-eye-closed')
+    passwordToggleIcon.innerHTML = isVisible ? SVG_EYE_OFF : SVG_EYE
 }
 
 function resetPasswordVisibility() {
@@ -166,7 +186,7 @@ registerForm.addEventListener('submit', async (e) => {
     }
     const { allMet } = checkPasswordStrength(password)
     if (!allMet) {
-        showError('Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen (empfohlen) werden benötigt')
+        showError('Kleinbuchstaben, Großbuchstaben, Ziffern und Sonderzeichen werden benötigt')
         return
     }
 

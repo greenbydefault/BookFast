@@ -20,7 +20,7 @@
 
         <h1 class="auth-title auth-title--centered">Willkommen zurück<br>bei BookFast</h1>
         <p class="auth-subtitle auth-subtitle--centered">
-            Melde dich mit deiner E-Mail oder deinem Google-Account<br>an und leg sofort los.
+            Melde dich mit deiner E-Mail oder deinem<br>Google-Account an und leg sofort los.
         </p>
 
         <div class="auth-card auth-card--compact">
@@ -41,14 +41,29 @@
                     Mit Google Anmelden
                 </button>
 
+                <p class="auth-divider-text">oder</p>
+
                 <div class="form-group">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" class="form-input" required placeholder="Type your email" autocomplete="email">
+                    <input type="email" id="email" class="form-input" required placeholder="Deine E-Mail-Adresse eingeben" autocomplete="email">
                 </div>
 
                 <div class="form-group form-group--tight">
                     <label for="password" class="form-label">Passwort</label>
-                    <input type="password" id="password" class="form-input" required placeholder="••••••••" autocomplete="current-password">
+                    <div class="auth-password-field">
+                        <input type="password" id="password" class="form-input form-input--with-icon" required placeholder="••••••••" autocomplete="current-password">
+                        <button
+                            type="button"
+                            id="passwordToggleBtn"
+                            class="auth-password-toggle"
+                            aria-label="Passwort anzeigen"
+                            aria-pressed="false">
+                            <svg class="auth-password-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
                     <div class="auth-inline-link-row">
                         <a href="/forgot-password.html" class="auth-inline-link">Passwort vergessen?</a>
                     </div>

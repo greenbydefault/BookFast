@@ -74,6 +74,13 @@ body.auth-page {
     text-align: left;
 }
 
+.auth-divider-text {
+    margin: var(--space-12) 0;
+    font-size: var(--space-12);
+    color: var(--color-vulcan-500);
+    text-align: center;
+}
+
 .form-group {
     margin-bottom: 0.75rem;
 }
@@ -326,6 +333,10 @@ body.auth-page {
 
 .password-requirements__text {
     display: block;
+}
+
+.password-requirement--met {
+    text-decoration: line-through;
 }
 
 .step-hidden {

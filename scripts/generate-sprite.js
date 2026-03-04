@@ -31,8 +31,8 @@ const generateSprite = async () => {
         if (svgContentMatch && svgContentMatch[1]) {
             let innerContent = svgContentMatch[1];
 
-            // Replace hardcoded colors with currentColor
-            innerContent = innerContent.replace(/#44403C/gi, 'currentColor');
+            // Replace hardcoded colors with currentColor (so icons inherit text color)
+            innerContent = innerContent.replace(/#44403C|#12111F/gi, 'currentColor');
 
             symbols += `<symbol id="${id}" viewBox="0 0 24 24" fill="none" stroke="currentColor">${innerContent}</symbol>\n`;
         }
