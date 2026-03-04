@@ -11,7 +11,7 @@ import { navigateWithParams, getNavigationGeneration } from '../../lib/router.js
 import { renderEmptyState, renderPageLoading } from '../../components/EmptyState/EmptyState.js';
 import { openCreateBookingModal } from './bookings/modals/CreateBookingModal.js';
 import { fetchAggregatedCustomers, fetchCustomerEmailCount, fetchBookingsForCustomerAggregation } from '../../lib/services/customersService.js';
-import { fetchEntities } from '../../lib/dataLayer.js';
+import { fetchEntities, fetchEntityCount } from '../../lib/dataLayer.js';
 
 /**
  * Fetch customers aggregated from bookings

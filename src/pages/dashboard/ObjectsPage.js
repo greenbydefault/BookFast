@@ -3,7 +3,7 @@
  * Following workflow: /create-dashboard-page
  */
 import { getState, setNestedState } from '../../lib/store.js';
-import { fetchEntities, deleteEntity, invalidateCache } from '../../lib/dataLayer.js';
+import { fetchEntities, fetchEntityCount, deleteEntity, invalidateCache } from '../../lib/dataLayer.js';
 import { getIconString } from '../../components/Icons/Icon.js';
 import { createButton } from '../../components/Button/Button.js';
 import { createActionMenu } from '../../components/ActionMenu/ActionMenu.js';
@@ -47,13 +47,19 @@ const fetchObjects = async () => {
   });
 
   if (result.items.length === 0) {
-    renderEmptyState(mainContent, {
-      ...EMPTY_STATE_CONFIG,
-      onPrimaryClick: handleAddObject,
-      secondaryHref: '#'
-    });
-    if (topBarActions) topBarActions.innerHTML = '';
-    return;
+    let globalCount = 0;
+    if (filter !== 'all') {
+      globalCount = await fetchEntityCount('objects');
+    }
+    if (globalCount === 0) {
+      renderEmptyState(mainContent, {
+        ...EMPTY_STATE_CONFIG,
+        onPrimaryClick: handleAddObject,
+        secondaryHref: '#'
+      });
+      if (topBarActions) topBarActions.innerHTML = '';
+      return;
+    }
   }
 
   const tableBody = document.getElementById('objects-table-body');

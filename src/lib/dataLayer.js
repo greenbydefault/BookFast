@@ -183,6 +183,29 @@ export const fetchEntities = async (entityType, options = {}) => {
 };
 
 /**
+ * Fetch total count for an entity type (unfiltered).
+ * Used to distinguish "no items for this filter" from "no items at all".
+ */
+export const fetchEntityCount = async (entityType) => {
+    const state = getState();
+    if (state.isDemoMode) {
+        return (DEMO_DATA[entityType] || []).length;
+    }
+    const workspaceId = state.currentWorkspace?.id;
+    if (!workspaceId) return 0;
+    const config = getEntityConfig(entityType);
+    const { count, error } = await supabase
+        .from(config.table)
+        .select('*', { count: 'exact', head: true })
+        .eq('workspace_id', workspaceId);
+    if (error) {
+        console.error(`fetchEntityCount(${entityType}):`, error);
+        return 0;
+    }
+    return count || 0;
+};
+
+/**
  * Fetch single entity by ID
  */
 export const fetchEntity = async (entityType, id) => {
