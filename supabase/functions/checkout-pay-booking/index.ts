@@ -97,7 +97,7 @@ serve(async (req: Request) => {
         const platformFeeCents = calculatePlatformFee(amountCents);
 
         // Create Stripe Session
-        const baseUrl = success_url?.split('?')[0] || Deno.env.get('APP_URL') || 'http://localhost:5173';
+        const baseUrl = success_url?.split('?')[0] || Deno.env.get('APP_URL') || 'https://app.book-fast.de';
 
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',

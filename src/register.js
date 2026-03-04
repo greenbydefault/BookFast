@@ -136,7 +136,7 @@ async function handleSocialLogin(provider) {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: provider,
             options: {
-                redirectTo: window.location.origin + '/dashboard/bookings'
+                redirectTo: 'https://app.book-fast.de/dashboard/bookings'
             }
         })
         if (error) throw error

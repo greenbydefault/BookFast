@@ -1,6 +1,7 @@
 const ALLOWED_ORIGINS = [
-  'https://www.bookfast.ch',
-  'https://bookfast.ch',
+  'https://book-fast.de',
+  'https://www.book-fast.de',
+  'https://app.book-fast.de',
   'http://localhost:5173',
   'http://localhost:3000',
 ];

@@ -35,7 +35,7 @@ export const renderDatenschutzPage = () => {
           <p>Für die Zahlungsabwicklung nutzen wir Stripe (Stripe, Inc.). Stripe ist ein zertifizierter PCI-DSS-konformer Zahlungsdienstleister. Mehr Informationen: <a href="https://stripe.com/de/privacy" target="_blank" rel="noopener">Stripe Datenschutz</a>.</p>
 
           <h2 class="landing-h3" style="margin-top: 2rem;">6. Deine Rechte</h2>
-          <p>Du hast jederzeit das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Wende dich dazu an: hello@bookfast.app</p>
+          <p>Du hast jederzeit das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Wende dich dazu an: hello@book-fast.de</p>
         </div>
       </div>
     </section>

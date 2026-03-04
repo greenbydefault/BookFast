@@ -27,7 +27,7 @@ export const renderContactPage = () => {
             <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
               <div style="padding: 1.25rem; background: var(--color-stone-50); border-radius: 10px;">
                 <div style="font-weight: 600; margin-bottom: 0.25rem;"><img src="/src/svg/ICON/Mails.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> E-Mail</div>
-                <p class="landing-text-sm" style="margin: 0;">hello@bookfast.app</p>
+                <p class="landing-text-sm" style="margin: 0;">hello@book-fast.de</p>
               </div>
               <div style="padding: 1.25rem; background: var(--color-stone-50); border-radius: 10px;">
                 <div style="font-weight: 600; margin-bottom: 0.25rem;"><img src="/src/svg/ICON/chat.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> Live-Chat</div>

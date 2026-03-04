@@ -11,7 +11,7 @@ async function handleSocialLogin(provider) {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: provider,
             options: {
-                redirectTo: window.location.origin + '/dashboard/bookings'
+                redirectTo: 'https://app.book-fast.de/dashboard/bookings'
             }
         })
         if (error) throw error
@@ -45,7 +45,7 @@ loginForm.addEventListener('submit', async (e) => {
         if (error) throw error
 
         // Redirect to home/dashboard on success
-        window.location.href = '/'
+        window.location.href = 'https://app.book-fast.de/dashboard/bookings'
 
     } catch (error) {
         errorMessage.textContent = error.message

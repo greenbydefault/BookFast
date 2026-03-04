@@ -21,7 +21,7 @@ export const setPageMeta = (title, description) => {
  * Set canonical URL
  */
 export const setCanonical = (path) => {
-  const url = `https://bookfast.app${path}`;
+  const url = `https://book-fast.de${path}`;
   let link = document.querySelector('link[rel="canonical"]');
   if (!link) {
     link = document.createElement('link');

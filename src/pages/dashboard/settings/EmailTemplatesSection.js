@@ -80,7 +80,7 @@ const COMMON_PLACEHOLDERS = [
 ];
 
 const PORTAL_PLACEHOLDERS = [
-  { key: '{{portal_link}}', label: 'Kundenportal-Link', defaultPreview: 'https://portal.bookfast.de/b/abc123' },
+  { key: '{{portal_link}}', label: 'Kundenportal-Link', defaultPreview: 'https://app.book-fast.de/b/abc123' },
   { key: '{{pin_code}}', label: 'Zugangscode', defaultPreview: '847291' },
 ];
 

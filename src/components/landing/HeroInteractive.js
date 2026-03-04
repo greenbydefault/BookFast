@@ -136,7 +136,7 @@ export const initHeroInteractive = () => {
     // Set global state to Demo Mode
     setState({
       isDemoMode: true,
-      user: { id: 'demo-user', email: 'demo@bookfast.app', user_metadata: { full_name: 'Demo User' } },
+      user: { id: 'demo-user', email: 'demo@book-fast.de', user_metadata: { full_name: 'Demo User' } },
       workspaces: [demoWorkspace],
       currentWorkspace: demoWorkspace
     });

@@ -307,7 +307,7 @@ serve(async (req: Request) => {
       };
 
       // Create Stripe Checkout Session (Direct Charges - payment goes directly to connected account)
-      const baseUrl = success_url?.split('?')[0] || Deno.env.get('APP_URL') || 'http://localhost:5173';
+      const baseUrl = success_url?.split('?')[0] || Deno.env.get('APP_URL') || 'https://app.book-fast.de';
 
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',

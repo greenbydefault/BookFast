@@ -14,12 +14,12 @@ const app = document.querySelector('#app');
  * Initialize the landing page system.
  * Called from main.js when user is not logged in (or on public routes).
  */
-export const initLandingPages = () => {
+export const initLandingPages = ({ isLoggedIn = false } = {}) => {
   document.body.classList.add('landing-active');
 
   app.innerHTML = '';
 
-  renderNavigation(app);
+  renderNavigation(app, { isLoggedIn });
 
   const content = document.createElement('main');
   content.id = 'landing-content';

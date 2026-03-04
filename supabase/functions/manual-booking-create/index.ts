@@ -326,7 +326,7 @@ serve(async (req: Request) => {
             // Construct Link
             // APP_URL env var or origin passed in req?
             // Usually provided via env.
-            const appUrl = Deno.env.get('APP_URL') || 'https://bookfast.app';
+            const appUrl = Deno.env.get('APP_URL') || 'https://app.book-fast.de';
             // Or construct from origin if available, but env is safer for server-side.
             // The user's specific portal URL:
             const portalLink = `${appUrl}/b/${plainToken}`;

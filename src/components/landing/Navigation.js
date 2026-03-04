@@ -74,7 +74,8 @@ function buildMegaFeaturesHTML() {
 /**
  * Render the navigation into a container element
  */
-export const renderNavigation = (container) => {
+export const renderNavigation = (container, options = {}) => {
+  const isLoggedIn = options.isLoggedIn || false;
   const nav = document.createElement('nav');
   nav.className = 'landing-nav';
 
@@ -111,8 +112,10 @@ export const renderNavigation = (container) => {
       <a href="/" class="landing-nav-logo" data-landing-link>BookFast</a>
       <div class="landing-nav-links">${linksHTML}</div>
       <div class="landing-nav-actions">
-        <a href="/login.html" class="landing-btn landing-btn-ghost landing-btn-sm"><span class="landing-btn__icon">${getIconString('key', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Anmelden</span></a>
-        <a href="/login.html" class="landing-btn landing-btn-primary landing-btn-sm">Kostenlos testen</a>
+        ${isLoggedIn
+          ? `<a href="/dashboard/bookings" class="landing-btn landing-btn-ghost landing-btn-sm"><span class="landing-btn__icon">${getIconString('arrow-right', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zum Dashboard</span></a>`
+          : `<a href="/login.html" class="landing-btn landing-btn-ghost landing-btn-sm"><span class="landing-btn__icon">${getIconString('key', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Anmelden</span></a>
+        <a href="/login.html" class="landing-btn landing-btn-primary landing-btn-sm">Kostenlos testen</a>`}
       </div>
       <button class="landing-nav-mobile-toggle" aria-label="Menü">
         <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -124,8 +127,10 @@ export const renderNavigation = (container) => {
       <a href="/features" data-landing-link>Features</a>
       <a href="/preise" data-landing-link>Preise</a>
       <div style="padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
-        <a href="/login.html" class="landing-btn landing-btn-secondary" style="text-align:center;"><span class="landing-btn__icon">${getIconString('key', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Anmelden</span></a>
-        <a href="/login.html" class="landing-btn landing-btn-primary" style="text-align:center;">Kostenlos testen</a>
+        ${isLoggedIn
+          ? `<a href="/dashboard/bookings" class="landing-btn landing-btn-secondary" style="text-align:center;"><span class="landing-btn__icon">${getIconString('arrow-right', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zum Dashboard</span></a>`
+          : `<a href="/login.html" class="landing-btn landing-btn-secondary" style="text-align:center;"><span class="landing-btn__icon">${getIconString('key', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Anmelden</span></a>
+        <a href="/login.html" class="landing-btn landing-btn-primary" style="text-align:center;">Kostenlos testen</a>`}
       </div>
     </div>
   `;

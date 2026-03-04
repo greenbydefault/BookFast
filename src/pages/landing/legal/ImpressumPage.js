@@ -25,7 +25,7 @@ export const renderImpressumPage = () => {
 
           <h2 class="landing-h3" style="margin-top: 2rem;">Kontakt</h2>
           <p>
-            E-Mail: hello@bookfast.app<br>
+            E-Mail: hello@book-fast.de<br>
             Telefon: [Telefonnummer]
           </p>
 

@@ -89,7 +89,7 @@ serve(async (req: Request) => {
     }
 
     // Create account link for onboarding
-    const baseUrl = return_url || Deno.env.get('APP_URL') || 'http://localhost:5173';
+    const baseUrl = return_url || Deno.env.get('APP_URL') || 'https://app.book-fast.de';
     
     const accountLink = await stripe.accountLinks.create({
       account: accountId,

@@ -145,7 +145,7 @@ const renderLayout = (user) => {
   if (userDropdownContainer && state.user) {
     const userEmail = state.user.email || 'Account';
     const userFullName = state.user.user_metadata?.full_name || userEmail;
-    const wishlistUrl = 'https://bookfast.de/roadmap';
+    const wishlistUrl = 'https://book-fast.de/roadmap';
 
     const userMenuOptions = [
       { label: 'Settings', value: 'settings', icon: 'gear' },
@@ -161,12 +161,12 @@ const renderLayout = (user) => {
       } else if (value === 'account') {
         navigate('settings', { queryParams: '?tab=account' });
       } else if (value === 'docs') {
-        window.location.href = '/docs';
+        window.location.href = 'https://book-fast.de/docs';
       } else if (value === 'roadmap') {
         window.open(wishlistUrl, '_blank');
       } else if (value === 'logout') {
         await supabase.auth.signOut();
-        window.location.reload();
+        window.location.href = 'https://book-fast.de/';
       }
     };
 

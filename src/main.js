@@ -18,6 +18,8 @@ import { removeStorageItem } from './lib/storageService.js';
 // Track current user to detect user changes
 let currentUserId = null;
 
+const isAppSubdomain = () => window.location.hostname === 'app.book-fast.de';
+
 /**
  * Handle user change: clear stale workspace selection and reset state
  */
@@ -85,9 +87,9 @@ const loadDashboard = async (session) => {
 /**
  * Dynamically load and start Landing Pages
  */
-const loadLanding = async () => {
+const loadLanding = async ({ isLoggedIn = false } = {}) => {
   const { initLandingPages } = await import('./pages/landing/LandingLayout.js');
-  initLandingPages();
+  initLandingPages({ isLoggedIn });
 };
 
 /**
@@ -118,16 +120,27 @@ const init = async () => {
   if (session) {
     handleUserChange(session.user.id);
 
-    if (isDashboardRoute()) {
+    if (isAppSubdomain()) {
+      if (!isDashboardRoute() && !isPortalRoute()) {
+        history.replaceState(null, '', '/dashboard/bookings');
+      }
+      await loadDashboard(session);
+    } else if (isDashboardRoute()) {
       await loadDashboard(session);
     } else if (isKnownLandingRoute(path)) {
-      await loadLanding();
+      await loadLanding({ isLoggedIn: true });
     } else {
       history.replaceState(null, '', '/dashboard/bookings');
       await loadDashboard(session);
     }
   } else {
-    // Not logged in → show landing pages
+    if (isAppSubdomain()) {
+      window.location.href = 'https://book-fast.de/';
+      return;
+    }
+    if (!isKnownLandingRoute(path)) {
+      history.replaceState(null, '', '/');
+    }
     await loadLanding();
   }
 
@@ -139,19 +152,27 @@ const init = async () => {
       handleUserChange(session.user.id);
       await unloadLanding();
 
-      if (isDashboardRoute()) {
+      if (isAppSubdomain()) {
+        if (!isDashboardRoute() && !isPortalRoute()) {
+          history.replaceState(null, '', '/dashboard/bookings');
+        }
+        await loadDashboard(session);
+      } else if (isDashboardRoute()) {
         await loadDashboard(session);
       } else if (isKnownLandingRoute(currentPath)) {
-        await loadLanding();
+        await loadLanding({ isLoggedIn: true });
       } else {
         history.replaceState(null, '', '/dashboard/bookings');
         await loadDashboard(session);
       }
     } else {
-      // Logged out → clear user-specific data and switch to landing
       currentUserId = null;
       removeStorageItem('selectedWorkspaceId');
       resetState();
+      if (isAppSubdomain()) {
+        window.location.href = 'https://book-fast.de/';
+        return;
+      }
       await unloadLanding();
       if (!isKnownLandingRoute(currentPath)) {
         history.replaceState(null, '', '/');

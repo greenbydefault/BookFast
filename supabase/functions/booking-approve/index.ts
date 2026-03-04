@@ -197,7 +197,7 @@ serve(async (req: Request) => {
         // Wrap in HTML
         const html = buildEmailHtml(bodyText, ws);
 
-        // Build "from" address (non-white-label: always send from bookfast.de)
+        // Build "from" address (non-white-label: always send from book-fast.de)
         const displayName = ws.company_name || ws.email_from_name || 'BookFast';
         const fromName = `${displayName} via BookFast`;
         const fromAddress = 'noreply@book-fast.de';

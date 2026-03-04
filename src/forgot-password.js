@@ -22,7 +22,7 @@ form.addEventListener('submit', async (e) => {
 
     try {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: window.location.origin + '/update-password.html',
+            redirectTo: 'https://app.book-fast.de/update-password.html',
         })
 
         if (error) throw error
