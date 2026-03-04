@@ -80,54 +80,40 @@ export const initFilterToggle = () => {
     let isAnimating = false;
     let fallbackTimer = null;
 
-    const finishTransition = (isOpening) => {
+    let inner = filters.querySelector('.zone-filters-inner');
+    if (!inner) {
+        inner = document.createElement('div');
+        inner.className = 'zone-filters-inner';
+        while (filters.firstChild) {
+            inner.appendChild(filters.firstChild);
+        }
+        filters.appendChild(inner);
+    }
+
+    const finishTransition = () => {
         if (fallbackTimer) {
             clearTimeout(fallbackTimer);
             fallbackTimer = null;
         }
-
-        if (isOpening) {
-            filters.style.height = 'auto';
-            filters.classList.add('is-visible');
-        } else {
-            filters.style.height = '0px';
-            filters.classList.remove('is-visible');
-        }
-
-        filters.style.willChange = '';
         isAnimating = false;
     };
 
     const startTransition = (isOpening) => {
         isAnimating = true;
-        filters.style.willChange = 'height';
-
-        if (isOpening) {
-            filters.classList.add('is-visible');
-            const targetHeight = filters.scrollHeight;
-            filters.style.height = '0px';
-            filters.offsetHeight;
-            filters.style.height = `${targetHeight}px`;
-        } else {
-            const currentHeight = filters.getBoundingClientRect().height;
-            filters.style.height = `${currentHeight}px`;
-            filters.offsetHeight;
-            filters.classList.remove('is-visible');
-            filters.style.height = '0px';
-        }
+        filters.classList.toggle('is-visible', isOpening);
 
         const onTransitionEnd = (event) => {
-            if (event.propertyName !== 'height') return;
+            if (event.target !== filters || event.propertyName !== 'grid-template-rows') return;
             filters.removeEventListener('transitionend', onTransitionEnd);
-            finishTransition(isOpening);
+            finishTransition();
         };
 
         filters.addEventListener('transitionend', onTransitionEnd);
 
-        // Fallback in case transitionend does not fire (e.g. interrupted layout updates).
+        // Fallback in case transitionend is skipped.
         fallbackTimer = setTimeout(() => {
             filters.removeEventListener('transitionend', onTransitionEnd);
-            finishTransition(isOpening);
+            finishTransition();
         }, 420);
     };
 

@@ -1,33 +1,244 @@
 /**
- * Settings - Integration Section (Google Calendar Placeholder)
+ * Settings - Integration Section (Drive UI on Stripe Connect logic)
  */
+import { getState } from '../../../lib/store.js';
+import { createActionButton } from '../../../components/Button/Button.js';
+import { getIconString } from '../../../components/Icons/Icon.js';
+import { refreshWorkspace } from './settingsHelpers.js';
+import { startStripeConnect, fetchStripeConnectStatus } from '../../../lib/services/stripeConnectService.js';
 
-export const renderIntegrationContent = () => {
+const integrationUiState = {
+  setupOpen: true,
+  paymentMethods: {
+    paypal: false,
+    card: true,
+    klarna: false,
+  },
+};
+
+const getStepConfig = (ws) => {
+  const isConnected = Boolean(ws?.stripe_connected_account_id);
+  const isActive = ws?.payout_status === 'active';
+
+  return [
+    {
+      index: 1,
+      title: 'Drive-Konto erstellen',
+      subtitle: 'Verbinde dein Drive-Konto',
+      done: isConnected,
+    },
+    {
+      index: 2,
+      title: 'Verifizierung',
+      subtitle: 'Identität bestätigen',
+      done: isActive,
+    },
+    {
+      index: 3,
+      title: 'Bereit',
+      subtitle: 'Dateien empfangen',
+      done: isActive,
+    },
+  ];
+};
+
+const getProgressSegments = (completed, total) => {
+  const totalSegments = 48;
+  const filledSegments = Math.round((completed / total) * totalSegments);
+  return Array.from({ length: totalSegments }, (_, idx) =>
+    `<div class="integration-progress-segment ${idx < filledSegments ? 'is-active' : ''}"></div>`
+  ).join('');
+};
+
+const handleConnectDrive = async () => {
+  const state = getState();
+  const ws = state.currentWorkspace;
+
+  if (!ws?.id) {
+    alert('Kein Workspace ausgewählt');
+    return;
+  }
+
+  try {
+    const result = await startStripeConnect({
+      workspaceId: ws.id,
+      returnUrl: window.location.href,
+      refreshUrl: window.location.href,
+    });
+
+    if (result.onboarding_url) {
+      window.location.href = result.onboarding_url;
+    }
+  } catch (error) {
+    console.error('Connect error:', error);
+    alert(`Fehler beim Verbinden: ${error.message}`);
+  }
+};
+
+const handleCheckIntegrationStatus = async () => {
+  const state = getState();
+  const ws = state.currentWorkspace;
+
+  if (!ws?.id || !ws.stripe_connected_account_id) {
+    return;
+  }
+
+  try {
+    await fetchStripeConnectStatus(ws.id);
+    await refreshWorkspace();
+    await renderIntegrationContent();
+  } catch (error) {
+    console.error('Status check error:', error);
+    alert(`Fehler beim Prüfen: ${error.message}`);
+  }
+};
+
+export const renderIntegrationContent = async () => {
   const container = document.getElementById('settings-content');
   if (!container) return;
 
+  const state = getState();
+  const ws = state.currentWorkspace || {};
+  const steps = getStepConfig(ws);
+  const completedSteps = steps.filter(step => step.done).length;
+  const totalSteps = steps.length;
+  const progressPercent = Math.round((completedSteps / totalSteps) * 100);
+  const isConnected = Boolean(ws.stripe_connected_account_id);
+  const isReady = ws.payout_status === 'active';
+  const canShowPaymentMethods = isReady;
+
   container.innerHTML = `
-    <div class="settings-section">
-      <div class="settings-card" style="display: flex; align-items: center; justify-content: space-between;">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-          <div style="width: 48px; height: 48px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-              <path fill="#4285F4" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" opacity="0.1"/>
-              <path d="M16 10V8C16 7.44772 15.5523 7 15 7H9C8.44772 7 8 7.44772 8 8V10" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M8 10V14" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 10V14" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M8 14V16C8 16.5523 8.44772 17 9 17H15C15.5523 17 16 16.5523 16 16V14" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M12 10V14" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M8 12H16" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
+    <div class="integration-setup">
+      <section class="settings-card">
+        <div class="integration-setup__header">
           <div>
-            <h3 style="margin: 0 0 0.25rem 0;">Google Kalender</h3>
-            <p style="color: var(--color-stone-500); font-size: 0.9rem; margin: 0;">Synchronisiere deine Buchungen automatisch mit Google Kalender.</p>
+            <h2 class="integration-setup__title">Drive Einrichtung</h2>
+            <p class="integration-setup__subtitle">${completedSteps} von ${totalSteps} erforderlichen Schritten abgeschlossen</p>
           </div>
+          <span class="integration-setup__percent">${progressPercent} / 100%</span>
         </div>
-        <button class="btn btn-secondary" disabled>Bald verfügbar</button>
-      </div>
+        <div class="integration-progress">${getProgressSegments(completedSteps, totalSteps)}</div>
+
+        <div class="workspace-checklist">
+          <article class="workspace-checklist-item">
+            <div class="workspace-checklist-item__left">
+              <span class="workspace-checklist-item__icon workspace-checklist-item__icon--secondary">
+                ${getIconString('check')}
+              </span>
+              <div>
+                <h3 class="workspace-checklist-item__title">Drive Connect ${isConnected ? 'aktiv' : 'inaktiv'}</h3>
+                <p class="workspace-checklist-item__subtitle">
+                  ${isConnected ? 'Dein Konto ist verbunden. Du kannst Dateien synchronisieren.' : 'Verbinde dein Konto, um die Einrichtung zu starten.'}
+                </p>
+              </div>
+            </div>
+            <div class="workspace-checklist-item__actions">
+              <span class="integration-status-tag ${isConnected ? 'is-connected' : 'is-disconnected'}">
+                ${isConnected ? 'Aktiv' : 'Nicht verbunden'}
+              </span>
+              <button type="button" class="workspace-accordion-btn ${integrationUiState.setupOpen ? 'is-open' : ''}" data-integration-toggle-setup aria-expanded="${integrationUiState.setupOpen ? 'true' : 'false'}">
+                ${getIconString('arrow-down')}
+              </button>
+            </div>
+          </article>
+          ${integrationUiState.setupOpen ? steps.map((step) => `
+            <article class="workspace-checklist-item">
+              <div class="workspace-checklist-item__left">
+                <span class="integration-step-index">${step.done ? '✓' : step.index}</span>
+                <div>
+                  <h3 class="workspace-checklist-item__title">${step.title}</h3>
+                  <p class="workspace-checklist-item__subtitle">${step.subtitle}</p>
+                </div>
+              </div>
+              <div class="workspace-checklist-item__actions">
+                <span class="integration-status-tag ${step.done ? 'is-connected' : 'is-disconnected'}">
+                  ${step.done ? 'Verbunden' : 'Nicht verbunden'}
+                </span>
+              </div>
+            </article>
+          `).join('') : ''}
+        </div>
+
+        <div class="integration-setup__actions" id="integration-actions"></div>
+      </section>
+
+      <section class="settings-card integration-payment-methods ${canShowPaymentMethods ? '' : 'is-locked'}">
+        <h3 class="integration-payment-methods__title">Akzeptierte Zahlungsarten</h3>
+        <p class="integration-payment-methods__subtitle">${completedSteps} von ${totalSteps} erforderlichen Schritten abgeschlossen</p>
+
+        <div class="integration-payment-methods__list">
+          <article class="workspace-settings-item integration-payment-methods__item">
+            <div class="workspace-settings-item__left">
+              <strong>PayPal</strong>
+            </div>
+            <label class="workspace-toggle" aria-label="PayPal aktivieren">
+              <input type="checkbox" data-payment-toggle="paypal" ${integrationUiState.paymentMethods.paypal ? 'checked' : ''} ${canShowPaymentMethods ? '' : 'disabled'} />
+              <span class="workspace-toggle__slider"></span>
+            </label>
+          </article>
+          <article class="workspace-settings-item integration-payment-methods__item">
+            <div class="workspace-settings-item__left">
+              <strong>Kreditkarte (Visa, Mastercard, Amex)</strong>
+            </div>
+            <label class="workspace-toggle" aria-label="Kreditkarte aktivieren">
+              <input type="checkbox" data-payment-toggle="card" ${integrationUiState.paymentMethods.card ? 'checked' : ''} ${canShowPaymentMethods ? '' : 'disabled'} />
+              <span class="workspace-toggle__slider"></span>
+            </label>
+          </article>
+          <article class="workspace-settings-item integration-payment-methods__item">
+            <div class="workspace-settings-item__left">
+              <strong>Klarna (Pay Later)</strong>
+            </div>
+            <label class="workspace-toggle" aria-label="Klarna aktivieren">
+              <input type="checkbox" data-payment-toggle="klarna" ${integrationUiState.paymentMethods.klarna ? 'checked' : ''} ${canShowPaymentMethods ? '' : 'disabled'} />
+              <span class="workspace-toggle__slider"></span>
+            </label>
+          </article>
+        </div>
+
+        ${canShowPaymentMethods ? '' : `
+          <div class="integration-payment-methods__lock">
+            Zahlungsarten werden nach abgeschlossener Einrichtung freigeschaltet.
+          </div>
+        `}
+      </section>
     </div>
   `;
+
+  const setupToggleBtn = container.querySelector('[data-integration-toggle-setup]');
+  if (setupToggleBtn) {
+    setupToggleBtn.addEventListener('click', () => {
+      integrationUiState.setupOpen = !integrationUiState.setupOpen;
+      renderIntegrationContent();
+    });
+  }
+
+  const actionsContainer = document.getElementById('integration-actions');
+  if (actionsContainer) {
+    const { element: connectBtn } = createActionButton({
+      text: isConnected ? 'Einrichtung fortsetzen' : 'Mit Drive verbinden',
+      loadingText: 'Verbinde...',
+      className: 'btn-primary',
+      onClick: handleConnectDrive,
+    });
+    actionsContainer.appendChild(connectBtn);
+
+    if (isConnected && !isReady) {
+      const { element: statusBtn } = createActionButton({
+        text: 'Status prüfen',
+        loadingText: 'Prüfe...',
+        className: 'btn-secondary',
+        onClick: handleCheckIntegrationStatus,
+      });
+      actionsContainer.appendChild(statusBtn);
+    }
+  }
+
+  const paymentToggles = container.querySelectorAll('[data-payment-toggle]');
+  paymentToggles.forEach(toggle => {
+    toggle.addEventListener('change', (e) => {
+      const key = e.target.dataset.paymentToggle;
+      integrationUiState.paymentMethods[key] = e.target.checked;
+    });
+  });
 };

@@ -299,11 +299,9 @@ const renderKPICards = (data) => {
           <div class="kpi-main">
             <div class="kpi-header">
               <span class="kpi-label">Buchungswidget-Aufrufe</span>
-              ${getIconString('eye')}
             </div>
             <div class="kpi-value">${formatNumber(kpis.widgetViews)}</div>
           </div>
-          <div class="kpi-icon-box">${getIconString('chart')}</div>
         </div>
         <div class="kpi-change ${changes.widgetViews >= 0 ? 'positive' : 'negative'}">
           ${changes.widgetViews >= 0 ? '+' : ''}${changes.widgetViews}% vs letzter Monat
@@ -535,7 +533,6 @@ const renderTrafficTab = (data) => {
     cities: []
   };
 
-  const maxVisitors = Math.max(...traffic.dailyVisitors.map(d => d.value), 1);
   const totalVisitors = traffic.dailyVisitors.reduce((sum, d) => sum + d.value, 0);
 
   // Render stat list with horizontal bars
@@ -559,14 +556,7 @@ const renderTrafficTab = (data) => {
         <h3>Besucher</h3>
         <span class="traffic-period-badge">↳ 14 Tage</span>
       </div>
-      <div class="traffic-visitors-chart">
-        ${traffic.dailyVisitors.map(day => `
-          <div class="traffic-bar-col" title="${day.label}: ${formatNumber(day.value)} Besucher">
-            <div class="traffic-bar" style="height: ${(day.value / maxVisitors) * 100}%"></div>
-            <span class="traffic-bar-label">${day.label}</span>
-          </div>
-        `).join('')}
-      </div>
+      <div class="traffic-visitors-chart" id="traffic-visitors-chart"></div>
     </div>
 
     <div class="traffic-stats-grid">
@@ -806,6 +796,8 @@ const handleTabClick = async (tabId) => {
     contentEl.innerHTML = renderTabContent(tabId, state.insights.data);
     if (tabId === 'overview') {
       initCharts(state.insights.data);
+    } else if (tabId === 'traffic') {
+      initTrafficChart(state.insights.data);
     }
   }
 };
@@ -863,6 +855,28 @@ const initCharts = (data) => {
   }, 50);
 };
 
+/**
+ * Initialize traffic visitors chart
+ */
+const initTrafficChart = (data) => {
+  const trafficVisitors = data?.traffic?.dailyVisitors;
+  const fallbackVisitors = data?.charts?.dailyVisitors;
+  const chartData = (trafficVisitors && trafficVisitors.length > 0)
+    ? trafficVisitors
+    : ((fallbackVisitors && fallbackVisitors.length > 0) ? fallbackVisitors : generateSampleData());
+
+  setTimeout(() => {
+    renderLineChart({
+      containerId: 'traffic-visitors-chart',
+      data: chartData,
+      autoScale: true,
+      showGrid: true,
+      showGradient: true,
+      height: 220
+    });
+  }, 50);
+};
+
 const EMPTY_STATE_CONFIG = {
   title: 'Noch keine Insights vorhanden.',
   description: 'Sobald Gäste Ihr Buchungswidget nutzen, sehen Sie hier Aufrufe, Buchungen und Conversion-Raten.',
@@ -909,6 +923,8 @@ const renderInsightsLayout = (mainContent, data) => {
 
   if (activeTab === 'overview') {
     initCharts(data);
+  } else if (activeTab === 'traffic') {
+    initTrafficChart(data);
   }
 };
 

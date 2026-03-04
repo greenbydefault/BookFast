@@ -586,28 +586,39 @@
 
 /* Filter Zone - standardmäßig versteckt, per Toggle einblendbar */
 .zone-filters {
-    display: flex;
-    align-items: center;
-    gap: var(--space-12);
-    padding-inline: var(--space-16);
-    padding-block: 0;
+    display: grid;
+    grid-template-rows: 0fr;
     background: white;
     flex-shrink: 0;
-    height: 0;
-    opacity: 0;
     overflow: hidden;
     border-bottom: 1px solid transparent;
-    transition: height 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-        padding-block 0.28s ease,
-        opacity 0.18s ease,
+    transition: grid-template-rows 0.28s cubic-bezier(0.22, 1, 0.36, 1),
         border-color 0.2s ease;
 }
 
 /* Filter Zone sichtbar */
 .zone-filters.is-visible {
-    padding-block: var(--space-12);
-    opacity: 1;
+    grid-template-rows: 1fr;
     border-color: var(--border-color);
+}
+
+.zone-filters-inner {
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    padding: 0 var(--space-16);
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.2s ease,
+        padding 0.28s ease;
+}
+
+.zone-filters.is-visible .zone-filters-inner {
+    padding: var(--space-12) var(--space-16);
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .filter-search-wrapper {
@@ -1293,8 +1304,9 @@
     background: white;
     border: 1px solid var(--color-stone-200);
     border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.039);
     z-index: 50;
+    padding: var(--space-12);
     min-width: 180px;
     overflow: hidden;
 }
@@ -1302,22 +1314,23 @@
 .time-period-option {
     display: block;
     width: 100%;
-    padding: var(--space-sm) var(--space-md);
-    font-size: 0.85rem;
+    padding: var(--space-14) var(--space-12);
+    font-size: var(--space-14);
     color: var(--color-stone-700);
     background: transparent;
     border: none;
     text-align: left;
     cursor: pointer;
     transition: background 0.1s ease;
+    border-radius: var(--space-8);
 }
 
 .time-period-option:hover {
-    background: var(--color-stone-100);
+    background: var(--color-majorelle-blue-50);
 }
 
 .time-period-option.active {
-    background: var(--color-stone-200);
+    background: var(--color-majorelle-blue-50);
     font-weight: 500;
 }
 
@@ -1484,37 +1497,13 @@
 }
 
 .traffic-visitors-chart {
-    display: flex;
-    align-items: flex-end;
-    height: 200px;
-    gap: 4px;
-}
-
-.traffic-bar-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    min-width: 0;
-}
-
-.traffic-bar-col .traffic-bar {
     width: 100%;
-    background: var(--color-stone-300);
-    border-radius: 4px 4px 0 0;
-    transition: height 0.3s ease;
-    min-height: 2px;
+    min-height: 220px;
+    position: relative;
 }
 
-.traffic-bar-label {
-    font-size: 0.65rem;
-    color: var(--color-stone-500);
-    margin-top: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
+.traffic-visitors-chart svg {
+    display: block;
 }
 
 .traffic-stats-grid {
