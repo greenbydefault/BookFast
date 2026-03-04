@@ -12,6 +12,7 @@ import { createFAQAccordion, initFAQAccordion } from '../../../components/landin
 import { createCTASection } from '../../../components/landing/CTASection.js';
 import { setPageMeta, setFAQSchema } from '../../../lib/seoHelper.js';
 import { escapeHtml } from '../../../lib/sanitize.js';
+import { iconImg, svgAssetUrl } from '../../../lib/landingAssets.js';
 import { featurePages } from '../../../data/features/index.js';
 
 /**
@@ -106,7 +107,7 @@ export const renderFeaturePage = (slug) => {
         <p class="landing-label">So sieht's aus</p>
         <h2 class="landing-h2">${page.meta.title} im Dashboard.</h2>
         <div style="margin-top: 2rem; background: var(--color-stone-100); border-radius: 16px; height: 400px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--color-stone-200);">
-          <span style="font-size: 3rem; opacity: 0.3;"><img src="/src/svg/ICON/target.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> Screenshot</span>
+          <span style="font-size: 3rem; opacity: 0.3;">${iconImg('target.svg')} Screenshot</span>
         </div>
       </div>
     </section>
@@ -135,7 +136,7 @@ export const renderFeaturePage = (slug) => {
 
   // Build hero: FeatureHero for all feature pages (demo module or illustration)
   const demoMod = page.hero.demoModule ? getDemoModule(page.hero.demoModule) : null;
-  const defaultIllustration = '/src/svg/illustrations/landingpage/features/ft_objektverwaltung.svg';
+  const defaultIllustration = svgAssetUrl('illustrations/landingpage/features/ft_objektverwaltung.svg');
   const heroHTML = createFeatureHero({
     headline: page.hero.headline,
     subheadline: page.hero.subheadline,
@@ -219,12 +220,12 @@ export const renderFeaturePage = (slug) => {
  */
 const getFeatureIcon = (slug) => {
   const icons = {
-    buchungen: '<img src="/src/svg/ICON/list.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', objekte: '<img src="/src/svg/ICON/home.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', services: '<img src="/src/svg/ICON/gear.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />️', zahlungen: '<img src="/src/svg/ICON/Bank-card.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />',
-    rechnungen: '<img src="/src/svg/ICON/receipt-euro.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', analytics: '<img src="/src/svg/ICON/chart.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', integration: '<img src="/src/svg/ICON/Globe.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', kundenportal: '<img src="/src/svg/ICON/blocks-integration.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />',
-    mitarbeiter: '<img src="/src/svg/ICON/users-2.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', addons: '<img src="/src/svg/ICON/ticket-percent.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', gutscheine: '<img src="/src/svg/ICON/ticket-percent.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />️', kunden: '<img src="/src/svg/ICON/user.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />',
-    verfuegbarkeit: '<img src="/src/svg/ICON/lock.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', buffer: '<img src="/src/svg/ICON/clean.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', zeitfenster: '⏰', approval: '<img src="/src/svg/ICON/check.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />',
-    overnight: '<img src="/src/svg/ICON/date-cog.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', workspaces: '<img src="/src/svg/ICON/Building-comapny.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', kaution: '<img src="/src/svg/ICON/lock.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />',
-    urlaub: '<img src="/src/svg/ICON/calender-days-date.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', 'email-templates': '<img src="/src/svg/ICON/Mail.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />️',
+    buchungen: iconImg('list.svg'), objekte: iconImg('home.svg'), services: `${iconImg('gear.svg')}️`, zahlungen: iconImg('Bank-card.svg'),
+    rechnungen: iconImg('receipt-euro.svg'), analytics: iconImg('chart.svg'), integration: iconImg('Globe.svg'), kundenportal: iconImg('blocks-integration.svg'),
+    mitarbeiter: iconImg('users-2.svg'), addons: iconImg('ticket-percent.svg'), gutscheine: `${iconImg('ticket-percent.svg')}️`, kunden: iconImg('user.svg'),
+    verfuegbarkeit: iconImg('lock.svg'), buffer: iconImg('clean.svg'), zeitfenster: '⏰', approval: iconImg('check.svg'),
+    overnight: iconImg('date-cog.svg'), workspaces: iconImg('Building-comapny.svg'), kaution: iconImg('lock.svg'),
+    urlaub: iconImg('calender-days-date.svg'), 'email-templates': `${iconImg('Mail.svg')}️`,
   };
-  return icons[slug] || '<img src="/src/svg/ICON/package.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />';
+  return icons[slug] || iconImg('package.svg');
 };

@@ -6,13 +6,14 @@ import { createFeatureGrid } from '../../../components/landing/FeatureCard.js';
 import { createCTASection } from '../../../components/landing/CTASection.js';
 import { setPageMeta } from '../../../lib/seoHelper.js';
 import { featurePages } from '../../../data/features/index.js';
+import { iconImg } from '../../../lib/landingAssets.js';
 
 const FEATURE_ICONS = {
-  buchungen: '<img src="/src/svg/ICON/list.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', objekte: '<img src="/src/svg/ICON/home.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', services: '<img src="/src/svg/ICON/gear.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />️', zahlungen: '<img src="/src/svg/ICON/Bank-card.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />',
-  rechnungen: '<img src="/src/svg/ICON/receipt-euro.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', analytics: '<img src="/src/svg/ICON/chart.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', integration: '<img src="/src/svg/ICON/Globe.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', kundenportal: '<img src="/src/svg/ICON/blocks-integration.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />',
-  mitarbeiter: '<img src="/src/svg/ICON/users-2.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', addons: '<img src="/src/svg/ICON/ticket-percent.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', gutscheine: '<img src="/src/svg/ICON/ticket-percent.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />️', kunden: '<img src="/src/svg/ICON/user.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />',
-  verfuegbarkeit: '<img src="/src/svg/ICON/lock.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', buffer: '<img src="/src/svg/ICON/clean.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', zeitfenster: '⏰', approval: '<img src="/src/svg/ICON/check.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />',
-  overnight: '<img src="/src/svg/ICON/date-cog.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', workspaces: '<img src="/src/svg/ICON/Building-comapny.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', kaution: '<img src="/src/svg/ICON/lock.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />',
+  buchungen: iconImg('list.svg'), objekte: iconImg('home.svg'), services: `${iconImg('gear.svg')}️`, zahlungen: iconImg('Bank-card.svg'),
+  rechnungen: iconImg('receipt-euro.svg'), analytics: iconImg('chart.svg'), integration: iconImg('Globe.svg'), kundenportal: iconImg('blocks-integration.svg'),
+  mitarbeiter: iconImg('users-2.svg'), addons: iconImg('ticket-percent.svg'), gutscheine: `${iconImg('ticket-percent.svg')}️`, kunden: iconImg('user.svg'),
+  verfuegbarkeit: iconImg('lock.svg'), buffer: iconImg('clean.svg'), zeitfenster: '⏰', approval: iconImg('check.svg'),
+  overnight: iconImg('date-cog.svg'), workspaces: iconImg('Building-comapny.svg'), kaution: iconImg('lock.svg'),
 };
 
 const CATEGORIES = [
@@ -42,7 +43,7 @@ export const renderFeaturesHubPage = () => {
       const sub = page?.hero?.subheadline || '';
       const desc = sub.length > 120 ? sub.slice(0, 117).trim() + '…' : sub || 'Bald verfügbar.';
       return {
-        icon: FEATURE_ICONS[slug] || '<img src="/src/svg/ICON/package.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />',
+        icon: FEATURE_ICONS[slug] || iconImg('package.svg'),
         title: page?.meta?.title || slug.charAt(0).toUpperCase() + slug.slice(1),
         description: desc,
         link: `/features/${slug}`,

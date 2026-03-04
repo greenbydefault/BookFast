@@ -11,14 +11,18 @@
  */
 
 import './HeroNew.css';
+import '../../styles/layout.css';
 import { setDemoWorkspaceName } from '../../lib/DemoStore.js';
 import { setState } from '../../lib/store.js';
 import { navigate } from '../../lib/router.js';
-import { registerAllPages } from '../../pages/dashboard/registry.js';
 import { renderSidebar } from '../Sidebar/Sidebar.js';
 import { renderTopBar } from '../TopBar/TopBar.js';
 import { openUpsellModal } from './UpsellModal.js';
 import { DEMO_WORKSPACE } from '../../lib/DemoData.js';
+
+const HERO_LOGO_URL = new URL('../../svg/logo-bookfast-hero.svg', import.meta.url).href;
+const HERO_ILLUSTRATION_URL = new URL('../../svg/hero-illustration.svg', import.meta.url).href;
+let dashboardPagesRegistered = false;
 
 /**
  * Create the new hero HTML string.
@@ -28,9 +32,9 @@ import { DEMO_WORKSPACE } from '../../lib/DemoData.js';
 export const createHeroNew = (config = {}) => {
   const {
     tagline = 'Buchungen & Zahlungen für Webflow',
-    headline = 'Book <img src="/src/svg/logo-bookfast-hero.svg" alt="+" class="hero-new__logo" width="56" height="56"> Fast jetzt testen<br>– ohne Anmeldung.',
+    headline = `Book <img src="${HERO_LOGO_URL}" alt="+" class="hero-new__logo" width="56" height="56"> Fast jetzt testen<br>– ohne Anmeldung.`,
     subheadline = 'Workspace-Name eingeben und Live-Demo starten.',
-    illustrationSrc = '/src/svg/hero-illustration.svg',
+    illustrationSrc = HERO_ILLUSTRATION_URL,
     illustrationAlt = 'BookFast Illustration',
     formLabel = 'Workspace-Name',
     formPlaceholder = 'z.B. Alpine Chalets, Studio Nordlicht…',
@@ -119,7 +123,7 @@ export const initHeroNew = () => {
   const EXPAND_DURATION_MS = 560;
   const DASHBOARD_REVEAL_DELAY_MS = 140;
 
-  createBtn.addEventListener('click', () => {
+  createBtn.addEventListener('click', async () => {
     const name = nameInput.value.trim();
     if (!name) {
       nameInput.classList.add('hero-new__card-input--error');
@@ -137,7 +141,18 @@ export const initHeroNew = () => {
       currentWorkspace: demoWorkspace,
     });
 
-    registerAllPages();
+    try {
+      if (!dashboardPagesRegistered) {
+        const { registerAllPages } = await import('../../pages/dashboard/registry.js');
+        registerAllPages();
+        dashboardPagesRegistered = true;
+      }
+    } catch (error) {
+      console.error('Demo page registration failed:', error);
+      alert('Die Demo konnte nicht gestartet werden. Bitte versuche es erneut.');
+      return;
+    }
+
     setDemoWorkspaceName(name);
 
     // Inject workspace name into sidebar

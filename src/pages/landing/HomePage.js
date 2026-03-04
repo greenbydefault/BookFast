@@ -25,7 +25,6 @@ export const renderHomePage = () => {
   content.innerHTML = `
     ${createHeroNew({
       tagline: 'Buchungen & Zahlungen für Webflow',
-      headline: 'Book <img src="/src/svg/logo-bookfast-hero.svg" alt="+" class="hero-new__logo" width="56" height="56"> Fast jetzt testen<br>– ohne Anmeldung.',
       subheadline: 'Workspace-Name eingeben und Live-Demo starten.',
       formLabel: 'Workspace-Name',
       formPlaceholder: 'z.B. Alpine Chalets, Studio Nordlicht…',

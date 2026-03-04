@@ -25,11 +25,11 @@
   <url><loc>https://book-fast.de/features/zeitfenster</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://book-fast.de/features/approval</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://book-fast.de/features/overnight</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://book-fast.de/features/urlaub</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://book-fast.de/features/email-templates</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://book-fast.de/features/workspaces</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://book-fast.de/features/kaution</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://book-fast.de/impressum</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://book-fast.de/datenschutz</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://book-fast.de/agb</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://book-fast.de/private-policies.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://book-fast.de/datenschutzbestimmungen.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
 </urlset>

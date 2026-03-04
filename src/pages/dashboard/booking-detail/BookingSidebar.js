@@ -6,7 +6,6 @@ import { getIconString } from '../../../components/Icons/Icon.js';
 import { formatDateRange } from '../../../lib/dateUtils.js';
 import { navigate } from '../../../lib/router.js';
 import { updateEntity, invalidateCache } from '../../../lib/dataLayer.js';
-import { generateInvoicePDF } from './pdfExport.js';
 import { buildSideCardWithTabs, sideCardSection, sideCardRow } from '../../../components/DetailLayout/DetailLayout.js';
 
 const SERVICE_TYPE_MAP = {
@@ -110,7 +109,24 @@ export const initSidebarEvents = (booking, workspace) => {
     // Download PDF
     const downloadBtn = document.getElementById('btn-download-pdf');
     if (downloadBtn) {
-        downloadBtn.addEventListener('click', () => generateInvoicePDF(booking, workspace));
+        const initialLabel = downloadBtn.innerHTML;
+        downloadBtn.addEventListener('click', async () => {
+            if (downloadBtn.disabled) return;
+
+            downloadBtn.disabled = true;
+            downloadBtn.textContent = 'PDF wird erstellt...';
+
+            try {
+                const { generateInvoicePDF } = await import('./pdfExport.js');
+                generateInvoicePDF(booking, workspace);
+            } catch (error) {
+                console.error('PDF export failed:', error);
+                alert('Fehler beim PDF-Export: ' + error.message);
+            } finally {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = initialLabel;
+            }
+        });
     }
 
     // Save/Cancel buttons removed

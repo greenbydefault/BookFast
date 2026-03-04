@@ -6,12 +6,14 @@
  * @param {Array<{feature: string, values: (boolean|string)[]}>} config.rows
  * @returns {string} HTML
  */
+import { iconImg } from '../../lib/landingAssets.js';
+
 export const createCompareTable = ({ columns, rows }) => {
   const headerHTML = columns.map(c => `<th>${c}</th>`).join('');
 
   const rowsHTML = rows.map(row => {
     const cells = row.values.map(v => {
-      if (v === true) return `<td><span class="landing-compare-check"><img src="/src/svg/ICON/check.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /></span></td>`;
+      if (v === true) return `<td><span class="landing-compare-check">${iconImg('check.svg')}</span></td>`;
       if (v === false) return `<td><span class="landing-compare-cross">—</span></td>`;
       return `<td>${v}</td>`;
     }).join('');

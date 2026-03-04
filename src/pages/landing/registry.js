@@ -16,8 +16,11 @@ import { renderDatenschutzPage } from './legal/DatenschutzPage.js';
 import { renderAGBPage } from './legal/AGBPage.js';
 import { renderAboutPage } from './AboutPage.js';
 import { renderContactPage } from './ContactPage.js';
+import { setPageMeta } from '../../lib/seoHelper.js';
 
-const createPlaceholder = (title) => () => {
+const createPlaceholder = (title, description) => () => {
+  setPageMeta(title, description || 'Diese Seite wird bald verfügbar sein.');
+
   const content = document.getElementById('landing-content');
   if (content) {
     content.innerHTML = `
@@ -43,7 +46,7 @@ export const registerAllLandingPages = () => {
   registerLandingPage('/produkt', renderProductPage);
   registerLandingPage('/preise', renderPricingPage);
   registerLandingPage('/integrationen', renderIntegrationsPage);
-  registerLandingPage('/ressourcen', createPlaceholder('Ressourcen'));
+  registerLandingPage('/ressourcen', createPlaceholder('Ressourcen', 'Ressourcen und Hilfestellungen fuer BookFast folgen in Kuerze.'));
   registerLandingPage('/ueber-uns', renderAboutPage);
   registerLandingPage('/kontakt', renderContactPage);
   registerLandingPage('/features', renderFeaturesHubPage);

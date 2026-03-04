@@ -3,6 +3,7 @@
  * Handles routing for all public-facing landing pages.
  * Separate from the dashboard router to keep concerns isolated.
  */
+import { clearSEO, setCanonical, setPageMeta } from './seoHelper.js';
 
 // Page registry: path → renderFn
 const landingPages = new Map();
@@ -78,16 +79,22 @@ export const navigateLanding = (path, replace = false) => {
  * Render the matching landing page
  */
 const renderLandingRoute = (path) => {
+  const normalizedPath = path === '/index.html' ? '/' : path;
+
   // Cleanup previous
   if (currentCleanup && typeof currentCleanup === 'function') {
     currentCleanup();
     currentCleanup = null;
   }
 
+  // Remove stale SEO artifacts (e.g. FAQ JSON-LD) between route changes
+  clearSEO();
+  setCanonical(normalizedPath);
+
   // Scroll to top
   window.scrollTo(0, 0);
 
-  const route = findRoute(path);
+  const route = findRoute(normalizedPath);
   if (route) {
     const result = route.slug ? route.renderFn(route.slug) : route.renderFn();
     if (typeof result === 'function') {
@@ -100,7 +107,7 @@ const renderLandingRoute = (path) => {
   // Update active nav links
   document.querySelectorAll('.landing-nav-link').forEach(link => {
     const href = link.getAttribute('href');
-    link.classList.toggle('active', href === path || (href !== '/' && path.startsWith(href)));
+    link.classList.toggle('active', href === normalizedPath || (href !== '/' && normalizedPath.startsWith(href)));
   });
 };
 
@@ -108,6 +115,8 @@ const renderLandingRoute = (path) => {
  * 404 fallback
  */
 const render404 = () => {
+  setPageMeta('Seite nicht gefunden', 'Die angeforderte Seite existiert nicht.');
+
   const content = document.getElementById('landing-content');
   if (content) {
     content.innerHTML = `

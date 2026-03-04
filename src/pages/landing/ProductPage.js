@@ -6,6 +6,7 @@ import { createFeatureGrid } from '../../components/landing/FeatureCard.js';
 import { createFeatureSection } from '../../components/landing/FeatureSection.js';
 import { createFAQAccordion, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
+import { iconImg } from '../../lib/landingAssets.js';
 import { setPageMeta, setFAQSchema } from '../../lib/seoHelper.js';
 
 const FAQ = [
@@ -28,7 +29,7 @@ export const renderProductPage = () => {
       headline: 'Alles an einem Ort – Buchungen, Zahlungen, Rechnungen.',
       subheadline: 'BookFast ist Booking-Widget + Operator-Dashboard in einem. Für Webflow-Nutzer, die Buchungen, Zahlungen und Rechnungen ohne iFrames und Provision verwalten wollen.',
       variant: 'split',
-      imageHTML: '<div style="background: var(--color-stone-100); border-radius: 16px; height: 400px; display: flex; align-items: center; justify-content: center; font-size: 4rem;"><img src="/src/svg/ICON/calender-days-date.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /></div>',
+      imageHTML: `<div style="background: var(--color-stone-100); border-radius: 16px; height: 400px; display: flex; align-items: center; justify-content: center; font-size: 4rem;">${iconImg('calender-days-date.svg')}</div>`,
     })}
 
     <section class="landing-section landing-section-alt">
@@ -64,15 +65,15 @@ export const renderProductPage = () => {
         <h2 class="landing-h2">Alles was du brauchst.</h2>
         <div style="margin-top: 2.5rem;">
           ${createFeatureGrid([
-            { icon: '<img src="/src/svg/ICON/list.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Buchungen', description: 'Status-Filter, Kalender/Liste, Bestätigen, Ablehnen, Stornieren.', link: '/features/buchungen' },
-            { icon: '<img src="/src/svg/ICON/Bank-card.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Zahlungen', description: 'Stripe Connect, Anzahlung, Refunds, automatische Auszahlungen.', link: '/features/zahlungen' },
-            { icon: '<img src="/src/svg/ICON/receipt-euro.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Rechnungen', description: 'Automatisch generiert nach Bestätigung oder Abschluss.', link: '/features/rechnungen' },
-            { icon: '<img src="/src/svg/ICON/chart.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Analytics', description: 'Funnel, Drop-offs, Conversion-Rates, Revenue-Tracking.', link: '/features/analytics' },
-            { icon: '<img src="/src/svg/ICON/home.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Objekte & Services', description: 'Räume, Stunden-/Tages-/Übernachtungsbuchungen.', link: '/features/objekte' },
-            { icon: '<img src="/src/svg/ICON/users-2.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Mitarbeiter', description: 'Zuordnung zu Services, Verfügbarkeiten, Kalender.', link: '/features/mitarbeiter' },
-            { icon: '<img src="/src/svg/ICON/ticket-percent.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Add-ons & Gutscheine', description: 'Upsells, Rabattcodes, Nutzungslimits.', link: '/features/addons' },
-            { icon: '<img src="/src/svg/ICON/Building-comapny.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Multi-Workspace', description: 'Mehrere Standorte oder Marken in einem Account.', link: '/features/workspaces' },
-            { icon: '<img src="/src/svg/ICON/lock.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', title: 'Approval-Flow', description: 'Erst zahlen, dann bestätigen. Du behältst die Kontrolle.', link: '/features/approval' },
+            { icon: iconImg('list.svg'), title: 'Buchungen', description: 'Status-Filter, Kalender/Liste, Bestätigen, Ablehnen, Stornieren.', link: '/features/buchungen' },
+            { icon: iconImg('Bank-card.svg'), title: 'Zahlungen', description: 'Stripe Connect, Anzahlung, Refunds, automatische Auszahlungen.', link: '/features/zahlungen' },
+            { icon: iconImg('receipt-euro.svg'), title: 'Rechnungen', description: 'Automatisch generiert nach Bestätigung oder Abschluss.', link: '/features/rechnungen' },
+            { icon: iconImg('chart.svg'), title: 'Analytics', description: 'Funnel, Drop-offs, Conversion-Rates, Revenue-Tracking.', link: '/features/analytics' },
+            { icon: iconImg('home.svg'), title: 'Objekte & Services', description: 'Räume, Stunden-/Tages-/Übernachtungsbuchungen.', link: '/features/objekte' },
+            { icon: iconImg('users-2.svg'), title: 'Mitarbeiter', description: 'Zuordnung zu Services, Verfügbarkeiten, Kalender.', link: '/features/mitarbeiter' },
+            { icon: iconImg('ticket-percent.svg'), title: 'Add-ons & Gutscheine', description: 'Upsells, Rabattcodes, Nutzungslimits.', link: '/features/addons' },
+            { icon: iconImg('Building-comapny.svg'), title: 'Multi-Workspace', description: 'Mehrere Standorte oder Marken in einem Account.', link: '/features/workspaces' },
+            { icon: iconImg('lock.svg'), title: 'Approval-Flow', description: 'Erst zahlen, dann bestätigen. Du behältst die Kontrolle.', link: '/features/approval' },
           ])}
         </div>
       </div>
@@ -99,19 +100,19 @@ export const renderProductPage = () => {
         <h2 class="landing-h2">Typische Szenarien</h2>
         <div class="landing-grid landing-grid-2" style="margin-top: 2rem; max-width: 800px; margin-left: auto; margin-right: auto; text-align: left;">
           <div style="padding: 1.5rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200);">
-            <h3 class="landing-h4"><img src="/src/svg/ICON/home.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> Ferienwohnung vermieten</h3>
+            <h3 class="landing-h4">${iconImg('home.svg')} Ferienwohnung vermieten</h3>
             <p class="landing-text-sm">Übernachtungen mit Check-in/out, Reinigungspuffer, Anzahlung und automatischer Rechnung.</p>
           </div>
           <div style="padding: 1.5rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200);">
-            <h3 class="landing-h4"><img src="/src/svg/ICON/sprout.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> Yoga-Kurse anbieten</h3>
+            <h3 class="landing-h4">${iconImg('sprout.svg')} Yoga-Kurse anbieten</h3>
             <p class="landing-text-sm">Kursbuchungen mit Trainer-Auswahl, Gutscheinen und Add-ons wie Yogamatten.</p>
           </div>
           <div style="padding: 1.5rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200);">
-            <h3 class="landing-h4"><img src="/src/svg/ICON/luggage.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> Coworking-Räume buchen</h3>
+            <h3 class="landing-h4">${iconImg('luggage.svg')} Coworking-Räume buchen</h3>
             <p class="landing-text-sm">Stunden- oder Tagesmiete für Meeting-Rooms und Schreibtische.</p>
           </div>
           <div style="padding: 1.5rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200);">
-            <h3 class="landing-h4"><img src="/src/svg/ICON/user.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> Friseur-Termine buchen</h3>
+            <h3 class="landing-h4">${iconImg('user.svg')} Friseur-Termine buchen</h3>
             <p class="landing-text-sm">Service-Auswahl, Mitarbeiter-Buchung, verschiedene Zeitslots.</p>
           </div>
         </div>

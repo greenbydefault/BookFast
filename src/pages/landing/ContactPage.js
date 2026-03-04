@@ -2,6 +2,7 @@
  * Contact Page
  */
 import { createHero } from '../../components/landing/Hero.js';
+import { iconImg } from '../../lib/landingAssets.js';
 import { setPageMeta } from '../../lib/seoHelper.js';
 
 export const renderContactPage = () => {
@@ -26,11 +27,11 @@ export const renderContactPage = () => {
             <h2 class="landing-h2" style="font-size: 1.5rem;">Kontakt-Optionen</h2>
             <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
               <div style="padding: 1.25rem; background: var(--color-stone-50); border-radius: 10px;">
-                <div style="font-weight: 600; margin-bottom: 0.25rem;"><img src="/src/svg/ICON/Mails.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> E-Mail</div>
+                <div style="font-weight: 600; margin-bottom: 0.25rem;">${iconImg('Mails.svg')} E-Mail</div>
                 <p class="landing-text-sm" style="margin: 0;">hello@book-fast.de</p>
               </div>
               <div style="padding: 1.25rem; background: var(--color-stone-50); border-radius: 10px;">
-                <div style="font-weight: 600; margin-bottom: 0.25rem;"><img src="/src/svg/ICON/chat.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /> Live-Chat</div>
+                <div style="font-weight: 600; margin-bottom: 0.25rem;">${iconImg('chat.svg')} Live-Chat</div>
                 <p class="landing-text-sm" style="margin: 0;">Im Dashboard unten rechts verfügbar.</p>
               </div>
               <div style="padding: 1.25rem; background: var(--color-stone-50); border-radius: 10px;">
@@ -87,7 +88,7 @@ export const renderContactPage = () => {
     e.preventDefault();
     form.innerHTML = `
       <div style="text-align: center; padding: 2rem;">
-        <div style="font-size: 2.5rem; margin-bottom: 1rem;"><img src="/src/svg/ICON/check.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /></div>
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">${iconImg('check.svg')}</div>
         <h3 class="landing-h3">Nachricht gesendet!</h3>
         <p class="landing-text-sm">Wir melden uns innerhalb von 24 Stunden bei dir.</p>
       </div>`;

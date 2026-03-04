@@ -10,6 +10,8 @@
  * @param {boolean} [config.reverse] - Image on left (true) or right (false)
  * @returns {string} HTML
  */
+import { iconImg } from '../../lib/landingAssets.js';
+
 export const createFeatureSection = ({ title, description, bullets = [], imageHTML = '', reverse = false }) => {
   const bulletsHTML = bullets.length ? `
     <ul class="landing-feature-bullets">
@@ -18,7 +20,7 @@ export const createFeatureSection = ({ title, description, bullets = [], imageHT
 
   const imageBlock = imageHTML || `
     <div class="landing-feature-image" style="height: 320px; display:flex; align-items:center; justify-content:center; background: var(--color-stone-100);">
-      <span style="font-size: 3rem; opacity: 0.3;"><img src="/src/svg/ICON/target.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /></span>
+      <span style="font-size: 3rem; opacity: 0.3;">${iconImg('target.svg')}</span>
     </div>`;
 
   return `

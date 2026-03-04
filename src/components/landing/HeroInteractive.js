@@ -11,11 +11,11 @@ import '../../styles/layout.css';
 import { setDemoWorkspaceName } from '../../lib/DemoStore.js';
 import { setState } from '../../lib/store.js';
 import { navigate } from '../../lib/router.js';
-import { registerAllPages } from '../../pages/dashboard/registry.js';
 import { renderSidebar } from '../Sidebar/Sidebar.js';
 import { DEMO_WORKSPACE } from '../../lib/DemoData.js';
 import { renderTopBar } from '../TopBar/TopBar.js';
 import { openUpsellModal } from './UpsellModal.js';
+let dashboardPagesRegistered = false;
 
 // ── Main Component ──────────────────────────────────────
 
@@ -119,7 +119,7 @@ export const initHeroInteractive = () => {
   const DASHBOARD_REVEAL_DELAY_MS = 140;
 
   // Handle workspace creation
-  createBtn.addEventListener('click', () => {
+  createBtn.addEventListener('click', async () => {
     const name = nameInput.value.trim();
     if (!name) {
       nameInput.style.borderColor = '#ef4444';
@@ -142,7 +142,17 @@ export const initHeroInteractive = () => {
     });
 
     // 2. Register Dashboard Pages
-    registerAllPages();
+    try {
+      if (!dashboardPagesRegistered) {
+        const { registerAllPages } = await import('../../pages/dashboard/registry.js');
+        registerAllPages();
+        dashboardPagesRegistered = true;
+      }
+    } catch (error) {
+      console.error('Demo page registration failed:', error);
+      alert('Die Demo konnte nicht gestartet werden. Bitte versuche es erneut.');
+      return;
+    }
 
     // 3. Store name in local demo store (optional, for persistency across reloads if needed)
     setDemoWorkspaceName(name);

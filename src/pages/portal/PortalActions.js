@@ -1,11 +1,9 @@
 /**
  * PortalActions - Customer actions (PDF download, cancel booking)
- * 
+ *
  * Cancel requires step-up verification via email confirmation.
- * PDF download reuses the existing pdfExport module.
+ * PDF download lazy-loads the pdfExport module on demand.
  */
-
-import { generateInvoicePDF } from '../dashboard/booking-detail/pdfExport.js';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -81,8 +79,23 @@ export const initPortalActions = (booking, workspace, token) => {
     // PDF Download
     const downloadBtn = document.getElementById('portal-download-pdf');
     if (downloadBtn) {
-        downloadBtn.addEventListener('click', () => {
-            generateInvoicePDF(booking, workspace);
+        const initialLabel = downloadBtn.textContent;
+        downloadBtn.addEventListener('click', async () => {
+            if (downloadBtn.disabled) return;
+
+            downloadBtn.disabled = true;
+            downloadBtn.textContent = 'PDF wird erstellt...';
+
+            try {
+                const { generateInvoicePDF } = await import('../dashboard/booking-detail/pdfExport.js');
+                generateInvoicePDF(booking, workspace);
+            } catch (error) {
+                console.error('PDF export failed:', error);
+                alert('Fehler beim PDF-Export: ' + error.message);
+            } finally {
+                downloadBtn.disabled = false;
+                downloadBtn.textContent = initialLabel;
+            }
         });
     }
 

@@ -1,6 +1,12 @@
 {
   "headers": [
     {
+      "source": "/dashboard",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
       "source": "/dashboard/(.*)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
@@ -26,6 +32,12 @@
     },
     {
       "source": "/update-password.html",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
+      "source": "/b",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
       ]

@@ -10,6 +10,8 @@
  * @param {string} [config.secondaryCTA]
  * @param {string} [config.secondaryHref]
  */
+const CTA_ILLUSTRATION_URL = new URL('../../svg/illustrations/landingpage/cta/cta_illustration.svg', import.meta.url).href;
+
 export const createCTASection = (config) => {
   const {
     headline,
@@ -24,7 +26,7 @@ export const createCTASection = (config) => {
     <section class="landing-section">
       <div class="landing-container">
         <div class="landing-cta-section">
-          <img src="/src/svg/illustrations/landingpage/cta/cta_illustration.svg" alt="" class="landing-cta-illustration" />
+          <img src="${CTA_ILLUSTRATION_URL}" alt="" class="landing-cta-illustration" />
           <h2 class="landing-h2">${headline}</h2>
           ${subheadline ? `<p class="landing-text">${subheadline}</p>` : ''}
           <div class="landing-cta-buttons">

@@ -2,6 +2,8 @@ User-agent: *
 Allow: /
 Disallow: /dashboard/
 Disallow: /b/
+Disallow: /dashboard
+Disallow: /b
 Disallow: /login.html
 Disallow: /register.html
 Disallow: /forgot-password.html

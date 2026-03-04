@@ -6,6 +6,7 @@ import { createIntegrationCard } from '../../components/landing/IntegrationCard.
 import { createFeatureSection } from '../../components/landing/FeatureSection.js';
 import { createFAQAccordion, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
+import { iconImg } from '../../lib/landingAssets.js';
 import { setPageMeta, setFAQSchema } from '../../lib/seoHelper.js';
 
 const FAQ = [
@@ -33,10 +34,10 @@ export const renderIntegrationsPage = () => {
     <section class="landing-section">
       <div class="landing-container">
         <div class="landing-grid landing-grid-2" style="max-width: 800px; margin: 0 auto;">
-          ${createIntegrationCard({ icon: '<img src="/src/svg/ICON/Globe.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', name: 'Webflow', description: 'Native Integration via Embed-Script oder Template-Copy.', status: 'active' })}
-          ${createIntegrationCard({ icon: '<img src="/src/svg/ICON/Bank-card.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', name: 'Stripe Connect', description: 'Zahlungen, Anzahlungen, Refunds und automatische Auszahlungen.', status: 'active' })}
-          ${createIntegrationCard({ icon: '<img src="/src/svg/ICON/calender-days-date.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', name: 'Google Calendar', description: 'Zwei-Wege-Sync für deine Buchungen.', status: 'coming-soon' })}
-          ${createIntegrationCard({ icon: '<img src="/src/svg/ICON/blocks-integration.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />', name: 'Webhooks', description: 'Events für Automatisierungen und eigene Integrationen.', status: 'active' })}
+          ${createIntegrationCard({ icon: iconImg('Globe.svg'), name: 'Webflow', description: 'Native Integration via Embed-Script oder Template-Copy.', status: 'active' })}
+          ${createIntegrationCard({ icon: iconImg('Bank-card.svg'), name: 'Stripe Connect', description: 'Zahlungen, Anzahlungen, Refunds und automatische Auszahlungen.', status: 'active' })}
+          ${createIntegrationCard({ icon: iconImg('calender-days-date.svg'), name: 'Google Calendar', description: 'Zwei-Wege-Sync für deine Buchungen.', status: 'coming-soon' })}
+          ${createIntegrationCard({ icon: iconImg('blocks-integration.svg'), name: 'Webhooks', description: 'Events für Automatisierungen und eigene Integrationen.', status: 'active' })}
         </div>
       </div>
     </section>
@@ -91,17 +92,17 @@ export const renderIntegrationsPage = () => {
         <h2 class="landing-h2">Weitere Integrationen in Planung.</h2>
         <div class="landing-grid landing-grid-3" style="max-width: 700px; margin: 2rem auto 0;">
           <div style="padding: 1.5rem; background: var(--color-stone-50); border-radius: 12px; text-align: center;">
-            <div style="font-size: 2rem; margin-bottom: 0.5rem;"><img src="/src/svg/ICON/calender-days-date.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /></div>
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">${iconImg('calender-days-date.svg')}</div>
             <h4 class="landing-h4">Google Calendar</h4>
             <p class="landing-text-sm">Zwei-Wege-Sync</p>
           </div>
           <div style="padding: 1.5rem; background: var(--color-stone-50); border-radius: 12px; text-align: center;">
-            <div style="font-size: 2rem; margin-bottom: 0.5rem;"><img src="/src/svg/ICON/Bulp.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /></div>
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">${iconImg('Bulp.svg')}</div>
             <h4 class="landing-h4">Zapier</h4>
             <p class="landing-text-sm">1000+ App-Verbindungen</p>
           </div>
           <div style="padding: 1.5rem; background: var(--color-stone-50); border-radius: 12px; text-align: center;">
-            <div style="font-size: 2rem; margin-bottom: 0.5rem;"><img src="/src/svg/ICON/gear.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /></div>
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">${iconImg('gear.svg')}</div>
             <h4 class="landing-h4">Make</h4>
             <p class="landing-text-sm">Visuelle Automationen</p>
           </div>

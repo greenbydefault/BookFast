@@ -1,5 +1,7 @@
 import { featurePages } from '../../data/features/index.js';
 
+const FOOTER_ILLUSTRATION_URL = new URL('../../svg/illustrations/landingpage/footer/footer_illustration.svg', import.meta.url).href;
+
 const FOOTER_COLUMNS = [
   { heading: 'SETUP & STRUKTUR', slugs: ['objekte', 'services', 'zeitfenster', 'integration', 'workspaces'] },
   { heading: 'BUCHUNGEN & VERFUEGBARKEIT', slugs: ['buchungen', 'verfuegbarkeit', 'buffer', 'urlaub', 'overnight'] },
@@ -73,7 +75,7 @@ export const renderFooter = (container) => {
       </div>
 
       <div class="landing-footer-stage" aria-hidden="true">
-        <img src="/src/svg/illustrations/landingpage/footer/footer_illustration.svg" alt="" class="landing-footer-illustration">
+        <img src="${FOOTER_ILLUSTRATION_URL}" alt="" class="landing-footer-illustration">
       </div>
 
       <div class="landing-footer-bottom">

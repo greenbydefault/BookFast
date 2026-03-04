@@ -6,6 +6,7 @@ import { createPricingCard } from '../../components/landing/PricingCard.js';
 import { createCompareTable } from '../../components/landing/CompareTable.js';
 import { createFAQAccordion, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
+import { iconImg } from '../../lib/landingAssets.js';
 import { setPageMeta, setFAQSchema } from '../../lib/seoHelper.js';
 
 const PLANS = [
@@ -67,10 +68,10 @@ const COMPARE_TABLE = {
 };
 
 const SECURITY_BADGES = [
-  { label: 'DSGVO-konform', icon: '<img src="/src/svg/ICON/check.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />' },
-  { label: 'SSL-Verschlüsselung', icon: '<img src="/src/svg/ICON/lock.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />' },
-  { label: 'Sichere Daten', icon: '<img src="/src/svg/ICON/check.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />' },
-  { label: 'EU-Server', icon: '<img src="/src/svg/ICON/Globe.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" />' },
+  { label: 'DSGVO-konform', icon: iconImg('check.svg') },
+  { label: 'SSL-Verschlüsselung', icon: iconImg('lock.svg') },
+  { label: 'Sichere Daten', icon: iconImg('check.svg') },
+  { label: 'EU-Server', icon: iconImg('Globe.svg') },
 ];
 
 const FAQ = [

@@ -12,6 +12,20 @@ export default defineConfig({
         forgotPassword: resolve(__dirname, 'forgot-password.html'),
         updatePassword: resolve(__dirname, 'update-password.html'),
       },
+      output: {
+        manualChunks(id) {
+          const isPdfExportModule =
+            id.includes('/src/pages/dashboard/booking-detail/pdfExport.js') ||
+            id.includes('/src/pages/dashboard/booking-detail/invoiceUtils.js') ||
+            id.includes('/node_modules/pdfmake/');
+
+          if (isPdfExportModule) {
+            return 'pdf-export';
+          }
+
+          return undefined;
+        },
+      },
     },
   },
 });

@@ -3,6 +3,7 @@
  */
 import { createHero } from '../../components/landing/Hero.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
+import { iconImg } from '../../lib/landingAssets.js';
 import { setPageMeta } from '../../lib/seoHelper.js';
 
 export const renderAboutPage = () => {
@@ -41,17 +42,17 @@ export const renderAboutPage = () => {
         </div>
         <div class="landing-grid landing-grid-3" style="max-width: 960px; margin: 0 auto;">
           <div style="padding: 2rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200); text-align: center;">
-            <div style="font-size: 2rem; margin-bottom: 1rem;"><img src="/src/svg/ICON/target.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /></div>
+            <div style="font-size: 2rem; margin-bottom: 1rem;">${iconImg('target.svg')}</div>
             <h3 class="landing-h4">Klarheit</h3>
             <p class="landing-text-sm">Einfache Preise, klare Kommunikation, keine versteckten Kosten.</p>
           </div>
           <div style="padding: 2rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200); text-align: center;">
-            <div style="font-size: 2rem; margin-bottom: 1rem;"><img src="/src/svg/ICON/Bulp.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /></div>
+            <div style="font-size: 2rem; margin-bottom: 1rem;">${iconImg('Bulp.svg')}</div>
             <h3 class="landing-h4">Geschwindigkeit</h3>
             <p class="landing-text-sm">In unter 5 Minuten startklar. Keine Lernkurve, keine Einarbeitungszeit.</p>
           </div>
           <div style="padding: 2rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200); text-align: center;">
-            <div style="font-size: 2rem; margin-bottom: 1rem;"><img src="/src/svg/ICON/gear.svg" alt="" style="width:1.2em; height:1.2em; vertical-align:-0.15em;" /></div>
+            <div style="font-size: 2rem; margin-bottom: 1rem;">${iconImg('gear.svg')}</div>
             <h3 class="landing-h4">Kontrolle</h3>
             <p class="landing-text-sm">Du bestimmst den Booking-Flow, das Design und die Regeln.</p>
           </div>
