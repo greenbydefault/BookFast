@@ -3,8 +3,8 @@
  * Unified checklist-style layout with per-field auto-save.
  * Each row is both a checklist item AND an editable input with inline spinner/checkmark.
  */
-import { getState } from '../../../lib/store.js';
-import { updateEntity, invalidateCache } from '../../../lib/dataLayer.js';
+import { getState, setState } from '../../../lib/store.js';
+import { updateEntity, invalidateCache, fetchEntities } from '../../../lib/dataLayer.js';
 import { getIconString } from '../../../components/Icons/Icon.js';
 import { refreshWorkspace } from './settingsHelpers.js';
 import { uploadWorkspaceLogo, removeWorkspaceLogo } from '../../../lib/services/workspaceService.js';
@@ -82,7 +82,8 @@ const renderWorkspaceVisualContent = () => {
                 ${activeSite
                   ? `<span>${esc(activeSite.domain)}</span>
                      <span class="workspace-domain-value__check">${getIconString('check')}</span>`
-                  : `<span class="workspace-domain-value--empty">Noch nicht verbunden</span>`
+                  : `<span class="workspace-domain-value--empty">Noch nicht verbunden</span>
+                     <button type="button" class="workspace-action-btn workspace-action-btn--check" data-check-connection>Verbindung prüfen</button>`
                 }
               </div>
             </article>
@@ -233,6 +234,34 @@ const renderWorkspaceVisualContent = () => {
         btn.textContent = originalText;
         btn.classList.remove('is-success');
       }, 1500);
+    });
+  }
+
+  const checkConnBtn = container.querySelector('[data-check-connection]');
+  if (checkConnBtn) {
+    checkConnBtn.addEventListener('click', async () => {
+      checkConnBtn.disabled = true;
+      checkConnBtn.innerHTML = `<div class="autosave-spinner"></div>`;
+      try {
+        const result = await fetchEntities('sites', { forceRefresh: true });
+        setState({ sites: result.items });
+        const nowActive = result.items.find(s => s.is_active);
+        if (nowActive) {
+          renderWorkspaceVisualContent();
+        } else {
+          checkConnBtn.textContent = 'Keine Verbindung erkannt';
+          checkConnBtn.classList.add('is-warning');
+          setTimeout(() => {
+            checkConnBtn.textContent = 'Verbindung prüfen';
+            checkConnBtn.classList.remove('is-warning');
+            checkConnBtn.disabled = false;
+          }, 2500);
+        }
+      } catch (err) {
+        console.error('Connection check failed:', err);
+        checkConnBtn.textContent = 'Fehler – erneut versuchen';
+        checkConnBtn.disabled = false;
+      }
     });
   }
 

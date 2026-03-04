@@ -1089,6 +1089,10 @@
         bind();
         show(1);
         track('widget_view');
+        fetch(`${API}/rest/v1/rpc/ping_site`, {
+            method: 'POST', keepalive: true, headers: HDR,
+            body: JSON.stringify({ site_id: siteId, p_domain: location.hostname })
+        }).catch(() => {});
     };
 
     document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
