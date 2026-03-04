@@ -72,11 +72,70 @@ export const ENTITY_STATUS_TABS = [
 export const initFilterToggle = () => {
     const btn = document.getElementById('filter-toggle-btn');
     const filters = document.querySelector('.zone-filters');
-    
-    if (btn && filters) {
-        btn.addEventListener('click', () => {
-            filters.classList.toggle('is-visible');
-            btn.classList.toggle('active');
-        });
-    }
+
+    if (!btn || !filters) return;
+    if (btn.dataset.filterToggleInitialized === 'true') return;
+    btn.dataset.filterToggleInitialized = 'true';
+
+    let isAnimating = false;
+    let fallbackTimer = null;
+
+    const finishTransition = (isOpening) => {
+        if (fallbackTimer) {
+            clearTimeout(fallbackTimer);
+            fallbackTimer = null;
+        }
+
+        if (isOpening) {
+            filters.style.height = 'auto';
+            filters.classList.add('is-visible');
+        } else {
+            filters.style.height = '0px';
+            filters.classList.remove('is-visible');
+        }
+
+        filters.style.willChange = '';
+        isAnimating = false;
+    };
+
+    const startTransition = (isOpening) => {
+        isAnimating = true;
+        filters.style.willChange = 'height';
+
+        if (isOpening) {
+            filters.classList.add('is-visible');
+            const targetHeight = filters.scrollHeight;
+            filters.style.height = '0px';
+            filters.offsetHeight;
+            filters.style.height = `${targetHeight}px`;
+        } else {
+            const currentHeight = filters.getBoundingClientRect().height;
+            filters.style.height = `${currentHeight}px`;
+            filters.offsetHeight;
+            filters.classList.remove('is-visible');
+            filters.style.height = '0px';
+        }
+
+        const onTransitionEnd = (event) => {
+            if (event.propertyName !== 'height') return;
+            filters.removeEventListener('transitionend', onTransitionEnd);
+            finishTransition(isOpening);
+        };
+
+        filters.addEventListener('transitionend', onTransitionEnd);
+
+        // Fallback in case transitionend does not fire (e.g. interrupted layout updates).
+        fallbackTimer = setTimeout(() => {
+            filters.removeEventListener('transitionend', onTransitionEnd);
+            finishTransition(isOpening);
+        }, 420);
+    };
+
+    btn.addEventListener('click', () => {
+        if (isAnimating) return;
+
+        const isOpening = !filters.classList.contains('is-visible');
+        btn.classList.toggle('active', isOpening);
+        startTransition(isOpening);
+    });
 };

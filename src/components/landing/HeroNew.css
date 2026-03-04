@@ -122,7 +122,7 @@
 
 /* Expanded dashboard state */
 .hero-new__card.expanded {
-    max-width: 90vw;
+    max-width: 92vw;
     width: 100vw;
     height: 85vh;
     padding: 0;
@@ -260,6 +260,16 @@
     opacity: 1;
     transform: translateY(0) scale(1);
     box-sizing: border-box;
+}
+
+/* Demo: avoid double frame (outer card border + inner dashboard border) */
+#hero-new-dashboard .main-wrapper {
+    border: none;
+}
+
+/* Demo Insights: hide extra icon next to "Buchungswidget-Aufrufe" */
+#hero-new-dashboard .insights-kpi-card:first-child .kpi-header .icon {
+    display: none;
 }
 
 /* ── Group 6: Trust Claims ── */

@@ -589,21 +589,25 @@
     display: flex;
     align-items: center;
     gap: var(--space-12);
-    padding: 0 var(--space-16);
+    padding-inline: var(--space-16);
+    padding-block: 0;
     background: white;
     flex-shrink: 0;
-    /* Hidden by default with slide animation */
-    max-height: 0;
+    height: 0;
+    opacity: 0;
     overflow: hidden;
-    border-bottom: none;
-    transition: max-height 0.25s ease-out, border-bottom 0.25s ease-out;
+    border-bottom: 1px solid transparent;
+    transition: height 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        padding-block 0.28s ease,
+        opacity 0.18s ease,
+        border-color 0.2s ease;
 }
 
 /* Filter Zone sichtbar */
 .zone-filters.is-visible {
-    max-height: var(--space-52);
-    border-bottom: 1px solid var(--border-color);
-    padding: var(--space-12) var(--space-16);
+    padding-block: var(--space-12);
+    opacity: 1;
+    border-color: var(--border-color);
 }
 
 .filter-search-wrapper {
@@ -948,7 +952,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    line-height: 1;
+    line-height: 0.8;
     padding: var(--space-10) var(--space-10);
     font-size: var(--space-12);
     font-weight: 400;
@@ -972,8 +976,8 @@
 }
 
 .status-pending_approval {
-    background: #fef3c7;
-    color: #92400e;
+    background: #fffcef;
+    color: #db6216;
     border-color: #fcd34d;
 }
 
@@ -984,7 +988,7 @@
 }
 
 .status-payment_pending {
-    background: #fff7ed;
+    background: #fff8ef;
     color: #9a3412;
     border-color: #fdba74;
 }
@@ -1040,7 +1044,7 @@
     padding: 2px 6px;
     border-radius: var(--space-56);
     font-size: 0.7rem;
-    font-weight: 200;
+    font-weight: 400;
     color: var(--color-stone-700);
     background: var(--color-stone-100);
     border: 1px solid var(--color-stone-200);
@@ -1186,9 +1190,9 @@
 }
 
 .kpi-label {
-    font-size: 0.85rem;
-    color: var(--color-stone-600);
-    font-weight: 500;
+    font-size: var(--space-12);
+    color: var(--color-vulcan-500);
+    font-weight: 400;
 }
 
 .kpi-value {

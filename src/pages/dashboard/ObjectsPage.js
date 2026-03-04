@@ -167,8 +167,8 @@ const handleObjectAction = (objectId, buttonElement) => {
 
   const actions = [
     {
-      label: 'Bearbeiten',
-      iconName: 'pencil',
+      label: 'Details ansehen',
+      iconName: 'eye',
       action: () => {
         navigateWithParams('object-detail', { id: objectId });
       }

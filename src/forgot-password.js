@@ -18,7 +18,7 @@ form.addEventListener('submit', async (e) => {
 
     // Disable button
     submitBtn.disabled = true
-    submitBtn.textContent = 'Sending...'
+    submitBtn.textContent = 'Wird gesendet...'
 
     try {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -27,7 +27,7 @@ form.addEventListener('submit', async (e) => {
 
         if (error) throw error
 
-        successMessage.textContent = 'Check your email for the password reset link.'
+        successMessage.textContent = 'Wir haben dir einen Link zum Zurücksetzen geschickt. Schau in dein Postfach.'
         successMessage.style.display = 'block'
         form.reset()
 
@@ -36,6 +36,6 @@ form.addEventListener('submit', async (e) => {
         errorMessage.style.display = 'block'
     } finally {
         submitBtn.disabled = false
-        submitBtn.textContent = 'Send Reset Link'
+        submitBtn.textContent = 'Reset-Link senden'
     }
 })

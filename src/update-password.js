@@ -80,7 +80,7 @@ form.addEventListener('submit', async (e) => {
 
     // Basic validation
     if (password !== confirmPassword) {
-        errorMessage.textContent = 'Passwords do not match'
+        errorMessage.textContent = 'Die Passwörter stimmen nicht überein. Bitte gib sie erneut ein.'
         errorMessage.style.display = 'block'
         return
     }
@@ -105,7 +105,7 @@ form.addEventListener('submit', async (e) => {
 
     // Disable button
     submitBtn.disabled = true
-    submitBtn.textContent = 'Updating...'
+    submitBtn.textContent = 'Wird gespeichert...'
 
     try {
         const { error } = await supabase.auth.updateUser({
@@ -114,7 +114,7 @@ form.addEventListener('submit', async (e) => {
 
         if (error) throw error
 
-        successMessage.textContent = 'Password updated successfully! Redirecting to login...'
+        successMessage.textContent = 'Passwort aktualisiert. Du wirst zum Login weitergeleitet.'
         successMessage.style.display = 'block'
         form.reset()
         resetPasswordRequirements()
@@ -127,6 +127,6 @@ form.addEventListener('submit', async (e) => {
         errorMessage.textContent = error.message
         errorMessage.style.display = 'block'
         submitBtn.disabled = false
-        submitBtn.textContent = 'Update Password'
+        submitBtn.textContent = 'Passwort speichern'
     }
 })
