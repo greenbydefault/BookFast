@@ -39,7 +39,7 @@ export const renderContactPage = () => {
               </div>
             </div>
             <div style="margin-top: 2rem;">
-              <p class="landing-text-sm">Schau auch in unsere <a href="/docs" data-landing-link>Dokumentation</a> – vielleicht findest du dort schon die Antwort.</p>
+              <p class="landing-text-sm">Wenn es dringend ist, nutze den Live-Chat im Dashboard oder schreibe uns direkt an hello@book-fast.de.</p>
             </div>
           </div>
 

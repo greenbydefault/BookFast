@@ -140,7 +140,7 @@ const renderLayout = (user) => {
   };
   document.addEventListener('keydown', workspaceShortcutHandler);
 
-  // User dropdown (email + Settings, Docs, Wishlist, Logout, Account)
+  // User dropdown (email + Settings, Account, Wishlist, Logout)
   const userDropdownContainer = document.getElementById('user-dropdown-wrapper');
   if (userDropdownContainer && state.user) {
     const userEmail = state.user.email || 'Account';
@@ -150,7 +150,6 @@ const renderLayout = (user) => {
     const userMenuOptions = [
       { label: 'Settings', value: 'settings', icon: 'gear' },
       { label: 'Account', value: 'account', icon: 'user' },
-      { label: 'Docs', value: 'docs', icon: 'book-open-text' },
       { label: 'Wishlist', value: 'roadmap', icon: 'road', external: true },
       { label: 'Logout', value: 'logout', icon: 'log-out', dividerBefore: true }
     ];
@@ -160,8 +159,6 @@ const renderLayout = (user) => {
         navigate('settings');
       } else if (value === 'account') {
         navigate('settings', { queryParams: '?tab=account' });
-      } else if (value === 'docs') {
-        window.location.href = 'https://book-fast.de/docs';
       } else if (value === 'roadmap') {
         window.open(wishlistUrl, '_blank');
       } else if (value === 'logout') {

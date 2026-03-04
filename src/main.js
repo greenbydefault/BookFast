@@ -10,6 +10,7 @@
  */
 
 import './styles/base.css';
+import { injectSpeedInsights } from '@vercel/speed-insights';
 import { supabase } from './lib/supabaseClient.js';
 import { loadSprite } from './components/Icons/sprite.js';
 import { resetState } from './lib/store.js';
@@ -47,20 +48,13 @@ const isDashboardRoute = () => {
 };
 
 /**
- * Check if current path is a docs route (accessible for logged-in users)
- */
-const isDocsRoute = () => {
-  return window.location.pathname === '/docs' || window.location.pathname.startsWith('/docs/');
-};
-
-/**
  * Static check for known landing routes — no render imports needed.
  * Keeps code-splitting intact (landing chunk stays lazy).
  */
-const LANDING_PATHS = ['/', '/secondary', '/produkt', '/preise', '/integrationen',
-  '/docs', '/ressourcen', '/ueber-uns', '/kontakt', '/features',
-  '/vergleich', '/impressum', '/datenschutz', '/agb'];
-const LANDING_PREFIXES = ['/features/', '/vergleich/', '/docs/'];
+const LANDING_PATHS = ['/', '/produkt', '/preise', '/integrationen',
+  '/ressourcen', '/ueber-uns', '/kontakt', '/features',
+  '/impressum', '/datenschutz', '/agb'];
+const LANDING_PREFIXES = ['/features/'];
 
 const isKnownLandingRoute = (path) => {
   if (path === '/' || path === '/index.html') return true;
@@ -183,4 +177,5 @@ const init = async () => {
 };
 
 // Start the app
+injectSpeedInsights();
 init();

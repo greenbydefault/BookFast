@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://book-fast.de/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://book-fast.de/secondary</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://book-fast.de/produkt</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://book-fast.de/preise</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://book-fast.de/integrationen</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://book-fast.de/docs</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://book-fast.de/docs/tracking-embed-js</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://book-fast.de/ressourcen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://book-fast.de/ueber-uns</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://book-fast.de/kontakt</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -30,11 +27,6 @@
   <url><loc>https://book-fast.de/features/overnight</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://book-fast.de/features/workspaces</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://book-fast.de/features/kaution</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://book-fast.de/vergleich</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://book-fast.de/vergleich/flowbookings</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://book-fast.de/vergleich/cozycal</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://book-fast.de/vergleich/bookla</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://book-fast.de/vergleich/schedulinks</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://book-fast.de/impressum</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://book-fast.de/datenschutz</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://book-fast.de/agb</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
