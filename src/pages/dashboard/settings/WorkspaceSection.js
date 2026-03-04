@@ -25,7 +25,10 @@ const renderWorkspaceVisualContent = () => {
   const ws = state.currentWorkspace || {};
   const sites = state.sites || [];
   const defaultSiteId = sites.length > 0 ? sites[0].id : (ws.id || 'YOUR_SITE_ID');
+  const activeSite = sites.find(s => s.is_active);
   const workspaceName = workspaceUiState.workspaceName || ws.company_name || ws.name || 'Massagegold Berlin Tegel';
+  const integrationSteps = (activeSite ? 1 : 0);
+  const integrationTotal = 2;
 
   container.innerHTML = `
     <div class="workspace-visual">
@@ -52,7 +55,7 @@ const renderWorkspaceVisualContent = () => {
       <section class="workspace-visual-card workspace-visual-card--flat">
         <div class="workspace-visual-card__section">
           <h2 class="workspace-visual-card__title">Website Integration</h2>
-          <p class="workspace-visual-card__subtitle">0 von 2 Schritten abgeschlossen</p>
+          <p class="workspace-visual-card__subtitle">${integrationSteps} von ${integrationTotal} Schritten abgeschlossen</p>
           ${workspaceUiState.embedOpen ? `
           <div class="workspace-checklist">
             <article class="workspace-checklist-item">
@@ -76,8 +79,11 @@ const renderWorkspaceVisualContent = () => {
                 <span class="workspace-checklist-item__title">Verknüpfte Domain</span>
               </div>
               <div class="workspace-domain-value">
-                <span>www.uferspa-berlin.de</span>
-                <span class="workspace-domain-value__check">${getIconString('check')}</span>
+                ${activeSite
+                  ? `<span>${esc(activeSite.domain)}</span>
+                     <span class="workspace-domain-value__check">${getIconString('check')}</span>`
+                  : `<span class="workspace-domain-value--empty">Noch nicht verbunden</span>`
+                }
               </div>
             </article>
           </div>

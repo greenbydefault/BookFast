@@ -134,7 +134,7 @@ export const renderHomePage = async () => {
             subtext: 'Integrieren Sie das Buchungs-Widget auf Ihrer Webseite.',
             done: hasSites,
             link: 'settings',
-            linkParams: '?tab=integration',
+            linkParams: '?tab=workspace',
             icon: 'globe',
             required: true
         },
