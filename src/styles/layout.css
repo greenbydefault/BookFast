@@ -27,10 +27,11 @@
 .sidebar-header {
     display: flex;
     align-items: center;
-    min-height: var(--space-56);
+    height: var(--space-56);
     padding: 0 var(--space-16);
     border-bottom: 1px solid var(--border-color);
     border-radius: var(--space-12) var(--space-12) 0 0;
+    flex-shrink: 0;
 }
 
 .sidebar-header .workspace-select-wrapper {
