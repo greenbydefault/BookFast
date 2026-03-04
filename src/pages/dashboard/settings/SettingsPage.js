@@ -206,7 +206,7 @@ export const renderSettingsPage = async () => {
     </div>
   `;
 
-  fetchSites();
+  await fetchSites();
   await refreshWorkspace();
   renderActiveSection(fromStripe);
 

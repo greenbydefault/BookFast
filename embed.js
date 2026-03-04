@@ -937,7 +937,7 @@
                         guest_count: state.sel.guestCount,
                         addon_selections: addonSelections.length ? addonSelections : undefined,
                         success_url: baseUrl + '?booking=success&bf_sid=' + sessionId,
-                        cancel_url: 'https://uferspa.webflow.io/fehler',
+                        cancel_url: baseUrl + '?booking=cancelled',
                     })
                 });
                 const checkoutData = await checkoutRes.json();
@@ -1073,10 +1073,14 @@
         if (!d || d.error) return;
         state.data = d;
 
+        fetch(`${API}/rest/v1/rpc/ping_site`, {
+            method: 'POST', keepalive: true, headers: HDR,
+            body: JSON.stringify({ site_id: siteId, p_domain: location.hostname })
+        }).catch(() => {});
+
         // Fetch deeply nested addon items via separate RPC
         if (state.data.addons?.length) {
             const addonIds = state.data.addons.map(a => a.id);
-            // rpc call returns array of { addon_id, items }
             const itemsRes = await rpc('get_addon_items', { p_addon_ids: addonIds });
             if (itemsRes && Array.isArray(itemsRes)) {
                 itemsRes.forEach(r => {
@@ -1089,10 +1093,6 @@
         bind();
         show(1);
         track('widget_view');
-        fetch(`${API}/rest/v1/rpc/ping_site`, {
-            method: 'POST', keepalive: true, headers: HDR,
-            body: JSON.stringify({ site_id: siteId, p_domain: location.hostname })
-        }).catch(() => {});
     };
 
     document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();

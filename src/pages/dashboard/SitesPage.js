@@ -6,6 +6,8 @@ import { getState, setState } from '../../lib/store.js';
 import { fetchEntities, createEntity } from '../../lib/dataLayer.js';
 import { createButton } from '../../components/Button/Button.js';
 
+const EMBED_BASE_URL = import.meta.env.VITE_EMBED_BASE_URL || 'https://app.book-fast.de';
+
 /**
  * Fetch sites using dataLayer
  */
@@ -129,9 +131,9 @@ const renderSitesList = () => {
         <p style="color: #888; font-size: 0.8rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Booking Widget Installation</p>
         <div style="display: flex; gap: 0.5rem;">
           <code style="flex: 1; background: #000; padding: 0.5rem; border-radius: 4px; color: #a5f3fc; font-size: 0.8em; overflow-x: auto; white-space: nowrap; font-family: monospace;">
-            &lt;script src="${window.location.origin}/embed.js" data-site-id="${site.id}"&gt;&lt;/script&gt;
+            &lt;script src="${EMBED_BASE_URL}/embed.js" data-site-id="${site.id}"&gt;&lt;/script&gt;
           </code>
-          <button class="copy-btn" data-code="<script src='${window.location.origin}/embed.js' data-site-id='${site.id}'></script>" style="background: #333; border: 1px solid #444; color: white; padding: 0 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Copy</button>
+          <button class="copy-btn" data-code="<script src='${EMBED_BASE_URL}/embed.js' data-site-id='${site.id}'></script>" style="background: #333; border: 1px solid #444; color: white; padding: 0 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Copy</button>
         </div>
         <p style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">Copy and paste this code into your website's &lt;body&gt; to enable the Booking Widget.</p>
       </div>

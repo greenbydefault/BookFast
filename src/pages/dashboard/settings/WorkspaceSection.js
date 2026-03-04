@@ -9,6 +9,8 @@ import { getIconString } from '../../../components/Icons/Icon.js';
 import { refreshWorkspace } from './settingsHelpers.js';
 import { uploadWorkspaceLogo, removeWorkspaceLogo } from '../../../lib/services/workspaceService.js';
 
+const EMBED_BASE_URL = import.meta.env.VITE_EMBED_BASE_URL || 'https://app.book-fast.de';
+
 const workspaceUiState = {
   embedOpen: false,
   workspaceName: '',
@@ -24,9 +26,9 @@ const renderWorkspaceVisualContent = () => {
   const state = getState();
   const ws = state.currentWorkspace || {};
   const sites = state.sites || [];
-  const defaultSiteId = sites.length > 0 ? sites[0].id : (ws.id || 'YOUR_SITE_ID');
+  const defaultSiteId = sites.length > 0 ? sites[0].id : 'YOUR_SITE_ID';
   const activeSite = sites.find(s => s.is_active);
-  const workspaceName = workspaceUiState.workspaceName || ws.company_name || ws.name || 'Massagegold Berlin Tegel';
+  const workspaceName = workspaceUiState.workspaceName || ws.name || ws.company_name || 'Massagegold Berlin Tegel';
   const integrationSteps = (activeSite ? 1 : 0);
   const integrationTotal = 2;
 
@@ -67,7 +69,7 @@ const renderWorkspaceVisualContent = () => {
                 </div>
               </div>
               <div class="workspace-checklist-item__actions">
-                <button type="button" class="workspace-action-btn" data-copy-embed data-embed-code="<script src='${window.location.origin}/embed.js' data-site-id='${defaultSiteId}'></script>">Code kopieren</button>
+                <button type="button" class="workspace-action-btn" data-copy-embed data-embed-code="<script src='${EMBED_BASE_URL}/embed.js' data-site-id='${defaultSiteId}'></script>">Code kopieren</button>
                 <button type="button" class="workspace-accordion-btn is-open" data-workspace-toggle-embed aria-expanded="true">
                   ${getIconString('arrow-down')}
                 </button>
@@ -113,7 +115,7 @@ const renderWorkspaceVisualContent = () => {
                 </div>
               </div>
               <div class="workspace-checklist-item__actions">
-                <button type="button" class="workspace-action-btn" data-copy-embed data-embed-code="<script src='${window.location.origin}/embed.js' data-site-id='${defaultSiteId}'></script>">Code kopieren</button>
+                <button type="button" class="workspace-action-btn" data-copy-embed data-embed-code="<script src='${EMBED_BASE_URL}/embed.js' data-site-id='${defaultSiteId}'></script>">Code kopieren</button>
                 <button type="button" class="workspace-accordion-btn" data-workspace-toggle-embed aria-expanded="false">
                   ${getIconString('arrow-down')}
                 </button>
@@ -267,8 +269,20 @@ const renderWorkspaceVisualContent = () => {
 
   const workspaceNameInput = container.querySelector('[data-workspace-name-input]');
   if (workspaceNameInput) {
+    let nameSaveTimer;
     workspaceNameInput.addEventListener('input', (e) => {
       workspaceUiState.workspaceName = e.target.value;
+      clearTimeout(nameSaveTimer);
+      nameSaveTimer = setTimeout(async () => {
+        const value = e.target.value.trim();
+        try {
+          await updateEntity('workspaces', ws.id, { name: value || ws.name });
+          invalidateCache('workspaces');
+          await refreshWorkspace();
+        } catch (err) {
+          console.error('Workspace name save error:', err);
+        }
+      }, 1000);
     });
   }
 
@@ -299,7 +313,7 @@ export const renderWorkspaceTabContent = () => {
   const ws = state.currentWorkspace || {};
 
   workspaceUiState.embedOpen = false;
-  workspaceUiState.workspaceName = ws.company_name || ws.name || 'Massagegold Berlin Tegel';
+  workspaceUiState.workspaceName = ws.name || ws.company_name || 'Massagegold Berlin Tegel';
   renderWorkspaceVisualContent();
 };
 

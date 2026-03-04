@@ -1,5 +1,5 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
-import { corsHeaders, handleCors } from '../_shared/cors.ts';
+import { handleCors, getCorsHeaders } from '../_shared/cors.ts';
 import { supabaseAdmin } from '../_shared/supabase.ts';
 import { stripe, calculatePlatformFee } from '../_shared/stripe.ts';
 
@@ -61,7 +61,7 @@ serve(async (req: Request) => {
     if (!site_id || !object_id || !service_id || !start_time || !end_time || !customer_name || !customer_email) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
       );
     }
 
@@ -75,7 +75,7 @@ serve(async (req: Request) => {
     if (siteError || !site) {
       return new Response(
         JSON.stringify({ error: 'Site not found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 404, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
       );
     }
 
@@ -89,7 +89,7 @@ serve(async (req: Request) => {
     if (wsError || !workspace) {
       return new Response(
         JSON.stringify({ error: 'Workspace not found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 404, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
       );
     }
 
@@ -97,7 +97,7 @@ serve(async (req: Request) => {
     if (!workspace.stripe_connected_account_id || workspace.payout_status !== 'active') {
       return new Response(
         JSON.stringify({ error: 'Online payments are not enabled for this workspace' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
       );
     }
 
@@ -111,7 +111,7 @@ serve(async (req: Request) => {
     if (svcError || !service) {
       return new Response(
         JSON.stringify({ error: 'Service not found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 404, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
       );
     }
 
@@ -144,7 +144,7 @@ serve(async (req: Request) => {
     if (availError || !isAvailable) {
       return new Response(
         JSON.stringify({ error: 'Selected time slot is not available' }),
-        { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 409, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
       );
     }
 
@@ -344,7 +344,7 @@ serve(async (req: Request) => {
           amount: amountToCharge,
           is_deposit: amountDeposit !== null,
         }),
-        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 200, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
       );
 
     } catch (innerError) {
@@ -361,7 +361,7 @@ serve(async (req: Request) => {
     console.error('Checkout create error:', error);
     return new Response(
       JSON.stringify({ error: error.message || 'Internal server error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { status: 500, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
     );
   }
 });
