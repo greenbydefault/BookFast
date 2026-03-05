@@ -119,6 +119,11 @@ export const renderProductPage = () => {
       </div>
     </section>
 
+    ${createCTASection({
+      headline: 'Buchungen auf deiner Website – in 5 Minuten eingerichtet.',
+      subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
+    })}
+
     <section class="landing-section">
       <div class="landing-container">
         <div class="text-center" style="margin-bottom: 2.5rem;">
@@ -128,11 +133,6 @@ export const renderProductPage = () => {
         ${createFAQAccordion(FAQ)}
       </div>
     </section>
-
-    ${createCTASection({
-      headline: 'Buchungen auf deiner Website – in 5 Minuten eingerichtet.',
-      subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
-    })}
   `;
 
   initFAQAccordion(content);

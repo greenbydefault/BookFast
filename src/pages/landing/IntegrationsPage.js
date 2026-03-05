@@ -110,6 +110,11 @@ export const renderIntegrationsPage = () => {
       </div>
     </section>
 
+    ${createCTASection({
+      headline: 'Integrationen in unter 5 Minuten einrichten.',
+      subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig. Webflow + Stripe in wenigen Klicks verbunden.',
+    })}
+
     <section class="landing-section landing-section-alt">
       <div class="landing-container">
         <div class="text-center" style="margin-bottom: 2.5rem;">
@@ -119,11 +124,6 @@ export const renderIntegrationsPage = () => {
         ${createFAQAccordion(FAQ)}
       </div>
     </section>
-
-    ${createCTASection({
-      headline: 'Integrationen in unter 5 Minuten einrichten.',
-      subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig. Webflow + Stripe in wenigen Klicks verbunden.',
-    })}
   `;
 
   initFAQAccordion(content);

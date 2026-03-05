@@ -156,6 +156,11 @@ export const renderPricingPage = () => {
       </div>
     </section>
 
+    ${createCTASection({
+      headline: 'Starte jetzt.',
+      subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
+    })}
+
     <section class="landing-section">
       <div class="landing-container">
         <div class="text-center" style="margin-bottom: 2.5rem;">
@@ -165,11 +170,6 @@ export const renderPricingPage = () => {
         ${createFAQAccordion(FAQ)}
       </div>
     </section>
-
-    ${createCTASection({
-      headline: 'Starte jetzt.',
-      subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
-    })}
   `;
 
   const faqContainer = content.querySelector('.landing-faq-list');

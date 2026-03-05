@@ -7,12 +7,11 @@ import { createFeatureHero } from '../../../components/landing/FeatureHero.js';
 import { getDemoModule } from '../../../components/landing/featureDemos/index.js';
 import { createFeatureSection } from '../../../components/landing/FeatureSection.js';
 import { createHowItWorksInteractive, initHowItWorksInteractive } from '../../../components/landing/HowItWorksInteractive.js';
-import { createFeatureGrid } from '../../../components/landing/FeatureCard.js';
 import { createFAQAccordion, initFAQAccordion } from '../../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../../components/landing/CTASection.js';
 import { setPageMeta, setFAQSchema } from '../../../lib/seoHelper.js';
 import { escapeHtml } from '../../../lib/sanitize.js';
-import { iconImg, svgAssetUrl } from '../../../lib/landingAssets.js';
+import { svgAssetUrl } from '../../../lib/landingAssets.js';
 import { featurePages } from '../../../data/features/index.js';
 
 /**
@@ -41,29 +40,6 @@ export const renderFeaturePage = (slug) => {
   setPageMeta(page.meta.title, page.meta.description);
   if (page.faq) setFAQSchema(page.faq);
 
-  // Build related features
-  const relatedHTML = page.relatedFeatures?.length ? (() => {
-    const related = page.relatedFeatures
-      .map(slug => featurePages[slug])
-      .filter(Boolean)
-      .map(f => ({
-        icon: getFeatureIcon(f.slug),
-        title: f.meta.title,
-        description: (f.hero?.subheadline || '').slice(0, 80) + '...',
-        link: `/features/${f.slug}`,
-      }));
-    return related.length ? `
-      <section class="landing-section landing-section-alt">
-        <div class="landing-container text-center">
-          <p class="landing-label">Verwandte Features</p>
-          <h2 class="landing-h2">So erreichst du mehr mit ${page.meta.title}.</h2>
-          <div style="margin-top: 2rem;">
-            ${createFeatureGrid(related)}
-          </div>
-        </div>
-      </section>` : '';
-  })() : '';
-
   // Build journey sections (alternating left/right like Integrations page)
   const journeyHTML = page.journey?.length ? page.journey.map((step, i) => `
     <section class="landing-section ${i % 2 === 0 ? 'landing-section-alt' : ''}">
@@ -78,7 +54,7 @@ export const renderFeaturePage = (slug) => {
     </section>
   `).join('') : '';
 
-  // Fallback: Problem + Screenshot + Steps when no journey
+  // Fallback: Steps when no journey
   const hasInteractiveHowItWorks = Boolean(page.interactiveHowItWorks && page.steps?.length);
   const interactiveHowItWorksHTML = hasInteractiveHowItWorks
     ? createHowItWorksInteractive({
@@ -90,29 +66,7 @@ export const renderFeaturePage = (slug) => {
     : '';
 
   const fallbackHTML = !page.journey?.length ? `
-    <!-- 2. Problem → Lösung -->
-    <section class="landing-section landing-section-alt">
-      <div class="landing-container">
-        ${createFeatureSection({
-          title: 'Das Problem.',
-          description: page.problem.text,
-          bullets: page.problem.bullets,
-        })}
-      </div>
-    </section>
-
-    <!-- 3. Screenshot -->
-    <section class="landing-section">
-      <div class="landing-container text-center">
-        <p class="landing-label">So sieht's aus</p>
-        <h2 class="landing-h2">${page.meta.title} im Dashboard.</h2>
-        <div style="margin-top: 2rem; background: var(--color-stone-100); border-radius: 16px; height: 400px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--color-stone-200);">
-          <span style="font-size: 3rem; opacity: 0.3;">${iconImg('target.svg')} Screenshot</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. So funktioniert's (alternierendes links-rechts Layout) -->
+    <!-- 2. So funktioniert's (alternierendes links-rechts Layout) -->
     ${page.steps?.length && !hasInteractiveHowItWorks ? `
     <section class="landing-section">
       <div class="landing-container text-center">
@@ -160,24 +114,15 @@ export const renderFeaturePage = (slug) => {
     ${journeyHTML}
     ` : fallbackHTML}
 
-    <!-- 5. Use-Cases -->
-    ${page.useCases?.length ? `
-    <section class="landing-section">
-      <div class="landing-container text-center">
-        <p class="landing-label">Perfekt für</p>
-        <h2 class="landing-h2">Use-Cases für ${page.meta.title}.</h2>
-        <div style="margin-top: 2rem;">
-          ${createFeatureGrid(page.useCases)}
-        </div>
-      </div>
-    </section>` : ''}
+    <!-- 5. CTA -->
+    ${createCTASection({
+      headline: page.cta?.headline ?? `${page.meta.title} kostenlos testen.`,
+      subheadline: page.cta && 'subheadline' in page.cta ? page.cta.subheadline : '3 Tage kostenlos testen. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
+    })}
 
-    <!-- 6. Verwandte Features -->
-    ${relatedHTML}
-
-    <!-- 7. FAQ -->
+    <!-- 8. FAQ -->
     ${page.faq?.length ? `
-    <section class="landing-section ${relatedHTML ? '' : 'landing-section-alt'}">
+    <section class="landing-section landing-section-alt">
       <div class="landing-container">
         <div class="text-center" style="margin-bottom: 2.5rem;">
           <p class="hero-new__tagline">FAQ</p>
@@ -186,12 +131,6 @@ export const renderFeaturePage = (slug) => {
         ${createFAQAccordion(page.faq)}
       </div>
     </section>` : ''}
-
-    <!-- 8. CTA -->
-    ${createCTASection({
-      headline: page.cta?.headline ?? `${page.meta.title} kostenlos testen.`,
-      subheadline: page.cta && 'subheadline' in page.cta ? page.cta.subheadline : '3 Tage kostenlos testen. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
-    })}
   `;
 
   // Init interactive demo module (if present)
@@ -213,19 +152,4 @@ export const renderFeaturePage = (slug) => {
   // Init FAQ
   const faqContainer = content.querySelector('.landing-faq-list');
   if (faqContainer) initFAQAccordion(content);
-};
-
-/**
- * Get emoji icon for a feature slug
- */
-const getFeatureIcon = (slug) => {
-  const icons = {
-    buchungen: iconImg('list.svg'), objekte: iconImg('home.svg'), services: `${iconImg('gear.svg')}️`, zahlungen: iconImg('Bank-card.svg'),
-    rechnungen: iconImg('receipt-euro.svg'), analytics: iconImg('chart.svg'), integration: iconImg('Globe.svg'), kundenportal: iconImg('blocks-integration.svg'),
-    mitarbeiter: iconImg('users-2.svg'), addons: iconImg('ticket-percent.svg'), gutscheine: `${iconImg('ticket-percent.svg')}️`, kunden: iconImg('user.svg'),
-    verfuegbarkeit: iconImg('lock.svg'), buffer: iconImg('clean.svg'), zeitfenster: '⏰', approval: iconImg('check.svg'),
-    overnight: iconImg('date-cog.svg'), workspaces: iconImg('Building-comapny.svg'), kaution: iconImg('lock.svg'),
-    urlaub: iconImg('calender-days-date.svg'), 'email-templates': `${iconImg('Mail.svg')}️`,
-  };
-  return icons[slug] || iconImg('package.svg');
 };

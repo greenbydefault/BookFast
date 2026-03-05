@@ -33,6 +33,11 @@ export const renderHomePage = () => {
       trustClaims: ['0% Provision', 'Webflow-native', 'Zahlung vor Termin'],
     })}
 
+    ${createCTASection({
+      headline: 'Buchungen auf deiner Website – in 5 Minuten eingerichtet.',
+      subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig.\nIn unter 5 Minuten startklar.',
+    })}
+
     <section class="landing-section landing-section-alt">
       <div class="landing-container">
         <div class="text-center" style="margin-bottom: 2.5rem;">
@@ -42,11 +47,6 @@ export const renderHomePage = () => {
         ${createFAQAccordion(FAQ)}
       </div>
     </section>
-
-    ${createCTASection({
-      headline: 'Buchungen auf deiner Website – in 5 Minuten eingerichtet.',
-      subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig.\nIn unter 5 Minuten startklar.',
-    })}
   `;
 
   initHeroNew();

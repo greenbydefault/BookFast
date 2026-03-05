@@ -30,8 +30,8 @@ export const createCTASection = (config) => {
           <h2 class="landing-h2">${headline}</h2>
           ${subheadline ? `<p class="landing-text">${subheadline}</p>` : ''}
           <div class="landing-cta-buttons">
-            <a href="${primaryHref}" class="landing-btn landing-btn-primary landing-btn-lg" data-landing-link>${primaryCTA}</a>
-            ${secondaryCTA ? `<a href="${secondaryHref}" class="landing-btn landing-btn-secondary landing-btn-lg">${secondaryCTA}</a>` : ''}
+            <a href="${primaryHref}" class="landing-btn landing-btn-primary landing-btn-md" data-landing-link>${primaryCTA}</a>
+            ${secondaryCTA ? `<a href="${secondaryHref}" class="landing-btn landing-btn-secondary landing-btn-md">${secondaryCTA}</a>` : ''}
           </div>
         </div>
       </div>

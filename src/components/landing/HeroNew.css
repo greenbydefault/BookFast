@@ -35,7 +35,8 @@
     border-radius: var(--space-12);
     background: var(--color-majorelle-blue-50);
     margin: 0 0 1.25rem;
-    
+    display: inline-block;
+    width: fit-content;
 }
 
 /* ── Group 2: Headline ── */

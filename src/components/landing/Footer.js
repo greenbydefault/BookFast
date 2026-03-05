@@ -73,11 +73,13 @@ export const renderFooter = (container) => {
           ${primaryColumnsHTML}
         </div>
       </div>
+    </div>
 
-      <div class="landing-footer-stage" aria-hidden="true">
-        <img src="${FOOTER_ILLUSTRATION_URL}" alt="" class="landing-footer-illustration">
-      </div>
+    <div class="landing-footer-stage" aria-hidden="true">
+      <img src="${FOOTER_ILLUSTRATION_URL}" alt="" class="landing-footer-illustration">
+    </div>
 
+    <div class="landing-container">
       <div class="landing-footer-bottom">
         <div class="landing-footer-legal">${legalLinksHTML}</div>
         <div class="landing-footer-badges">${bottomBadgesHTML}</div>
