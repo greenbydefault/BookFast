@@ -1,0 +1,19 @@
+{
+  "name": "BookFast",
+  "short_name": "BookFast",
+  "description": "Buchungen und Zahlungen direkt auf deiner Website.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "lang": "de-DE",
+  "icons": [
+    {
+      "src": "/Logo/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

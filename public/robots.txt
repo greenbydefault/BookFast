@@ -9,4 +9,19 @@ Disallow: /register.html
 Disallow: /forgot-password.html
 Disallow: /update-password.html
 
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /dashboard/
+Disallow: /b/
+
+User-agent: GPTBot
+Allow: /
+Disallow: /dashboard/
+Disallow: /b/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /dashboard/
+Disallow: /b/
+
 Sitemap: https://book-fast.de/sitemap.xml

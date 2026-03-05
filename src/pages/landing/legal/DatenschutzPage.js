@@ -7,7 +7,7 @@ export const renderDatenschutzPage = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta('Datenschutz', 'Datenschutzerklärung von BookFast.');
+  setPageMeta('Datenschutz', 'Datenschutzerklaerung von BookFast.');
 
   content.innerHTML = `
     <section class="landing-section">
@@ -15,27 +15,28 @@ export const renderDatenschutzPage = () => {
         <h1 class="landing-h1" style="font-size: 2.5rem;">Datenschutzerklärung</h1>
         <div class="landing-text" style="margin-top: 2rem;">
 
-          <h2 class="landing-h3">1. Datenschutz auf einen Blick</h2>
-          <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit deinen personenbezogenen Daten passiert, wenn du diese Website besuchst.</p>
+          <p><strong>Stand:</strong> 05.03.2026</p>
 
-          <h2 class="landing-h3" style="margin-top: 2rem;">2. Allgemeine Hinweise</h2>
-          <p>Die Betreiber dieser Seiten nehmen den Schutz deiner persönlichen Daten sehr ernst. Wir behandeln deine personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p>
+          <h2 class="landing-h3">1. Verantwortlicher</h2>
+          <p>Verantwortlich fuer die Datenverarbeitung ist der Betreiber von BookFast. Die Kontaktdaten findest du im Impressum.</p>
 
-          <h2 class="landing-h3" style="margin-top: 2rem;">3. Datenerfassung auf dieser Website</h2>
-          <h3 class="landing-h4">Wer ist verantwortlich für die Datenerfassung?</h3>
-          <p>Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Die Kontaktdaten findest du im Impressum.</p>
+          <h2 class="landing-h3" style="margin-top: 2rem;">2. Verarbeitete Daten</h2>
+          <p>Wir verarbeiten Daten, die du uns mitteilst (z.B. Name, E-Mail, Telefonnummer, Buchungsdaten) sowie technische Daten (z.B. Browser, Geraetetyp, Betriebssystem, Zeitstempel).</p>
 
-          <h3 class="landing-h4" style="margin-top: 1rem;">Wie erfassen wir deine Daten?</h3>
-          <p>Deine Daten werden zum einen dadurch erhoben, dass du uns diese mitteilst (z.B. Kontaktformular, Registrierung). Andere Daten werden automatisch beim Besuch der Website durch unsere IT-Systeme erfasst (z.B. Browser, Betriebssystem, Uhrzeit des Seitenaufrufs).</p>
+          <h2 class="landing-h3" style="margin-top: 2rem;">3. Zwecke und Rechtsgrundlagen</h2>
+          <p>Die Verarbeitung erfolgt zur Vertragsdurchfuehrung (Art. 6 Abs. 1 lit. b DSGVO), zur Erfuellung rechtlicher Pflichten (Art. 6 Abs. 1 lit. c DSGVO) sowie auf Basis berechtigter Interessen an einem sicheren und stabilen Betrieb (Art. 6 Abs. 1 lit. f DSGVO).</p>
 
-          <h2 class="landing-h3" style="margin-top: 2rem;">4. Hosting</h2>
-          <p>Diese Website wird bei einem externen Dienstleister gehostet. Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert.</p>
+          <h2 class="landing-h3" style="margin-top: 2rem;">4. Eingesetzte Dienstleister</h2>
+          <p>Wir nutzen Supabase (Datenbank/Auth), Stripe (Zahlungen), Vercel (Hosting) und Resend (transaktionale E-Mails). Mit den Anbietern bestehen Auftragsverarbeitungsvertraege, soweit erforderlich.</p>
 
-          <h2 class="landing-h3" style="margin-top: 2rem;">5. Zahlungsabwicklung</h2>
-          <p>Für die Zahlungsabwicklung nutzen wir Stripe (Stripe, Inc.). Stripe ist ein zertifizierter PCI-DSS-konformer Zahlungsdienstleister. Mehr Informationen: <a href="https://stripe.com/de/privacy" target="_blank" rel="noopener">Stripe Datenschutz</a>.</p>
+          <h2 class="landing-h3" style="margin-top: 2rem;">5. Buchungs- und Event-Tracking</h2>
+          <p>Zur technischen Analyse des Buchungsprozesses erfassen wir Ereignisse mit einer zufaelligen Session-ID. Das dient der Fehleranalyse und Produktverbesserung und enthaelt keine sensiblen Zahlungsdaten.</p>
 
-          <h2 class="landing-h3" style="margin-top: 2rem;">6. Deine Rechte</h2>
-          <p>Du hast jederzeit das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Wende dich dazu an: hello@book-fast.de</p>
+          <h2 class="landing-h3" style="margin-top: 2rem;">6. Speicherdauer</h2>
+          <p>Wir speichern personenbezogene Daten nur so lange, wie es fuer die genannten Zwecke erforderlich ist oder gesetzliche Aufbewahrungsfristen bestehen.</p>
+
+          <h2 class="landing-h3" style="margin-top: 2rem;">7. Deine Rechte</h2>
+          <p>Du hast das Recht auf Auskunft, Berichtigung, Loeschung, Einschraenkung der Verarbeitung, Datenuebertragbarkeit und Widerspruch sowie ein Beschwerderecht bei einer Datenschutzaufsichtsbehoerde.</p>
         </div>
       </div>
     </section>

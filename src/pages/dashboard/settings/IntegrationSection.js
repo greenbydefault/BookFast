@@ -1,5 +1,5 @@
 /**
- * Settings - Integration Section (Drive UI on Stripe Connect logic)
+ * Settings - Integration Section (Stripe Connect)
  */
 import { getState } from '../../../lib/store.js';
 import { createActionButton } from '../../../components/Button/Button.js';
@@ -23,8 +23,8 @@ const getStepConfig = (ws) => {
   return [
     {
       index: 1,
-      title: 'Drive-Konto erstellen',
-      subtitle: 'Verbinde dein Drive-Konto',
+      title: 'Stripe Konto erstellen',
+      subtitle: 'Verbinde dein Stripe-Konto',
       done: isConnected,
     },
     {
@@ -36,7 +36,7 @@ const getStepConfig = (ws) => {
     {
       index: 3,
       title: 'Bereit',
-      subtitle: 'Dateien empfangen',
+      subtitle: 'Zahlungen empfangen',
       done: isActive,
     },
   ];
@@ -50,7 +50,7 @@ const getProgressSegments = (completed, total) => {
   ).join('');
 };
 
-const handleConnectDrive = async () => {
+const handleConnectStripe = async () => {
   const state = getState();
   const ws = state.currentWorkspace;
 
@@ -59,7 +59,14 @@ const handleConnectDrive = async () => {
     return;
   }
 
+  const popup = window.open('', '_blank');
+
   try {
+    if (popup && !popup.closed) {
+      popup.document.title = 'Stripe wird geöffnet...';
+      popup.document.body.innerHTML = '<p style="font-family: sans-serif; padding: 16px;">Stripe wird vorbereitet...</p>';
+    }
+
     const result = await startStripeConnect({
       workspaceId: ws.id,
       returnUrl: window.location.href,
@@ -67,9 +74,19 @@ const handleConnectDrive = async () => {
     });
 
     if (result.onboarding_url) {
-      window.location.href = result.onboarding_url;
+      if (popup && !popup.closed) {
+        popup.location.href = result.onboarding_url;
+      } else {
+        window.location.href = result.onboarding_url;
+      }
+      return;
     }
+
+    throw new Error('Keine Onboarding-URL erhalten.');
   } catch (error) {
+    if (popup && !popup.closed) {
+      popup.close();
+    }
     console.error('Connect error:', error);
     alert(`Fehler beim Verbinden: ${error.message}`);
   }
@@ -112,7 +129,7 @@ export const renderIntegrationContent = async () => {
       <section class="settings-card">
         <div class="integration-setup__header">
           <div>
-            <h2 class="integration-setup__title">Drive Einrichtung</h2>
+            <h2 class="integration-setup__title">Stripe Einrichtung</h2>
             <p class="integration-setup__subtitle">${completedSteps} von ${totalSteps} erforderlichen Schritten abgeschlossen</p>
           </div>
           <span class="integration-setup__percent">${progressPercent} / 100%</span>
@@ -126,9 +143,9 @@ export const renderIntegrationContent = async () => {
                 ${getIconString('check')}
               </span>
               <div>
-                <h3 class="workspace-checklist-item__title">Drive Connect ${isConnected ? 'aktiv' : 'inaktiv'}</h3>
+                <h3 class="workspace-checklist-item__title">Stripe Connect ${isConnected ? 'aktiv' : 'inaktiv'}</h3>
                 <p class="workspace-checklist-item__subtitle">
-                  ${isConnected ? 'Dein Konto ist verbunden. Du kannst Dateien synchronisieren.' : 'Verbinde dein Konto, um die Einrichtung zu starten.'}
+                  ${isConnected ? 'Dein Konto ist vollständig eingerichtet. Du kannst Online-Zahlungen empfangen.' : 'Verbinde dein Konto, um die Einrichtung zu starten.'}
                 </p>
               </div>
             </div>
@@ -216,10 +233,10 @@ export const renderIntegrationContent = async () => {
   const actionsContainer = document.getElementById('integration-actions');
   if (actionsContainer) {
     const { element: connectBtn } = createActionButton({
-      text: isConnected ? 'Einrichtung fortsetzen' : 'Mit Drive verbinden',
+      text: isConnected ? 'Einrichtung fortsetzen' : 'Einrichtung starten',
       loadingText: 'Verbinde...',
       className: 'btn-primary',
-      onClick: handleConnectDrive,
+      onClick: handleConnectStripe,
     });
     actionsContainer.appendChild(connectBtn);
 

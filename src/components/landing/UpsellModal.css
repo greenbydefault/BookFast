@@ -1,0 +1,62 @@
+@import '../Modal/Modal.css';
+@import '../Button/Button.css';
+
+.upsell-modal {
+  backdrop-filter: blur(var(--space-4));
+  z-index: 9999;
+}
+
+.upsell-modal__container {
+  max-width: calc(var(--space-128) * 3.75);
+  text-align: center;
+  margin: 0;
+}
+
+.upsell-modal__header {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.upsell-modal__close-btn {
+  inline-size: var(--space-32);
+  block-size: var(--space-32);
+}
+
+.upsell-modal__content {
+  padding: 0 var(--space-32) var(--space-40) var(--space-32);
+}
+
+.upsell-modal__title {
+  margin: 0 0 var(--space-12) 0;
+  font-size: var(--space-24);
+  color: var(--color-vulcan-900);
+}
+
+.upsell-modal__subtitle {
+  margin: 0 0 var(--space-32) 0;
+  color: var(--color-stone-600);
+  line-height: var(--space-24);
+}
+
+.upsell-modal__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.upsell-modal__register-btn {
+  inline-size: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-14);
+}
+
+.upsell-modal__cancel-btn {
+  color: var(--color-stone-500);
+  padding: var(--space-4);
+}
+
+.upsell-modal__cancel-btn:hover {
+  color: var(--color-vulcan-900);
+}

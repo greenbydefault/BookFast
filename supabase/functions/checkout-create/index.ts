@@ -2,6 +2,7 @@ import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { handleCors, getCorsHeaders } from '../_shared/cors.ts';
 import { supabaseAdmin } from '../_shared/supabase.ts';
 import { stripe, calculatePlatformFee } from '../_shared/stripe.ts';
+import { checkRateLimit } from '../_shared/rateLimit.ts';
 
 interface CheckoutCreateRequest {
   site_id: string;
@@ -26,11 +27,36 @@ interface CheckoutCreateRequest {
 }
 
 const RESERVATION_MINUTES = 30;
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isValidUuid(value: string | undefined): boolean {
+  return Boolean(value && UUID_REGEX.test(value));
+}
 
 serve(async (req: Request) => {
   // Handle CORS
   const corsResponse = handleCors(req);
   if (corsResponse) return corsResponse;
+
+  const rateLimit = checkRateLimit(req, {
+    bucket: 'checkout-create',
+    maxRequests: 60,
+    windowMs: 60_000,
+  });
+  if (!rateLimit.allowed) {
+    return new Response(
+      JSON.stringify({ error: 'Too many requests. Please try again shortly.' }),
+      {
+        status: 429,
+        headers: {
+          ...getCorsHeaders(req),
+          'Content-Type': 'application/json',
+          'Retry-After': String(rateLimit.retryAfterSeconds),
+        },
+      }
+    );
+  }
 
   try {
     const body: CheckoutCreateRequest = await req.json();
@@ -61,6 +87,76 @@ serve(async (req: Request) => {
     if (!site_id || !object_id || !service_id || !start_time || !end_time || !customer_name || !customer_email) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!isValidUuid(site_id) || !isValidUuid(object_id) || !isValidUuid(service_id)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid identifier format' }),
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!EMAIL_REGEX.test(customer_email)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid email address' }),
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (customer_name.trim().length === 0 || customer_name.length > 200) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid customer name length' }),
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (customer_phone && customer_phone.length > 40) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid phone number length' }),
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (customer_address && customer_address.length > 300) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid address length' }),
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (customer_city && customer_city.length > 120) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid city length' }),
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (customer_zip && customer_zip.length > 20) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid postal code length' }),
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (guest_count !== undefined && (!Number.isInteger(guest_count) || guest_count < 1 || guest_count > 100)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid guest count' }),
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (staff_id && !isValidUuid(staff_id)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid staff identifier format' }),
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (addon_ids && (!Array.isArray(addon_ids) || addon_ids.some((id) => !isValidUuid(id)))) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid addon identifier format' }),
         { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
       );
     }
@@ -360,7 +456,7 @@ serve(async (req: Request) => {
   } catch (error) {
     console.error('Checkout create error:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
+      JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
     );
   }

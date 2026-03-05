@@ -1,0 +1,33 @@
+# BookFast
+
+> BookFast ist ein Buchungssystem fuer Webflow und andere Websites mit integrierter Zahlungsabwicklung, Kundenportal und Verwaltungsfunktionen fuer Teams.
+
+## Services
+
+- [Produkt](https://book-fast.de/produkt): Ueberblick ueber die Plattform und Kernfunktionen.
+- [Preise](https://book-fast.de/preise): Tarife und Preismodelle.
+- [Integrationen](https://book-fast.de/integrationen): Verfuegbare Integrationen und Einbindung.
+- [Features](https://book-fast.de/features): Vollstaendige Funktionsuebersicht.
+
+## What We Do Not Do
+
+- Keine Rechtsberatung.
+- Keine Steuerberatung.
+- Keine Zahlungsabwicklung ausserhalb angebundener Zahlungsdienstleister.
+
+## Contact
+
+- [Kontakt](https://book-fast.de/kontakt): Allgemeine Anfragen und Support.
+- [Impressum](https://book-fast.de/impressum): Rechtliche Angaben.
+
+## Key Information
+
+- [Ueber Uns](https://book-fast.de/ueber-uns): Unternehmen und Mission.
+- [Datenschutz](https://book-fast.de/datenschutz): Datenschutzinformationen.
+- [AGB](https://book-fast.de/agb): Allgemeine Geschaeftsbedingungen.
+
+## AI Discovery Files
+
+- [llms.txt](https://book-fast.de/llms.txt): Kuratierte Uebersicht fuer AI-Systeme.
+- [sitemap.xml](https://book-fast.de/sitemap.xml): Vollstaendige URL-Uebersicht.
+- [robots.txt](https://book-fast.de/robots.txt): Crawl-Regeln.

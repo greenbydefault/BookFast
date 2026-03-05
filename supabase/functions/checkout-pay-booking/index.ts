@@ -154,7 +154,7 @@ serve(async (req: Request) => {
     } catch (error) {
         console.error('Checkout pay error:', error);
         return new Response(
-            JSON.stringify({ error: error.message || 'Internal server error' }),
+            JSON.stringify({ error: 'Internal server error' }),
             { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
     }

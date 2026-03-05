@@ -3,8 +3,8 @@
     const siteId = script?.getAttribute('data-site-id');
     if (!siteId) return;
 
-    const API = 'https://yolidffzpvkizdqqcolk.supabase.co';
-    const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbGlkZmZ6cHZraXpkcXFjb2xrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2ODU4OTMsImV4cCI6MjA4NTI2MTg5M30._V6ZbzwIZvTKkBTUVNbDLWmcDvBrKOJuKUlT2N5q0Fs';
+    const API = '__SUPABASE_URL__';
+    const KEY = '__SUPABASE_ANON_KEY__';
     const HDR = { 'Content-Type': 'application/json', 'apikey': KEY, 'Authorization': `Bearer ${KEY}` };
     const SESSION_KEY = `bf_session_${siteId}`;
     const sessionId = (() => {
@@ -43,11 +43,18 @@
         } catch { return null; }
     };
 
+    const safeMetadata = (m = {}) => {
+        const merged = { ..._meta, ...m };
+        const json = JSON.stringify(merged);
+        if (json.length <= 2048) return merged;
+        return { ..._meta, note: 'metadata_truncated' };
+    };
+
     // --- Tracking: fire-and-forget, keepalive, nie awaiten ---
     const track = (e, m) => {
         fetch(`${API}/rest/v1/rpc/track_event`, {
             method: 'POST', keepalive: true, headers: HDR,
-            body: JSON.stringify({ p_site_id: siteId, p_event_type: e, p_session_id: sessionId, p_metadata: { ..._meta, ...m } })
+            body: JSON.stringify({ p_site_id: siteId, p_event_type: e, p_session_id: sessionId, p_metadata: safeMetadata(m) })
         }).catch(() => { });
     };
 
@@ -55,7 +62,7 @@
     const trackWithSid = (sid, e, m) => {
         fetch(`${API}/rest/v1/rpc/track_event`, {
             method: 'POST', keepalive: true, headers: HDR,
-            body: JSON.stringify({ p_site_id: siteId, p_event_type: e, p_session_id: sid, p_metadata: { ..._meta, ...m } })
+            body: JSON.stringify({ p_site_id: siteId, p_event_type: e, p_session_id: sid, p_metadata: safeMetadata(m) })
         }).catch(() => { });
     };
 

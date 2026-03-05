@@ -132,7 +132,7 @@ serve(async (req: Request) => {
   } catch (error) {
     console.error(`[${requestId}] Webhook error:`, error);
     return jsonResponse(500, {
-      error: error instanceof Error ? error.message : String(error),
+      error: 'Internal server error',
       code: 'unhandled_webhook_error' satisfies WebhookErrorCode,
       request_id: requestId,
     });
@@ -343,7 +343,7 @@ async function handleCheckoutExpired(session: Stripe.Checkout.Session, requestId
   if (error) {
     console.error(`[${requestId}] Failed to delete expired reservation`, {
       checkout_session_id: session.id,
-      error: error.message,
+      error: 'reservation_cleanup_failed',
     });
   }
 

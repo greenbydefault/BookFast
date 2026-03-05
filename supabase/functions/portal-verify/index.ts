@@ -11,10 +11,30 @@ import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { corsHeaders, handleCors } from '../_shared/cors.ts';
 import { supabaseAdmin } from '../_shared/supabase.ts';
 import { hashToken, PORTAL_BOOKING_SELECT, PORTAL_WORKSPACE_SELECT } from '../_shared/tokenUtils.ts';
+import { checkRateLimit } from '../_shared/rateLimit.ts';
 
 serve(async (req: Request) => {
   const corsResponse = handleCors(req);
   if (corsResponse) return corsResponse;
+
+  const rateLimit = checkRateLimit(req, {
+    bucket: 'portal-verify',
+    maxRequests: 30,
+    windowMs: 60_000,
+  });
+  if (!rateLimit.allowed) {
+    return new Response(
+      JSON.stringify({ error: 'Too many requests. Please try again shortly.' }),
+      {
+        status: 429,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json',
+          'Retry-After': String(rateLimit.retryAfterSeconds),
+        },
+      }
+    );
+  }
 
   try {
     const { token, pin_code } = await req.json();
@@ -141,7 +161,7 @@ serve(async (req: Request) => {
   } catch (error) {
     console.error('Portal verify error:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
+      JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

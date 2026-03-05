@@ -19,6 +19,8 @@ const passwordToggleBtn = document.getElementById('passwordToggleBtn')
 const passwordToggleIcon = passwordToggleBtn?.querySelector('.auth-password-toggle-icon')
 const passwordRequirements = document.getElementById('passwordRequirements')
 const passwordRequirementsText = passwordRequirements?.querySelector('.password-requirements__text')
+let lastEmailCheckAt = 0
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // Password strength check (Supabase recommended: lower, upper, digit, symbol)
 function checkPasswordStrength(pw) {
@@ -88,6 +90,11 @@ function resetPasswordVisibility() {
 }
 
 async function isRegistrationEmailTaken(email) {
+    const now = Date.now()
+    if (now - lastEmailCheckAt < 2000) {
+        throw new Error('Bitte kurz warten, bevor du erneut pruefst.')
+    }
+    lastEmailCheckAt = now
     const normalizedEmail = (email || '').trim().toLowerCase()
     const { data, error } = await supabase.rpc('check_registration_email_exists', {
         p_email: normalizedEmail
@@ -100,8 +107,8 @@ async function isRegistrationEmailTaken(email) {
 continueBtn.addEventListener('click', async () => {
     // Basic validation for Step 1
     const email = (emailInput.value || '').trim()
-    if (!email || !email.includes('@')) {
-        showError('Please enter a valid email address')
+    if (!email || !EMAIL_REGEX.test(email)) {
+        showError('Bitte gib eine gueltige E-Mail-Adresse ein')
         return
     }
 
@@ -123,7 +130,7 @@ continueBtn.addEventListener('click', async () => {
         step2.classList.remove('step-hidden')
         step2.classList.add('step-visible')
     } catch (error) {
-        showError('E-Mail-Prüfung fehlgeschlagen. Bitte versuche es erneut.')
+        showError(error?.message || 'E-Mail-Pruefung fehlgeschlagen. Bitte versuche es erneut.')
     } finally {
         continueBtn.disabled = false
         continueBtn.textContent = originalContinueText
@@ -171,13 +178,21 @@ googleBtn.addEventListener('click', () => handleSocialLogin('google'))
 registerForm.addEventListener('submit', async (e) => {
     e.preventDefault()
 
-    const fullName = fullNameInput.value
-    const email = emailInput.value
+    const fullName = (fullNameInput.value || '').trim()
+    const email = (emailInput.value || '').trim()
     const password = passwordInput.value
 
     // Basic validation for Step 2
     if (!fullName) {
         showError('Please enter your full name')
+        return
+    }
+    if (fullName.length > 200) {
+        showError('Der Name darf maximal 200 Zeichen haben')
+        return
+    }
+    if (!EMAIL_REGEX.test(email)) {
+        showError('Bitte gib eine gueltige E-Mail-Adresse ein')
         return
     }
     if (!password || password.length < 6) {
