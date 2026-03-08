@@ -1,3 +1,8 @@
+import './HeroNew.css';
+import './FeatureHero.css';
+
+const ILLUSTRATION_URL = new URL('../../svg/illustrations/landingpage/features/ft_zahlungen.svg', import.meta.url).href;
+
 /**
  * Hero Component
  * Supports centered (homepage) and split (feature/industry) variants.
@@ -12,6 +17,7 @@
  * @param {string[]} [config.trustClaims] - Array of trust claim strings
  * @param {string} [config.variant] - 'centered' | 'split'
  * @param {string} [config.imageHTML] - HTML for the right side (split variant)
+ * @param {string} [config.illustrationSrc] - Override illustration (default: ft_zahlungen.svg)
  */
 export const createHero = (config) => {
   const {
@@ -20,8 +26,13 @@ export const createHero = (config) => {
     secondaryCTA = 'Alle Features ansehen', secondaryHref = '/features',
     trustClaims = [],
     variant = 'centered',
-    imageHTML = ''
+    imageHTML = '',
+    illustrationSrc = ILLUSTRATION_URL,
   } = config;
+
+  const illustrationHTML = illustrationSrc
+    ? `<div class="feature-hero__illustration"><img src="${illustrationSrc}" alt="" loading="eager"></div>`
+    : '';
 
   const checkSVG = '<svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/></svg>';
 
@@ -42,8 +53,9 @@ export const createHero = (config) => {
         <div class="landing-container">
           <div class="landing-hero-split">
             <div>
-              <h1 class="landing-h1">${headline}</h1>
-              <p class="landing-text-lg">${subheadline}</p>
+              ${illustrationHTML}
+              <h1 class="hero-new__headline">${headline}</h1>
+              <p class="hero-new__subheadline">${subheadline}</p>
               ${ctaHTML}
               ${trustHTML}
             </div>
@@ -58,8 +70,9 @@ export const createHero = (config) => {
     <section class="landing-hero">
       <div class="landing-container">
         <div class="landing-hero-centered">
-          <h1 class="landing-h1 text-balance">${headline}</h1>
-          <p class="landing-text-lg">${subheadline}</p>
+          ${illustrationHTML}
+          <h1 class="hero-new__headline">${headline}</h1>
+          <p class="hero-new__subheadline">${subheadline}</p>
           ${ctaHTML}
           ${trustHTML}
         </div>

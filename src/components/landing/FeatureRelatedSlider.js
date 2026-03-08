@@ -29,21 +29,21 @@ const createCardHTML = (feature) => {
 export const createFeatureRelatedSlider = ({
   currentTitle = '',
   features = [],
+  label = 'Mehr entdecken',
+  headline = '',
 } = {}) => {
   if (!Array.isArray(features) || !features.length) return '';
   const titleLabel = currentTitle || 'dieses Feature';
+  const headlineText = headline || `Weitere Funktionen rund um ${escapeHtml(titleLabel)}.`;
 
   return `
     <section class="landing-section feature-related-slider-section">
       <div class="landing-container">
         <div class="feature-related-slider__header">
           <div>
-            <p class="landing-label landing-label--pill">Mehr entdecken</p>
-            <h2 class="landing-h2">Weitere Funktionen rund um ${escapeHtml(titleLabel)}.</h2>
+            <p class="landing-label landing-label--pill">${escapeHtml(label)}</p>
+            <h2 class="landing-h2">${headlineText}</h2>
           </div>
-          <p class="landing-text feature-related-slider__intro">
-            Passend zu ${escapeHtml(titleLabel)}: Entdecke Funktionen, die häufig zusammen eingesetzt werden.
-          </p>
         </div>
 
         <div class="feature-related-slider" data-feature-related-slider>

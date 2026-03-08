@@ -4,10 +4,11 @@
 import { createHero } from '../../components/landing/Hero.js';
 import { createPricingCard } from '../../components/landing/PricingCard.js';
 import { createCompareTable } from '../../components/landing/CompareTable.js';
-import { createFeatureGrid } from '../../components/landing/FeatureCard.js';
+import { createFeatureRelatedSlider, initFeatureRelatedSlider } from '../../components/landing/FeatureRelatedSlider.js';
 import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
 import { iconImg } from '../../lib/landingAssets.js';
+import { featurePages } from '../../data/features/index.js';
 import { setPageMeta, setFAQSchema } from '../../lib/seoHelper.js';
 
 const FOUNDER_DEAL_ACTIVE = false;
@@ -59,23 +60,6 @@ const COMPARE_TABLE = {
     { feature: 'Support', values: ['Standard', 'Standard', 'Priorisiert'] },
   ],
 };
-
-const ALWAYS_INCLUDED_FEATURES = [
-  { icon: iconImg('chart.svg'), title: 'Voller Analytics-Umfang', description: 'Funnel, Drop-offs, Conversion-Rates für alle Workspaces.' },
-  { icon: iconImg('Bank-card.svg'), title: 'Online-Zahlungen', description: 'Stripe Connect – Zahlung vor Buchung.' },
-  { icon: iconImg('check.svg'), title: 'Zahlung vor Termin', description: 'Kein Booking ohne Payment.' },
-  { icon: iconImg('calender-days-date.svg'), title: 'Konfliktvermeidung', description: 'Keine Double-Bookings, keine Slot-Überschneidungen.' },
-  { icon: iconImg('home.svg'), title: 'Overnight-Buchungen', description: 'Mehrtägige Buchungen mit Check-in/out.' },
-  { icon: iconImg('receipt-euro.svg'), title: 'Deposit/Anzahlung', description: 'Optional konfigurierbar.' },
-  { icon: iconImg('clock-check.svg'), title: 'Request/Approval Flow', description: 'Optional – erst zahlen, dann bestätigen.' },
-  { icon: iconImg('Mail.svg'), title: 'E-Mail Notifications', description: 'Bestätigung, Status-Updates an Betreiber.' },
-];
-
-const ROADMAP_ITEMS = [
-  { icon: iconImg('messages-square.svg'), title: 'SMS/WhatsApp Notifications', description: 'Variable Versandkosten, Add-on.' },
-  { icon: iconImg('Building-comapny.svg'), title: 'Extra Workspaces', description: 'Zusätzliche Workspaces als Add-on.' },
-  { icon: iconImg('lock.svg'), title: 'Kaution', description: 'Kaution/Deposit pro Buchung konfigurierbar.' },
-];
 
 const SECURITY_BADGES = [
   { label: 'DSGVO-konform', icon: iconImg('check.svg') },
@@ -155,64 +139,7 @@ export const renderPricingPage = () => {
       </div>
     </section>
 
-    <section class="landing-section">
-      <div class="landing-container text-center">
-        <p class="landing-label">In allen Plänen enthalten</p>
-        <h2 class="landing-h2">Immer dabei</h2>
-        <div style="margin-top: 2.5rem;">
-          ${createFeatureGrid(ALWAYS_INCLUDED_FEATURES, 4)}
-        </div>
-      </div>
-    </section>
-
-    <section class="landing-section landing-section-sustainability">
-      <div class="landing-container">
-        <div class="landing-sustainability-block">
-          <h2 class="landing-h2">Nachhaltigkeits-Impact – automatisch dabei.</h2>
-          <p class="landing-text">Jeder aktive Plan unterstützt einen nachhaltigen Impact. Ohne Extra-Aufwand für dich – ein Teil deines Plans fließt direkt in messbare Projekte.</p>
-          <div class="landing-sustainability-points">
-            <div class="landing-sustainability-point">
-              <span class="landing-sustainability-point-icon">${iconImg('target.svg')}</span>
-              <div>
-                <strong>Transparenz</strong>
-                <p>Du siehst, wohin dein Beitrag fließt – keine Black Box.</p>
-              </div>
-            </div>
-            <div class="landing-sustainability-point">
-              <span class="landing-sustainability-point-icon">${iconImg('chart.svg')}</span>
-              <div>
-                <strong>Messbarer Impact</strong>
-                <p>Konkrete Ergebnisse, keine leeren Versprechen.</p>
-              </div>
-            </div>
-            <div class="landing-sustainability-point">
-              <span class="landing-sustainability-point-icon">${iconImg('sprout.svg')}</span>
-              <div>
-                <strong>Wirtschaft + Verantwortung</strong>
-                <p>Buchungen laufen – gleichzeitig unterstützt du Nachhaltigkeit.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="landing-section landing-section-alt">
-      <div class="landing-container text-center">
-        <p class="landing-label">Coming Soon</p>
-        <h2 class="landing-h2">Erweiterungen in Planung.</h2>
-        <p class="landing-text" style="max-width: 560px; margin: 1rem auto 2rem;">Diese Erweiterungen kommen als Add-ons dazu – du startest mit dem Kern, erweiterst bei Bedarf.</p>
-        <div class="landing-grid landing-grid-3" style="max-width: 800px; margin: 0 auto;">
-          ${ROADMAP_ITEMS.map((item) => `
-            <div class="landing-pricing-info-box landing-roadmap-item">
-              <div class="landing-roadmap-item-icon">${item.icon}</div>
-              <h3 class="landing-h4">${item.title}</h3>
-              <p class="landing-text-sm">${item.description}</p>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    </section>
+    ${createFeatureRelatedSlider({ features: Object.values(featurePages), label: 'In allen Plänen enthalten', headline: 'Immer dabei.' })}
 
     ${createCTASection({
       headline: 'Starte mit Solo – oder wähle Plus.',
@@ -223,6 +150,7 @@ export const renderPricingPage = () => {
   `;
 
   initPricingToggle(content);
+  initFeatureRelatedSlider(content);
   initFAQAccordion(content);
 };
 

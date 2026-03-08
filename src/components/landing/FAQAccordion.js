@@ -34,6 +34,26 @@ export const createFAQSection = ({ sharedFaq = [], pageFaq = [], pageTitle = '',
   `;
   }
 
+  const hasPageFaq = pageFaq && pageFaq.length > 0;
+
+  if (!hasPageFaq) {
+    return `
+    <section class="landing-section landing-section-alt landing-section--centered">
+      <div class="landing-container">
+        <div class="text-center landing-faq-section-header">
+          <p class="hero-new__tagline">FAQ</p>
+          <h2 class="landing-h2">Häufige Fragen zu BookFast.</h2>
+        </div>
+        <div class="landing-faq-grid landing-faq-grid--single">
+          <div class="landing-faq-col">
+            ${col1}
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+  }
+
   return `
     <section class="landing-section landing-section-alt landing-section--centered">
       <div class="landing-container">
@@ -48,7 +68,7 @@ export const createFAQSection = ({ sharedFaq = [], pageFaq = [], pageTitle = '',
           </div>
           <div class="landing-faq-col">
             ${pageHeading}
-            ${col2 || '<p class="landing-faq-empty">Keine weiteren Fragen für diese Seite.</p>'}
+            ${col2}
           </div>
         </div>
       </div>

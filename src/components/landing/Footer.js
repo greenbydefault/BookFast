@@ -15,7 +15,7 @@ const LEGAL_LINKS = [
   { label: 'Datenschutz', href: '/datenschutz' },
 ];
 
-const BOTTOM_BADGES = ['GPDR', 'SOC2 Compliant', 'AICPA SOC Trusted', 'Made with passion and love from Berlin'];
+const BOTTOM_BADGES = ['DSGVO-konform', 'EU-Server', 'SOC2 Compliant', 'AICPA SOC Trusted', 'Made with passion and love from Berlin'];
 
 function buildFooterColumns() {
   return FOOTER_COLUMNS.map((column) => {

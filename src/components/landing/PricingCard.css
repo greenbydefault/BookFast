@@ -207,14 +207,14 @@
 .landing-pricing-security-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: var(--space-4);
   padding: 0.5rem 1rem;
-  background: var(--color-stone-50);
-  border: 1px solid var(--color-stone-200);
+  background: var(--color-majorelle-blue-50);
+  
   border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--color-stone-700);
+  font-size: var(--space-12);
+  font-weight: 400;
+  color: var(--color-vulcan-900);
 }
 
 /* Sustainability Block */

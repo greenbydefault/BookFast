@@ -40,9 +40,9 @@
 
 .feature-related-slider__card {
   position: relative;
-  width: 33.75em;
+  width: 25em;
   height: 100%;
-  min-height: 36rem;
+  min-height: 32rem;
   border: 1px solid var(--color-stone-200);
   border-radius: var(--space-12);
   background: #fff;
@@ -123,7 +123,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  margin-top: 1rem;
+  margin-top: var(--space-32);
 }
 
 .feature-related-slider__arrow {

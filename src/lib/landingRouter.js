@@ -109,6 +109,18 @@ const renderLandingRoute = (path) => {
     const href = link.getAttribute('href');
     link.classList.toggle('active', href === normalizedPath || (href !== '/' && normalizedPath.startsWith(href)));
   });
+
+  // Update active footer links
+  document.querySelectorAll('.landing-footer-links a[href]').forEach(link => {
+    const href = link.getAttribute('href').replace(/\/$/, '');
+    const isActive = href === normalizedPath;
+    link.classList.toggle('is-active', isActive);
+    if (isActive) {
+      link.setAttribute('aria-current', 'page');
+    } else {
+      link.removeAttribute('aria-current');
+    }
+  });
 };
 
 /**

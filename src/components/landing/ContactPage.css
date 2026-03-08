@@ -1,0 +1,60 @@
+/* ============================================================
+   Contact Page — form styles (gradient handled by FeatureHero)
+   ============================================================ */
+
+/* Frosted form card — overrides the default frosted opacity for readability */
+.contact-form-frame {
+  padding: var(--space-24);
+  margin: 0 auto;
+  background: #fff;
+}
+
+.contact-form-heading {
+  font-size: var(--space-24);
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+/* Form layout */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-form__label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-stone-700);
+  margin-bottom: 0.4rem;
+}
+
+.contact-form__input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--color-stone-200);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.contact-form__select {
+  background: white;
+}
+
+.contact-form__textarea {
+  resize: vertical;
+}
+
+.contact-form__hint {
+  margin: 0.35rem 0 0;
+  color: var(--color-stone-500);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .contact-form-frame {
+    border-radius: 16px;
+  }
+}

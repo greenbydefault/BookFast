@@ -102,6 +102,11 @@
   color: var(--color-stone-900);
 }
 
+.landing-footer-links a.is-active {
+  color: var(--color-majorelle-blue-900);
+  font-weight: 500;
+}
+
 .landing-footer-stage {
   margin-top: var(--space-32);
   pointer-events: none;
