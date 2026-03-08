@@ -1,4 +1,62 @@
 /**
+ * FAQ Section – Zwei-Spalten-Layout (oder einspaltig bei featureOnly)
+ * Spalte 1: Häufige Fragen (shared)
+ * Spalte 2: Individueller Part für die jeweilige Landingpage
+ *
+ * @param {Object} opts
+ * @param {Array<{question: string, answer: string}>} [opts.sharedFaq]
+ * @param {Array<{question: string, answer: string}>} [opts.pageFaq]
+ * @param {string} [opts.pageTitle] – z.B. "Buchungsverwaltung" für Spalte-2-Überschrift
+ * @param {boolean} [opts.featureOnly] – nur pageFaq anzeigen (kein shared FAQ), für Feature-Seiten
+ * @returns {string} HTML string
+ */
+export const createFAQSection = ({ sharedFaq = [], pageFaq = [], pageTitle = '', featureOnly = false }) => {
+  const col1 = createFAQAccordion(sharedFaq);
+  const col2 = createFAQAccordion(pageFaq);
+  const pageHeading = (pageTitle && pageFaq?.length) ? `<h3 class="landing-faq-col-heading">Fragen zu ${pageTitle}</h3>` : '';
+
+  if (featureOnly) {
+    return `
+    <section class="landing-section landing-section-alt landing-section--centered">
+      <div class="landing-container">
+        <div class="text-center landing-faq-section-header">
+          <p class="hero-new__tagline">FAQ</p>
+          <h2 class="landing-h2">Häufige Fragen zu ${pageTitle || 'BookFast'}.</h2>
+        </div>
+        <div class="landing-faq-grid landing-faq-grid--single">
+          <div class="landing-faq-col">
+            ${pageHeading}
+            ${col2 || '<p class="landing-faq-empty">Keine Fragen für dieses Feature.</p>'}
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+  }
+
+  return `
+    <section class="landing-section landing-section-alt landing-section--centered">
+      <div class="landing-container">
+        <div class="text-center landing-faq-section-header">
+          <p class="hero-new__tagline">FAQ</p>
+          <h2 class="landing-h2">Häufige Fragen zu BookFast.</h2>
+        </div>
+        <div class="landing-faq-grid">
+          <div class="landing-faq-col">
+            <h3 class="landing-faq-col-heading">Häufige Fragen</h3>
+            ${col1}
+          </div>
+          <div class="landing-faq-col">
+            ${pageHeading}
+            ${col2 || '<p class="landing-faq-empty">Keine weiteren Fragen für diese Seite.</p>'}
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+};
+
+/**
  * FAQ Accordion Component
  *
  * @param {Array<{question: string, answer: string}>} items

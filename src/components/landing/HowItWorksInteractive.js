@@ -14,7 +14,9 @@ const createBulletsHTML = (bullets = []) => {
           : { title: String(bullet), description: '' };
         return `
           <li class="how-it-works__bullet">
-            <span class="how-it-works__bullet-title">${escapeHtml(item.title)}</span>
+            <span class="how-it-works__bullet-title-wrap">
+              <span class="how-it-works__bullet-title">${escapeHtml(item.title)}</span>
+            </span>
             ${item.description ? `<span class="how-it-works__bullet-desc">${escapeHtml(item.description)}</span>` : ''}
           </li>
         `;
@@ -44,7 +46,7 @@ export const createHowItWorksInteractive = ({
     <section class="landing-section how-it-works" data-how-it-works data-active-index="${safeActiveIndex}">
       <div class="landing-container">
         <div class="how-it-works__header">
-          <p class="landing-label">${escapeHtml(label)}</p>
+          <p class="landing-label landing-label--pill">${escapeHtml(label)}</p>
           <h2 class="landing-h2">${escapeHtml(headline)}</h2>
         </div>
 

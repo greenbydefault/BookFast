@@ -79,6 +79,59 @@
 .landing-pricing-annual-hint {
   font-size: 0.8rem;
   color: var(--color-stone-500);
+  margin-top: 0.25rem;
+}
+
+.landing-pricing-microcopy {
+  font-size: 0.8rem;
+  color: var(--color-stone-500);
+  margin: 0.75rem 0 0;
+  text-align: center;
+}
+
+.landing-pricing-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.landing-pricing-toggle-pill {
+  display: inline-flex;
+  background: var(--color-stone-100);
+  border-radius: 999px;
+  padding: 0.25rem;
+}
+
+.landing-pricing-toggle-pill button {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  color: var(--color-stone-600);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.landing-pricing-toggle-pill button:hover {
+  color: var(--color-vulcan-900);
+}
+
+.landing-pricing-toggle-pill button.is-active {
+  background: white;
+  color: var(--color-vulcan-900);
+  box-shadow: var(--shadow-sm);
+}
+
+.landing-pricing-toggle-save {
+  font-size: 0.85rem;
+  color: var(--color-emerald-600);
+  font-weight: 500;
 }
 
 .landing-pricing-founder-note {
@@ -91,7 +144,7 @@
 }
 
 .landing-pricing-founder-badge {
-  background: linear-gradient(135deg, #d4a84b 0%, #c9942e 100%);
+  background: linear-gradient(135deg, var(--color-founder-start) 0%, var(--color-founder-end) 100%);
   color: white;
   font-size: 0.8rem;
   font-weight: 600;
@@ -162,4 +215,76 @@
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--color-stone-700);
+}
+
+/* Sustainability Block */
+.landing-section-sustainability {
+  background: var(--color-emerald-50);
+}
+
+.landing-sustainability-block {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.landing-sustainability-block .landing-h2 {
+  margin-bottom: 1rem;
+}
+
+.landing-sustainability-block .landing-text {
+  margin-bottom: 2rem;
+}
+
+.landing-sustainability-points {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.landing-sustainability-point {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.25rem;
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-stone-200);
+}
+
+.landing-sustainability-point-icon {
+  flex-shrink: 0;
+}
+
+.landing-sustainability-point-icon img {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-emerald-600);
+}
+
+.landing-sustainability-point strong {
+  display: block;
+  color: var(--color-vulcan-900);
+  margin-bottom: 0.25rem;
+}
+
+.landing-sustainability-point p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-stone-600);
+}
+
+/* Roadmap items */
+.landing-roadmap-item {
+  text-align: center;
+}
+
+.landing-roadmap-item-icon {
+  margin-bottom: 1rem;
+}
+
+.landing-roadmap-item-icon img {
+  width: 2rem;
+  height: 2rem;
 }

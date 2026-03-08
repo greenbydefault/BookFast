@@ -51,6 +51,7 @@ export const special = {
       { icon: '💼', title: 'Coworking', description: 'Meeting-Rooms nicht doppelt belegt.', link: '/features' },
     ],
     relatedFeatures: ['objekte', 'buffer', 'zeitfenster'],
+    tags: ['verfuegbarkeit', 'conflicts', 'availability', 'booking-rules', 'calendar'],
     faq: [
       { question: 'Was passiert wenn zwei Kunden gleichzeitig buchen?', answer: 'Der erste der den Checkout startet, reserviert den Slot. Der zweite sieht den Slot als nicht mehr verfügbar.' },
       { question: 'Wie schnell wird die Verfügbarkeit aktualisiert?', answer: 'In Echtzeit. Sobald ein Checkout gestartet wird, ist der Slot für andere blockiert.' },
@@ -109,6 +110,7 @@ export const special = {
       { icon: '💼', title: 'Coworking', description: '15min für Raum-Umbau.', link: '/features' },
     ],
     relatedFeatures: ['verfuegbarkeit', 'objekte', 'overnight'],
+    tags: ['buffer', 'turnaround', 'cleaning', 'availability', 'prep-time'],
     faq: [
       { question: 'Sehen Kunden den Puffer?', answer: 'Nein, Kunden sehen nur die verfügbaren Zeitslots. Der Puffer ist im Hintergrund eingerechnet.' },
       { question: 'Kann ich verschiedene Puffer pro Service haben?', answer: 'Ja, jeder Service hat seine eigene Pufferzeit-Konfiguration.' },
@@ -167,6 +169,7 @@ export const special = {
       { icon: '💼', title: 'Coworking', description: 'Meeting-Rooms 08:00-20:00.', link: '/features' },
     ],
     relatedFeatures: ['verfuegbarkeit', 'objekte', 'buffer'],
+    tags: ['zeitfenster', 'opening-hours', 'time-rules', 'availability', 'schedule'],
     faq: [
       { question: 'Kann ich verschiedene Zeiten pro Wochentag setzen?', answer: 'Ja, du kannst pro Tag unterschiedliche Zeitfenster konfigurieren.' },
       { question: 'Können Kunden auch am Wochenende buchen?', answer: 'Ja, du konfigurierst die buchbaren Tage individuell.' },
@@ -229,6 +232,7 @@ export const special = {
       { icon: '🎨', title: 'Tattoo-Studios', description: 'Motivabsprache vor dem Termin.', link: '/features' },
     ],
     relatedFeatures: ['buchungen', 'zahlungen', 'rechnungen'],
+    tags: ['approval', 'moderation', 'review', 'risk-control', 'booking-rules'],
     faq: [
       { question: 'Was passiert mit der Zahlung bei Ablehnung?', answer: 'BookFast löst automatisch die volle Rückerstattung über Stripe aus. Die Gutschrift kann je nach Zahlungsart 5–10 Werktage dauern.' },
       { question: 'Kann ich den Approval-Flow pro Service aktivieren?', answer: 'Ja, du kannst ihn individuell pro Service ein- oder ausschalten.' },
@@ -287,6 +291,7 @@ export const special = {
       { icon: '🚐', title: 'Wohnmobil-Vermietung', description: 'Mietdauer in Nächten.', link: '/features' },
     ],
     relatedFeatures: ['buffer', 'verfuegbarkeit', 'kaution'],
+    tags: ['overnight', 'nights', 'checkin', 'checkout', 'stay-duration'],
     faq: [
       { question: 'Kann ich verschiedene Preise pro Nacht setzen?', answer: 'Aktuell ein Preis pro Nacht pro Service. Saisonpreise sind in Planung.' },
       { question: 'Wird der Reinigungspuffer nach Check-out berücksichtigt?', answer: 'Ja, du konfigurierst den Buffer der nach dem Check-out automatisch blockiert wird.' },
@@ -345,6 +350,7 @@ export const special = {
       { icon: '💇', title: 'Salon-Ketten', description: 'Mehrere Filialen zentral verwalten.', link: '/features' },
     ],
     relatedFeatures: ['objekte', 'integration', 'analytics'],
+    tags: ['workspaces', 'multi-location', 'teams', 'permissions', 'organization'],
     faq: [
       { question: 'Haben Workspaces separate Daten?', answer: 'Ja, jeder Workspace hat eigene Objekte, Services, Buchungen und Einstellungen.' },
       { question: 'Kann ich Mitarbeiter einem Workspace zuordnen?', answer: 'Ja, Mitarbeiter werden pro Workspace verwaltet.' },
@@ -411,6 +417,7 @@ export const special = {
       { icon: '🧘', title: 'Yoga Studios', description: 'Studio geschlossen – ganze Workspace sperren.', link: '/features' },
     ],
     relatedFeatures: ['verfuegbarkeit', 'zeitfenster', 'buffer', 'objekte'],
+    tags: ['urlaub', 'absences', 'blackout', 'availability', 'capacity-planning'],
     faq: [
       { question: 'Kann ich Urlaub für einzelne Objekte setzen?', answer: 'Ja, du wählst den Scope: Ganzes Workspace, Objekt, Mitarbeiter oder Service. So blockierst du nur den Bereich, den du sperren möchtest.' },
       { question: 'Werden bestehende Buchungen beeinflusst?', answer: 'Nein, Urlaub blockiert nur neue Buchungen. Bestehende Buchungen bleiben unverändert.' },
@@ -477,6 +484,7 @@ export const special = {
       { icon: '🧘', title: 'Yoga Studios', description: 'Eigene Formulierungen für Buchung und Rückerstattung.', link: '/features' },
     ],
     relatedFeatures: ['buchungen', 'kundenportal', 'zahlungen'],
+    tags: ['email-templates', 'communication', 'automation', 'notifications', 'branding'],
     faq: [
       { question: 'Welche Platzhalter kann ich nutzen?', answer: 'Z.B. {{customer_name}}, {{booking_number}}, {{service_name}}, {{object_name}}, {{start_date}}, {{end_date}}, {{total_price}}, {{company_name}}, {{portal_link}}, {{pin_code}}. Die vollständige Liste siehst du im Editor.' },
       { question: 'Kann ich zur Standard-Vorlage zurückkehren?', answer: 'Ja, du kannst angepasste Vorlagen löschen – dann greift wieder die Standard-Vorlage.' },
@@ -488,7 +496,7 @@ export const special = {
 
   kaution: {
     slug: 'kaution',
-    meta: { title: 'Kaution & Anzahlung', description: 'Konfigurierbare Anzahlung oder Kaution pro Service – prozentual oder als Festbetrag.' },
+    meta: { title: 'Kaution', description: 'Konfigurierbare Kaution pro Service – prozentual oder als Festbetrag.' },
     hero: {
       headline: '30% bei Buchung – der Rest beim Termin.',
       subheadline: 'Konfiguriere prozentuale oder feste Anzahlungen pro Service. Einzug bei Buchung über Stripe, Restbetrag später – automatische Berechnung auf der Rechnung.',
@@ -536,6 +544,7 @@ export const special = {
       { icon: '🚲', title: 'Verleih', description: 'Kaution für Equipment-Schutz.', link: '/features' },
     ],
     relatedFeatures: ['zahlungen', 'approval', 'rechnungen'],
+    tags: ['kaution', 'deposit', 'prepayment', 'refund', 'risk-control'],
     faq: [
       { question: 'Wird die Anzahlung auf der Rechnung angezeigt?', answer: 'Ja, Anzahlung und Restbetrag werden auf der Rechnung ausgewiesen.' },
       { question: 'Was passiert bei Stornierung?', answer: 'Bei Stornierung durch dich wird die Anzahlung automatisch rückerstattet. Bei Kundenstornierung greift deine Policy.' },

@@ -53,9 +53,14 @@
     --color-majorelle-blue-100: #E4DFFC;
     --color-majorelle-blue-50: #F8F7FE;
 
+    /* Founder Badge (Pricing) */
+    --color-founder-start: #d4a84b;
+    --color-founder-end: #c9942e;
+
     /* Vulcan */
     --color-vulcan-500: #717079;
     --color-vulcan-900: #12111F;
+    --color-vulcan-700: #41414C;
 
     /* Radius */
     --radius-md: 6px;
@@ -110,6 +115,8 @@
 
     /* Typography */
     --font-main: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+    --section-padding: 8.125rem;
 }
 
 @media (prefers-color-scheme: light) {

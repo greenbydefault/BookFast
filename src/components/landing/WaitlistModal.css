@@ -1,0 +1,104 @@
+@import '../Modal/Modal.css';
+@import '../Button/Button.css';
+
+.waitlist-modal {
+  backdrop-filter: blur(var(--space-4));
+  z-index: 9999;
+}
+
+.waitlist-modal .modal-container,
+.waitlist-modal__container {
+  max-width: calc(var(--space-128) * 3.75);
+  text-align: center;
+  margin: 0;
+}
+
+.waitlist-modal .modal-header,
+.waitlist-modal__header {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.waitlist-modal .modal-close-btn,
+.waitlist-modal__close-btn {
+  inline-size: var(--space-32);
+  block-size: var(--space-32);
+}
+
+.waitlist-modal .modal-content,
+.waitlist-modal__content {
+  padding: 0 var(--space-32) var(--space-40) var(--space-32);
+}
+
+.waitlist-modal__close-fallback {
+  font-size: var(--space-24);
+  line-height: 1;
+}
+
+.waitlist-modal__title {
+  margin: 0 0 var(--space-12) 0;
+  font-size: var(--space-24);
+  color: var(--color-vulcan-900);
+}
+
+.waitlist-modal__subtitle {
+  margin: 0 0 var(--space-24) 0;
+  color: var(--color-stone-600);
+  line-height: var(--space-24);
+}
+
+.waitlist-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  margin-bottom: var(--space-16);
+  text-align: left;
+}
+
+.waitlist-modal__label {
+  font-size: var(--space-14);
+  font-weight: 500;
+  color: var(--color-vulcan-900);
+}
+
+.waitlist-modal__input {
+  padding: var(--space-12) var(--space-16);
+  border: 1px solid var(--color-stone-200);
+  border-radius: var(--radius-lg);
+  font-size: var(--space-16);
+  color: var(--color-vulcan-900);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.waitlist-modal__input:focus {
+  border-color: var(--color-majorelle-blue-500);
+}
+
+.waitlist-modal__input::placeholder {
+  color: var(--color-stone-400);
+}
+
+.waitlist-modal__submit-btn {
+  inline-size: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-14);
+}
+
+.waitlist-modal__cancel-btn {
+  color: var(--color-stone-500);
+  padding: var(--space-4);
+}
+
+.waitlist-modal__cancel-btn:hover {
+  color: var(--color-vulcan-900);
+}
+
+.waitlist-modal__error {
+  margin: 0;
+  color: #dc2626;
+  font-size: var(--space-14);
+  line-height: 1.4;
+}

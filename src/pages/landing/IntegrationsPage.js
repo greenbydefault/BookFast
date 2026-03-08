@@ -4,12 +4,13 @@
 import { createHero } from '../../components/landing/Hero.js';
 import { createIntegrationCard } from '../../components/landing/IntegrationCard.js';
 import { createFeatureSection } from '../../components/landing/FeatureSection.js';
-import { createFAQAccordion, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
+import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
+import { SHARED_FAQ } from '../../data/faq.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
 import { iconImg } from '../../lib/landingAssets.js';
 import { setPageMeta, setFAQSchema } from '../../lib/seoHelper.js';
 
-const FAQ = [
+const PAGE_FAQ = [
   { question: 'Wie binde ich BookFast in Webflow ein?', answer: 'Zwei Wege: Embed-Script (ein Script-Tag in den Body) oder Template-Copy (Booking-Flow direkt in den Webflow Designer einfügen). Beide Varianten sind in unter 5 Minuten eingerichtet.' },
   { question: 'Brauche ich einen Stripe-Account?', answer: 'Ja, für Online-Zahlungen. Das Stripe-Connect-Onboarding dauert nur wenige Minuten. Ohne Stripe kannst du BookFast auch rein für Buchungsverwaltung nutzen – ohne Zahlungsfunktion.' },
   { question: 'Funktioniert BookFast auch ohne Webflow?', answer: 'Ja. Das Embed-Script funktioniert auf jeder Website. Template-Copy und native Datenattribute sind Webflow-exklusiv.' },
@@ -22,7 +23,7 @@ export const renderIntegrationsPage = () => {
   if (!content) return;
 
   setPageMeta('Integrationen', 'BookFast integriert sich nahtlos mit Webflow, Stripe, Google Calendar und mehr.');
-  setFAQSchema(FAQ);
+  setFAQSchema([...SHARED_FAQ, ...PAGE_FAQ]);
 
   content.innerHTML = `
     ${createHero({
@@ -115,15 +116,7 @@ export const renderIntegrationsPage = () => {
       subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig. Webflow + Stripe in wenigen Klicks verbunden.',
     })}
 
-    <section class="landing-section landing-section-alt">
-      <div class="landing-container">
-        <div class="text-center" style="margin-bottom: 2.5rem;">
-          <p class="hero-new__tagline">FAQ</p>
-          <h2 class="landing-h2">Häufige Fragen zu Integrationen.</h2>
-        </div>
-        ${createFAQAccordion(FAQ)}
-      </div>
-    </section>
+    ${createFAQSection({ sharedFaq: SHARED_FAQ, pageFaq: PAGE_FAQ, pageTitle: 'Integrationen' })}
   `;
 
   initFAQAccordion(content);

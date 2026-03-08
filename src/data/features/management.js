@@ -54,6 +54,7 @@ export const management = {
       { icon: '🏥', title: 'Physiotherapie', description: 'Therapeuten-Buchung mit Fachgebiet.', link: '/features' },
     ],
     relatedFeatures: ['buchungen', 'zeitfenster', 'services'],
+    tags: ['mitarbeiter', 'team', 'staffing', 'scheduling', 'roles'],
     faq: [
       { question: 'Wie viele Mitarbeiter kann ich anlegen?', answer: 'Unbegrenzt in Pro und Enterprise.' },
       { question: 'Können Mitarbeiter eigene Verfügbarkeiten haben?', answer: 'Aktuell werden Verfügbarkeiten über die Objekt-Einstellungen gesteuert. Mitarbeiter-eigene Kalender sind in Planung.' },
@@ -69,7 +70,7 @@ export const management = {
     hero: {
       headline: 'Extras im Checkout – mehr Umsatz pro Buchung.',
       subheadline: 'Yogamatte, Beamer, Reinigung, Frühstück – biete Extras an, die Kunden im Buchungsflow dazuwählen. Automatisch berechnet, auf der Rechnung ausgewiesen.',
-      illustration: '/src/svg/illustrations/landingpage/features/ft_objektverwaltung.svg',
+      illustration: '/src/svg/illustrations/landingpage/features/ft_addons.svg',
     },
     problem: { text: 'Bei der Buchung sind Kunden bereit, mehr auszugeben. Ohne Add-on-Option im Checkout verschenkst du durchschnittlich 15-25% Zusatzumsatz.', bullets: ['Add-ons pro Service konfigurierbar.', 'Preis pro Add-on separat festlegbar.', 'Auf der Rechnung korrekt ausgewiesen.'] },
     interactiveHowItWorks: true,
@@ -112,6 +113,7 @@ export const management = {
       { icon: '🧘', title: 'Yoga', description: 'Yogamatte, Handtuch, Tee.', link: '/features' },
     ],
     relatedFeatures: ['gutscheine', 'zahlungen', 'rechnungen'],
+    tags: ['addons', 'upsell', 'extras', 'checkout', 'revenue'],
     faq: [
       { question: 'Werden Add-ons auf der Rechnung angezeigt?', answer: 'Ja, jedes gebuchte Add-on wird als separate Position auf der Rechnung aufgelistet.' },
       { question: 'Kann ich Add-ons als Pflicht markieren?', answer: 'Aktuell sind Add-ons optional. Pflicht-Add-ons sind in Planung.' },
@@ -127,7 +129,7 @@ export const management = {
     hero: {
       headline: 'Rabattcodes, die Buchungen bringen – nicht nur Klicks.',
       subheadline: 'Prozent oder Festbetrag, Nutzungslimit und Gültigkeitszeitraum. Erstelle Codes in Sekunden und tracke, welche tatsächlich konvertieren.',
-      illustration: '/src/svg/illustrations/landingpage/features/ft_objektverwaltung.svg',
+      illustration: '/src/svg/illustrations/landingpage/features/ft_rabattcodes.svg',
     },
     problem: { text: 'Rabatte ohne System führen zu doppelt eingelösten Codes, vergessenen Ablaufdaten und fehlender Nachverfolgung. Du weißt nicht, was funktioniert.', bullets: ['Prozent- oder Festbetrag-Rabatt.', 'Nutzungslimit pro Code.', 'Gültigkeitszeitraum konfigurierbar.'] },
     interactiveHowItWorks: true,
@@ -170,6 +172,7 @@ export const management = {
       { icon: '🎉', title: 'Saisonaktionen', description: 'SOMMER2025 für saisonale Rabatte.', link: '/features/buchungen' },
     ],
     relatedFeatures: ['addons', 'zahlungen', 'buchungen'],
+    tags: ['gutscheine', 'discounts', 'promo', 'marketing', 'campaigns'],
     faq: [
       { question: 'Können Gutscheine auf bestimmte Services beschränkt werden?', answer: 'Aktuell gelten Gutscheine für alle Services. Servicespezifische Einschränkung ist in Planung.' },
       { question: 'Wird der Rabatt auf der Rechnung angezeigt?', answer: 'Ja, eingelöste Gutscheine werden als Rabatt auf der Rechnung ausgewiesen.' },
@@ -228,6 +231,7 @@ export const management = {
       { icon: '🏥', title: 'Therapeuten', description: 'Patientenhistorie und Behandlungsverläufe.', link: '/features' },
     ],
     relatedFeatures: ['buchungen', 'rechnungen', 'analytics'],
+    tags: ['kunden', 'crm', 'history', 'profiles', 'retention'],
     faq: [
       { question: 'Werden Kundendaten automatisch gespeichert?', answer: 'Ja, bei jeder Buchung werden Kontaktdaten automatisch in der Kundendatenbank hinterlegt.' },
       { question: 'Kann ich Kunden exportieren?', answer: 'Export als CSV ist in Planung.' },

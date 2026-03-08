@@ -45,4 +45,24 @@ enabled = false
 
 # Edge Functions
 [functions]
-# enabled = true
+
+[functions.waitlist-signup]
+verify_jwt = false
+
+[functions.waitlist-confirm]
+verify_jwt = false
+
+[functions.portal-verify]
+verify_jwt = false
+
+[functions.portal-action]
+verify_jwt = false
+
+[functions.checkout-create]
+verify_jwt = false
+
+[functions.checkout-pay-booking]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false

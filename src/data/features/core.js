@@ -11,7 +11,7 @@ export const core = {
     hero: {
       headline: 'Jede Buchung an einem Ort – statt in 5 Postfächern.',
       subheadline: 'Status-Filter, Kalender- und Listenansicht, Bestätigen und Ablehnen – in einem Dashboard statt über E-Mail, Telefon und Excel.',
-      illustration: '/src/svg/illustrations/landingpage/features/ft_objektverwaltung.svg',
+      illustration: '/src/svg/illustrations/landingpage/features/ft_buchungsverwaltung.svg',
       trustClaims: ['Keine Kreditkarte nötig', 'In unter 5 Minuten startklar'],
     },
     problem: {
@@ -63,6 +63,7 @@ export const core = {
       { icon: '💇', title: 'Friseure', description: 'Tagesübersicht pro Mitarbeiter, ohne Tabellen-Chaos.', link: '/features' },
     ],
     relatedFeatures: ['zahlungen', 'analytics', 'approval', 'kundenportal'],
+    tags: ['buchungen', 'workflow', 'status', 'calendar', 'operations'],
     cta: {
       headline: 'Buchungsverwaltung kostenlos testen.',
       primaryCTA: 'Kostenlos starten',
@@ -85,7 +86,7 @@ export const core = {
     hero: {
       headline: 'Geld auf deinem Konto, bevor der Termin startet.',
       subheadline: 'Stripe Connect in unter 5 Minuten aktiv. Deine Kunden zahlen bei Buchung, du erhältst die Auszahlung automatisch – ohne Provision.',
-      illustration: '/src/svg/illustrations/landingpage/features/ft_objektverwaltung.svg',
+      illustration: '/src/svg/illustrations/landingpage/features/ft_zahlungen.svg',
       trustClaims: ['Keine Kreditkarte nötig', 'In unter 5 Minuten startklar'],
     },
     problem: {
@@ -137,6 +138,7 @@ export const core = {
       { icon: '🔐', title: 'Escape Rooms', description: 'Volle Zahlung bei Buchung. Kein Aufwand am Tag.', link: '/features' },
     ],
     relatedFeatures: ['rechnungen', 'buchungen', 'kaution'],
+    tags: ['zahlungen', 'stripe', 'checkout', 'deposit', 'refund'],
     faq: [
       { question: 'Welche Zahlungsmethoden werden unterstützt?', answer: 'Aktuell Kreditkarte (Visa, Mastercard, Amex) über Stripe. Klarna und PayPal sind in Planung.' },
       { question: 'Gibt es eine Provision pro Buchung?', answer: 'Nein. BookFast erhebt keine Provision. Du zahlst nur die Stripe-Transaktionsgebühren (1,4% + 0,25€ in Europa).' },
@@ -206,6 +208,7 @@ export const core = {
       { icon: '🏥', title: 'Therapeuten', description: 'Rechnung pro Behandlung mit Steuernummer.', link: '/features' },
     ],
     relatedFeatures: ['zahlungen', 'buchungen', 'kunden'],
+    tags: ['rechnungen', 'billing', 'tax', 'documents', 'accounting'],
     faq: [
       { question: 'Kann ich das Rechnungsdesign anpassen?', answer: 'Die Rechnung enthält automatisch deine Firmendaten und das BookFast-Standard-Layout. Custom-Templates sind für die Enterprise-Version geplant.' },
       { question: 'Werden Gutscheine auf der Rechnung berücksichtigt?', answer: 'Ja, eingelöste Gutscheine und deren Rabatt werden korrekt auf der Rechnung ausgewiesen.' },
@@ -275,6 +278,7 @@ export const core = {
       { icon: '🌍', title: 'Zielgruppe verstehen', description: 'Browser, Geräte, Länder und Städte deiner Besucher.', link: '/features/kunden' },
     ],
     relatedFeatures: ['buchungen', 'zahlungen', 'integration'],
+    tags: ['analytics', 'tracking', 'reports', 'conversion', 'insights'],
     faq: [
       { question: 'Werden die Daten in Echtzeit angezeigt?', answer: 'Ja, Analytics-Daten werden in Echtzeit erfasst und im Dashboard angezeigt.' },
       { question: 'Welche Zeiträume kann ich auswählen?', answer: 'Letzter Monat, letzte 3, 6 oder 12 Monate. Mit Vergleichswerten zum vorherigen Zeitraum.' },
@@ -344,6 +348,7 @@ export const core = {
       { icon: '💼', title: 'Coworking', description: 'Räume und Schreibtische verwalten.', link: '/features' },
     ],
     relatedFeatures: ['services', 'verfuegbarkeit', 'buffer'],
+    tags: ['objekte', 'resources', 'availability', 'capacity', 'locations'],
     faq: [
       { question: 'Wie viele Objekte kann ich anlegen?', answer: 'Free-Plan: 1 Objekt. Pro und Enterprise: unbegrenzt.' },
       { question: 'Kann ich Bilder hochladen?', answer: 'Ja. Bilder und Beschreibungen pro Objekt – Kunden sehen sie im Buchungs-Widget.' },
@@ -403,6 +408,7 @@ export const core = {
       { icon: '🏠', title: 'Ferienwohnungen', description: 'Overnight mit Check-in/out.', link: '/features' },
     ],
     relatedFeatures: ['objekte', 'overnight', 'zeitfenster'],
+    tags: ['services', 'pricing', 'duration', 'configuration', 'catalog'],
     faq: [
       { question: 'Kann ich verschiedene Preise pro Service haben?', answer: 'Ja, jeder Service hat seinen eigenen Preis.' },
       { question: 'Kann ein Objekt mehrere Services haben?', answer: 'Ja, einem Raum kannst du z.B. Stundenmiete und Tagesmiete zuordnen.' },

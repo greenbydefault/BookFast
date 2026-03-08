@@ -11,10 +11,9 @@ body.landing-active #app {
 
 /* --- Container --- */
 .landing-container {
-  max-width: 120rem;
+  max-width: 105rem;
   margin: 0 auto;
-  
-  
+  width: 100%;
 }
 
 .landing-container-narrow {
@@ -25,7 +24,7 @@ body.landing-active #app {
 
 /* --- Sections --- */
 .landing-section {
-  padding: 7rem var(--space-120);
+  padding:var(--section-padding) var(--space-120);
   display: flex;
   justify-content: flex-end;
 }
@@ -40,6 +39,10 @@ body.landing-active #app {
 
 .landing-section-alt {
   
+}
+
+.landing-section--centered {
+  justify-content: center;
 }
 
 /* Reusable frosted frame for interactive cards/modules */

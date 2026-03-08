@@ -16,6 +16,7 @@ import { renderDatenschutzPage } from './legal/DatenschutzPage.js';
 import { renderAGBPage } from './legal/AGBPage.js';
 import { renderAboutPage } from './AboutPage.js';
 import { renderContactPage } from './ContactPage.js';
+import { renderWaitlistConfirmPage } from './WaitlistConfirmPage.js';
 import { setPageMeta } from '../../lib/seoHelper.js';
 
 const createPlaceholder = (title, description) => () => {
@@ -53,5 +54,6 @@ export const registerAllLandingPages = () => {
   registerLandingPage('/impressum', renderImpressumPage);
   registerLandingPage('/datenschutz', renderDatenschutzPage);
   registerLandingPage('/agb', renderAGBPage);
+  registerLandingPage('/waitlist/confirm', renderWaitlistConfirmPage);
   registerLandingWildcard('/features/', renderFeaturePage);
 };

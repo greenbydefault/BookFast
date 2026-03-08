@@ -21,10 +21,12 @@ export const createCompareTable = ({ columns, rows }) => {
   }).join('');
 
   return `
-    <div style="overflow-x: auto;">
-      <table class="landing-compare-table">
-        <thead><tr>${headerHTML}</tr></thead>
-        <tbody>${rowsHTML}</tbody>
-      </table>
+    <div class="landing-compare-table-wrap">
+      <div class="landing-compare-table-scroll">
+        <table class="landing-compare-table">
+          <thead><tr>${headerHTML}</tr></thead>
+          <tbody>${rowsHTML}</tbody>
+        </table>
+      </div>
     </div>`;
 };

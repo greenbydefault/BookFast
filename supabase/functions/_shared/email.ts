@@ -6,6 +6,7 @@
  */
 
 const RESEND_API_URL = 'https://api.resend.com/emails';
+const RESEND_CONTACTS_BASE = 'https://api.resend.com/audiences';
 
 // ─── Default template (fallback when workspace has none) ───
 
@@ -163,4 +164,90 @@ export async function sendEmail(opts: SendEmailOptions): Promise<string> {
 
   const data = await res.json();
   return data.id; // Resend message ID
+}
+
+// ─── Resend Audience / Contacts ───
+
+function getResendApiKey(): string {
+  const apiKey = Deno.env.get('RESEND_API_KEY');
+  if (!apiKey) throw new Error('RESEND_API_KEY is not set');
+  return apiKey;
+}
+
+interface CreateContactOptions {
+  audienceId: string;
+  email: string;
+  unsubscribed?: boolean;
+}
+
+/**
+ * Create (or upsert) a contact in a Resend Audience.
+ * Returns the contact id on success.
+ */
+export async function createResendContact(opts: CreateContactOptions): Promise<string> {
+  const apiKey = getResendApiKey();
+
+  const res = await fetch(`${RESEND_CONTACTS_BASE}/${opts.audienceId}/contacts`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      email: opts.email,
+      unsubscribed: opts.unsubscribed ?? false,
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Resend contacts API error ${res.status}: ${body}`);
+  }
+
+  const data = await res.json();
+  return data.id;
+}
+
+// ─── Waitlist DOI email ───
+
+export function buildWaitlistDoiHtml(confirmUrl: string): string {
+  return `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waitlist bestätigen</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f5;">
+    <tr>
+      <td align="center" style="padding: 40px 20px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; max-width: 600px; width: 100%;">
+          <tr>
+            <td style="padding: 32px 40px; color: #1a1a1a; font-size: 15px; line-height: 1.6;">
+              <h2 style="margin: 0 0 16px 0; font-size: 20px;">Fast geschafft!</h2>
+              <p style="margin: 0 0 24px 0;">
+                Du hast dich für die BookFast-Waitlist eingetragen. Bitte bestätige deine E-Mail-Adresse, damit wir dich auf dem Laufenden halten können.
+              </p>
+              <p style="margin: 0 0 24px 0; text-align: center;">
+                <a href="${confirmUrl}" style="display: inline-block; padding: 14px 32px; background-color: #4f46e5; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px;">E-Mail bestätigen</a>
+              </p>
+              <p style="margin: 0; color: #71717a; font-size: 13px;">
+                Falls du dich nicht eingetragen hast, kannst du diese E-Mail einfach ignorieren.
+              </p>
+            </td>
+          </tr>
+        </table>
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
+          <tr>
+            <td style="padding: 20px 40px; text-align: center; color: #a1a1aa; font-size: 12px; line-height: 1.5;">
+              BookFast &middot; book-fast.de
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
 }

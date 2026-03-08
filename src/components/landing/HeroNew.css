@@ -6,7 +6,7 @@
 .hero-new {
     --hero-illustration-size: 17.5em;
     --hero-illustration-overlap: 0px;
-    padding: var(--space-52) 0 0;
+    padding: var(--space-52) 0 8.125rem;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -64,10 +64,10 @@
 
 /* ── Group 3: Subheadline ── */
 .hero-new__subheadline {
-    font-size: 1.125rem;
-    line-height: 1.6;
+    font-size: var(--space-18);
+    line-height: 1.2;
     color: var(--color-stone-500);
-    margin: 0 0 2rem;
+    margin: 0;
     max-width: 480px;
     margin-left: auto;
     margin-right: auto;

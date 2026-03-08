@@ -17,7 +17,7 @@ import { setState } from '../../lib/store.js';
 import { navigate } from '../../lib/router.js';
 import { renderSidebar } from '../Sidebar/Sidebar.js';
 import { renderTopBar } from '../TopBar/TopBar.js';
-import { openUpsellModal } from './UpsellModal.js';
+import { openWaitlistModal } from './WaitlistModal.js';
 import { DEMO_WORKSPACE } from '../../lib/DemoData.js';
 
 const HERO_LOGO_URL = new URL('../../svg/logo-bookfast-hero.svg', import.meta.url).href;
@@ -193,14 +193,14 @@ export const initHeroNew = () => {
     }
   });
 
-  // Upsell modal for create actions in demo
+  // Reuse the shared waitlist modal for gated create actions in demo
   card.addEventListener('click', (e) => {
     const createLink = e.target.closest('.nav-link[data-page="create-booking"]');
     if (createLink) {
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
-      openUpsellModal();
+      openWaitlistModal();
       return;
     }
     const actionBtn = e.target.closest('.btn-primary');
@@ -208,7 +208,7 @@ export const initHeroNew = () => {
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
-      openUpsellModal();
+      openWaitlistModal();
     }
   }, true);
 

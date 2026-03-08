@@ -8,7 +8,7 @@ export const platform = {
     hero: {
       headline: 'Dein Booking-Widget lebt in Webflow – nicht in einem iFrame.',
       subheadline: 'Ein Script-Tag oder Template-Copy, und dein Buchungswidget ist Teil deiner Seite. Volle Design-Kontrolle, kein Redirect, keine Conversion-Verluste.',
-      illustration: '/src/svg/illustrations/landingpage/features/ft_objektverwaltung.svg',
+      illustration: '/src/svg/illustrations/landingpage/features/ft_integrationen.svg',
     },
     problem: { text: 'iFrames sehen fremd aus, Redirects kosten Conversion. Deine Besucher merken den Bruch – und springen ab.', bullets: ['Embed-Script: Ein Tag in den Body, fertig.', 'Template-Copy: Widget in den Webflow Designer importieren.', 'Datenattribute statt iFrame – volle Design-Kontrolle.'] },
     interactiveHowItWorks: true,
@@ -50,6 +50,7 @@ export const platform = {
       { icon: '🌐', title: 'Webflow-Designer', description: 'Für Agenturen und Freelancer die Kunden-Projekte bauen.', link: '/produkt' },
     ],
     relatedFeatures: ['buchungen', 'zahlungen', 'workspaces'],
+    tags: ['integration', 'website', 'widget', 'embed', 'api'],
     faq: [
       { question: 'Funktioniert es nur mit Webflow?', answer: 'Nein, das Embed-Script funktioniert auf jeder Website. Template-Copy ist Webflow-exklusiv.' },
       { question: 'Beeinflusst es die Ladezeit?', answer: 'Minimal. Das Script wird asynchron geladen und hat keinen Einfluss auf die Core Web Vitals.' },
@@ -68,7 +69,7 @@ export const platform = {
     hero: {
       headline: 'Kein Login, kein Konto – deine Kunden buchen trotzdem.',
       subheadline: 'Ein Magic Link pro Buchung: einsehen, bezahlen, stornieren. Deine Kunden verwalten alles selbst – ohne Passwort und ohne Rückfragen an dich.',
-      illustration: '/src/svg/illustrations/landingpage/features/ft_objektverwaltung.svg',
+      illustration: '/src/svg/illustrations/landingpage/features/ft_kundenportal.svg',
       trustClaims: ['Keine Kreditkarte nötig', 'In unter 5 Minuten startklar'],
     },
     problem: {
@@ -119,6 +120,7 @@ export const platform = {
       { icon: '💇', title: 'Friseure & Salons', description: 'Termin direkt buchbar – Rechnung und Stornierung über den Magic Link.', link: '/features' },
     ],
     relatedFeatures: ['rechnungen', 'buchungen', 'zahlungen'],
+    tags: ['kundenportal', 'selfservice', 'magic-link', 'status', 'payments'],
     cta: {
       headline: 'Kundenportal kostenlos testen.',
       primaryCTA: 'Kostenlos starten',

@@ -3,6 +3,7 @@
  * Sticky top nav with mega menus for Features.
  */
 import { getIconString } from '../Icons/Icon.js';
+import { openWaitlistModal } from './WaitlistModal.js';
 import { featurePages } from '../../data/features/index.js';
 import {
   FEATURE_ICON_MAP,
@@ -114,8 +115,7 @@ export const renderNavigation = (container, options = {}) => {
       <div class="landing-nav-actions">
         ${isLoggedIn
           ? `<a href="/dashboard/bookings" class="landing-btn landing-btn-ghost landing-btn-sm"><span class="landing-btn__icon">${getIconString('arrow-right', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zum Dashboard</span></a>`
-          : `<a href="/login.html" class="landing-btn landing-btn-ghost landing-btn-sm"><span class="landing-btn__icon">${getIconString('key', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Anmelden</span></a>
-        <a href="/login.html" class="landing-btn landing-btn-primary landing-btn-sm">Kostenlos testen</a>`}
+          : `<a href="#" class="landing-btn landing-btn-primary landing-btn-sm nav-join-waitlist" data-landing-waitlist><span class="landing-btn__icon">${getIconString('mails', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zur Warteliste anmelden</span></a>`}
       </div>
       <button class="landing-nav-mobile-toggle" aria-label="Menü">
         <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -129,8 +129,7 @@ export const renderNavigation = (container, options = {}) => {
       <div style="padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
         ${isLoggedIn
           ? `<a href="/dashboard/bookings" class="landing-btn landing-btn-secondary" style="text-align:center;"><span class="landing-btn__icon">${getIconString('arrow-right', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zum Dashboard</span></a>`
-          : `<a href="/login.html" class="landing-btn landing-btn-secondary" style="text-align:center;"><span class="landing-btn__icon">${getIconString('key', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Anmelden</span></a>
-        <a href="/login.html" class="landing-btn landing-btn-primary" style="text-align:center;">Kostenlos testen</a>`}
+          : `<a href="#" class="landing-btn landing-btn-primary landing-btn-sm nav-join-waitlist" style="text-align:center;" data-landing-waitlist><span class="landing-btn__icon">${getIconString('mails', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zur Warteliste anmelden</span></a>`}
       </div>
     </div>
   `;
@@ -196,6 +195,15 @@ export const renderNavigation = (container, options = {}) => {
   nav.querySelectorAll('#mobile-menu a[data-landing-link]').forEach(link => {
     link.addEventListener('click', () => {
       nav.querySelector('#mobile-menu').classList.remove('open');
+    });
+  });
+
+  // Waitlist button: open modal, prevent default
+  nav.querySelectorAll('.nav-join-waitlist').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      nav.querySelector('#mobile-menu')?.classList.remove('open');
+      openWaitlistModal();
     });
   });
 };

@@ -53,7 +53,7 @@ const isDashboardRoute = () => {
  */
 const LANDING_PATHS = ['/', '/produkt', '/preise', '/integrationen',
   '/ressourcen', '/ueber-uns', '/kontakt', '/features',
-  '/impressum', '/datenschutz', '/agb'];
+  '/impressum', '/datenschutz', '/agb', '/waitlist/confirm'];
 const LANDING_PREFIXES = ['/features/'];
 
 const isKnownLandingRoute = (path) => {

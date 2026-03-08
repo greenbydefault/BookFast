@@ -1,7 +1,48 @@
+/* FAQ Section – Zwei-Spalten-Layout */
+.landing-faq-section-header {
+  margin-bottom: 2.5rem;
+}
+
+.landing-faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-40);
+  align-items: start;
+  max-width: 64rem;
+  margin-inline: auto;
+}
+
+.landing-faq-grid--single {
+  grid-template-columns: 1fr;
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+.landing-faq-col-heading {
+  margin: 0 0 var(--space-20);
+  font-size: var(--space-16);
+  font-weight: 500;
+  color: var(--color-stone-500);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.landing-faq-empty {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-stone-500);
+}
+
+@media (max-width: 900px) {
+  .landing-faq-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* FAQ accordion – styled to match HowItWorksInteractive accordion */
 .landing-faq-list {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 0;

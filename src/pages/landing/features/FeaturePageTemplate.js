@@ -7,12 +7,14 @@ import { createFeatureHero } from '../../../components/landing/FeatureHero.js';
 import { getDemoModule } from '../../../components/landing/featureDemos/index.js';
 import { createFeatureSection } from '../../../components/landing/FeatureSection.js';
 import { createHowItWorksInteractive, initHowItWorksInteractive } from '../../../components/landing/HowItWorksInteractive.js';
-import { createFAQAccordion, initFAQAccordion } from '../../../components/landing/FAQAccordion.js';
+import { createFAQSection, initFAQAccordion } from '../../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../../components/landing/CTASection.js';
+import { createFeatureRelatedSlider, initFeatureRelatedSlider } from '../../../components/landing/FeatureRelatedSlider.js';
 import { setPageMeta, setFAQSchema } from '../../../lib/seoHelper.js';
 import { escapeHtml } from '../../../lib/sanitize.js';
 import { svgAssetUrl } from '../../../lib/landingAssets.js';
 import { featurePages } from '../../../data/features/index.js';
+import { getRelatedFeaturesFor } from '../../../data/features/relatedFeatures.js';
 
 /**
  * Render a feature page by slug
@@ -38,7 +40,7 @@ export const renderFeaturePage = (slug) => {
   }
 
   setPageMeta(page.meta.title, page.meta.description);
-  if (page.faq) setFAQSchema(page.faq);
+  setFAQSchema(page.faq || []);
 
   // Build journey sections (alternating left/right like Integrations page)
   const journeyHTML = page.journey?.length ? page.journey.map((step, i) => `
@@ -99,6 +101,11 @@ export const renderFeaturePage = (slug) => {
     demoModuleHTML: demoMod ? demoMod.create() : '',
     demoHint: demoMod ? "Tippe, klicke & probier's aus — ganz ohne Account." : '',
   });
+  const relatedFeatures = getRelatedFeaturesFor(slug, { limit: 5 });
+  const relatedFeaturesHTML = createFeatureRelatedSlider({
+    currentTitle: page.meta.title,
+    features: relatedFeatures,
+  });
 
   content.innerHTML = `
     <!-- 1. Hero -->
@@ -120,17 +127,15 @@ export const renderFeaturePage = (slug) => {
       subheadline: page.cta && 'subheadline' in page.cta ? page.cta.subheadline : '3 Tage kostenlos testen. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
     })}
 
-    <!-- 8. FAQ -->
-    ${page.faq?.length ? `
-    <section class="landing-section landing-section-alt">
-      <div class="landing-container">
-        <div class="text-center" style="margin-bottom: 2.5rem;">
-          <p class="hero-new__tagline">FAQ</p>
-          <h2 class="landing-h2">Häufige Fragen zu ${page.meta.title}.</h2>
-        </div>
-        ${createFAQAccordion(page.faq)}
-      </div>
-    </section>` : ''}
+    <!-- 6. Related Features Slider -->
+    ${relatedFeaturesHTML}
+
+    <!-- 8. FAQ (nur Feature-spezifisch, kein allgemeines FAQ) -->
+    ${createFAQSection({
+      pageFaq: page.faq || [],
+      pageTitle: page.meta.title,
+      featureOnly: true,
+    })}
   `;
 
   // Init interactive demo module (if present)
@@ -149,7 +154,6 @@ export const renderFeaturePage = (slug) => {
     });
   }
 
-  // Init FAQ
-  const faqContainer = content.querySelector('.landing-faq-list');
-  if (faqContainer) initFAQAccordion(content);
+  initFeatureRelatedSlider(content);
+  initFAQAccordion(content);
 };
