@@ -99,7 +99,13 @@ export const openWaitlistModal = () => {
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        throw new Error(data.error || `Fehler ${res.status}`);
+        const fallback =
+          res.status === 429
+            ? 'Zu viele Versuche. Bitte warte kurz und probiere es erneut.'
+            : res.status >= 500
+              ? 'Ein interner Fehler ist aufgetreten. Bitte versuche es später erneut.'
+              : `Fehler: ${data.error || res.statusText || res.status}`;
+        throw new Error(data.error || fallback);
       }
 
       const content = modalOverlay.querySelector('.waitlist-modal__content');

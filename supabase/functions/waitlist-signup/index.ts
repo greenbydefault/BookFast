@@ -25,6 +25,10 @@ serve(async (req: Request) => {
   if (cors) return cors;
   const headers = getCorsHeaders(req);
 
+  if (req.method !== 'POST') {
+    return jsonRes({ error: 'Method Not Allowed' }, 405, { ...headers, Allow: 'POST' });
+  }
+
   // Rate-limit: 5 requests per minute per IP
   const rl = checkRateLimit(req, { bucket: 'waitlist-signup', maxRequests: 5, windowMs: 60_000 });
   if (!rl.allowed) {
@@ -35,10 +39,16 @@ serve(async (req: Request) => {
   }
 
   try {
-    const body = await req.json().catch(() => null);
-    const rawEmail: string | undefined = body?.email;
+    let body: Record<string, unknown> | null = null;
+    try {
+      body = await req.json();
+    } catch {
+      return jsonRes({ error: 'Ungültiger JSON-Body.' }, 400, headers);
+    }
 
-    if (!rawEmail || typeof rawEmail !== 'string') {
+    const rawEmail: string | undefined = (body as Record<string, unknown>)?.email as string | undefined;
+
+    if (!rawEmail || typeof rawEmail !== 'string' || !rawEmail.trim()) {
       return jsonRes({ error: 'E-Mail ist erforderlich.' }, 400, headers);
     }
 
