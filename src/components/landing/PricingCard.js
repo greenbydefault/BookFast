@@ -1,3 +1,5 @@
+import { iconUrl } from '../../lib/landingAssets.js';
+
 /**
  * Pricing Card Component
  *
@@ -9,11 +11,10 @@
  * @param {boolean} [config.isAnnual] - wenn true: Zeige Jahrespreis an
  * @param {string} [config.description]
  * @param {number} [config.workspaces] - number of workspaces (shows "X Workspace(s)")
+ * @param {string[]} [config.planFeatures]
+ * @param {Array} [config.securityBadges] - { icon, label }[] für DSGVO, SSL, etc.
  * @param {string} [config.cta] - CTA text
  * @param {string} [config.ctaHref]
- * @param {boolean} [config.highlighted]
- * @param {string} [config.badge] - e.g. 'Am beliebtesten'
- * @param {string} [config.microcopy] - Text unter dem CTA-Button
  * @returns {string} HTML
  */
 export const createPricingCard = (config) => {
@@ -21,16 +22,25 @@ export const createPricingCard = (config) => {
     name, price, priceAnnual, priceEffectiveMonthly,
     isAnnual = false,
     description = '', workspaces,
-    cta = 'Kostenlos testen', ctaHref = '/register.html',
-    highlighted = false, badge = '', microcopy = ''
+    planFeatures = [],
+    securityBadges = [],
+    cta = 'Kostenlos testen', ctaHref = '/register.html'
   } = config;
 
-  const featuresList = workspaces != null
-    ? [`${workspaces} Workspace${workspaces === 1 ? '' : 's'}`]
-    : [];
-  const featuresHTML = featuresList.map(f => `<li>${f}</li>`).join('');
+  const featuresList = planFeatures.length ? planFeatures : [...securityBadges];
+  const featuresHTML = featuresList.map((feature) => {
+    if (typeof feature === 'object' && feature !== null && feature.icon && feature.label) {
+      return `<li class="landing-pricing-feature-item has-icon"><img src="${iconUrl(feature.icon)}" alt="" class="landing-pricing-feature-icon">${feature.label}</li>`;
+    }
+    return `<li>${feature}</li>`;
+  }).join('');
 
-  const priceDisplay = price === '0'
+  const featureItems = featuresHTML ? featuresHTML.match(/<li[\s\S]*?<\/li>/g) || [] : [];
+  const splitIndex = Math.ceil(featureItems.length / 2);
+  const featuresLeftHTML = featureItems.slice(0, splitIndex).join('');
+  const featuresRightHTML = featureItems.slice(splitIndex).join('');
+
+  const priceValue = price === '0'
     ? 'Kostenlos'
     : isAnnual && priceAnnual
       ? `${priceAnnual.replace('.', ',')} €`
@@ -44,18 +54,50 @@ export const createPricingCard = (config) => {
 
   const annualHintHTML = isAnnual && priceEffectiveMonthly
     ? `<div class="landing-pricing-annual-hint">≈ ${priceEffectiveMonthly.replace('.', ',')} €/Monat, 2 Monate gratis</div>`
-    : '';
+    : `<div class="landing-pricing-annual-hint">2 Monate gratis</div>`;
 
+  const cardModifier = name ? `landing-pricing-card--${name.toLowerCase()}` : '';
+  const workspaceMetric = `${workspaces || 1}`;
   return `
-    <div class="landing-pricing-card ${highlighted ? 'highlighted' : ''}">
-      ${badge ? `<div class="landing-pricing-badge">${badge}</div>` : ''}
-      <h3 class="landing-h4">${name}</h3>
-      ${description ? `<p class="landing-text-sm">${description}</p>` : ''}
-      <div class="landing-pricing-price">${priceDisplay}</div>
-      <div class="landing-pricing-period">${periodDisplay}</div>
+    <div class="landing-pricing-card landing-pricing-card--showcase ${cardModifier}">
+      <div class="landing-pricing-card__header">
+        <div class="landing-pricing-card__headline">
+          <h3 class="landing-pricing-card__name">${name}</h3>
+          ${description ? `<p class="landing-pricing-card__desc">${description}</p>` : ''}
+        </div>
+        <div class="landing-pricing-card__header-controls">
+          <div class="landing-pricing-toggle-pill" id="pricing-toggle-pill">
+            <button type="button" class="${!isAnnual ? 'is-active' : ''}" data-period="monthly">Monatlich</button>
+            <button type="button" class="${isAnnual ? 'is-active' : ''}" data-period="annual">Jährlich</button>
+          </div>
+          <span class="landing-pricing-toggle-save">2 Monate gratis</span>
+        </div>
+      </div>
+      <div class="landing-pricing-card__metrics">
+        <div>
+          <div class="landing-pricing-card__metric-label">Workspaces</div>
+          <div class="landing-pricing-card__metric-value">${workspaceMetric}</div>
+        </div>
+        <div class="landing-pricing-card__price-wrap">
+          <div class="landing-pricing-price">${priceValue}</div>
+          <div class="landing-pricing-period">${periodDisplay}</div>
+        </div>
+      </div>
+      <input
+        id="pricing-workspace-slider"
+        class="landing-pricing-workspace-slider landing-pricing-workspace-slider--grabber is-step-${workspaces || 1}"
+        type="range"
+        min="1"
+        max="10"
+        step="1"
+        value="${workspaces || 1}"
+        aria-label="Anzahl der Workspaces"
+      />
       ${annualHintHTML}
-      <ul class="landing-pricing-features">${featuresHTML}</ul>
-      <a href="${ctaHref}" class="landing-btn ${highlighted ? 'landing-btn-primary' : 'landing-btn-secondary'}" style="width:100%; text-align:center;">${cta}</a>
-      ${microcopy ? `<p class="landing-pricing-microcopy">${microcopy}</p>` : ''}
+      <div class="landing-pricing-features-grid">
+        <ul class="landing-pricing-features">${featuresLeftHTML}</ul>
+        <ul class="landing-pricing-features">${featuresRightHTML}</ul>
+      </div>
+      <a href="${ctaHref}" class="landing-btn landing-btn-primary landing-pricing-card__btn landing-pricing-card__btn--full">${cta}</a>
     </div>`;
 };

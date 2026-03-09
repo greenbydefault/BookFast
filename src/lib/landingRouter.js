@@ -3,7 +3,8 @@
  * Handles routing for all public-facing landing pages.
  * Separate from the dashboard router to keep concerns isolated.
  */
-import { clearSEO, setCanonical, setPageMeta } from './seoHelper.js';
+import { clearSEO, setCanonical } from './seoHelper.js';
+import { renderNotFoundPage } from '../pages/landing/NotFoundPage.js';
 
 // Page registry: path → renderFn
 const landingPages = new Map();
@@ -127,18 +128,7 @@ const renderLandingRoute = (path) => {
  * 404 fallback
  */
 const render404 = () => {
-  setPageMeta('Seite nicht gefunden', 'Die angeforderte Seite existiert nicht.');
-
-  const content = document.getElementById('landing-content');
-  if (content) {
-    content.innerHTML = `
-      <div style="text-align: center; padding: 8rem 2rem;">
-        <h1 style="font-size: 4rem; margin-bottom: 1rem;">404</h1>
-        <p style="color: var(--color-stone-500); font-size: 1.2rem; margin-bottom: 2rem;">Seite nicht gefunden.</p>
-        <a href="/" class="landing-btn landing-btn-primary" data-landing-link>Zur Startseite</a>
-      </div>
-    `;
-  }
+  renderNotFoundPage();
 };
 
 /**

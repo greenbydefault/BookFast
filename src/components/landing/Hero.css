@@ -9,6 +9,14 @@
   margin: 0 auto;
 }
 
+.landing-hero--has-slot .landing-hero-centered {
+  max-width: 960px;
+}
+
+.landing-hero--has-slot {
+  padding-bottom: 5rem;
+}
+
 .landing-hero-split {
   display: grid;
   grid-template-columns: 1fr 1fr;

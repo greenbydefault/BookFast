@@ -1,7 +1,7 @@
 /* --- Grid --- */
 .landing-grid {
   display: grid;
-  gap: 2rem;
+  gap: var(--space-12);
 }
 
 .landing-grid-2 { grid-template-columns: repeat(2, 1fr); }

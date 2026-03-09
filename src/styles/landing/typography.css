@@ -26,8 +26,8 @@
 }
 
 .landing-h4 {
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: var(--space-18);
+  font-weight: 400;
   line-height: 1.4;
   color: var(--color-vulcan-900);
   margin: 0 0 0.5rem;
@@ -41,8 +41,8 @@
 }
 
 .landing-text-sm {
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-size: var(--space-14);
+  line-height: 1.4;
   color: var(--color-stone-500);
 }
 

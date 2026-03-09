@@ -1,0 +1,27 @@
+/* 404 Not Found page */
+.landing-not-found {
+  padding-top: var(--section-padding);
+  padding-bottom: var(--section-padding);
+}
+
+.landing-not-found__inner {
+  text-align: center;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+.landing-not-found__illustration {
+  display: block;
+  margin: 0 auto var(--space-32);
+  max-width: 100%;
+  height: auto;
+}
+
+.landing-not-found__inner .landing-h1 {
+  margin-bottom: var(--space-16);
+}
+
+.landing-not-found__inner .landing-text {
+  margin-bottom: var(--space-32);
+  color: var(--color-stone-500);
+}

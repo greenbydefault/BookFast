@@ -13,6 +13,7 @@ const LEGAL_LINKS = [
   { label: 'Kontakt', href: '/kontakt' },
   { label: 'Impressum', href: '/impressum' },
   { label: 'Datenschutz', href: '/datenschutz' },
+  { label: 'AGB', href: '/agb' },
 ];
 
 const BOTTOM_BADGES = ['DSGVO-konform', 'EU-Server', 'SOC2 Compliant', 'AICPA SOC Trusted', 'Made with passion and love from Berlin'];

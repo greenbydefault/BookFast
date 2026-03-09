@@ -18,6 +18,7 @@ const ILLUSTRATION_URL = new URL('../../svg/illustrations/landingpage/features/f
  * @param {string} [config.variant] - 'centered' | 'split'
  * @param {string} [config.imageHTML] - HTML for the right side (split variant)
  * @param {string} [config.illustrationSrc] - Override illustration (default: ft_zahlungen.svg)
+ * @param {string} [config.slotContent] - Optional HTML rendered after subheadline, before CTA/trustClaims
  */
 export const createHero = (config) => {
   const {
@@ -28,6 +29,7 @@ export const createHero = (config) => {
     variant = 'centered',
     imageHTML = '',
     illustrationSrc = ILLUSTRATION_URL,
+    slotContent = '',
   } = config;
 
   const illustrationHTML = illustrationSrc
@@ -48,14 +50,16 @@ export const createHero = (config) => {
     </div>`;
 
   if (variant === 'split') {
+    const heroClass = slotContent ? 'landing-hero landing-hero--has-slot' : 'landing-hero';
     return `
-      <section class="landing-hero">
+      <section class="${heroClass}">
         <div class="landing-container">
           <div class="landing-hero-split">
             <div>
               ${illustrationHTML}
               <h1 class="hero-new__headline">${headline}</h1>
               <p class="hero-new__subheadline">${subheadline}</p>
+              ${slotContent}
               ${ctaHTML}
               ${trustHTML}
             </div>
@@ -66,13 +70,15 @@ export const createHero = (config) => {
   }
 
   // Centered (default)
+  const heroClass = slotContent ? 'landing-hero landing-hero--has-slot' : 'landing-hero';
   return `
-    <section class="landing-hero">
+    <section class="${heroClass}">
       <div class="landing-container">
         <div class="landing-hero-centered">
           ${illustrationHTML}
           <h1 class="hero-new__headline">${headline}</h1>
           <p class="hero-new__subheadline">${subheadline}</p>
+          ${slotContent}
           ${ctaHTML}
           ${trustHTML}
         </div>

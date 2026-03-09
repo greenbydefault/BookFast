@@ -7,6 +7,8 @@ import { setPageMeta } from '../../lib/seoHelper.js';
 import { supabase } from '../../lib/supabaseClient.js';
 import '../../components/landing/ContactPage.css';
 
+const SUPPORT_EMAIL = 'admin@bookfast.de';
+
 const contactFormHTML = `
   <div class="landing-frosted-frame contact-form-frame">
     <h2 class="landing-h2 contact-form-heading">Nachricht senden</h2>
@@ -50,7 +52,7 @@ export const renderContactPage = () => {
   content.innerHTML = `
     ${createFeatureHero({
       headline: 'Schreib uns – wir helfen dir weiter.',
-      subheadline: 'Technischer Support, Enterprise-Anfragen oder Feedback – einfach das Formular ausfüllen oder den Live-Chat im Dashboard nutzen.',
+      subheadline: 'Technischer Support, Enterprise-Anfragen oder Feedback – einfach das Formular ausfüllen.',
       illustrationSrc: '/src/svg/illustrations/landingpage/features/ft_kontakt.svg',
       breadcrumb: ['Home', 'Kontakt'],
       demoModuleHTML: contactFormHTML,
@@ -78,7 +80,12 @@ export const renderContactPage = () => {
           msg.className = 'landing-text-sm contact-form__error';
           msg.style.color = 'var(--color-red-600, #dc2626)';
           msg.style.marginTop = '0.5rem';
-          msg.textContent = 'Nachricht konnte nicht gesendet werden. Bitte versuche es nochmal.';
+          const rawError = String(error?.message || error?.name || '');
+          const notFound = rawError.includes('NOT_FOUND')
+            || rawError.includes('Requested function was not found');
+          msg.innerHTML = notFound
+            ? `Kontaktformular ist gerade nicht verfuegbar. Bitte sende uns kurz direkt an <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.`
+            : `Nachricht konnte nicht gesendet werden. Bitte versuche es nochmal oder schreibe an <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.`;
           form.querySelector('div:last-child').appendChild(msg);
         }
       }

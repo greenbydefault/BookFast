@@ -5,6 +5,7 @@
 
 /* Base */
 @import './landing/index.css';
+@import './landing/legal.css';
 
 /* Component CSS (co-located) */
 @import '../components/landing/Navigation.css';
