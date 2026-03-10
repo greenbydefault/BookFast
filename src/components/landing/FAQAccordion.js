@@ -13,7 +13,7 @@
 export const createFAQSection = ({ sharedFaq = [], pageFaq = [], pageTitle = '', featureOnly = false }) => {
   const col1 = createFAQAccordion(sharedFaq);
   const col2 = createFAQAccordion(pageFaq);
-  const pageHeading = (pageTitle && pageFaq?.length) ? `<h3 class="landing-faq-col-heading">Fragen zu ${pageTitle}</h3>` : '';
+  const pageHeading = (pageTitle && pageFaq?.length) ? `` : '';
 
   if (featureOnly) {
     return `

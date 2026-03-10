@@ -51,11 +51,10 @@
   border: 1px solid var(--color-stone-200);
   border-radius: clamp(var(--space-12), 1.8vw, var(--space-12));
   background: #fff;
-  padding: clamp(var(--space-16), 2.4vw, var(--space-24));
-  padding-bottom: clamp(calc(var(--space-40) * 2), 12vw, calc(var(--space-56) * 2));
+  padding: clamp(var(--space-12), var(--space-24), var(--space-24));
   display: flex;
   flex-direction: column;
-  gap: clamp(var(--space-8), 1.6vw, var(--space-14));
+ 
   overflow: hidden;
 }
 

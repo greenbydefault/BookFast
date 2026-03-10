@@ -120,7 +120,7 @@
 
 .landing-faq-answer p {
   margin: 0;
-  font-size: clamp(var(--space-16), 1.8vw, var(--space-16));
+  font-size: clamp(var(--space-14), var(--space-14), var(--space-16));
   line-height: 1.65;
   color: var(--color-stone-600);
   text-wrap: pretty;

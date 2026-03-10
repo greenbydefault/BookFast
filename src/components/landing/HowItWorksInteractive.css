@@ -190,13 +190,22 @@
 @media (max-width: 1024px) {
   .how-it-works__layout {
     grid-template-columns: 1fr;
+    max-height: none;
+    overflow: visible;
   }
 
   .how-it-works__preview-shell {
+    order: 1;
     border-left: none;
-    border-top: 1px solid rgba(121, 98, 243, 0.14);
-    min-height: 0;
-    padding: 1.25rem;
+    border-top: none;
+    border-bottom: 1px solid rgba(121, 98, 243, 0.14);
+    height: clamp(calc(var(--space-128) + var(--space-32)), 44vw, calc(var(--space-128) * 2));
+    padding: clamp(var(--space-16), 3.2vw, var(--space-24));
+    overflow: hidden;
+  }
+
+  .how-it-works__accordion {
+    order: 2;
   }
 
   .how-it-works__preview .feature-demo-card {

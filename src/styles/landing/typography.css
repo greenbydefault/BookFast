@@ -34,8 +34,8 @@
 }
 
 .landing-text {
-  font-size: 1.125rem;
-  line-height: 1.7;
+  font-size: var(--space-16);
+  line-height: 1.4;
   color: var(--color-stone-600);
   margin: 0;
 }
