@@ -26,7 +26,7 @@ body.landing-active #app {
 
 /* --- Sections --- */
 .landing-section {
-  padding: var(--section-pad-block) var(--space-120);
+  padding: var(--section-pad-block) var(--container-pad-inline);
   display: flex;
   justify-content: center;
 }

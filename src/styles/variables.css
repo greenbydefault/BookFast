@@ -139,7 +139,7 @@
     --section-padding: 8.125rem;
 
     /* Landing fluid layout tokens */
-    --container-pad-inline: clamp(1rem, 4vw, var(--space-120));
+    --container-pad-inline: clamp(1rem, 8.5vw, var(--space-192));
     --section-pad-inline: var(--container-pad-inline);
     --section-pad-block: clamp(3.5rem, 7vw, var(--section-padding));
     --landing-nav-height: clamp(4rem, 8vw, 5.25rem);
