@@ -3,7 +3,7 @@
   background: white;
   border: 1px solid var(--color-stone-200);
   border-radius: 18px;
-  padding: 2rem;
+  padding: clamp(1rem, 2.5vw, 2rem);
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -13,24 +13,26 @@
 .landing-pricing-card__header {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 1rem 1.5rem;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
   align-items: start;
 }
 
 .landing-pricing-card__name {
   margin: 0;
-  font-size: var(--space-24);
+  font-size: clamp(1.45rem, 2.8vw, var(--space-24));
   font-weight: 400;
   line-height: 1.05;
   color: var(--color-vulcan-900);
+  text-wrap: balance;
 }
 
 .landing-pricing-card__desc {
   margin: var(--space-8) 0 var(--space-24) 0;
   max-width: 32ch;
-  font-size: var(--space-16);
-  line-height: 1.2;
+  font-size: clamp(0.95rem, 1.8vw, var(--space-16));
+  line-height: 1.35;
   color: var(--color-stone-500);
+  text-wrap: pretty;
 }
 
 .landing-pricing-card__header-controls {
@@ -57,7 +59,7 @@
 }
 
 .landing-pricing-card__metric-value {
-  font-size: var(--space-32);
+  font-size: clamp(1.7rem, 4vw, var(--space-32));
   font-weight: 400;
   line-height: 1;
   color: var(--color-vulcan-900);
@@ -67,6 +69,49 @@
   display: flex;
   align-items: baseline;
   gap: var(--space-8);
+}
+
+.bf-number-reel {
+  display: inline-flex;
+  align-items: baseline;
+  vertical-align: baseline;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+.bf-number-reel__chars {
+  display: inline-flex;
+  align-items: baseline;
+  
+}
+
+.bf-number-reel__char {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.bf-number-reel__viewport {
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1;
+  height: 1em;
+}
+
+.bf-number-reel__track {
+  display: block;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.bf-number-reel__row {
+  display: block;
+  line-height: 1;
+  height: 1em;
+  text-align: center;
+}
+
+.bf-number-reel__char--static {
+  white-space: pre;
 }
 
 .landing-pricing-card__btn { background: #fff;
@@ -80,7 +125,7 @@
 }
 
 .landing-pricing-price {
-  font-size: var(--space-32);
+  font-size: clamp(1.7rem, 4vw, var(--space-32));
   font-weight: 400;
   color: var(--color-vulcan-900);
   margin: 0;
@@ -88,7 +133,7 @@
 }
 
 .landing-pricing-period {
-  font-size: var(--space-18);
+  font-size: clamp(0.95rem, 2vw, var(--space-18));
   color: var(--color-stone-500);
 }
 
@@ -105,8 +150,8 @@
 .landing-pricing-features-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-24);
-  margin-bottom: var(--space-32);
+  gap: clamp(0.75rem, 2vw, var(--space-24));
+  margin-bottom: clamp(1rem, 2.8vw, var(--space-32));
 }
 
 .landing-pricing-features li {
@@ -162,7 +207,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-12);
-  margin:var(--space-44) 0 var(--space-24) 0;
+  margin: clamp(1.25rem, 4vw, var(--space-44)) 0 var(--space-24) 0;
   flex-wrap: wrap;
 }
 
@@ -261,8 +306,8 @@
 
 .landing-pricing-module-shell {
   position: relative;
-  max-width: 44em;
-  margin: var(--space-44) auto 0;
+  max-width: min(44rem, 100%);
+  margin: clamp(1.25rem, 4vw, var(--space-44)) auto 0;
   border-radius: 22px;
   background-image: url('/src/svg/illustrations/gradient_noise_bg.avif');
   background-size: cover;
@@ -273,7 +318,7 @@
 .landing-pricing-module-frame {
   position: relative;
   border-radius: 22px;
-  padding: 1.3rem;
+  padding: clamp(0.65rem, 1.8vw, 1.3rem);
   background: rgba(255, 255, 255, 0.42);
   border: 1px solid rgba(255, 255, 255, 0.84);
   box-shadow:
@@ -459,6 +504,13 @@
   height: 2rem;
 }
 
+@media (max-width: 860px) {
+  .landing-pricing-features-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
 @media (max-width: 640px) {
   .landing-pricing-toggle {
     margin-top: var(--space-32);
@@ -469,7 +521,7 @@
   }
 
   .landing-pricing-card {
-    padding: 1.5rem;
+    padding: 1rem;
   }
 
   .landing-pricing-module-shell {
@@ -478,7 +530,7 @@
 
   .landing-pricing-module-frame {
     border-radius: 16px;
-    padding: 0.7rem;
+    padding: 0.65rem;
   }
 
   .landing-pricing-module-frame::before {
@@ -502,5 +554,11 @@
   .landing-pricing-features-grid {
     grid-template-columns: 1fr;
     gap: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bf-number-reel__track {
+    transition: none !important;
   }
 }

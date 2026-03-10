@@ -355,7 +355,7 @@ export const special = {
       { question: 'Haben Workspaces separate Daten?', answer: 'Ja, jeder Workspace hat eigene Objekte, Services, Buchungen und Einstellungen.' },
       { question: 'Kann ich Mitarbeiter einem Workspace zuordnen?', answer: 'Ja, Mitarbeiter werden pro Workspace verwaltet.' },
       { question: 'Brauche ich pro Workspace ein separates Stripe-Konto?', answer: 'Nein. Du kannst denselben Stripe-Account für alle Workspaces nutzen oder separate Accounts verbinden.' },
-      { question: 'Wie viele Workspaces sind in meinem Plan enthalten?', answer: 'Starter: 1, Growth: 3, Scale: 10 Workspaces. Alle Features sind in jedem Plan enthalten.' },
+      { question: 'Wie viele Workspaces sind in meinem Plan enthalten?', answer: 'Basic: 1, Team: 3, Agentur: 10 Workspaces. Alle Features sind in jedem Plan enthalten.' },
       { question: 'Kann ich Workspaces nachträglich hinzufügen?', answer: 'Ja. Du erstellst neue Workspaces jederzeit im Dashboard – bis zum Limit deines Plans. Ein Upgrade erweitert das Limit sofort.' },
     ],
   },

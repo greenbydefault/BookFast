@@ -1,4 +1,10 @@
 :root {
+    /* Breakpoints (documentation + consistent usage targets) */
+    --bp-sm: 36rem;   /* 576px */
+    --bp-md: 48rem;   /* 768px */
+    --bp-lg: 64rem;   /* 1024px */
+    --bp-xl: 80rem;   /* 1280px */
+
     /* Stone Color Palette */
     --color-stone-50: #fafaf9;
     --color-stone-100: #f5f5f4;
@@ -117,6 +123,12 @@
     --font-main: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
     --section-padding: 8.125rem;
+
+    /* Landing fluid layout tokens */
+    --container-pad-inline: clamp(1rem, 3vw, 2.5rem);
+    --section-pad-inline: var(--container-pad-inline);
+    --section-pad-block: clamp(3.5rem, 7vw, var(--section-padding));
+    --landing-nav-height: clamp(4rem, 8vw, 5.25rem);
 }
 
 @media (prefers-color-scheme: light) {
