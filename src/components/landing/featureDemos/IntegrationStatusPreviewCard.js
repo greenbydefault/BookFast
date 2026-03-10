@@ -1,5 +1,6 @@
 import './featureDemos.css';
 import { openWaitlistModal } from '../WaitlistModal.js';
+import { getIconString } from '../../Icons/Icon.js';
 
 const INITIAL_STATE = {
   trackingEnabled: false,
@@ -7,6 +8,7 @@ const INITIAL_STATE = {
   language: 'de',
   embedOpen: false,
 };
+const TEST_LINKED_DOMAIN = 'bookfast.de';
 
 const renderDemo = (container, state) => {
   const embedExpandedClass = state.embedOpen ? ' is-open' : '';
@@ -16,16 +18,16 @@ const renderDemo = (container, state) => {
   container.innerHTML = `
     <div class="integration-settings-demo">
       <div class="integration-settings-demo__section">
-        <h3 class="integration-settings-demo__title">Website Integration</h3>
-        <p class="integration-settings-demo__subtitle">1 von 2 Schritten abgeschlossen</p>
+        <h3 class="feature-demo-card__title integration-settings-demo__title">Website Integration</h3>
+        <p class="feature-demo-card__subtitle integration-settings-demo__subtitle">1 von 2 Schritten abgeschlossen</p>
 
         <div class="integration-settings-demo__list">
           <article class="integration-settings-demo__item">
             <div class="integration-settings-demo__item-left">
               <span class="integration-settings-demo__check" aria-hidden="true">✓</span>
               <div>
-                <h4 class="integration-settings-demo__item-title">Embed Script</h4>
-                <p class="integration-settings-demo__item-subtitle">Fuegen Sie dieses Skript in den &lt;body&gt; Ihrer Website ein.</p>
+                <h4 class="modal-label integration-settings-demo__item-title">Embed Script</h4>
+                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">Fuegen Sie dieses Skript in den &lt;body&gt; Ihrer Website ein.</p>
               </div>
             </div>
             <div class="integration-settings-demo__item-actions">
@@ -39,17 +41,28 @@ const renderDemo = (container, state) => {
                 data-integration-toggle-embed
                 aria-label="Embed-Bereich umschalten"
               >
-                ˅
+                ${getIconString('arrow-down')}
               </button>
             </div>
           </article>
+          ${state.embedOpen ? `
+          <article class="integration-settings-demo__item integration-settings-demo__item--domain">
+            <div class="integration-settings-demo__item-left integration-settings-demo__item-left--domain">
+              <span class="modal-label integration-settings-demo__item-title">Verknüpfte Webseite</span>
+            </div>
+            <div class="integration-settings-demo__domain-value">
+              <span>${TEST_LINKED_DOMAIN}</span>
+              <span class="integration-settings-demo__domain-check" aria-hidden="true">✓</span>
+            </div>
+          </article>
+          ` : ''}
 
           <article class="integration-settings-demo__item">
             <div class="integration-settings-demo__item-left">
               <span class="integration-settings-demo__check" aria-hidden="true">✓</span>
               <div>
-                <h4 class="integration-settings-demo__item-title">Booking Flow Template (Webflow)</h4>
-                <p class="integration-settings-demo__item-subtitle">Kopieren Sie das Buchungs-Widget und fuegen Sie es in Webflow ein.</p>
+                <h4 class="modal-label integration-settings-demo__item-title">Booking Flow Template (Webflow)</h4>
+                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">Kopieren Sie das Buchungs-Widget und fuegen Sie es in Webflow ein.</p>
               </div>
             </div>
             <div class="integration-settings-demo__item-actions">
@@ -62,15 +75,15 @@ const renderDemo = (container, state) => {
       </div>
 
       <div class="integration-settings-demo__section integration-settings-demo__section--top-border">
-        <h3 class="integration-settings-demo__title">Einstellungen</h3>
-        <p class="integration-settings-demo__subtitle">0 von 3 Schritten abgeschlossen</p>
+        <h3 class="feature-demo-card__title integration-settings-demo__title">Einstellungen</h3>
+        <p class="feature-demo-card__subtitle integration-settings-demo__subtitle">0 von 3 Schritten abgeschlossen</p>
 
         <div class="integration-settings-demo__settings-list">
           <article class="integration-settings-demo__settings-item">
             <div class="integration-settings-demo__settings-left">
               <div>
-                <h4 class="integration-settings-demo__item-title">Tracking aktivieren</h4>
-                <p class="integration-settings-demo__item-subtitle">Cookie-loses Tracking fuer Analysen aktivieren.</p>
+                <h4 class="modal-label integration-settings-demo__item-title">Tracking aktivieren</h4>
+                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">Cookie-loses Tracking fuer Analysen aktivieren.</p>
               </div>
             </div>
             <label class="integration-settings-demo__toggle" aria-label="Tracking aktivieren">
@@ -88,8 +101,8 @@ const renderDemo = (container, state) => {
           <article class="integration-settings-demo__settings-item">
             <div class="integration-settings-demo__settings-left">
               <div>
-                <h4 class="integration-settings-demo__item-title">Zeitzone</h4>
-                <p class="integration-settings-demo__item-subtitle">Zeiten und Buchungen werden in dieser Zeitzone angezeigt.</p>
+                <h4 class="modal-label integration-settings-demo__item-title">Zeitzone</h4>
+                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">Zeiten und Buchungen werden in dieser Zeitzone angezeigt.</p>
               </div>
             </div>
             <select class="integration-settings-demo__select" data-integration-timezone-select>
@@ -102,8 +115,8 @@ const renderDemo = (container, state) => {
           <article class="integration-settings-demo__settings-item">
             <div class="integration-settings-demo__settings-left">
               <div>
-                <h4 class="integration-settings-demo__item-title">Sprache</h4>
-                <p class="integration-settings-demo__item-subtitle">Sprache fuer E-Mails und Buchungswidget.</p>
+                <h4 class="modal-label integration-settings-demo__item-title">Sprache</h4>
+                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">Sprache fuer E-Mails und Buchungswidget.</p>
               </div>
             </div>
             <select class="integration-settings-demo__select" data-integration-language-select>
@@ -144,8 +157,7 @@ export const initIntegrationStatusPreviewCard = (heroContainer) => {
     const toggleTarget = event.target.closest('[data-integration-toggle-embed]');
     if (toggleTarget) {
       state.embedOpen = !state.embedOpen;
-      toggleTarget.classList.toggle('is-open', state.embedOpen);
-      toggleTarget.setAttribute('aria-expanded', state.embedOpen ? 'true' : 'false');
+      renderDemo(root, state);
     }
   };
 
