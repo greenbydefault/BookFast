@@ -41,7 +41,7 @@
 
 /* ── Group 2: Headline ── */
 .hero-new__headline {
-    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    font-size: clamp(var(--space-36), 5vw, var(--space-56));
     font-weight: 400;
     line-height: 1.12;
     letter-spacing: -0.03em;

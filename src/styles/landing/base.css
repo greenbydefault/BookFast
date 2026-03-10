@@ -14,7 +14,7 @@ body.landing-active #app {
   max-width: 105rem;
   margin: 0 auto;
   width: 100%;
-  padding-inline: var(--container-pad-inline);
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -26,7 +26,7 @@ body.landing-active #app {
 
 /* --- Sections --- */
 .landing-section {
-  padding: var(--section-pad-block) var(--section-pad-inline);
+  padding: var(--section-pad-block) var(--space-120);
   display: flex;
   justify-content: center;
 }

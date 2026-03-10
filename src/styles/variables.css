@@ -106,6 +106,20 @@
     --space-96: 6em;
     --space-120: 7.5em;
     --space-128: 8em;
+    --space-136: 8.5em;
+    --space-144: 9em;
+    --space-152: 9.5em;
+    --space-160: 10em;
+    --space-192: 12em;
+    --space-224: 14em;
+    --space-256: 16em;
+    --space-288: 18em;
+    --space-320: 20em;
+    --space-352: 22em;
+    --space-384: 24em;
+    --space-416: 26em;
+    --space-448: 28em;
+    --space-480: 30em;
 
     /* T-Shirt Size Aliases */
     --space-3xs: var(--space-4);
@@ -125,7 +139,7 @@
     --section-padding: 8.125rem;
 
     /* Landing fluid layout tokens */
-    --container-pad-inline: clamp(1rem, 3vw, 2.5rem);
+    --container-pad-inline: clamp(1rem, 4vw, var(--space-120));
     --section-pad-inline: var(--container-pad-inline);
     --section-pad-block: clamp(3.5rem, 7vw, var(--section-padding));
     --landing-nav-height: clamp(4rem, 8vw, 5.25rem);

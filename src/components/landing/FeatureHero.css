@@ -7,13 +7,13 @@
 .feature-hero {
   position: relative;
   overflow: hidden;
-  padding-bottom: var(--section-padding);
+  padding-bottom: var(--section-pad-block);
 }
 
 /* --- Zone 1: White top --- */
 .feature-hero__top {
   background: #fff;
-  padding: 3rem 0 2.5rem;
+  padding: clamp(var(--space-24), 4vw, var(--space-48)) 0 clamp(var(--space-20), 3.5vw, var(--space-40));
   text-align: center;
 }
 
@@ -22,9 +22,9 @@
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  font-size: 0.82rem;
+  font-size: clamp(var(--space-12), 1.2vw, var(--space-14));
   color: var(--color-stone-400, #a8a29e);
-  margin-bottom: 2rem;
+  margin-bottom: clamp(var(--space-16), 3vw, var(--space-32));
 }
 
 .feature-hero__breadcrumb a {
@@ -45,8 +45,8 @@
 }
 
 .feature-hero__breadcrumb-sep .feature-hero__breadcrumb-icon {
-  width: 12px;
-  height: 12px;
+  width: clamp(var(--space-10), 1.8vw, var(--space-12));
+  height: clamp(var(--space-10), 1.8vw, var(--space-12));
   transform: rotate(-90deg);
 }
 
@@ -57,7 +57,7 @@
 }
 
 .feature-hero__illustration img {
-  max-width: 240px;
+  max-width: clamp(calc(var(--space-128) + var(--space-32)), 28vw, calc(var(--space-120) + var(--space-120)));
   width: 100%;
   height: auto;
   display: block;
@@ -68,10 +68,10 @@
 /* --- Zone 2: Gradient bottom with card --- */
 .feature-hero__bottom {
   position: relative;
-  padding: var(--space-24);
-  max-width: 680px;
+  padding: clamp(var(--space-12), 2vw, var(--space-24));
+  max-width: min(680px, 100%);
   margin: 0 auto;
-  border-radius: var(--space-12);
+  border-radius: clamp(var(--space-10), 1.8vw, var(--space-12));
 }
 
 .feature-hero__gradient-bg {
@@ -80,7 +80,7 @@
   background-size: cover;
   background-position: center top;
   pointer-events: none;
-  border-radius: var(--space-12);
+  border-radius: clamp(var(--space-10), 1.8vw, var(--space-12));
 }
 
 .feature-hero__card-area {
@@ -91,15 +91,15 @@
 }
 
 .feature-hero__card-frame {
-  max-width: 732px;
+  max-width: min(732px, 100%);
 }
 
 .feature-hero__hint {
   text-align: center;
-  font-size: 0.78rem;
+  font-size: clamp(var(--space-12), 1.1vw, var(--space-14));
   color: var(--color-stone-400, #a8a29e);
-  margin: 1.25rem 0 0;
-  padding: 0 1.5rem;
+  margin: clamp(var(--space-12), 2vw, var(--space-20)) 0 0;
+  padding: 0 clamp(var(--space-12), 2.5vw, var(--space-24));
 }
 
 /* Decorative accents on both sides */
@@ -110,20 +110,20 @@
 }
 
 .feature-hero__decor--left {
-  left: 8%;
+  left: clamp(2%, 6vw, 8%);
   top: 0;
   transform: translateY(-30%);
 }
 
 .feature-hero__decor--right {
-  right: 8%;
+  right: clamp(2%, 6vw, 8%);
   top: 0;
   transform: translateY(-30%) scaleX(-1);
 }
 
 .feature-hero__decor svg {
-  width: 48px;
-  height: 48px;
+  width: clamp(var(--space-32), 4vw, var(--space-48));
+  height: clamp(var(--space-32), 4vw, var(--space-48));
   opacity: 0.35;
   color: var(--color-majorelle-blue-900, #7660F1);
 }
@@ -139,7 +139,7 @@
   }
 
   .feature-hero__bottom {
-    padding: 2.5rem 0 3rem;
+    padding: clamp(var(--space-20), 5vw, var(--space-40)) 0 clamp(var(--space-24), 7vw, var(--space-48));
   }
 
   .feature-hero__card-frame {

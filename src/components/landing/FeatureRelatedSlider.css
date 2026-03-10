@@ -16,7 +16,7 @@
 }
 
 .feature-related-slider__viewport {
-  --related-slider-peek: clamp(0.75rem, 5vw, 4rem);
+  --related-slider-peek: clamp(var(--space-12), 5vw, var(--space-64));
   width: calc(100% + var(--related-slider-peek));
   margin-right: calc(var(--related-slider-peek) * -1);
   overflow: hidden;
@@ -35,22 +35,22 @@
 }
 
 .feature-related-slider__slide {
-  flex: 0 0 clamp(16rem, 33vw, 22rem);
+  flex: 0 0 clamp(calc(var(--space-128) * 2), 33vw, calc(var(--space-128) * 2 + var(--space-96) + var(--space-32)));
 }
 
 .feature-related-slider__card {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: clamp(19rem, 45vw, 32rem);
+  min-height: clamp(calc(var(--space-128) * 2 + var(--space-40)), 45vw, calc(var(--space-128) * 4));
   border: 1px solid var(--color-stone-200);
-  border-radius: clamp(0.75rem, 1.8vw, var(--space-12));
+  border-radius: clamp(var(--space-12), 1.8vw, var(--space-12));
   background: #fff;
-  padding: clamp(1rem, 2.4vw, var(--space-24));
-  padding-bottom: clamp(5rem, 12vw, 7rem);
+  padding: clamp(var(--space-16), 2.4vw, var(--space-24));
+  padding-bottom: clamp(calc(var(--space-40) * 2), 12vw, calc(var(--space-56) * 2));
   display: flex;
   flex-direction: column;
-  gap: clamp(0.5rem, 1.6vw, 0.9rem);
+  gap: clamp(var(--space-8), 1.6vw, var(--space-14));
   overflow: hidden;
 }
 
@@ -61,7 +61,7 @@
 
 .feature-related-slider__card-title {
   margin: 0;
-  font-size: clamp(1.35rem, 2.2vw, var(--space-24));
+  font-size: clamp(var(--space-22), 2.2vw, var(--space-24));
   line-height: 1.2;
   color: var(--color-vulcan-900);
   font-weight: 400;
@@ -69,7 +69,7 @@
 
 .feature-related-slider__card-subtext {
   margin: 0.35rem 0 0;
-  font-size: clamp(0.9rem, 1.7vw, var(--space-14));
+  font-size: clamp(var(--space-14), 1.7vw, var(--space-14));
   line-height: 1.45;
   color: var(--color-vulcan-500);
   display: -webkit-box;
@@ -101,9 +101,9 @@
   justify-content: end;
   flex: 0 0 auto;
   position: absolute;
-  bottom: -22%;
-  right: -18%;
-  width: clamp(9.5rem, 45%, 16rem);
+  bottom: -15%;
+  right: -15%;
+  width: clamp(calc(var(--space-128) + var(--space-24)), 45%, calc(var(--space-128) * 2));
   aspect-ratio: 1 / 1;
   pointer-events: none;
 }
@@ -125,7 +125,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  margin-top: clamp(1rem, 4vw, var(--space-32));
+  margin-top: clamp(var(--space-16), 4vw, var(--space-32));
 }
 
 .feature-related-slider__arrow {
@@ -165,7 +165,7 @@
 
 @media (max-width: 1100px) {
   .feature-related-slider__slide {
-    flex-basis: clamp(15.5rem, 46vw, 21rem);
+    flex-basis: clamp(calc(var(--space-128) + var(--space-120)), 46vw, calc(var(--space-128) * 2 + var(--space-64) + var(--space-40)));
   }
 }
 
@@ -188,12 +188,12 @@
   }
 
   .feature-related-slider__card {
-    min-height: clamp(20rem, 68vw, 24rem);
-    padding-bottom: clamp(5.5rem, 24vw, 7rem);
+    min-height: clamp(calc(var(--space-128) * 2 + var(--space-64)), 68vw, calc(var(--space-128) * 3));
+    padding-bottom: clamp(calc(var(--space-44) * 2), 24vw, calc(var(--space-56) * 2));
   }
 
   .feature-related-slider__media {
-    width: clamp(8rem, 48%, 12rem);
+    width: clamp(var(--space-128), 48%, calc(var(--space-48) * 4));
     bottom: -24%;
     right: -20%;
   }
