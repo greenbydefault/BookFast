@@ -60,7 +60,7 @@
 .how-it-works__title-wrap {
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: var(--space-8);
   min-width: 0;
 }
 
@@ -76,8 +76,8 @@
 }
 
 .how-it-works__title {
-  font-size: clamp(var(--space-16), 1.8vw, var(--space-18));
-  font-weight: 500;
+  font-size: clamp(var(--space-16), 4vw, var(--space-18));
+  font-weight: 300;
   line-height: 1.3;
 }
 

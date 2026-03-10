@@ -6,6 +6,7 @@ import { createActionButton } from '../../../components/Button/Button.js';
 import { getIconString } from '../../../components/Icons/Icon.js';
 import { refreshWorkspace } from './settingsHelpers.js';
 import { startStripeConnect, fetchStripeConnectStatus } from '../../../lib/services/stripeConnectService.js';
+import { mapStripeWorkspaceStatus } from '../../../lib/integration/statusMapping.js';
 
 const integrationUiState = {
   setupOpen: true,
@@ -17,8 +18,12 @@ const integrationUiState = {
 };
 
 const getStepConfig = (ws) => {
-  const isConnected = Boolean(ws?.stripe_connected_account_id);
-  const isActive = ws?.payout_status === 'active';
+  const stripe = mapStripeWorkspaceStatus({
+    stripeConnectedAccountId: ws?.stripe_connected_account_id,
+    payoutStatus: ws?.payout_status,
+  });
+  const isConnected = stripe.connected;
+  const isActive = stripe.ready;
 
   return [
     {
@@ -116,12 +121,16 @@ export const renderIntegrationContent = async () => {
 
   const state = getState();
   const ws = state.currentWorkspace || {};
+  const stripe = mapStripeWorkspaceStatus({
+    stripeConnectedAccountId: ws.stripe_connected_account_id,
+    payoutStatus: ws.payout_status,
+  });
   const steps = getStepConfig(ws);
   const completedSteps = steps.filter(step => step.done).length;
   const totalSteps = steps.length;
   const progressPercent = Math.round((completedSteps / totalSteps) * 100);
-  const isConnected = Boolean(ws.stripe_connected_account_id);
-  const isReady = ws.payout_status === 'active';
+  const isConnected = stripe.connected;
+  const isReady = stripe.ready;
   const canShowPaymentMethods = isReady;
 
   container.innerHTML = `
@@ -151,7 +160,7 @@ export const renderIntegrationContent = async () => {
             </div>
             <div class="workspace-checklist-item__actions">
               <span class="integration-status-tag ${isConnected ? 'is-connected' : 'is-disconnected'}">
-                ${isConnected ? 'Aktiv' : 'Nicht verbunden'}
+                ${stripe.label}
               </span>
               <button type="button" class="workspace-accordion-btn ${integrationUiState.setupOpen ? 'is-open' : ''}" data-integration-toggle-setup aria-expanded="${integrationUiState.setupOpen ? 'true' : 'false'}">
                 ${getIconString('arrow-down')}

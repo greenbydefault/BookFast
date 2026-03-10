@@ -9,6 +9,7 @@ export const platform = {
       headline: 'Dein Booking-Widget lebt in Webflow – nicht in einem iFrame.',
       subheadline: 'Ein Script-Tag oder Template-Copy, und dein Buchungswidget ist Teil deiner Seite. Volle Design-Kontrolle, kein Redirect, keine Conversion-Verluste.',
       illustration: '/src/svg/illustrations/landingpage/features/ft_integrationen.svg',
+      demoModule: 'integration',
     },
     problem: { text: 'iFrames sehen fremd aus, Redirects kosten Conversion. Deine Besucher merken den Bruch – und springen ab.', bullets: ['Embed-Script: Ein Tag in den Body, fertig.', 'Template-Copy: Widget in den Webflow Designer importieren.', 'Datenattribute statt iFrame – volle Design-Kontrolle.'] },
     interactiveHowItWorks: true,

@@ -182,8 +182,13 @@
 
 @media (max-width: 600px) {
   .feature-related-slider__viewport {
-    width: 100%;
+    width: calc(100% + var(--related-slider-edge-offset));
     margin-right: 0;
+    margin-left: 0;
+  }
+
+  .feature-related-slider__viewport.is-bleed-both {
+    width: calc(100% + var(--related-slider-edge-offset));
     margin-left: 0;
   }
 

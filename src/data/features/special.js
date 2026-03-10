@@ -67,7 +67,7 @@ export const special = {
     hero: {
       headline: 'Zeit zwischen Terminen – automatisch blockiert.',
       subheadline: 'Reinigung, Umbau, Vorbereitung: Definiere Pufferzeiten pro Service, die automatisch in die Verfügbarkeit eingerechnet werden.',
-      illustration: '/src/svg/illustrations/landingpage/features/ft_objektverwaltung.svg',
+      illustration: '/src/svg/illustrations/landingpage/features/ft_puffer.svg',
     },
     problem: { text: 'Rücken an Rücken gebucht: Kein Raum zum Lüften, kein Umbau, keine Reinigung. Dein Team ist gestresst, die Qualität leidet.', bullets: ['Pufferzeit in Minuten oder Stunden.', 'Pro Service individuell konfigurierbar.', 'Automatisch in die Verfügbarkeit eingerechnet.'] },
     interactiveHowItWorks: true,

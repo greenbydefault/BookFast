@@ -1,5 +1,5 @@
 import { escapeAttr, escapeHtml } from '../../lib/sanitize.js';
-import { svgAssetUrl } from '../../lib/landingAssets.js';
+import { resolveSvgAssetUrl, svgAssetUrl } from '../../lib/landingAssets.js';
 import './FeatureRelatedSlider.css';
 
 const FALLBACK_ILLUSTRATION = svgAssetUrl('illustrations/landingpage/features/ft_objektverwaltung.svg');
@@ -7,7 +7,9 @@ const FALLBACK_ILLUSTRATION = svgAssetUrl('illustrations/landingpage/features/ft
 const createCardHTML = (feature) => {
   const title = feature?.meta?.title || feature?.hero?.headline || 'Feature';
   const subtext = feature?.hero?.subheadline || '';
-  const illustration = feature?.hero?.illustration || FALLBACK_ILLUSTRATION;
+  const rawIllustration = feature?.hero?.illustration || FALLBACK_ILLUSTRATION;
+  const resolvedIllustration = resolveSvgAssetUrl(rawIllustration);
+  const illustration = resolvedIllustration || FALLBACK_ILLUSTRATION;
   const href = feature?.slug ? `/features/${feature.slug}` : '/features';
 
   return `
