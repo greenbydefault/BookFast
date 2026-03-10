@@ -4,9 +4,9 @@
 
 /* Section */
 .hero-new {
-    --hero-illustration-size: 17.5em;
+    --hero-illustration-size: var(--space-256);
     --hero-illustration-overlap: 0px;
-    padding: var(--space-52) 0 8.125rem;
+    padding: var(--space-52) 0 8.145rem;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -282,8 +282,22 @@
 /* ── Responsive ── */
 @media (max-width: 768px) {
     .hero-new {
-        --hero-illustration-size: 200px;
+        --hero-illustration-size: var(--space-128);
+        --hero-illustration-mobile-offset-x: 0px;
+        --hero-illustration-mobile-offset-y: -2em;
         padding: 3rem 0 2rem;
+    }
+
+    .hero-new__illustration img {
+        transform: translate(
+            var(--hero-illustration-mobile-offset-x),
+            var(--hero-illustration-mobile-offset-y)
+        );
+    }
+
+    .hero-new__subheadline {
+        padding-inline: var(--space-16);
+        box-sizing: border-box;
     }
 
     .hero-new__card.expanded {

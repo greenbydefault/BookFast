@@ -123,7 +123,6 @@ export const renderNavigation = (container, options = {}) => {
     </div>
     <div class="landing-nav-mobile-menu" id="mobile-menu">
       <a href="/produkt" data-landing-link>Produkt</a>
-      <a href="/integrationen" data-landing-link>Integrationen</a>
       <a href="/features" data-landing-link>Features</a>
       <a href="/preise" data-landing-link>Preise</a>
       <div style="padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">

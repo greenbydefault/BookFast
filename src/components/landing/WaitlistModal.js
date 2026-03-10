@@ -7,7 +7,7 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const resolveCloseIconMarkup = () => {
   const hasCloseIcon = Boolean(document.getElementById('icon-close'));
   return hasCloseIcon
-    ? getIconString('close')
+    ? getIconString('close', 'waitlist-modal__close-icon')
     : '<span class="waitlist-modal__close-fallback" aria-hidden="true">&times;</span>';
 };
 
@@ -48,10 +48,6 @@ export const openWaitlistModal = () => {
             Eintragen
           </button>
         </form>
-
-        <button class="btn-text waitlist-modal__cancel-btn" id="waitlist-cancel-btn">
-          Abbrechen
-        </button>
       </div>
     </div>
   `;
@@ -68,7 +64,6 @@ export const openWaitlistModal = () => {
   };
 
   modalOverlay.querySelector('#waitlist-close-btn').addEventListener('click', close);
-  modalOverlay.querySelector('#waitlist-cancel-btn').addEventListener('click', close);
 
   modalOverlay.addEventListener('click', (e) => {
     if (e.target === modalOverlay) close();

@@ -116,6 +116,7 @@ export const initFeatureRelatedSlider = (container) => {
     let index = 1;
     let currentTranslate = 0;
     let isAnimating = false;
+    let hasShiftedToBothEdges = false;
     const getOriginalIndex = () => ((index - 1) % count + count) % count;
 
     const setActiveBubble = () => {
@@ -140,6 +141,14 @@ export const initFeatureRelatedSlider = (container) => {
       setTransform(-index * stride);
     };
 
+    const enableBothEdgeBleed = () => {
+      if (hasShiftedToBothEdges) return;
+      hasShiftedToBothEdges = true;
+      viewport.classList.add('is-bleed-both');
+      // Recalculate stride after viewport width changes to avoid jumpy transforms.
+      measure();
+    };
+
     const jumpIfLoopBoundary = () => {
       const needsReset = index === 0 || index === count + 1;
       if (!needsReset) {
@@ -160,7 +169,10 @@ export const initFeatureRelatedSlider = (container) => {
 
     const goTo = (nextIndex, { animate = true } = {}) => {
       if (animate && isAnimating) return;
-      index = clampIndex(nextIndex, count + 1);
+      const targetIndex = clampIndex(nextIndex, count + 1);
+      if (targetIndex === index) return;
+      enableBothEdgeBleed();
+      index = targetIndex;
       if (animate) {
         isAnimating = true;
         track.style.transition = 'transform 360ms cubic-bezier(0.22, 1, 0.36, 1)';
