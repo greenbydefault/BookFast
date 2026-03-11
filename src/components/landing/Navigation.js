@@ -22,7 +22,7 @@ function truncateTo7Words(str) {
 
 function buildMegaProductHTML() {
   const items = MEGA_PRODUCT_ITEMS.map(item => `
-    <a href="${item.href}" class="landing-mega-item" data-landing-link>
+    <a href="${item.href}" class="landing-mega-item" data-landing-link title="${item.label}">
       <span class="landing-mega-item-icon">${getIconString(item.icon)}</span>
       <div class="landing-mega-item-content">
         <span class="landing-mega-item-title">${item.label}</span>
@@ -51,8 +51,9 @@ function buildMegaFeaturesHTML() {
         const href = disabled ? '' : ` href="/features/${slug}"`;
         const cls = `landing-mega-item${disabled ? ' landing-mega-item--disabled' : ''}`;
         const dataLink = disabled ? '' : ' data-landing-link';
+        const title = disabled ? '' : ` title="${page.meta.title}"`;
         return `
-          <${tag}${href} class="${cls}"${dataLink}>
+          <${tag}${href} class="${cls}"${dataLink}${title}>
             <span class="landing-mega-item-icon">${getIconString(iconName)}</span>
             <div class="landing-mega-item-content">
               <span class="landing-mega-item-title">${page.meta.title}</span>
@@ -86,7 +87,7 @@ export const renderNavigation = (container, options = {}) => {
         : buildMegaProductHTML();
       return `
         <div class="landing-nav-mega-wrap">
-          <a href="${item.href || '#'}" class="landing-nav-link landing-nav-mega-trigger" data-mega="${item.mega}" data-landing-link>
+          <a href="${item.href || '#'}" class="landing-nav-link landing-nav-mega-trigger" data-mega="${item.mega}" data-landing-link title="${item.label}">
             ${item.label} <span class="landing-nav-caret">${getIconString('arrow-down', 'landing-nav-caret-icon')}</span>
           </a>
           <div class="landing-nav-mega-menu" id="mega-${item.mega}">
@@ -97,7 +98,7 @@ export const renderNavigation = (container, options = {}) => {
     }
     if (item.children && !item.mega) {
       const childrenHTML = item.children.map(child =>
-        `<a href="${child.href}" class="landing-nav-dropdown-item" data-landing-link>${child.label}</a>`
+        `<a href="${child.href}" class="landing-nav-dropdown-item" data-landing-link title="${child.label}">${child.label}</a>`
       ).join('');
       return `
         <div class="landing-nav-dropdown">
@@ -105,30 +106,30 @@ export const renderNavigation = (container, options = {}) => {
           <div class="landing-nav-dropdown-menu">${childrenHTML}</div>
         </div>`;
     }
-    return `<a href="${item.href}" class="landing-nav-link" data-landing-link>${item.label}</a>`;
+    return `<a href="${item.href}" class="landing-nav-link" data-landing-link title="${item.label}">${item.label}</a>`;
   }).join('');
 
   nav.innerHTML = `
     <div class="landing-nav-inner">
-      <a href="/" class="landing-nav-logo" data-landing-link>BookFast</a>
+      <a href="/" class="landing-nav-logo" data-landing-link title="BookFast Startseite">BookFast</a>
       <div class="landing-nav-links">${linksHTML}</div>
       <div class="landing-nav-actions">
         ${isLoggedIn
-          ? `<a href="/dashboard/bookings" class="landing-btn landing-btn-ghost landing-btn-sm"><span class="landing-btn__icon">${getIconString('arrow-right', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zum Dashboard</span></a>`
-          : `<a href="#" class="landing-btn landing-btn-primary landing-btn-sm nav-join-waitlist" data-landing-waitlist><span class="landing-btn__icon">${getIconString('mails', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zur Warteliste anmelden</span></a>`}
+          ? `<a href="/dashboard/bookings" class="landing-btn landing-btn-ghost landing-btn-sm" title="Zum Dashboard wechseln"><span class="landing-btn__icon">${getIconString('arrow-right', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zum Dashboard</span></a>`
+          : `<a href="#" class="landing-btn landing-btn-primary landing-btn-sm nav-join-waitlist" data-landing-waitlist title="Zur BookFast Warteliste anmelden"><span class="landing-btn__icon">${getIconString('mails', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zur Warteliste anmelden</span></a>`}
       </div>
-      <button class="landing-nav-mobile-toggle" aria-label="Menü">
+      <button class="landing-nav-mobile-toggle" aria-label="Menü" title="Menü öffnen oder schließen">
         <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
       </button>
     </div>
     <div class="landing-nav-mobile-menu" id="mobile-menu">
-      <a href="/produkt" data-landing-link>Produkt</a>
-      <a href="/features" data-landing-link>Features</a>
-      <a href="/preise" data-landing-link>Preise</a>
+      <a href="/produkt" data-landing-link title="Produkt">Produkt</a>
+      <a href="/features" data-landing-link title="Features">Features</a>
+      <a href="/preise" data-landing-link title="Preise">Preise</a>
       <div style="padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
         ${isLoggedIn
-          ? `<a href="/dashboard/bookings" class="landing-btn landing-btn-secondary" style="text-align:center;"><span class="landing-btn__icon">${getIconString('arrow-right', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zum Dashboard</span></a>`
-          : `<a href="#" class="landing-btn landing-btn-primary landing-btn-sm nav-join-waitlist" style="text-align:center;" data-landing-waitlist><span class="landing-btn__icon">${getIconString('mails', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zur Warteliste anmelden</span></a>`}
+          ? `<a href="/dashboard/bookings" class="landing-btn landing-btn-secondary" style="text-align:center;" title="Zum Dashboard wechseln"><span class="landing-btn__icon">${getIconString('arrow-right', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zum Dashboard</span></a>`
+          : `<a href="#" class="landing-btn landing-btn-primary landing-btn-sm nav-join-waitlist" style="text-align:center;" data-landing-waitlist title="Zur BookFast Warteliste anmelden"><span class="landing-btn__icon">${getIconString('mails', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zur Warteliste anmelden</span></a>`}
       </div>
     </div>
   `;

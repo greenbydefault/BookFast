@@ -54,6 +54,7 @@ export const renderContactPage = () => {
       headline: 'Schreib uns – wir helfen dir weiter.',
       subheadline: 'Technischer Support, Enterprise-Anfragen oder Feedback – einfach das Formular ausfüllen.',
       illustrationSrc: '/src/svg/illustrations/landingpage/features/ft_kontakt.svg',
+      illustrationAlt: 'Illustration zur Kontaktaufnahme mit dem BookFast Team',
       breadcrumb: ['Home', 'Kontakt'],
       demoModuleHTML: contactFormHTML,
     })}

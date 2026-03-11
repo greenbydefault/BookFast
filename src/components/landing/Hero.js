@@ -18,6 +18,7 @@ const ILLUSTRATION_URL = new URL('../../svg/illustrations/landingpage/features/f
  * @param {string} [config.variant] - 'centered' | 'split'
  * @param {string} [config.imageHTML] - HTML for the right side (split variant)
  * @param {string} [config.illustrationSrc] - Override illustration (default: ft_zahlungen.svg)
+ * @param {string} [config.illustrationAlt] - Alt text for illustration
  * @param {string} [config.slotContent] - Optional HTML rendered after subheadline, before CTA/trustClaims
  */
 export const createHero = (config) => {
@@ -29,11 +30,12 @@ export const createHero = (config) => {
     variant = 'centered',
     imageHTML = '',
     illustrationSrc = ILLUSTRATION_URL,
+    illustrationAlt = 'Illustration von BookFast Funktionen und Buchungsverwaltung',
     slotContent = '',
   } = config;
 
   const illustrationHTML = illustrationSrc
-    ? `<div class="feature-hero__illustration"><img src="${illustrationSrc}" alt="" loading="eager"></div>`
+    ? `<div class="feature-hero__illustration"><img src="${illustrationSrc}" alt="${illustrationAlt}" loading="eager"></div>`
     : '';
 
   const checkSVG = '<svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/></svg>';
@@ -45,8 +47,8 @@ export const createHero = (config) => {
 
   const ctaHTML = `
     <div class="landing-hero-ctas">
-      ${primaryCTA ? `<a href="${primaryHref}" class="landing-btn landing-btn-primary landing-btn-lg">${primaryCTA}</a>` : ''}
-      ${secondaryCTA ? `<a href="${secondaryHref}" class="landing-btn landing-btn-secondary landing-btn-lg" data-landing-link>${secondaryCTA}</a>` : ''}
+      ${primaryCTA ? `<a href="${primaryHref}" class="landing-btn landing-btn-primary landing-btn-lg" title="${primaryCTA}">${primaryCTA}</a>` : ''}
+      ${secondaryCTA ? `<a href="${secondaryHref}" class="landing-btn landing-btn-secondary landing-btn-lg" data-landing-link title="${secondaryCTA}">${secondaryCTA}</a>` : ''}
     </div>`;
 
   if (variant === 'split') {

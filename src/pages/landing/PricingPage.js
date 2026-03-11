@@ -154,6 +154,7 @@ export const renderPricingPage = () => {
     ${createHero({
       headline: 'Buchen lassen. Bezahlen lassen. Verstehen, was wirkt.',
       subheadline: 'BookFast verbindet Buchungen, Online-Zahlungen und Analytics in einem System – für Services, Tagesmieten und Übernachtungen.',
+      illustrationAlt: 'Preisübersicht und Analytics-Illustration für BookFast Workspaces',
       primaryCTA: '',
       secondaryCTA: '',
       trustClaims: [],

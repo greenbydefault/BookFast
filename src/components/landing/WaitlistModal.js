@@ -25,7 +25,7 @@ export const openWaitlistModal = () => {
   modalOverlay.innerHTML = `
     <div class="modal-container waitlist-modal__container">
       <div class="modal-header waitlist-modal__header">
-        <button class="modal-close-btn waitlist-modal__close-btn" id="waitlist-close-btn" aria-label="Modal schließen">${resolveCloseIconMarkup()}</button>
+        <button class="modal-close-btn waitlist-modal__close-btn" id="waitlist-close-btn" aria-label="Modal schließen" title="Wartelisten-Modal schließen">${resolveCloseIconMarkup()}</button>
       </div>
       <div class="modal-content waitlist-modal__content">
         <h2 class="waitlist-modal__title">Zur Warteliste anmelden</h2>
@@ -44,7 +44,7 @@ export const openWaitlistModal = () => {
             autocomplete="email"
           >
           <p class="waitlist-modal__error" id="waitlist-error" style="display:none;"></p>
-          <button type="submit" class="btn btn-primary waitlist-modal__submit-btn" id="waitlist-submit-btn">
+          <button type="submit" class="btn btn-primary waitlist-modal__submit-btn" id="waitlist-submit-btn" title="Zur BookFast Warteliste eintragen">
             Eintragen
           </button>
         </form>
@@ -109,7 +109,7 @@ export const openWaitlistModal = () => {
         <p class="waitlist-modal__subtitle">
           Wir haben dir eine Bestätigungsmail geschickt. Bitte klicke auf den Link in der E-Mail, um deine Anmeldung abzuschließen.
         </p>
-        <button class="btn btn-primary waitlist-modal__submit-btn" id="waitlist-done-btn">Schließen</button>
+        <button class="btn btn-primary waitlist-modal__submit-btn" id="waitlist-done-btn" title="Modal schließen">Schließen</button>
       `;
       modalOverlay.querySelector('#waitlist-done-btn').addEventListener('click', close);
 

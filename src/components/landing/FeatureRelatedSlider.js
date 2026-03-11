@@ -19,9 +19,9 @@ const createCardHTML = (feature) => {
         <p class="feature-related-slider__card-subtext">${escapeHtml(subtext)}</p>
       </div>
       <div class="feature-related-slider__footer">
-        <a href="${escapeAttr(href)}" class="landing-btn landing-btn-primary feature-related-slider__card-btn" data-landing-link data-related-card-link>Ansehen</a>
-        <div class="feature-related-slider__media" aria-hidden="true">
-          <img src="${escapeAttr(illustration)}" alt="" loading="eager" decoding="async" />
+        <a href="${escapeAttr(href)}" class="landing-btn landing-btn-primary feature-related-slider__card-btn" data-landing-link data-related-card-link title="${escapeAttr(`${title} ansehen`)}">Ansehen</a>
+        <div class="feature-related-slider__media">
+          <img src="${escapeAttr(illustration)}" alt="${escapeAttr(`Illustration zum Feature ${title}`)}" loading="eager" decoding="async" />
         </div>
       </div>
     </article>
@@ -59,9 +59,9 @@ export const createFeatureRelatedSlider = ({
             </div>
           </div>
           <div class="feature-related-slider__controls">
-            <button type="button" class="feature-related-slider__arrow" data-related-prev aria-label="Vorheriger Slide">‹</button>
+            <button type="button" class="feature-related-slider__arrow" data-related-prev aria-label="Vorheriger Slide" title="Vorherigen Slide anzeigen">‹</button>
             <div class="feature-related-slider__bubbles" data-related-bubbles></div>
-            <button type="button" class="feature-related-slider__arrow" data-related-next aria-label="Nächster Slide">›</button>
+            <button type="button" class="feature-related-slider__arrow" data-related-next aria-label="Nächster Slide" title="Nächsten Slide anzeigen">›</button>
           </div>
         </div>
       </div>

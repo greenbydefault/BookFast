@@ -32,10 +32,10 @@ let dashboardPagesRegistered = false;
 export const createHeroNew = (config = {}) => {
   const {
     tagline = 'Buchungen & Zahlungen für Webflow',
-    headline = `Book <img src="${HERO_LOGO_URL}" alt="+" class="hero-new__logo" width="56" height="56"> Fast jetzt testen<br>– ohne Anmeldung.`,
+    headline = `Book <img src="${HERO_LOGO_URL}" alt="BookFast Plus-Logo" class="hero-new__logo" width="56" height="56"> Fast jetzt testen<br>– ohne Anmeldung.`,
     subheadline = 'Workspace-Name eingeben und Live-Demo starten.',
     illustrationSrc = HERO_ILLUSTRATION_URL,
-    illustrationAlt = 'BookFast Illustration',
+    illustrationAlt = 'Illustration der BookFast Demo mit Buchungsablauf und Dashboard',
     formLabel = 'Workspace-Name',
     formPlaceholder = 'z.B. Alpine Chalets, Studio Nordlicht…',
     formButtonText = 'Live-Demo starten',

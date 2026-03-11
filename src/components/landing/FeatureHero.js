@@ -15,6 +15,7 @@ const BG_IMAGE = '/src/svg/illustrations/gradient_noise_bg.avif';
  * @param {string}  config.headline
  * @param {string}  config.subheadline
  * @param {string}  [config.illustrationSrc]
+ * @param {string}  [config.illustrationAlt]
  * @param {string[]}[config.breadcrumb]       - ['Home', 'Features', 'Mitarbeiterverwaltung']
  * @param {string}  [config.demoModuleHTML]    - HTML string to inject as demo card
  * @param {string}  [config.demoHint]          - Hint text below card (e.g. "Tippe, klicke & probier's aus — ganz ohne Account.")
@@ -24,6 +25,7 @@ export const createFeatureHero = (config) => {
     headline,
     subheadline,
     illustrationSrc = '',
+    illustrationAlt = '',
     breadcrumb = ['Home', 'Features'],
     demoModuleHTML = '',
     demoHint = '',
@@ -33,11 +35,11 @@ export const createFeatureHero = (config) => {
     const isLast = i === breadcrumb.length - 1;
     if (isLast) return `<span>${escapeHtml(item)}</span>`;
     const href = i === 0 ? '/' : `/${item.toLowerCase()}`;
-    return `<a href="${escapeAttr(href)}" data-landing-link>${escapeHtml(item)}</a><span class="feature-hero__breadcrumb-sep">${getIconString('arrow-down', 'feature-hero__breadcrumb-icon')}</span>`;
+    return `<a href="${escapeAttr(href)}" data-landing-link title="${escapeAttr(item)}">${escapeHtml(item)}</a><span class="feature-hero__breadcrumb-sep">${getIconString('arrow-down', 'feature-hero__breadcrumb-icon')}</span>`;
   }).join(' ');
 
   const illustrationHTML = illustrationSrc
-    ? `<div class="feature-hero__illustration"><img src="${escapeAttr(illustrationSrc)}" alt="" loading="eager"></div>`
+    ? `<div class="feature-hero__illustration"><img src="${escapeAttr(illustrationSrc)}" alt="${escapeAttr(illustrationAlt || `Illustration zum Feature ${headline}`)}" loading="eager"></div>`
     : '';
   const demoFrameHTML = demoModuleHTML
     ? `<div class="landing-frosted-frame feature-hero__card-frame">${demoModuleHTML}</div>`
@@ -48,7 +50,7 @@ export const createFeatureHero = (config) => {
       <!-- Zone 1: White top -->
       <div class="feature-hero__top">
         <div class="landing-container">
-          <nav class="feature-hero__breadcrumb">${breadcrumbHTML}</nav>
+          <nav class="feature-hero__breadcrumb" aria-label="Breadcrumb Navigation">${breadcrumbHTML}</nav>
           ${illustrationHTML}
           <h1 class="hero-new__headline">${escapeHtml(headline)}</h1>
           <p class="hero-new__subheadline">${escapeHtml(subheadline)}</p>

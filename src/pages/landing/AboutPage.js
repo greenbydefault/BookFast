@@ -16,6 +16,7 @@ export const renderAboutPage = () => {
     ${createHero({
       headline: 'Warum wir BookFast gebaut haben.',
       subheadline: 'Wir waren frustriert von den Booking-Lösungen für Webflow. Also haben wir das Tool gebaut, das wir selbst vermisst haben – ohne iFrames, ohne Provision, mit echter Kontrolle.',
+      illustrationAlt: 'Illustration zur Entstehung von BookFast und digitaler Buchungsabwicklung',
       secondaryCTA: '',
       primaryCTA: 'Kostenlos starten',
     })}

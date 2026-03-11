@@ -30,7 +30,7 @@ export const createPricingCard = (config) => {
   const featuresList = planFeatures.length ? planFeatures : [...securityBadges];
   const featuresHTML = featuresList.map((feature) => {
     if (typeof feature === 'object' && feature !== null && feature.icon && feature.label) {
-      return `<li class="landing-pricing-feature-item has-icon"><img src="${iconUrl(feature.icon)}" alt="" class="landing-pricing-feature-icon">${feature.label}</li>`;
+      return `<li class="landing-pricing-feature-item has-icon"><img src="${iconUrl(feature.icon)}" alt="${feature.label}" class="landing-pricing-feature-icon">${feature.label}</li>`;
     }
     return `<li>${feature}</li>`;
   }).join('');
@@ -67,8 +67,8 @@ export const createPricingCard = (config) => {
         </div>
         <div class="landing-pricing-card__header-controls">
           <div class="landing-pricing-toggle-pill" id="pricing-toggle-pill">
-            <button type="button" class="${!isAnnual ? 'is-active' : ''}" data-period="monthly">Monatlich</button>
-            <button type="button" class="${isAnnual ? 'is-active' : ''}" data-period="annual">Jährlich</button>
+            <button type="button" class="${!isAnnual ? 'is-active' : ''}" data-period="monthly" title="Monatliche Abrechnung wählen">Monatlich</button>
+            <button type="button" class="${isAnnual ? 'is-active' : ''}" data-period="annual" title="Jährliche Abrechnung wählen">Jährlich</button>
           </div>
           <span class="landing-pricing-toggle-save">2 Monate gratis</span>
         </div>
@@ -92,12 +92,13 @@ export const createPricingCard = (config) => {
         step="1"
         value="${workspaces || 1}"
         aria-label="Anzahl der Workspaces"
+        title="Anzahl der Workspaces auswählen"
       />
       ${annualHintHTML}
       <div class="landing-pricing-features-grid">
         <ul class="landing-pricing-features">${featuresLeftHTML}</ul>
         <ul class="landing-pricing-features">${featuresRightHTML}</ul>
       </div>
-      <a href="${ctaHref}" class="landing-btn landing-btn-primary landing-pricing-card__btn landing-pricing-card__btn--full">${cta}</a>
+      <a href="${ctaHref}" class="landing-btn landing-btn-primary landing-pricing-card__btn landing-pricing-card__btn--full" title="${cta}">${cta}</a>
     </div>`;
 };

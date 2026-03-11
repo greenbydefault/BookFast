@@ -32,7 +32,7 @@ export const renderFeaturePage = (slug) => {
           <h1 class="landing-h1">Feature nicht gefunden</h1>
           <p class="landing-text-lg">Das Feature "${escapeHtml(slug)}" existiert noch nicht.</p>
           <div class="landing-hero-ctas" style="justify-content: center;">
-            <a href="/features" class="landing-btn landing-btn-secondary" data-landing-link>Alle Features</a>
+            <a href="/features" class="landing-btn landing-btn-secondary" data-landing-link title="Alle Features anzeigen">Alle Features</a>
           </div>
         </div>
       </section>`;
@@ -97,6 +97,7 @@ export const renderFeaturePage = (slug) => {
     headline: page.hero.headline,
     subheadline: page.hero.subheadline,
     illustrationSrc: page.hero.illustration || defaultIllustration,
+    illustrationAlt: `Illustration zum Feature ${page.meta.title} in BookFast`,
     breadcrumb: ['Home', 'Features', page.meta.title],
     demoModuleHTML: demoMod ? demoMod.create() : '',
     demoHint: demoMod ? "Tippe, klicke & probier's aus — ganz ohne Account." : '',

@@ -63,7 +63,7 @@ function renderMessage(title, text, isError) {
     <section style="text-align: center; padding: 8rem 2rem;">
       <h1 style="font-size: 2rem; margin-bottom: 1rem; color: ${isError ? '#dc2626' : 'var(--color-vulcan-900)'};">${title}</h1>
       <p style="color: var(--color-stone-600); font-size: 1.1rem; margin-bottom: 2rem; max-width: 480px; margin-inline: auto; line-height: 1.6;">${text}</p>
-      <a href="/" class="landing-btn landing-btn-primary" data-landing-link>Zur Startseite</a>
+      <a href="/" class="landing-btn landing-btn-primary" data-landing-link title="Zur Startseite wechseln">Zur Startseite</a>
     </section>
   `;
 }

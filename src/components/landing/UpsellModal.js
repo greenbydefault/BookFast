@@ -16,7 +16,7 @@ export const openUpsellModal = () => {
   modalOverlay.innerHTML = `
     <div class="modal-container upsell-modal__container">
       <div class="modal-header upsell-modal__header">
-        <button class="modal-close-btn upsell-modal__close-btn" id="upsell-close-btn" aria-label="Modal schließen"></button>
+        <button class="modal-close-btn upsell-modal__close-btn" id="upsell-close-btn" aria-label="Modal schließen" title="Upsell-Modal schließen"></button>
       </div>
       <div class="modal-content upsell-modal__content">
         <h2 class="upsell-modal__title">Bereit für mehr?</h2>
@@ -25,10 +25,10 @@ export const openUpsellModal = () => {
         </p>
 
         <div class="upsell-modal__actions">
-          <button class="btn btn-primary upsell-modal__register-btn" id="upsell-register-btn">
+          <button class="btn btn-primary upsell-modal__register-btn" id="upsell-register-btn" title="Kostenlos registrieren">
             Kostenlos registrieren
           </button>
-          <button class="btn-text upsell-modal__cancel-btn" id="upsell-cancel-btn">
+          <button class="btn-text upsell-modal__cancel-btn" id="upsell-cancel-btn" title="Zurück zur Demo">
             Zurück zur Demo
           </button>
         </div>

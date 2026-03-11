@@ -27,7 +27,7 @@ export const renderAGBPage = () => {
           <p>Für die Nutzung von BookFast ist eine Registrierung erforderlich. Du bist für die Sicherheit deines Kontos verantwortlich und darfst deine Zugangsdaten nicht an Dritte weitergeben.</p>
 
           <h2 class="landing-h3">§ 4 Preise und Zahlung</h2>
-          <p>Die aktuellen Preise findest du auf unserer <a href="/preise" data-landing-link>Preisseite</a>. Bezahlte Pläne werden monatlich oder jährlich abgerechnet. Alle Preise verstehen sich zzgl. MwSt.</p>
+          <p>Die aktuellen Preise findest du auf unserer <a href="/preise" data-landing-link title="Preisseite öffnen">Preisseite</a>. Bezahlte Pläne werden monatlich oder jährlich abgerechnet. Alle Preise verstehen sich zzgl. MwSt.</p>
 
           <h2 class="landing-h3">§ 5 Kündigung</h2>
           <p>Monatliche Pläne können jederzeit zum Ende des Abrechnungszeitraums gekündigt werden. Jährliche Pläne können zum Ende der Laufzeit gekündigt werden.</p>

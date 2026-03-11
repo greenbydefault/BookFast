@@ -10,7 +10,7 @@
  */
 export const createFeatureCard = ({ icon, title, description, link }) => {
   const tag = link ? 'a' : 'div';
-  const linkAttr = link ? `href="${link}" data-landing-link` : '';
+  const linkAttr = link ? `href="${link}" data-landing-link title="${title}"` : '';
 
   return `
     <${tag} class="landing-feature-card" ${linkAttr}>

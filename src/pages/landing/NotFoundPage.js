@@ -17,10 +17,10 @@ export const renderNotFoundPage = () => {
     <section class="landing-section landing-not-found">
       <div class="landing-container">
         <div class="landing-not-found__inner">
-          <img src="${ILLUSTRATION_URL}" alt="" class="landing-not-found__illustration" loading="eager">
+          <img src="${ILLUSTRATION_URL}" alt="404 Illustration für eine nicht gefundene BookFast Seite" class="landing-not-found__illustration" loading="eager">
           <h1 class="landing-h1">Diese Seite ist leider nicht mehr da.</h1>
           <p class="landing-text">Kein Problem – hier geht's zurück zur Startseite.</p>
-          <a href="/" class="landing-btn landing-btn-primary landing-btn-md" data-landing-link>Zur Startseite</a>
+          <a href="/" class="landing-btn landing-btn-primary landing-btn-md" data-landing-link title="Zur Startseite wechseln">Zur Startseite</a>
         </div>
       </div>
     </section>

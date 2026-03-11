@@ -5,6 +5,7 @@
  */
 import { clearSEO, setCanonical } from './seoHelper.js';
 import { renderNotFoundPage } from '../pages/landing/NotFoundPage.js';
+import { applyLandingAccessibilityTitles } from './landingAccessibility.js';
 
 // Page registry: path → renderFn
 const landingPages = new Map();
@@ -122,6 +123,8 @@ const renderLandingRoute = (path) => {
       link.removeAttribute('aria-current');
     }
   });
+
+  applyLandingAccessibilityTitles(document.getElementById('app'));
 };
 
 /**

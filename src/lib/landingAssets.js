@@ -23,7 +23,18 @@ export const svgAssetUrl = (relativePath) => {
   return new URL(normalized, import.meta.url).href;
 };
 
-export const iconImg = (fileName, alt = '') => `<img src="${iconUrl(fileName)}" alt="${alt}" style="${ICON_IMG_STYLE}" />`;
+const escapeAttr = (value) => String(value || '')
+  .replace(/&/g, '&amp;')
+  .replace(/"/g, '&quot;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;');
+
+export const iconImg = (fileName, alt = '', options = {}) => {
+  const decorative = options.decorative ?? (String(alt || '').trim() === '');
+  const safeAlt = decorative ? '' : escapeAttr(alt);
+  const ariaHidden = decorative ? ' aria-hidden="true"' : '';
+  return `<img src="${iconUrl(fileName)}" alt="${safeAlt}" style="${ICON_IMG_STYLE}"${ariaHidden} />`;
+};
 
 export const resolveSvgAssetUrl = (path) => {
   if (typeof path !== 'string') return '';

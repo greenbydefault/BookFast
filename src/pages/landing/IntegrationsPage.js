@@ -29,6 +29,7 @@ export const renderIntegrationsPage = () => {
     ${createHero({
       headline: 'Integrationen: Tools verbinden statt wechseln.',
       subheadline: 'Webflow, Stripe, Webhooks – BookFast verbindet sich mit den Tools, die du bereits nutzt. Kein iFrame, volle Kontrolle.',
+      illustrationAlt: 'Integrations-Illustration mit Webflow, Stripe und Webhooks in BookFast',
       secondaryCTA: '',
     })}
 

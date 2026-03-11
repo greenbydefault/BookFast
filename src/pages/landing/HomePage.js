@@ -31,6 +31,7 @@ export const renderHomePage = () => {
     ${createHeroNew({
       tagline: 'Buchungen & Zahlungen für Webflow',
       subheadline: 'Workspace-Name eingeben und Live-Demo starten.',
+      illustrationAlt: 'Startseiten-Illustration mit BookFast Demo, Buchungen und Zahlung vor Termin',
       formLabel: 'Workspace-Name',
       formPlaceholder: 'z.B. Alpine Chalets, Studio Nordlicht…',
       formButtonText: 'Live-Demo starten',

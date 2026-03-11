@@ -31,7 +31,7 @@ const createPlaceholder = (title, description) => () => {
             <h1 class="landing-h1">${title}</h1>
             <p class="landing-text-lg">Diese Seite wird bald verfügbar sein.</p>
             <div class="landing-hero-ctas" style="justify-content: center;">
-              <a href="/" class="landing-btn landing-btn-primary" data-landing-link>Zur Startseite</a>
+              <a href="/" class="landing-btn landing-btn-primary" data-landing-link title="Zur Startseite wechseln">Zur Startseite</a>
             </div>
           </div>
         </div>

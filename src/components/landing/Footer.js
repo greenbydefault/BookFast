@@ -46,14 +46,14 @@ export const renderFooter = (container) => {
         <section class="landing-footer-col" aria-label="${column.heading}">
           <h3 class="landing-footer-heading">${column.heading}</h3>
           <ul class="landing-footer-links">
-            ${column.links.map((link) => `<li><a href="${link.href}" data-landing-link>${link.label}</a></li>`).join('')}
+            ${column.links.map((link) => `<li><a href="${link.href}" data-landing-link title="${link.label}">${link.label}</a></li>`).join('')}
           </ul>
         </section>
       `
     )
     .join('');
 
-  const legalLinksHTML = LEGAL_LINKS.map((item) => `<a href="${item.href}" data-landing-link>${item.label}</a>`).join('');
+  const legalLinksHTML = LEGAL_LINKS.map((item) => `<a href="${item.href}" data-landing-link title="${item.label}">${item.label}</a>`).join('');
   const bottomBadgesHTML = BOTTOM_BADGES.map((item) => `<span class="landing-footer-badge">${item}</span>`).join('');
 
   footer.innerHTML = `
@@ -76,8 +76,8 @@ export const renderFooter = (container) => {
       </div>
     </div>
 
-    <div class="landing-footer-stage" aria-hidden="true">
-      <img src="${FOOTER_ILLUSTRATION_URL}" alt="" class="landing-footer-illustration">
+    <div class="landing-footer-stage">
+      <img src="${FOOTER_ILLUSTRATION_URL}" alt="BookFast Footer Illustration mit digitalem Buchungs- und Zahlungsfluss" class="landing-footer-illustration">
     </div>
 
     <div class="landing-container">
