@@ -4,13 +4,17 @@
 import { createHero } from '../../components/landing/Hero.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
 import { iconImg } from '../../lib/landingAssets.js';
-import { setPageMeta } from '../../lib/seoHelper.js';
+import { setPageMeta, setBreadcrumbSchema } from '../../lib/seoHelper.js';
 
 export const renderAboutPage = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
   setPageMeta('Über uns', 'Die Geschichte hinter BookFast – warum wir das Buchungssystem für Webflow gebaut haben.');
+  setBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Über uns', url: '/ueber-uns' },
+  ]);
 
   content.innerHTML = `
     ${createHero({

@@ -372,13 +372,13 @@
   height: 8px;
   border-radius: 999px;
   --pricing-slider-progress: 0%;
-  background: linear-gradient(to right, var(--color-majorelle-blue-500) 0%, var(--color-majorelle-blue-500) var(--pricing-slider-progress), var(--color-stone-100) var(--pricing-slider-progress), var(--color-stone-100) 100%);
+  background: linear-gradient(to right, var(--color-majorelle-blue-900) 0%, var(--color-majorelle-blue-900) var(--pricing-slider-progress), var(--color-stone-100) var(--pricing-slider-progress), var(--color-stone-100) 100%);
   outline: none;
 }
 
 .landing-pricing-workspace-slider--grabber {
   --pricing-thumb-size: 20px;
-  --pricing-thumb-bg: var(--color-majorelle-blue-500);
+  --pricing-thumb-bg: var(--color-majorelle-blue-900);
   --pricing-thumb-border: #fff;
   
 }

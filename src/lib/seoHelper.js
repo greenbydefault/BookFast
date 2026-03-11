@@ -5,6 +5,14 @@
 const BASE_URL = 'https://book-fast.de';
 const DEFAULT_TITLE = 'BookFast – Buchungen in Webflow';
 const DEFAULT_IMAGE = `${BASE_URL}/Logo/logo.png`;
+const ORGANIZATION_ID = `${BASE_URL}/#organization`;
+
+const SCHEMA_SCRIPT_IDS = Object.freeze({
+  faq: 'faq-schema',
+  product: 'product-schema',
+  breadcrumb: 'breadcrumb-schema',
+  contact: 'contact-page-schema',
+});
 
 const upsertMeta = (attrName, attrValue) => {
   let meta = document.querySelector(`meta[${attrName}="${attrValue}"]`);
@@ -16,10 +24,40 @@ const upsertMeta = (attrName, attrValue) => {
   return meta;
 };
 
+const normalizePath = (path) => {
+  if (!path || path === '/index.html') return '/';
+  return path.startsWith('/') ? path : `/${path}`;
+};
+
+const toAbsoluteUrl = (path) => `${BASE_URL}${normalizePath(path)}`;
+
+const upsertJsonLdScript = (id, schema) => {
+  document.getElementById(id)?.remove();
+  if (!schema) return;
+
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = id;
+  script.textContent = JSON.stringify(schema);
+  document.head.appendChild(script);
+};
+
+const parseEuroPrice = (value) => {
+  const numeric = Number(String(value ?? '').replace(',', '.'));
+  return Number.isFinite(numeric) ? numeric.toFixed(2) : null;
+};
+
+const oneYearFromNowIsoDate = () => {
+  const future = new Date();
+  future.setFullYear(future.getFullYear() + 1);
+  return future.toISOString().slice(0, 10);
+};
+
 /**
  * Set page title and meta description
  */
-export const setPageMeta = (title, description) => {
+export const setPageMeta = (title, description, options = {}) => {
+  const { noindex = false } = options;
   const fullTitle = title ? `${title} | BookFast` : DEFAULT_TITLE;
   const desc = description || '';
   const url = `${BASE_URL}${window.location.pathname === '/index.html' ? '/' : window.location.pathname}`;
@@ -27,6 +65,7 @@ export const setPageMeta = (title, description) => {
   document.title = fullTitle;
 
   upsertMeta('name', 'description').content = desc;
+  upsertMeta('name', 'robots').content = noindex ? 'noindex,follow' : 'index,follow';
 
   // Open Graph
   upsertMeta('property', 'og:title').content = fullTitle;
@@ -47,7 +86,7 @@ export const setPageMeta = (title, description) => {
  * Set canonical URL
  */
 export const setCanonical = (path) => {
-  const url = `${BASE_URL}${path}`;
+  const url = toAbsoluteUrl(path);
   let link = document.querySelector('link[rel="canonical"]');
   if (!link) {
     link = document.createElement('link');
@@ -61,9 +100,7 @@ export const setCanonical = (path) => {
  * Inject FAQ Schema JSON-LD
  */
 export const setFAQSchema = (items) => {
-  // Remove previous
-  document.getElementById('faq-schema')?.remove();
-
+  upsertJsonLdScript(SCHEMA_SCRIPT_IDS.faq, null);
   if (!items || items.length === 0) return;
 
   const schema = {
@@ -79,16 +116,137 @@ export const setFAQSchema = (items) => {
     }))
   };
 
-  const script = document.createElement('script');
-  script.type = 'application/ld+json';
-  script.id = 'faq-schema';
-  script.textContent = JSON.stringify(schema);
-  document.head.appendChild(script);
+  upsertJsonLdScript(SCHEMA_SCRIPT_IDS.faq, schema);
+};
+
+/**
+ * Inject Product + Offer JSON-LD for pricing page.
+ */
+export const setProductSchema = (plans) => {
+  upsertJsonLdScript(SCHEMA_SCRIPT_IDS.product, null);
+  if (!Array.isArray(plans) || plans.length === 0) return;
+
+  const priceValidUntil = oneYearFromNowIsoDate();
+  const products = plans.map((plan) => {
+    const monthlyPrice = parseEuroPrice(plan.price);
+    const yearlyPrice = parseEuroPrice(plan.priceAnnual);
+    const offers = [];
+
+    if (monthlyPrice) {
+      offers.push({
+        '@type': 'Offer',
+        name: `${plan.name} monatlich`,
+        price: monthlyPrice,
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        priceValidUntil,
+        category: 'monthly',
+        url: toAbsoluteUrl('/preise'),
+      });
+    }
+
+    if (yearlyPrice) {
+      offers.push({
+        '@type': 'Offer',
+        name: `${plan.name} jährlich`,
+        price: yearlyPrice,
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        priceValidUntil,
+        category: 'yearly',
+        url: toAbsoluteUrl('/preise'),
+      });
+    }
+
+    return {
+      '@type': 'Product',
+      name: `BookFast ${plan.name}`,
+      description: plan.description,
+      brand: {
+        '@type': 'Brand',
+        name: 'BookFast',
+      },
+      offers,
+    };
+  }).filter((product) => product.offers.length > 0);
+
+  if (products.length === 0) return;
+
+  upsertJsonLdScript(SCHEMA_SCRIPT_IDS.product, {
+    '@context': 'https://schema.org',
+    '@graph': products,
+  });
+};
+
+/**
+ * Inject BreadcrumbList JSON-LD.
+ */
+export const setBreadcrumbSchema = (items) => {
+  upsertJsonLdScript(SCHEMA_SCRIPT_IDS.breadcrumb, null);
+  if (!Array.isArray(items) || items.length < 2) return;
+
+  const itemListElement = items
+    .map((item, index) => {
+      const name = item?.name?.trim();
+      if (!name) return null;
+
+      const entry = {
+        '@type': 'ListItem',
+        position: index + 1,
+        name,
+      };
+
+      if (item.url) {
+        entry.item = toAbsoluteUrl(item.url);
+      }
+
+      return entry;
+    })
+    .filter(Boolean);
+
+  if (itemListElement.length < 2) return;
+
+  upsertJsonLdScript(SCHEMA_SCRIPT_IDS.breadcrumb, {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement,
+  });
+};
+
+/**
+ * Inject ContactPage schema for contact route.
+ */
+export const setContactPageSchema = () => {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Kontakt | BookFast',
+    url: toAbsoluteUrl('/kontakt'),
+    mainEntity: {
+      '@type': 'Organization',
+      '@id': ORGANIZATION_ID,
+      name: 'BookFast',
+      url: BASE_URL,
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          contactType: 'customer support',
+          url: toAbsoluteUrl('/kontakt'),
+          email: 'hello@book-fast.de',
+          availableLanguage: ['de'],
+        },
+      ],
+    },
+  };
+
+  upsertJsonLdScript(SCHEMA_SCRIPT_IDS.contact, schema);
 };
 
 /**
  * Clear all SEO tags (for cleanup)
  */
 export const clearSEO = () => {
-  document.getElementById('faq-schema')?.remove();
+  Object.values(SCHEMA_SCRIPT_IDS).forEach((id) => {
+    document.getElementById(id)?.remove();
+  });
 };

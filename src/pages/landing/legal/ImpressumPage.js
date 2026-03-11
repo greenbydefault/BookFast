@@ -1,7 +1,7 @@
 /**
  * Impressum Page
  */
-import { setPageMeta } from '../../../lib/seoHelper.js';
+import { setPageMeta, setBreadcrumbSchema } from '../../../lib/seoHelper.js';
 import { legalConfig } from '../../../data/legalConfig.js';
 
 export const renderImpressumPage = () => {
@@ -9,6 +9,10 @@ export const renderImpressumPage = () => {
   if (!content) return;
 
   setPageMeta('Impressum', 'Impressum von BookFast.');
+  setBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Impressum', url: '/impressum' },
+  ]);
 
   const c = legalConfig;
   content.innerHTML = `

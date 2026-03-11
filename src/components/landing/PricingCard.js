@@ -52,9 +52,10 @@ export const createPricingCard = (config) => {
       ? '/Jahr'
       : '/Monat';
 
-  const annualHintHTML = isAnnual && priceEffectiveMonthly
-    ? `<div class="landing-pricing-annual-hint">≈ ${priceEffectiveMonthly.replace('.', ',')} €/Monat, 2 Monate gratis</div>`
-    : `<div class="landing-pricing-annual-hint">2 Monate gratis</div>`;
+  const annualHintContent = isAnnual && priceEffectiveMonthly
+    ? `≈ ${priceEffectiveMonthly.replace('.', ',')} €/Monat, 2 Monate gratis`
+    : '';
+  const annualHintHTML = `<div class="landing-pricing-annual-hint" ${!annualHintContent ? 'style="display:none"' : ''}>${annualHintContent}</div>`;
 
   const cardModifier = name ? `landing-pricing-card--${name.toLowerCase()}` : '';
   const workspaceMetric = `${workspaces || 1}`;

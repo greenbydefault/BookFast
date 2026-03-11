@@ -8,7 +8,7 @@ import '../../styles/landing/not-found.css';
 const ILLUSTRATION_URL = new URL('../../svg/illustrations/landingpage/404/404.svg', import.meta.url).href;
 
 export const renderNotFoundPage = () => {
-  setPageMeta('Seite nicht gefunden', 'Diese Seite ist leider nicht mehr da. Zurück zur Startseite.');
+  setPageMeta('Seite nicht gefunden', 'Diese Seite ist leider nicht mehr da. Zurück zur Startseite.', { noindex: true });
 
   const content = document.getElementById('landing-content');
   if (!content) return;

@@ -6,7 +6,7 @@ import { createPricingCard } from '../../components/landing/PricingCard.js';
 import { createFeatureRelatedSlider, initFeatureRelatedSlider } from '../../components/landing/FeatureRelatedSlider.js';
 import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
 import { featurePages } from '../../data/features/index.js';
-import { setPageMeta, setFAQSchema } from '../../lib/seoHelper.js';
+import { setPageMeta, setFAQSchema, setProductSchema, setBreadcrumbSchema } from '../../lib/seoHelper.js';
 import { createNumberReel } from '../../lib/animation/numberReel.js';
 
 const FOUNDER_DEAL_ACTIVE = false;
@@ -46,7 +46,7 @@ const PLANS = [
     priceEffectiveMonthly: '13,19',
     workspaces: 3,
     description: 'Mehrere Angebote/Setups, 2–3 Websites, Wachstum.',
-    cta: 'Team wählen',
+    cta: 'Mit Team starten',
   },
   {
     name: 'Agentur',
@@ -55,7 +55,7 @@ const PLANS = [
     priceEffectiveMonthly: '23,59',
     workspaces: 10,
     description: 'Agenturen, Franchise, Portfolio-Betreiber, viele Websites.',
-    cta: 'Agentur wählen',
+    cta: 'Mit Agentur starten',
   },
 ];
 
@@ -122,7 +122,7 @@ function getAnnualHintDisplay(plan, isAnnual) {
   if (isAnnual && plan.priceEffectiveMonthly) {
     return `≈ ${plan.priceEffectiveMonthly.replace('.', ',')} €/Monat, 2 Monate gratis`;
   }
-  return '2 Monate gratis';
+  return '';
 }
 
 export const renderPricingPage = () => {
@@ -131,6 +131,11 @@ export const renderPricingPage = () => {
 
   setPageMeta('Preise', 'BookFast Preise – Mit jedem Plan bekommst du alles. Der einzige Unterschied: die Anzahl der Workspaces.');
   setFAQSchema(PAGE_FAQ);
+  setProductSchema(PLANS);
+  setBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Preise', url: '/preise' },
+  ]);
 
   const founderNoteHTML = FOUNDER_DEAL_ACTIVE
     ? `<div class="landing-pricing-founder-note">
@@ -242,8 +247,9 @@ function initPricingControls(content) {
     if (nodes.periodEl && nodes.periodEl.textContent !== periodText) {
       nodes.periodEl.textContent = periodText;
     }
-    if (nodes.annualHintEl && nodes.annualHintEl.textContent !== annualHintText) {
+    if (nodes.annualHintEl) {
       nodes.annualHintEl.textContent = annualHintText;
+      nodes.annualHintEl.style.display = annualHintText ? '' : 'none';
     }
     if (nodes.ctaEl && nodes.ctaEl.textContent !== activePlan.cta) {
       nodes.ctaEl.textContent = activePlan.cta;

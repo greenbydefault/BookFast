@@ -3,7 +3,7 @@
  */
 import { createFeatureHero } from '../../components/landing/FeatureHero.js';
 import { iconImg } from '../../lib/landingAssets.js';
-import { setPageMeta } from '../../lib/seoHelper.js';
+import { setPageMeta, setBreadcrumbSchema, setContactPageSchema } from '../../lib/seoHelper.js';
 import { supabase } from '../../lib/supabaseClient.js';
 import '../../components/landing/ContactPage.css';
 
@@ -48,6 +48,11 @@ export const renderContactPage = () => {
   if (!content) return;
 
   setPageMeta('Kontakt', 'Kontaktiere das BookFast-Team – wir helfen dir weiter.');
+  setBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Kontakt', url: '/kontakt' },
+  ]);
+  setContactPageSchema();
 
   content.innerHTML = `
     ${createFeatureHero({

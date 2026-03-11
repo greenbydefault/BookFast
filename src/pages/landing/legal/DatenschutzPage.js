@@ -1,7 +1,7 @@
 /**
  * Datenschutz (Privacy Policy) Page
  */
-import { setPageMeta } from '../../../lib/seoHelper.js';
+import { setPageMeta, setBreadcrumbSchema } from '../../../lib/seoHelper.js';
 import { legalConfig } from '../../../data/legalConfig.js';
 
 export const renderDatenschutzPage = () => {
@@ -9,6 +9,10 @@ export const renderDatenschutzPage = () => {
   if (!content) return;
 
   setPageMeta('Datenschutz', 'Datenschutzerklaerung von BookFast.');
+  setBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Datenschutz', url: '/datenschutz' },
+  ]);
 
   const c = legalConfig;
   content.innerHTML = `

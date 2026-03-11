@@ -4,7 +4,7 @@
 import { createHero } from '../../../components/landing/Hero.js';
 import { createFeatureGrid } from '../../../components/landing/FeatureCard.js';
 import { createCTASection } from '../../../components/landing/CTASection.js';
-import { setPageMeta } from '../../../lib/seoHelper.js';
+import { setPageMeta, setBreadcrumbSchema } from '../../../lib/seoHelper.js';
 import { featurePages } from '../../../data/features/index.js';
 import { iconImg } from '../../../lib/landingAssets.js';
 
@@ -36,6 +36,10 @@ export const renderFeaturesHubPage = () => {
   if (!content) return;
 
   setPageMeta('Features', 'Alle BookFast Features im Überblick – Buchungen, Zahlungen, Rechnungen, Analytics und mehr.');
+  setBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Features', url: '/features' },
+  ]);
 
   const categorySections = CATEGORIES.map(cat => {
     const features = cat.slugs.map(slug => {

@@ -8,7 +8,7 @@ import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQ
 import { SHARED_FAQ } from '../../data/faq.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
 import { iconImg } from '../../lib/landingAssets.js';
-import { setPageMeta, setFAQSchema } from '../../lib/seoHelper.js';
+import { setPageMeta, setFAQSchema, setBreadcrumbSchema } from '../../lib/seoHelper.js';
 
 const PAGE_FAQ = [
   { question: 'Was genau ist das BookFast-Widget?', answer: 'Ein Buchungsformular, das nativ in deiner Website lebt – kein iFrame, kein Redirect. Deine Kunden bleiben auf deiner Seite und buchen direkt dort.' },
@@ -24,6 +24,10 @@ export const renderProductPage = () => {
 
   setPageMeta('Produkt', 'BookFast – Das Buchungssystem für Webflow. Widget + Dashboard für Buchungen, Zahlungen, Rechnungen und Analytics.');
   setFAQSchema([...SHARED_FAQ, ...PAGE_FAQ]);
+  setBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Produkt', url: '/produkt' },
+  ]);
 
   content.innerHTML = `
     ${createHero({

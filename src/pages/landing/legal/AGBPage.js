@@ -1,7 +1,7 @@
 /**
  * AGB (Terms of Service) Page
  */
-import { setPageMeta } from '../../../lib/seoHelper.js';
+import { setPageMeta, setBreadcrumbSchema } from '../../../lib/seoHelper.js';
 import { legalConfig } from '../../../data/legalConfig.js';
 
 export const renderAGBPage = () => {
@@ -9,6 +9,10 @@ export const renderAGBPage = () => {
   if (!content) return;
 
   setPageMeta('AGB', 'Allgemeine Geschäftsbedingungen von BookFast.');
+  setBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'AGB', url: '/agb' },
+  ]);
 
   const c = legalConfig;
   content.innerHTML = `

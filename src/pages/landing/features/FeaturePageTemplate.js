@@ -10,7 +10,7 @@ import { createHowItWorksInteractive, initHowItWorksInteractive } from '../../..
 import { createFAQSection, initFAQAccordion } from '../../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../../components/landing/CTASection.js';
 import { createFeatureRelatedSlider, initFeatureRelatedSlider } from '../../../components/landing/FeatureRelatedSlider.js';
-import { setPageMeta, setFAQSchema } from '../../../lib/seoHelper.js';
+import { setPageMeta, setFAQSchema, setBreadcrumbSchema } from '../../../lib/seoHelper.js';
 import { escapeHtml } from '../../../lib/sanitize.js';
 import { svgAssetUrl } from '../../../lib/landingAssets.js';
 import { featurePages } from '../../../data/features/index.js';
@@ -41,6 +41,11 @@ export const renderFeaturePage = (slug) => {
 
   setPageMeta(page.meta.title, page.meta.description);
   setFAQSchema(page.faq || []);
+  setBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Features', url: '/features' },
+    { name: page.meta.title, url: `/features/${slug}` },
+  ]);
 
   // Build journey sections (alternating left/right like Integrations page)
   const journeyHTML = page.journey?.length ? page.journey.map((step, i) => `

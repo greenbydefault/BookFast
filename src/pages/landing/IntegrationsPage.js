@@ -8,7 +8,7 @@ import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQ
 import { SHARED_FAQ } from '../../data/faq.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
 import { iconImg } from '../../lib/landingAssets.js';
-import { setPageMeta, setFAQSchema } from '../../lib/seoHelper.js';
+import { setPageMeta, setFAQSchema, setBreadcrumbSchema } from '../../lib/seoHelper.js';
 
 const PAGE_FAQ = [
   { question: 'Wie binde ich BookFast in Webflow ein?', answer: 'Zwei Wege: Embed-Script (ein Script-Tag in den Body) oder Template-Copy (Booking-Flow direkt in den Webflow Designer einfügen). Beide Varianten sind in unter 5 Minuten eingerichtet.' },
@@ -24,6 +24,10 @@ export const renderIntegrationsPage = () => {
 
   setPageMeta('Integrationen', 'BookFast integriert sich nahtlos mit Webflow, Stripe, Google Calendar und mehr.');
   setFAQSchema([...SHARED_FAQ, ...PAGE_FAQ]);
+  setBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Integrationen', url: '/integrationen' },
+  ]);
 
   content.innerHTML = `
     ${createHero({
