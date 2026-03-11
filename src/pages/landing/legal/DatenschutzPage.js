@@ -2,6 +2,7 @@
  * Datenschutz (Privacy Policy) Page
  */
 import { setPageMeta } from '../../../lib/seoHelper.js';
+import { legalConfig } from '../../../data/legalConfig.js';
 
 export const renderDatenschutzPage = () => {
   const content = document.getElementById('landing-content');
@@ -9,6 +10,7 @@ export const renderDatenschutzPage = () => {
 
   setPageMeta('Datenschutz', 'Datenschutzerklaerung von BookFast.');
 
+  const c = legalConfig;
   content.innerHTML = `
     <section class="landing-section">
       <div class="landing-container-narrow">
@@ -18,7 +20,7 @@ export const renderDatenschutzPage = () => {
           <p><strong>Stand:</strong> 09.03.2026</p>
 
           <h2 class="landing-h3">1. Verantwortlicher</h2>
-          <p>Verantwortlich für die Datenverarbeitung ist der Betreiber von BookFast. Die Kontaktdaten findest du im <a href="/impressum" data-landing-link title="Impressum anzeigen">Impressum</a>.</p>
+          <p>Verantwortlich für die Datenverarbeitung ist ${c.responsibleName}, ${c.responsibleAddress}. Weitere Kontaktdaten findest du im <a href="/impressum" data-landing-link title="Impressum anzeigen">Impressum</a>.</p>
 
           <h2 class="landing-h3">2. Verarbeitete Daten</h2>
           <p>Wir verarbeiten Daten, die du uns mitteilst (z.B. Name, E-Mail, Telefonnummer, Buchungsdaten, Kontaktformular-Inhalte) sowie technische Daten (z.B. Browser, Gerätetyp, Betriebssystem, Zeitstempel).</p>
@@ -56,8 +58,8 @@ export const renderDatenschutzPage = () => {
           </ul>
 
           <h2 class="landing-h3">8. Deine Rechte</h2>
-          <p>Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). Zur Ausübung wende dich an die im Impressum genannten Kontaktdaten.</p>
-          <p class="landing-legal-note"><strong>Beschwerderecht:</strong> Du hast das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Zuständig ist in der Regel die Landesdatenschutzbehörde deines Wohnsitzes oder die des Landes, in dem wir unseren Sitz haben (siehe Impressum).</p>
+          <p>Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). Zur Ausübung wende dich an ${c.responsibleName}, ${c.responsibleAddress}, E-Mail: <a href="mailto:${c.email}">${c.email}</a>.</p>
+          <p class="landing-legal-note"><strong>Beschwerderecht:</strong> Du hast das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Zuständig ist in der Regel die Landesdatenschutzbehörde deines Wohnsitzes oder die des Landes Berlin (Sitz: ${c.cityZip}).</p>
         </div>
       </div>
     </section>

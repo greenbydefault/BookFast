@@ -78,6 +78,7 @@
     { "source": "/update-password.html", "destination": "/update-password.html" },
     { "source": "/private-policies.html", "destination": "/private-policies.html" },
     { "source": "/datenschutzbestimmungen.html", "destination": "/datenschutzbestimmungen.html" },
+    { "source": "/impressum.html", "destination": "/impressum.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
