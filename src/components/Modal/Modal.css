@@ -779,13 +779,17 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: var(--space-16);
+    margin-bottom: 0;
 }
 
 .voucher-code-input {
     flex: 1;
     font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
     letter-spacing: 0.05em;
+}
+
+.voucher-code-input-uppercase {
+    text-transform: uppercase;
 }
 
 .voucher-generate-btn {

@@ -106,16 +106,13 @@
 .landing-faq-answer {
   max-height: 0;
   overflow: hidden;
-  
+  padding: 0 clamp(var(--space-16), 2vw, var(--space-24));
   transition: max-height 0.3s ease;
 }
 
 .landing-faq-item.open .landing-faq-answer {
   max-height: 500px;
-}
-
-.landing-faq-answer-inner {
-  padding: 0 clamp(var(--space-16), 2vw, var(--space-24)) clamp(var(--space-16), 2vw, var(--space-24)) clamp(var(--space-16), 2vw, var(--space-24));
+  padding-bottom: clamp(var(--space-16), 2vw, var(--space-24));
 }
 
 .landing-faq-answer p {
@@ -132,8 +129,12 @@
     font-size: 1rem;
   }
 
-  .landing-faq-answer-inner {
-    padding: 0 1rem 1rem 1rem;
+  .landing-faq-answer {
+    padding: 0 1rem;
+  }
+
+  .landing-faq-item.open .landing-faq-answer {
+    padding-bottom: 1rem;
   }
 }
 

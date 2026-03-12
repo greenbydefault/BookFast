@@ -85,19 +85,22 @@ export const createFAQSection = ({ sharedFaq = [], pageFaq = [], pageTitle = '',
 export const createFAQAccordion = (items) => {
   if (!items || items.length === 0) return '';
 
-  const itemsHTML = items.map((item, i) => `
+  const uid = `landing-faq-${Math.random().toString(36).slice(2, 8)}`;
+  const itemsHTML = items.map((item, i) => {
+    const answerId = `${uid}-answer-${i}`;
+    const questionId = `${uid}-question-${i}`;
+    return `
     <div class="landing-faq-item" data-faq-index="${i}">
-      <button class="landing-faq-question">
+      <button class="landing-faq-question" id="${questionId}" aria-expanded="false" aria-controls="${answerId}">
         <span>${item.question}</span>
         <span class="landing-faq-chevron" aria-hidden="true"></span>
       </button>
-      <div class="landing-faq-answer">
-        <div class="landing-faq-answer-inner">
-          <p>${item.answer}</p>
-        </div>
+      <div class="landing-faq-answer" id="${answerId}" role="region" aria-labelledby="${questionId}" aria-hidden="true">
+        <p>${item.answer}</p>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   return `<div class="landing-faq-list">${itemsHTML}</div>`;
 };
@@ -108,14 +111,34 @@ export const createFAQAccordion = (items) => {
  */
 export const initFAQAccordion = (container) => {
   const items = container.querySelectorAll('.landing-faq-item');
+  const closeItem = (item) => {
+    item.classList.remove('open');
+    const btn = item.querySelector('.landing-faq-question');
+    const answer = item.querySelector('.landing-faq-answer');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    if (answer) answer.setAttribute('aria-hidden', 'true');
+  };
+
+  const openItem = (item) => {
+    item.classList.add('open');
+    const btn = item.querySelector('.landing-faq-question');
+    const answer = item.querySelector('.landing-faq-answer');
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+    if (answer) answer.setAttribute('aria-hidden', 'false');
+  };
+
   items.forEach(item => {
     const btn = item.querySelector('.landing-faq-question');
+    const answer = item.querySelector('.landing-faq-answer');
+    if (!btn || !answer) return;
+
+    btn.setAttribute('aria-expanded', 'false');
+    answer.setAttribute('aria-hidden', 'true');
+
     btn.addEventListener('click', () => {
       const isOpen = item.classList.contains('open');
-      // Close all
-      items.forEach(i => i.classList.remove('open'));
-      // Toggle current
-      if (!isOpen) item.classList.add('open');
+      items.forEach((entry) => closeItem(entry));
+      if (!isOpen) openItem(item);
     });
   });
 };

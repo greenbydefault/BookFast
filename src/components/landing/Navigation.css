@@ -254,6 +254,12 @@
   display: block;
 }
 
+.landing-nav-mobile-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .landing-nav-mobile-menu a {
   display: block;
   padding: 0.875rem 0;

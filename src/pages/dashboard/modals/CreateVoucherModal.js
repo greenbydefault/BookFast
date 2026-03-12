@@ -24,7 +24,6 @@ const getInitialState = () => ({
     validUntil: '',
     maxUsesTotal: null,
     maxUsesPerCustomer: null,
-    maxUsesPerCustomer: null,
     isDraft: false,
     services: [], // loaded services
     selectedServices: new Set(), // IDs of selected services
@@ -140,90 +139,88 @@ export const openCreateVoucherModal = async (onSuccess) => {
         const currentType = DISCOUNT_TYPES.find(t => t.id === state.discountType);
 
         contentContainer.innerHTML = `
-            <!-- Name Input (Optional) -->
-            <input type="text" class="modal-form-input modal-input-large" 
-                   placeholder="z. B. Frühbucher-Rabatt oder Neukunden-Gutschein"
-                   value="${state.name}" id="input-name">
+            <div class="modal-content-section">
+                <input type="text" class="modal-form-input modal-input-large"
+                    placeholder="z. B. Frühbucher-Rabatt oder Neukunden-Gutschein"
+                    value="${state.name}" id="input-name">
 
-            <div class="modal-separator"></div>
-
-            <!-- Gutscheincode -->
-            <label class="modal-label modal-form-label">Gutscheincode</label>
-            <div class="voucher-code-input-wrapper">
-                <input type="text" class="modal-form-input voucher-code-input" 
-                       placeholder="WELCOME25"
-                       value="${state.code}" id="input-code" style="text-transform: uppercase;">
-                <button type="button" class="voucher-generate-btn" id="btn-generate-code" title="Code generieren">
-                    ${getIconString('refresh-cw')}
-                </button>
-            </div>
-
-            <!-- Wert (Discount Value) -->
-            <div class="modal-row">
-                <div class="modal-label">${getIconString('coins')} Wert</div>
-                <div class="modal-controls addon-price-controls">
-                    <select class="price-type-select" id="input-discount-type">
-                        ${DISCOUNT_TYPES.map(type => `
-                            <option value="${type.id}" ${state.discountType === type.id ? 'selected' : ''}>
-                                ${type.label}
-                            </option>
-                        `).join('')}
-                    </select>
-                    <input type="number" class="price-amount-input" value="${state.discountValue}" id="input-discount-value" step="1" min="0">
-                    <span class="price-currency">${currentType.suffix}</span>
-                </div>
-            </div>
-
-            <!-- Service auswählen -->
-            <div class="modal-row" style="align-items: flex-start;">
-                <div class="modal-label">${getIconString('briefcase')} Service auswählen</div>
-                <div class="modal-controls" style="flex-direction: column; gap: 8px; width: 100%;">
-                    <div id="services-multiselect-container" style="width: 100%; ${state.appliesToAll ? 'opacity: 0.5; pointer-events: none;' : ''}"></div>
-                </div>
-            </div>
-
-            <!-- Gilt für alle Services (separate toggle row) -->
-            <div class="modal-row">
-                <div class="modal-label">${getIconString('globe')} Gilt für alle Services</div>
-                <div class="modal-controls">
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="input-applies-all" ${state.appliesToAll ? 'checked' : ''}>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Gültig bis (Optional) -->
-            <div class="modal-row">
-                <div class="modal-label">${getIconString('calender-days-date')} Gültig bis<span class="modal-label-optional">(Optional)</span></div>
-                <div class="modal-controls">
-                    <div class="date-input-group">
-                        <input type="date" class="date-input" value="${state.validUntil}" id="input-valid-until">
-                        <button class="date-clear" type="button" id="btn-clear-date">×</button>
+                <div class="modal-form-field">
+                    <label class="modal-label modal-form-label">Gutscheincode</label>
+                    <div class="voucher-code-input-wrapper">
+                        <input type="text" class="modal-form-input voucher-code-input voucher-code-input-uppercase"
+                            placeholder="WELCOME25"
+                            value="${state.code}" id="input-code">
+                        <button type="button" class="voucher-generate-btn" id="btn-generate-code" title="Code generieren">
+                            ${getIconString('refresh-cw')}
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Max. Einlösungen insgesamt (Optional) -->
-            <div class="modal-row">
-                <div class="modal-label">${getIconString('hash')} Max. Einlösungen insgesamt<span class="modal-label-optional">(Optional)</span></div>
-                <div class="modal-controls">
-                    <div class="stepper-input">
-                        <button type="button" class="stepper-btn" data-action="increment" data-key="maxUsesTotal">+</button>
-                        <input type="number" class="stepper-value" value="${state.maxUsesTotal ?? ''}" id="input-max-uses" placeholder="∞" min="1">
-                        <button type="button" class="stepper-btn" data-action="decrement" data-key="maxUsesTotal">−</button>
+            <div class="modal-content-section">
+                <div class="modal-row">
+                    <div class="modal-label">${getIconString('coins')} Wert</div>
+                    <div class="modal-controls addon-price-controls">
+                        <select class="price-type-select" id="input-discount-type">
+                            ${DISCOUNT_TYPES.map(type => `
+                                <option value="${type.id}" ${state.discountType === type.id ? 'selected' : ''}>
+                                    ${type.label}
+                                </option>
+                            `).join('')}
+                        </select>
+                        <input type="number" class="price-amount-input" value="${state.discountValue}" id="input-discount-value" step="1" min="0">
+                        <span class="price-currency">${currentType.suffix}</span>
+                    </div>
+                </div>
+
+                <div class="modal-row">
+                    <div class="modal-label">${getIconString('globe')} Gilt für alle Services</div>
+                    <div class="modal-controls">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="input-applies-all" ${state.appliesToAll ? 'checked' : ''}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-row modal-row-align-start">
+                    <div class="modal-label">${getIconString('briefcase')} Service auswählen</div>
+                    <div class="modal-controls modal-controls-column-start">
+                        <div id="services-multiselect-container" class="modal-control-fill ${state.appliesToAll ? 'modal-control-disabled' : ''}"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Max. Einlösungen pro Kunde (Optional) -->
-            <div class="modal-row">
-                <div class="modal-label">${getIconString('user')} Max. Einlösungen pro Kunde<span class="modal-label-optional">(Optional)</span></div>
-                <div class="modal-controls">
-                    <div class="stepper-input">
-                        <button type="button" class="stepper-btn" data-action="increment" data-key="maxUsesPerCustomer">+</button>
-                        <input type="number" class="stepper-value" value="${state.maxUsesPerCustomer ?? ''}" id="input-max-per-customer" placeholder="∞" min="1">
-                        <button type="button" class="stepper-btn" data-action="decrement" data-key="maxUsesPerCustomer">−</button>
+            <div class="modal-content-section">
+                <div class="modal-row">
+                    <div class="modal-label">${getIconString('calender-days-date')} Gültig bis<span class="modal-label-optional">(Optional)</span></div>
+                    <div class="modal-controls">
+                        <div class="date-input-group">
+                            <input type="date" class="date-input" value="${state.validUntil}" id="input-valid-until">
+                            <button class="date-clear" type="button" id="btn-clear-date">×</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-row">
+                    <div class="modal-label">${getIconString('hash')} Max. Einlösungen insgesamt<span class="modal-label-optional">(Optional)</span></div>
+                    <div class="modal-controls">
+                        <div class="stepper-input">
+                            <button type="button" class="stepper-btn" data-action="increment" data-key="maxUsesTotal">+</button>
+                            <input type="number" class="stepper-value" value="${state.maxUsesTotal ?? ''}" id="input-max-uses" placeholder="∞" min="1">
+                            <button type="button" class="stepper-btn" data-action="decrement" data-key="maxUsesTotal">−</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-row">
+                    <div class="modal-label">${getIconString('user')} Max. Einlösungen pro Kunde<span class="modal-label-optional">(Optional)</span></div>
+                    <div class="modal-controls">
+                        <div class="stepper-input">
+                            <button type="button" class="stepper-btn" data-action="increment" data-key="maxUsesPerCustomer">+</button>
+                            <input type="number" class="stepper-value" value="${state.maxUsesPerCustomer ?? ''}" id="input-max-per-customer" placeholder="∞" min="1">
+                            <button type="button" class="stepper-btn" data-action="decrement" data-key="maxUsesPerCustomer">−</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -345,7 +342,6 @@ export const openCreateVoucherModal = async (onSuccess) => {
 
     const renderContent = () => {
         const div = document.createElement('div');
-        div.className = 'voucher-modal-content';
         contentContainer = div;
         renderFormContent();
         return div;

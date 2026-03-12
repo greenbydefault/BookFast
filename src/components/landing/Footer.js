@@ -58,9 +58,9 @@ export const renderFooter = (container) => {
 
   footer.innerHTML = `
     <div class="landing-container">
-      <header class="landing-footer-header">
+      <div class="landing-footer-header">
         <h2 class="landing-footer-title">Probiere BookFast noch heute und entdecke alle Moeglichkeiten.</h2>
-      </header>
+      </div>
 
       <div class="landing-footer-links-zone">
         <div class="landing-footer-main">

@@ -123,9 +123,11 @@ export const renderNavigation = (container, options = {}) => {
       </button>
     </div>
     <div class="landing-nav-mobile-menu" id="mobile-menu">
-      <a href="/produkt" data-landing-link title="Produkt">Produkt</a>
-      <a href="/features" data-landing-link title="Features">Features</a>
-      <a href="/preise" data-landing-link title="Preise">Preise</a>
+      <ul class="landing-nav-mobile-links" aria-label="Mobile Navigation">
+        <li><a href="/produkt" data-landing-link title="Produkt">Produkt</a></li>
+        <li><a href="/features" data-landing-link title="Features">Features</a></li>
+        <li><a href="/preise" data-landing-link title="Preise">Preise</a></li>
+      </ul>
       <div style="padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
         ${isLoggedIn
           ? `<a href="/dashboard/bookings" class="landing-btn landing-btn-secondary" style="text-align:center;" title="Zum Dashboard wechseln"><span class="landing-btn__icon">${getIconString('arrow-right', 'landing-btn-icon-svg')}</span><span class="landing-btn__text">Zum Dashboard</span></a>`

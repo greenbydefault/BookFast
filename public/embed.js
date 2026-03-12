@@ -159,21 +159,21 @@
         s.textContent = [
             // Calendar
             '.bf-cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}',
-            '.bf-cal-header button{background:none;border:none;cursor:pointer;padding:.4rem .8rem;font:inherit;border-radius:6px}',
+            '.bf-cal-header button{background:none;border:none;cursor:pointer;padding:.4rem .8rem;font:inherit;border-radius:.375rem}',
             '.bf-cal-header button:hover{background:rgba(0,0,0,.05)}',
             '.bf-cal-grid{user-select:none}',
-            '.bf-cal-weekdays,.bf-cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}',
+            '.bf-cal-weekdays,.bf-cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:.125rem;text-align:center}',
             '.bf-cal-weekdays span{padding:.4rem;font-size:.8rem;font-weight:600;opacity:.6}',
-            '.bf-day{min-width:40px;min-height:40px;padding:0;border:none;border-radius:50%;background:none;cursor:pointer;font:inherit;display:flex;align-items:center;justify-content:center;transition:background .15s,opacity .15s}',
+            '.bf-day{min-width:2.5rem;min-height:2.5rem;padding:0;border:none;border-radius:50%;background:none;cursor:pointer;font:inherit;display:flex;align-items:center;justify-content:center;transition:background .15s,opacity .15s}',
             '.bf-day:hover:not(:disabled){background:rgba(0,0,0,.06)}',
             '.bf-day:disabled{cursor:default}',
             '.bf-day-other{visibility:hidden}',
             '.bf-day-disabled{opacity:.25;cursor:default}',
             '.bf-day-selected{font-weight:700;background:rgba(0,0,0,.1);border-radius:50%}',
             '.bf-day-range{background:rgba(0,0,0,.04)}',
-            '.bf-day-today{outline:2px solid currentColor;outline-offset:-2px}',
+            '.bf-day-today{outline:.125rem solid currentColor;outline-offset:-.125rem}',
             // Timeslots
-            '.bf-slot{display:inline-flex;align-items:center;justify-content:center;min-width:64px;padding:.5rem .75rem;border:1px solid #d1d5db;border-radius:6px;background:none;cursor:pointer;font:inherit;margin:0 6px 6px 0;transition:background .15s,opacity .15s}',
+            '.bf-slot{display:inline-flex;align-items:center;justify-content:center;min-width:4rem;padding:.5rem .75rem;border:.0625rem solid #d1d5db;border-radius:.375rem;background:none;cursor:pointer;font:inherit;margin:0 .375rem .375rem 0;transition:background .15s,opacity .15s}',
             '.bf-slot:hover:not(:disabled){background:rgba(0,0,0,.05)}',
             '.bf-slot-disabled{opacity:.3;cursor:default;text-decoration:line-through}',
             '.bf-slot-selected{font-weight:700;border-color:currentColor;background:rgba(0,0,0,.06)}',
@@ -181,33 +181,42 @@
             // Radio / Checkbox (dynamic service & staff lists)
             '.bf-radio,.bf-checkbox{display:block;cursor:pointer;padding:.5rem 0}',
             // Addon cards
-            '.bf-addon-card{border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin-bottom:8px;background:#fafafa}',
+            '.bf-addon-card{border:.0625rem solid #e5e7eb;border-radius:.5rem;padding:.75rem;margin-bottom:.5rem;background:#fafafa}',
             '.bf-addon-card.active{border-color:#2563eb;background:#eff6ff}',
-            '.bf-addon-header{display:flex;align-items:center;gap:8px;cursor:pointer}',
+            '.bf-addon-header{display:flex;align-items:center;gap:.5rem;cursor:pointer}',
             '.bf-addon-header input{margin:0}',
-            '.bf-addon-body{margin-top:8px;padding-left:24px}',
-            '.bf-addon-item{margin-bottom:6px}',
-            '.bf-addon-item-label{font-size:.85rem;font-weight:500;margin-bottom:4px}',
-            '.bf-variant-radios label{display:block;padding:2px 0;font-size:.85rem;cursor:pointer}',
-            '.bf-variant-radios input{margin-right:6px}',
-            '.bf-variant-select{padding:4px 8px;border:1px solid #d1d5db;border-radius:4px;font-size:.85rem}',
+            '.bf-addon-body{margin-top:.5rem;padding-left:1.5rem}',
+            '.bf-addon-item{margin-bottom:.375rem}',
+            '.bf-addon-item-label{font-size:.85rem;font-weight:500;margin-bottom:.25rem}',
+            '.bf-variant-radios label{display:block;padding:.125rem 0;font-size:.85rem;cursor:pointer}',
+            '.bf-variant-radios input{margin-right:.375rem}',
+            '.bf-variant-select{padding:.25rem .5rem;border:.0625rem solid #d1d5db;border-radius:.25rem;font-size:.85rem}',
             // Quantity controls
-            '.bf-qty-row{display:flex;align-items:center;gap:6px;margin-top:4px}',
-            '.bf-qty-btn{width:28px;height:28px;border:1px solid #d1d5db;border-radius:4px;background:#fff;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}',
+            '.bf-qty-row{display:flex;align-items:center;gap:.375rem;margin-top:.25rem}',
+            '.bf-qty-btn{width:2.75rem;height:2.75rem;border:.0625rem solid #d1d5db;border-radius:.375rem;background:#fff;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}',
             '.bf-qty-btn:hover{background:#f3f4f6}',
-            '.bf-qty-val{min-width:24px;text-align:center;font-size:.9rem}',
+            '.bf-qty-val{min-width:2ch;text-align:center;font-size:.95rem;font-weight:600}',
             // Guest count
-            '.bf-guest-count{margin-bottom:12px}',
-            '.bf-guest-block{padding:10px 0;border-top:1px solid #e5e7eb}',
+            '.bf-guest-count{margin-bottom:.75rem}',
+            '.bf-guest-block{padding:.625rem 0;border-top:.0625rem solid #e5e7eb}',
             '.bf-guest-block:first-child{border-top:none;padding-top:0}',
-            '.bf-guest-label{font-weight:600;font-size:.9rem;margin-bottom:6px;color:#1e40af}',
+            '.bf-guest-label{font-weight:600;font-size:.9rem;margin-bottom:.375rem;color:#1e40af}',
             // Summary layout
             '.bf-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:2rem}',
-            '@media(max-width:768px){.bf-grid-2{grid-template-columns:1fr}}',
+            '@media(max-width:48em){.bf-grid-2{grid-template-columns:1fr}}',
             '.bf-form-group{margin-bottom:1rem}',
             '.bf-form-label{display:block;font-size:.9rem;font-weight:500;margin-bottom:.4rem}',
-            '.bf-input{width:100%;padding:.6rem;border:1px solid #d1d5db;border-radius:6px;font-size:1rem;box-sizing:border-box}',
+            '.bf-input{width:100%;padding:.6rem;border:.0625rem solid #d1d5db;border-radius:.375rem;font-size:1rem;box-sizing:border-box}',
             '.bf-row-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}',
+            // Step progress + inline errors
+            '.bf-step-progress{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1rem;padding:0;list-style:none}',
+            '.bf-step-progress-item{display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .65rem;border:.0625rem solid #d1d5db;border-radius:999rem;font-size:.85rem;color:#52525b;background:#fff}',
+            '.bf-step-progress-item::before{content:attr(data-step);display:inline-flex;align-items:center;justify-content:center;min-width:1.5rem;min-height:1.5rem;border-radius:50%;background:#e4e4e7;color:#18181b;font-size:.75rem;font-weight:700}',
+            '.bf-step-progress-item.is-complete{border-color:#86efac;background:#f0fdf4;color:#166534}',
+            '.bf-step-progress-item.is-complete::before{background:#16a34a;color:#fff}',
+            '.bf-step-progress-item.is-current{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;font-weight:600}',
+            '.bf-step-progress-item.is-current::before{background:#2563eb;color:#fff}',
+            '.bf-init-error{margin:0 0 .75rem;padding:.6rem .75rem;border:.0625rem solid #fecaca;background:#fef2f2;color:#991b1b;border-radius:.375rem;font-size:.92rem}',
             // Date info & availability
             '.bf-dateinfo{margin:.75rem 0}',
             '.bf-avail-status[data-status="available"]{color:#16a34a}',
@@ -220,7 +229,76 @@
     // --- DOM-Helpers ---
     const $ = s => root?.querySelector(s);
     const $$ = s => root?.querySelectorAll(s) || [];
-    const show = n => { state.step = n; $$('[data-bf-step]').forEach(e => e.style.display = e.dataset.bfStep === String(n) ? 'block' : 'none'); };
+    const getStepEntries = () => Array.from($$('[data-bf-step]'))
+        .map(el => ({ id: String(el.dataset.bfStep || ''), el }))
+        .filter(x => x.id && x.id !== 'success')
+        .sort((a, b) => Number(a.id) - Number(b.id));
+
+    const ensureProgress = () => {
+        if ($('[data-bf-step-progress]')) return;
+        const steps = getStepEntries().filter(x => /^\d+$/.test(x.id));
+        if (!steps.length) return;
+        const progress = document.createElement('ol');
+        progress.className = 'bf-step-progress';
+        progress.setAttribute('data-bf-step-progress', 'true');
+
+        steps.forEach(({ id, el }) => {
+            const titleEl = el.querySelector('h1,h2,h3,h4,[data-bf-step-title]');
+            const item = document.createElement('li');
+            item.className = 'bf-step-progress-item';
+            item.setAttribute('data-step', id);
+            item.setAttribute('data-bf-progress-step', id);
+            item.textContent = titleEl?.textContent?.trim() || `Schritt ${id}`;
+            progress.appendChild(item);
+        });
+
+        root.prepend(progress);
+    };
+
+    const setInitError = (message) => {
+        let err = $('[data-bf-init-error]');
+        if (!err) {
+            err = document.createElement('div');
+            err.className = 'bf-init-error';
+            err.setAttribute('data-bf-init-error', 'true');
+            err.setAttribute('role', 'alert');
+            root.prepend(err);
+        }
+        err.textContent = message;
+        err.style.display = 'block';
+    };
+
+    const clearInitError = () => {
+        const err = $('[data-bf-init-error]');
+        if (err) err.style.display = 'none';
+    };
+
+    const updateProgress = () => {
+        const current = Number(state.step);
+        $$('[data-bf-progress-step]').forEach(item => {
+            const stepNo = Number(item.getAttribute('data-bf-progress-step'));
+            item.classList.remove('is-current', 'is-complete');
+
+            if (state.step === 'success') {
+                item.classList.add('is-complete');
+                return;
+            }
+
+            if (!Number.isNaN(current) && stepNo < current) item.classList.add('is-complete');
+            if (!Number.isNaN(current) && stepNo === current) item.classList.add('is-current');
+        });
+    };
+
+    const show = n => {
+        const target = String(n);
+        const steps = $$('[data-bf-step]');
+        if (!steps.length) return;
+        const exists = Array.from(steps).some(e => e.dataset.bfStep === target);
+        const next = exists ? target : '1';
+        state.step = next;
+        steps.forEach(e => { e.style.display = e.dataset.bfStep === next ? 'block' : 'none'; });
+        updateProgress();
+    };
 
     const isStepEmpty = (stepId) => {
         const stepEl = $(`[data-bf-step="${stepId}"]`);
@@ -440,7 +518,7 @@
         const gc = state.sel.guestCount;
         let html = `<div class="bf-guest-count">
             <p><strong>Anzahl Gäste</strong>${max < 99 ? ` <small>(Max: ${max})</small>` : ''}</p>
-            <div class="bf-qty-row" style="margin-bottom:16px">
+            <div class="bf-qty-row" style="margin-bottom:1rem">
                 <button class="bf-qty-btn" id="bf-gc-minus" type="button" ${gc <= 1 ? 'disabled' : ''}>−</button>
                 <span class="bf-qty-val" id="bf-gc-val">${gc}</span>
                 <button class="bf-qty-btn" id="bf-gc-plus" type="button" ${gc >= max ? 'disabled' : ''}>+</button>
@@ -471,7 +549,7 @@
                         html += `<div class="bf-addon-item-label">${item.name || 'Artikel'}</div>`;
 
                         if (item.selection_mode === 'single_choice' && item.addon_item_variants?.length) {
-                            html += `<select class="bf-variant-select" data-addon="${a.id}" data-guest="${guestIdx}" data-item="${ii}" style="width:100%;margin-top:4px">`;
+                            html += `<select class="bf-variant-select" data-addon="${a.id}" data-guest="${guestIdx}" data-item="${ii}" style="width:100%;margin-top:.25rem">`;
                             item.addon_item_variants.forEach((v, vi) => {
                                 const selected = itemSel.variant === v.name ? ' selected' : (vi === 0 && !itemSel.variant ? ' selected' : '');
                                 html += `<option value="${v.name}"${selected}>${v.name}</option>`;
@@ -1056,6 +1134,9 @@
         root = document.querySelector('[data-bf-root="true"]');
         if (!root) return;
         css();
+        ensureProgress();
+        show(1);
+        clearInitError();
 
         // Stripe-Rueckkehr: URL-Parameter pruefen (Zero-Storage)
         const params = new URLSearchParams(location.search);
@@ -1077,7 +1158,10 @@
         }
 
         const d = await rpc('get_widget_data', { p_site_id: siteId });
-        if (!d || d.error) return;
+        if (!d || d.error) {
+            setInitError('Buchungsdaten konnten nicht geladen werden. Bitte Seite neu laden oder spaeter erneut versuchen.');
+            return;
+        }
         state.data = d;
 
         fetch(`${API}/rest/v1/rpc/ping_site`, {

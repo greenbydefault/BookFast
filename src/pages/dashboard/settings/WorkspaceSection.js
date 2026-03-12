@@ -901,21 +901,21 @@ const getWebflowTemplate = () => {
     return id;
   };
 
-  defClass('bf-root', 'max-width: 640px; margin-left: auto; margin-right: auto; font-family: inherit;');
+  defClass('bf-root', 'max-width: 40rem; margin-left: auto; margin-right: auto; font-family: inherit;');
   defClass('bf-form', 'display: flex; flex-direction: column;');
-  defClass('bf-step', 'padding-top: 20px; padding-bottom: 20px;');
+  defClass('bf-step', 'padding-top: 1.25rem; padding-bottom: 1.25rem;');
   defClass('bf-step-title', 'font-size: 1.25rem; font-weight: 600; margin-bottom: 1.25rem; margin-top: 0;');
   defClass('bf-label', 'display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem;');
-  defClass('bf-select', 'width: 100%; padding-top: 0.6rem; padding-bottom: 0.6rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; font-size: 1rem; background-color: #fff; margin-bottom: 1rem;');
-  defClass('bf-dynamic-area', 'margin-top: 0.75rem; margin-bottom: 0.75rem; min-height: 40px;');
-  defClass('bf-nav', 'display: flex; align-items: center; gap: 12px; margin-top: 1.5rem;');
-  defClass('bf-btn-next', 'display: inline-block; padding-top: 0.65rem; padding-bottom: 0.65rem; padding-left: 1.5rem; padding-right: 1.5rem; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; font-weight: 600; font-size: 0.95rem; text-decoration: none; cursor: pointer; background-color: #18181b; color: #fff;');
-  defClass('bf-btn-back', 'display: inline-block; padding-top: 0.65rem; padding-bottom: 0.65rem; padding-left: 1.25rem; padding-right: 1.25rem; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; font-weight: 500; font-size: 0.95rem; text-decoration: none; cursor: pointer; background-color: transparent; color: #71717a;');
-  defClass('bf-voucher-row', 'display: flex; align-items: center; gap: 8px; margin-top: 0.75rem; margin-bottom: 0.5rem;');
-  defClass('bf-voucher-input', 'flex-grow: 1; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; font-size: 0.95rem;');
-  defClass('bf-btn-voucher', 'display: inline-block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; font-weight: 500; font-size: 0.9rem; text-decoration: none; cursor: pointer; background-color: #f4f4f5; color: #18181b;');
+  defClass('bf-select', 'width: 100%; padding-top: 0.6rem; padding-bottom: 0.6rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 1rem; background-color: #fff; margin-bottom: 1rem;');
+  defClass('bf-dynamic-area', 'margin-top: 0.75rem; margin-bottom: 0.75rem; min-height: 2.5rem;');
+  defClass('bf-nav', 'display: flex; align-items: center; gap: 0.75rem; margin-top: 1.5rem;');
+  defClass('bf-btn-next', 'display: inline-block; padding-top: 0.65rem; padding-bottom: 0.65rem; padding-left: 1.5rem; padding-right: 1.5rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 600; font-size: 0.95rem; text-decoration: none; cursor: pointer; background-color: #18181b; color: #fff;');
+  defClass('bf-btn-back', 'display: inline-block; padding-top: 0.65rem; padding-bottom: 0.65rem; padding-left: 1.25rem; padding-right: 1.25rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 500; font-size: 0.95rem; text-decoration: none; cursor: pointer; background-color: transparent; color: #71717a;');
+  defClass('bf-voucher-row', 'display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; margin-bottom: 0.5rem;');
+  defClass('bf-voucher-input', 'flex-grow: 1; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 0.95rem;');
+  defClass('bf-btn-voucher', 'display: inline-block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 500; font-size: 0.9rem; text-decoration: none; cursor: pointer; background-color: #f4f4f5; color: #18181b;');
   defClass('bf-total-display', 'margin-top: 0.75rem; font-size: 1.1rem; font-weight: 600;');
-  defClass('bf-submit', 'width: 100%; padding-top: 0.75rem; padding-bottom: 0.75rem; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; font-weight: 600; font-size: 1rem; cursor: pointer; background-color: #18181b; color: #fff; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; margin-top: 1rem;');
+  defClass('bf-submit', 'width: 100%; padding-top: 0.75rem; padding-bottom: 0.75rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 600; font-size: 1rem; cursor: pointer; background-color: #18181b; color: #fff; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; margin-top: 1rem;');
   defClass('bf-success', 'text-align: center; padding-top: 3rem; padding-bottom: 3rem;');
   defClass('bf-success-icon', 'font-size: 3rem; margin-bottom: 1rem;');
   defClass('bf-success-title', 'font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; margin-top: 0;');
@@ -974,7 +974,7 @@ const getWebflowTemplate = () => {
     { "_id": ids.step1BtnText, "text": true, "v": "Weiter" },
 
     // Step 2: Service
-    { "_id": ids.step2, "tag": "div", "classes": c('bf-step'), "children": [ids.step2Title, ids.servicesContainer, ids.staffContainer, ids.step2Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "2", "style": "display: none;" } } },
+    { "_id": ids.step2, "tag": "div", "classes": c('bf-step'), "children": [ids.step2Title, ids.servicesContainer, ids.staffContainer, ids.step2Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "2" } } },
     { "_id": ids.step2Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step2TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step2TitleText, "text": true, "v": "Service wählen" },
     { "_id": ids.servicesContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "services" } } },
@@ -986,7 +986,7 @@ const getWebflowTemplate = () => {
     { "_id": ids.step2BtnBackText, "text": true, "v": "Zurück" },
 
     // Step 3: Date & Time
-    { "_id": ids.step3, "tag": "div", "classes": c('bf-step'), "children": [ids.step3Title, ids.calendarContainer, ids.timeslotsContainer, ids.dateInfoContainer, ids.step3Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "3", "style": "display: none;" } } },
+    { "_id": ids.step3, "tag": "div", "classes": c('bf-step'), "children": [ids.step3Title, ids.calendarContainer, ids.timeslotsContainer, ids.dateInfoContainer, ids.step3Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "3" } } },
     { "_id": ids.step3Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step3TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step3TitleText, "text": true, "v": "Datum & Zeit" },
     { "_id": ids.calendarContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "calendar" } } },
@@ -999,7 +999,7 @@ const getWebflowTemplate = () => {
     { "_id": ids.step3BtnBackText, "text": true, "v": "Zurück" },
 
     // Step 4: Addons
-    { "_id": ids.step4, "tag": "div", "classes": c('bf-step'), "children": [ids.step4Title, ids.addonsContainer, ids.step4Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "4", "style": "display: none;" } } },
+    { "_id": ids.step4, "tag": "div", "classes": c('bf-step'), "children": [ids.step4Title, ids.addonsContainer, ids.step4Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "4" } } },
     { "_id": ids.step4Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step4TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step4TitleText, "text": true, "v": "Extras hinzufügen" },
     { "_id": ids.addonsContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "addons" } } },
@@ -1010,7 +1010,7 @@ const getWebflowTemplate = () => {
     { "_id": ids.step4BtnBackText, "text": true, "v": "Zurück" },
 
     // Step 5: Summary
-    { "_id": ids.step5, "tag": "div", "classes": c('bf-step'), "children": [ids.step5Title, ids.summaryContainer, ids.voucherLabel, ids.voucherRow, ids.voucherStatus, ids.totalDisplay, ids.submitBtn, ids.step5Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "5", "style": "display: none;" } } },
+    { "_id": ids.step5, "tag": "div", "classes": c('bf-step'), "children": [ids.step5Title, ids.summaryContainer, ids.voucherLabel, ids.voucherRow, ids.voucherStatus, ids.totalDisplay, ids.submitBtn, ids.step5Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "5" } } },
     { "_id": ids.step5Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step5TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step5TitleText, "text": true, "v": "Zusammenfassung" },
     { "_id": ids.summaryContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary" } } },
@@ -1028,7 +1028,7 @@ const getWebflowTemplate = () => {
     { "_id": ids.step5BtnBackText, "text": true, "v": "Zurück" },
 
     // Success
-    { "_id": ids.stepSuccess, "tag": "div", "classes": c('bf-success'), "children": [ids.successIcon, ids.successTitle, ids.successDesc], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "success", "style": "display: none;" } } },
+    { "_id": ids.stepSuccess, "tag": "div", "classes": c('bf-success'), "children": [ids.successIcon, ids.successTitle, ids.successDesc], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "success" } } },
     { "_id": ids.successIcon, "tag": "div", "classes": c('bf-success-icon'), "children": [ids.successIconText], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.successIconText, "text": true, "v": "🎉" },
     { "_id": ids.successTitle, "tag": "h2", "classes": c('bf-success-title'), "children": [ids.successTitleText], "type": "Heading", "data": { "tag": "h2" } },
@@ -1068,7 +1068,7 @@ export const copyWebflowTemplate = async () => {
 
     const dummy = document.createElement('textarea');
     dummy.style.position = 'fixed';
-    dummy.style.left = '-9999px';
+    dummy.style.left = '-100vw';
     dummy.style.top = '0';
     document.body.appendChild(dummy);
     dummy.focus();

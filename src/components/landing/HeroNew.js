@@ -24,6 +24,18 @@ const HERO_LOGO_URL = new URL('../../svg/logo-bookfast-hero.svg', import.meta.ur
 const HERO_ILLUSTRATION_URL = new URL('../../svg/hero-illustration.svg', import.meta.url).href;
 let dashboardPagesRegistered = false;
 
+const createDashboardShellHTML = () => {
+  const sidebarHTML = renderSidebar({ activePage: 'home' });
+  const topBarHTML = renderTopBar();
+  return `
+    ${sidebarHTML}
+    <div class="main-wrapper">
+      ${topBarHTML}
+      <div class="main-content" id="main-content"></div>
+    </div>
+  `;
+};
+
 /**
  * Create the new hero HTML string.
  * @param {Object} config
@@ -46,13 +58,9 @@ export const createHeroNew = (config = {}) => {
   const checkSVG = '<svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/></svg>';
 
   const trustHTML = trustClaims.length ? `
-    <div class="landing-trust-claims hero-new__trust">
-      ${trustClaims.map(c => `<div class="landing-trust-claim">${checkSVG} <span>${c}</span></div>`).join('')}
-    </div>` : '';
-
-  // Pre-render layout for expanded demo
-  const sidebarHTML = renderSidebar({ activePage: 'home' });
-  const topBarHTML = renderTopBar();
+    <ul class="landing-trust-claims hero-new__trust">
+      ${trustClaims.map((claim) => `<li class="landing-trust-claim">${checkSVG} <span>${claim}</span></li>`).join('')}
+    </ul>` : '';
 
   return `
     <section class="hero-new">
@@ -92,13 +100,7 @@ export const createHeroNew = (config = {}) => {
             </div>
 
             <!-- Phase 2: Dashboard (expands on submit) -->
-            <div class="hero-new__dashboard dashboard-layout" id="hero-new-dashboard">
-              ${sidebarHTML}
-              <div class="main-wrapper">
-                ${topBarHTML}
-                <div class="main-content" id="main-content"></div>
-              </div>
-            </div>
+            <div class="hero-new__dashboard dashboard-layout" id="hero-new-dashboard"></div>
           </div>
         </div>
 
@@ -117,11 +119,18 @@ export const initHeroNew = () => {
   const card = document.getElementById('hero-new-card');
   const createBtn = document.getElementById('hero-new-create-btn');
   const nameInput = document.getElementById('hero-new-workspace-name');
+  const dashboardContainer = document.getElementById('hero-new-dashboard');
 
-  if (!card || !createBtn || !nameInput) return;
+  if (!card || !createBtn || !nameInput || !dashboardContainer) return;
 
   const EXPAND_DURATION_MS = 560;
   const DASHBOARD_REVEAL_DELAY_MS = 140;
+
+  const ensureDashboardShell = () => {
+    if (dashboardContainer.dataset.hydrated === 'true') return;
+    dashboardContainer.innerHTML = createDashboardShellHTML();
+    dashboardContainer.dataset.hydrated = 'true';
+  };
 
   createBtn.addEventListener('click', async () => {
     const name = nameInput.value.trim();
@@ -154,6 +163,7 @@ export const initHeroNew = () => {
     }
 
     setDemoWorkspaceName(name);
+    ensureDashboardShell();
 
     // Inject workspace name into sidebar
     const sidebarHeaderWrapper = document.getElementById('workspace-dropdown-wrapper');
