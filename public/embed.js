@@ -177,7 +177,6 @@
             '.bf-slot:hover:not(:disabled){background:rgba(0,0,0,.05)}',
             '.bf-slot-disabled{opacity:.3;cursor:default;text-decoration:line-through}',
             '.bf-slot-selected{font-weight:700;border-color:currentColor;background:rgba(0,0,0,.06)}',
-            '.bf-slots-empty{opacity:.6;font-size:.9rem}',
             // Radio / Checkbox (dynamic service & staff lists)
             '.bf-radio,.bf-checkbox{display:block;cursor:pointer;padding:.5rem 0}',
             // Addon cards
@@ -200,6 +199,11 @@
             '.bf-avail-status[data-status="available"]{color:#16a34a}',
             '.bf-avail-status[data-status="unavailable"]{color:#dc2626}',
             '.bf-avail-status[data-status="checking"]{opacity:.6}',
+            '[data-bf-status="available"]{color:#16a34a}',
+            '[data-bf-status="unavailable"]{color:#dc2626}',
+            '[data-bf-status="checking"]{opacity:.6}',
+            // Summary rows (fallback for dynamically generated price rows)
+            '.bf-summary-row{display:flex;justify-content:space-between;padding:.35rem 0}',
         ].join('');
         document.head.appendChild(s);
     };
@@ -393,7 +397,17 @@
         const staff = state.data.staff.filter(s => s.linked_service_ids?.includes(svc?.id));
         if (!staff.length) { c.style.display = 'none'; state.sel.staff = null; return; }
         c.style.display = 'block';
-        c.innerHTML = `<p><strong>Mitarbeiter</strong></p><label class="bf-radio"><input type="radio" name="bf-staff" value=""${state.sel.staff === null ? ' checked' : ''}><span>Egal</span></label>${staff.map(s => `<label class="bf-radio"><input type="radio" name="bf-staff" value="${s.id}"${state.sel.staff === s.id ? ' checked' : ''}><span>${s.name}</span></label>`).join('')}`;
+
+        const staffListEl = c.querySelector('[data-bf-dynamic="staff-list"]');
+        const hasTemplateStaff = !!c.querySelector('[data-bf-static="staff-heading"]');
+
+        if (hasTemplateStaff && staffListEl) {
+            const anyInput = c.querySelector('[data-bf-static="staff-any"] input');
+            if (anyInput) anyInput.checked = state.sel.staff === null;
+            staffListEl.innerHTML = staff.map(s => `<label class="bf-radio"><input type="radio" name="bf-staff" value="${s.id}"${state.sel.staff === s.id ? ' checked' : ''}><span>${s.name}</span></label>`).join('');
+        } else {
+            c.innerHTML = `<p><strong>Mitarbeiter</strong></p><label class="bf-radio"><input type="radio" name="bf-staff" value=""${state.sel.staff === null ? ' checked' : ''}><span>Egal</span></label>${staff.map(s => `<label class="bf-radio"><input type="radio" name="bf-staff" value="${s.id}"${state.sel.staff === s.id ? ' checked' : ''}><span>${s.name}</span></label>`).join('')}`;
+        }
         c.querySelectorAll('input[name="bf-staff"]').forEach(r => r.onchange = () => selStaff(r.value || null));
     };
 
@@ -433,20 +447,35 @@
         const c = dyn('timeslots');
         if (!c) return;
         const hasStaticTitle = !!c.querySelector('[data-bf-static="timeslots-title"]');
+        const staticEmpty = c.querySelector('[data-bf-static="slots-empty"]');
         let slotsWrap = c.querySelector('[data-bf-dynamic="timeslots-list"]');
         if (!slotsWrap) {
             slotsWrap = document.createElement('div');
             slotsWrap.setAttribute('data-bf-dynamic', 'timeslots-list');
             c.appendChild(slotsWrap);
         }
-        if (!state.slots.length) { c.style.display = 'none'; slotsWrap.innerHTML = ''; return; }
+        if (!state.slots.length) {
+            c.style.display = 'none';
+            slotsWrap.innerHTML = '';
+            if (staticEmpty) staticEmpty.style.display = 'none';
+            return;
+        }
         const anyAvail = state.slots.some(s => s.available);
         c.style.display = 'block';
-        slotsWrap.innerHTML = `${hasStaticTitle ? '' : '<p><strong>Uhrzeit wählen</strong></p>'}${!anyAvail ? '<p class="bf-slots-empty">Keine freien Termine an diesem Tag.</p>' : ''}${state.slots.map(s => {
+
+        if (staticEmpty) {
+            staticEmpty.style.display = anyAvail ? 'none' : 'block';
+        }
+
+        let html = '';
+        if (!hasStaticTitle) html += '<p><strong>Uhrzeit wählen</strong></p>';
+        if (!anyAvail && !staticEmpty) html += '<p class="bf-slots-empty">Keine freien Termine an diesem Tag.</p>';
+        html += state.slots.map(s => {
             const sel = state.sel.time === s.start;
             const cls = `bf-slot${s.available ? '' : ' bf-slot-disabled'}${sel ? ' bf-slot-selected' : ''}`;
             return `<button type="button" class="${cls}" data-time="${s.start}"${!s.available ? ' disabled' : ''}>${s.start}</button>`;
-        }).join('')}`;
+        }).join('');
+        slotsWrap.innerHTML = html;
         slotsWrap.querySelectorAll('.bf-slot:not(:disabled)').forEach(b => b.onclick = () => selTime(b.dataset.time));
     };
 
@@ -454,18 +483,44 @@
         const c = dyn('dateinfo');
         if (!c) return;
         const { service: svc, startDate: sd, endDate: ed, time } = state.sel;
-        if (!svc || !sd) { c.innerHTML = ''; return; }
-        const isON = svc.service_type === 'overnight', isH = svc.service_type === 'hourly', n = nights(sd, ed);
-        let h = '<div class="bf-dateinfo">';
-        if (isON && sd && ed) h += `<p><strong>${fmtDisplay(sd)} → ${fmtDisplay(ed)}</strong><br>${n} ${n === 1 ? 'Nacht' : 'Nächte'}</p>`;
-        else if (isH && sd) { h += `<p><strong>${fmtDisplay(sd)}</strong>${time ? `<br>${time} Uhr (${svc.duration_minutes} Min.)` : ''}</p>`; }
-        else if (sd) h += `<p><strong>${fmtDisplay(sd)}</strong><br>Ganztags</p>`;
-        h += '</div>';
-        if (state.availStatus) {
-            const t = { checking: '⏳ Prüfe Verfügbarkeit...', available: '✅ Verfügbar', unavailable: '❌ Nicht verfügbar' }[state.availStatus];
-            h += `<p class="bf-avail-status" data-status="${state.availStatus}"><strong>${t}</strong></p>`;
+        const staticText = c.querySelector('[data-bf-static="dateinfo-text"]');
+        const staticAvail = c.querySelector('[data-bf-static="avail-status"]');
+        const hasTemplate = !!staticText && !!staticAvail;
+
+        if (!svc || !sd) {
+            if (hasTemplate) {
+                staticText.innerHTML = '';
+                staticAvail.style.display = 'none';
+            } else {
+                c.innerHTML = '';
+            }
+            return;
         }
-        c.innerHTML = h;
+
+        const isON = svc.service_type === 'overnight', isH = svc.service_type === 'hourly', n = nights(sd, ed);
+        let dateHtml = '';
+        if (isON && sd && ed) dateHtml = `<p><strong>${fmtDisplay(sd)} → ${fmtDisplay(ed)}</strong><br>${n} ${n === 1 ? 'Nacht' : 'Nächte'}</p>`;
+        else if (isH && sd) dateHtml = `<p><strong>${fmtDisplay(sd)}</strong>${time ? `<br>${time} Uhr (${svc.duration_minutes} Min.)` : ''}</p>`;
+        else if (sd) dateHtml = `<p><strong>${fmtDisplay(sd)}</strong><br>Ganztags</p>`;
+
+        if (hasTemplate) {
+            staticText.innerHTML = dateHtml;
+            if (state.availStatus) {
+                staticAvail.style.display = 'block';
+                staticAvail.querySelectorAll('[data-bf-status]').forEach(el => {
+                    el.style.display = el.dataset.bfStatus === state.availStatus ? 'inline' : 'none';
+                });
+            } else {
+                staticAvail.style.display = 'none';
+            }
+        } else {
+            let h = `<div class="bf-dateinfo">${dateHtml}</div>`;
+            if (state.availStatus) {
+                const t = { checking: '⏳ Prüfe Verfügbarkeit...', available: '✅ Verfügbar', unavailable: '❌ Nicht verfügbar' }[state.availStatus];
+                h += `<p class="bf-avail-status" data-status="${state.availStatus}"><strong>${t}</strong></p>`;
+            }
+            c.innerHTML = h;
+        }
     };
 
     // --- Gästezahl ändern ---
@@ -699,30 +754,20 @@
         const stf = staff ? state.data.staff.find(s => s.id === staff) : null;
         let dt = fmtDisplay(sd); if (isON && ed) dt = `${fmtDisplay(sd)} → ${fmtDisplay(ed)} (${n} ${n === 1 ? 'Nacht' : 'Nächte'})`;
 
-        // Right Column: Summary
-        let rows = `<tr><td>Objekt</td><td>${obj?.name || '-'}</td></tr>`;
-        rows += `<tr><td>Service</td><td>${svc?.name || '-'}</td></tr>`;
-        if (stf) rows += `<tr><td>Mitarbeiter</td><td>${stf.name}</td></tr>`;
-        rows += `<tr><td>Anzahl Gäste</td><td>${guestCount}</td></tr>`;
-        rows += `<tr><td>Datum</td><td>${dt}</td></tr>`;
-        if (isH && time) rows += `<tr><td>Uhrzeit</td><td>${time} (${svc?.duration_minutes}min)</td></tr>`;
-        let prices = `<tr><td>${svc?.name}</td><td>€${base.toFixed(2)}</td></tr>`;
-
-        // Addon logic (abbreviated)
+        // Build price rows HTML (always needed)
+        let priceRowsHtml = `<div class="bf-summary-row"><span>${svc?.name || '-'}</span><span>€${base.toFixed(2)}</span></div>`;
         state.sel.addons.forEach(sel => {
             const a = state.data.addons.find(x => x.id === sel.id);
             if (!a) return;
             const items = a.addon_items || [];
             if (items.length) {
-                // Per Booking
                 (sel.items || []).forEach((it, ii) => {
                     if (!it) return;
                     const def = items[ii]; if (!def) return;
                     const detail = it.variant ? ` ${it.variant}` : '';
                     const qty = it.qty || 1;
-                    prices += `<tr><td>+ ${def.name}${detail}</td><td>€${(+a.price * qty).toFixed(2)}</td></tr>`;
+                    priceRowsHtml += `<div class="bf-summary-row"><span>+ ${def.name}${detail}</span><span>€${(+a.price * qty).toFixed(2)}</span></div>`;
                 });
-                // Per Guest
                 (sel.guests || []).forEach((guest, gi) => {
                     let guestLabel = guestCount > 1 ? ` (G ${gi + 1})` : '';
                     (guest.items || []).forEach((it, ii) => {
@@ -730,25 +775,26 @@
                         const def = items[ii]; if (!def) return;
                         const detail = it.variant ? ` ${it.variant}` : '';
                         const qty = it.qty || 1;
-                        prices += `<tr><td>+ ${def.name}${detail}${guestLabel}</td><td>€${(+a.price * qty).toFixed(2)}</td></tr>`;
+                        priceRowsHtml += `<div class="bf-summary-row"><span>+ ${def.name}${detail}${guestLabel}</span><span>€${(+a.price * qty).toFixed(2)}</span></div>`;
                     });
                 });
             } else {
                 const total = +a.price * guestCount;
-                prices += `<tr><td>+ ${a.name}${guestCount > 1 ? ` ×${guestCount}` : ''}</td><td>€${total.toFixed(2)}</td></tr>`;
+                priceRowsHtml += `<div class="bf-summary-row"><span>+ ${a.name}${guestCount > 1 ? ` ×${guestCount}` : ''}</span><span>€${total.toFixed(2)}</span></div>`;
             }
         });
+        if (+svc?.cleaning_fee) priceRowsHtml += `<div class="bf-summary-row"><span>Reinigung</span><span>€${(+svc.cleaning_fee).toFixed(2)}</span></div>`;
+        if (state.voucher.data) priceRowsHtml += `<div class="bf-summary-row"><span>🎫 ${state.voucher.data.name}</span><span>-€${calcDisc().toFixed(2)}</span></div>`;
 
-        if (+svc?.cleaning_fee) prices += `<tr><td>Reinigung</td><td>€${(+svc.cleaning_fee).toFixed(2)}</td></tr>`;
-        if (state.voucher.data) prices += `<tr><td>🎫 ${state.voucher.data.name}</td><td>-€${calcDisc().toFixed(2)}</td></tr>`;
-        prices += `<tr class="bf-total"><td><strong>Gesamt</strong></td><td><strong>€${calcTotal().toFixed(2)}</strong></td></tr>`;
+        const totalStr = `€${calcTotal().toFixed(2)}`;
 
-        const summaryDetails = dyn('summary-details');
-        const summaryPrices = dyn('summary-prices');
         const templateBindInputs = c.querySelectorAll('[data-bf-bind]');
-        const hasTemplateSummary = templateBindInputs.length > 0 && summaryDetails && summaryPrices;
+        const summaryRows = c.querySelectorAll('[data-bf-summary]');
+        const priceRowsEl = c.querySelector('[data-bf-dynamic="price-rows"]');
+        const hasTemplateRows = summaryRows.length > 0 && priceRowsEl;
 
-        if (hasTemplateSummary) {
+        if (hasTemplateRows) {
+            // Template-First: bind form inputs
             templateBindInputs.forEach(i => {
                 const key = i.dataset.bfBind;
                 if (!key) return;
@@ -756,71 +802,99 @@
                 if (i.value !== value) i.value = value;
                 i.oninput = e => { state.sel[key] = e.target.value; };
             });
-            summaryDetails.innerHTML = `<table class="bf-summary"><tbody>${rows}</tbody></table>`;
-            summaryPrices.innerHTML = `<table class="bf-prices"><tbody>${prices}</tbody></table>`;
+
+            // Fill summary detail values via textContent
+            const setVal = (key, val) => { const el = c.querySelector(`[data-bf-display="summary-${key}"]`); if (el) el.textContent = val || '-'; };
+            setVal('object', obj?.name);
+            setVal('service', svc?.name);
+            setVal('staff', stf?.name);
+            setVal('guests', guestCount);
+            setVal('date', dt);
+            setVal('time', isH && time ? `${time} (${svc?.duration_minutes}min)` : '');
+
+            // Show/hide conditional rows
+            const showRow = (key, visible) => { const row = c.querySelector(`[data-bf-summary="${key}"]`); if (row) row.style.display = visible ? '' : 'none'; };
+            showRow('staff', !!stf);
+            showRow('time', isH && !!time);
+
+            // Price rows
+            priceRowsEl.innerHTML = priceRowsHtml;
+
+            // Total
+            setVal('total', totalStr);
         } else {
-            // Fallback for old copied templates without static summary form.
-            let formParams = `
-                <div class="bf-form-group">
-                    <label class="bf-form-label">Vorname *</label>
-                    <input type="text" class="bf-input" data-bind="fname" value="${fname || ''}" placeholder="Max">
-                </div>
-                <div class="bf-form-group">
-                    <label class="bf-form-label">Nachname *</label>
-                    <input type="text" class="bf-input" data-bind="lname" value="${lname || ''}" placeholder="Mustermann">
-                </div>
-                <div class="bf-form-group">
-                    <label class="bf-form-label">E-Mail Adresse *</label>
-                    <input type="email" class="bf-input" data-bind="email" value="${email || ''}" placeholder="max@beispiel.de">
-                </div>
-                <div class="bf-form-group">
-                    <label class="bf-form-label">Telefonnummer</label>
-                    <input type="tel" class="bf-input" data-bind="phone" value="${phone || ''}" placeholder="+49 123 456789">
-                </div>
-                <div class="bf-form-group">
-                    <label class="bf-form-label">Adresse *</label>
-                    <input type="text" class="bf-input" data-bind="address" value="${address || ''}" placeholder="Musterstraße 1">
-                </div>
-                <div class="bf-row-2">
-                    <div class="bf-form-group">
-                        <label class="bf-form-label">PLZ *</label>
-                        <input type="text" class="bf-input" data-bind="zip" value="${zip || ''}" placeholder="12345">
-                    </div>
-                    <div class="bf-form-group">
-                        <label class="bf-form-label">Stadt *</label>
-                        <input type="text" class="bf-input" data-bind="city" value="${city || ''}" placeholder="Berlin">
-                    </div>
-                </div>
-            `;
-
-            c.innerHTML = `
-                <div class="bf-grid-2">
-                    <div class="bf-form-column">
-                        <h3 style="margin-top:0">Ihre Daten</h3>
-                        ${formParams}
-                    </div>
-                    <div class="bf-summary-column">
-                        <h3 style="margin-top:0">Zusammenfassung</h3>
-                        <table class="bf-summary"><tbody>${rows}</tbody></table>
-                        <hr>
-                        <table class="bf-prices"><tbody>${prices}</tbody></table>
-                    </div>
-                </div>
-            `;
-
-            c.querySelectorAll('input[data-bind]').forEach(i => {
-                i.oninput = e => { state.sel[i.dataset.bind] = e.target.value; };
+            // Fallback: build table-based HTML for old templates
+            let rows = `<tr><td>Objekt</td><td>${obj?.name || '-'}</td></tr>`;
+            rows += `<tr><td>Service</td><td>${svc?.name || '-'}</td></tr>`;
+            if (stf) rows += `<tr><td>Mitarbeiter</td><td>${stf.name}</td></tr>`;
+            rows += `<tr><td>Anzahl Gäste</td><td>${guestCount}</td></tr>`;
+            rows += `<tr><td>Datum</td><td>${dt}</td></tr>`;
+            if (isH && time) rows += `<tr><td>Uhrzeit</td><td>${time} (${svc?.duration_minutes}min)</td></tr>`;
+            let prices = `<tr><td>${svc?.name}</td><td>€${base.toFixed(2)}</td></tr>`;
+            state.sel.addons.forEach(sel => {
+                const a = state.data.addons.find(x => x.id === sel.id);
+                if (!a) return;
+                const items = a.addon_items || [];
+                if (items.length) {
+                    (sel.items || []).forEach((it, ii) => { if (!it) return; const def = items[ii]; if (!def) return; const detail = it.variant ? ` ${it.variant}` : ''; const qty = it.qty || 1; prices += `<tr><td>+ ${def.name}${detail}</td><td>€${(+a.price * qty).toFixed(2)}</td></tr>`; });
+                    (sel.guests || []).forEach((guest, gi) => { let gl = guestCount > 1 ? ` (G ${gi + 1})` : ''; (guest.items || []).forEach((it, ii) => { if (!it) return; const def = items[ii]; if (!def) return; const detail = it.variant ? ` ${it.variant}` : ''; const qty = it.qty || 1; prices += `<tr><td>+ ${def.name}${detail}${gl}</td><td>€${(+a.price * qty).toFixed(2)}</td></tr>`; }); });
+                } else { const total = +a.price * guestCount; prices += `<tr><td>+ ${a.name}${guestCount > 1 ? ` ×${guestCount}` : ''}</td><td>€${total.toFixed(2)}</td></tr>`; }
             });
+            if (+svc?.cleaning_fee) prices += `<tr><td>Reinigung</td><td>€${(+svc.cleaning_fee).toFixed(2)}</td></tr>`;
+            if (state.voucher.data) prices += `<tr><td>🎫 ${state.voucher.data.name}</td><td>-€${calcDisc().toFixed(2)}</td></tr>`;
+            prices += `<tr class="bf-total"><td><strong>Gesamt</strong></td><td><strong>${totalStr}</strong></td></tr>`;
+
+            const summaryDetails = dyn('summary-details');
+            const summaryPrices = dyn('summary-prices');
+            if (templateBindInputs.length > 0 && summaryDetails && summaryPrices) {
+                templateBindInputs.forEach(i => { const key = i.dataset.bfBind; if (!key) return; const value = state.sel[key] || ''; if (i.value !== value) i.value = value; i.oninput = e => { state.sel[key] = e.target.value; }; });
+                summaryDetails.innerHTML = `<table class="bf-summary"><tbody>${rows}</tbody></table>`;
+                summaryPrices.innerHTML = `<table class="bf-prices"><tbody>${prices}</tbody></table>`;
+            } else {
+                c.innerHTML = `
+                    <div class="bf-grid-2">
+                        <div class="bf-form-column">
+                            <h3 style="margin-top:0">Ihre Daten</h3>
+                            <div class="bf-form-group"><label class="bf-form-label">Vorname *</label><input type="text" class="bf-input" data-bind="fname" value="${fname || ''}" placeholder="Max"></div>
+                            <div class="bf-form-group"><label class="bf-form-label">Nachname *</label><input type="text" class="bf-input" data-bind="lname" value="${lname || ''}" placeholder="Mustermann"></div>
+                            <div class="bf-form-group"><label class="bf-form-label">E-Mail Adresse *</label><input type="email" class="bf-input" data-bind="email" value="${email || ''}" placeholder="max@beispiel.de"></div>
+                            <div class="bf-form-group"><label class="bf-form-label">Telefonnummer</label><input type="tel" class="bf-input" data-bind="phone" value="${phone || ''}" placeholder="+49 123 456789"></div>
+                            <div class="bf-form-group"><label class="bf-form-label">Adresse *</label><input type="text" class="bf-input" data-bind="address" value="${address || ''}" placeholder="Musterstraße 1"></div>
+                            <div class="bf-row-2"><div class="bf-form-group"><label class="bf-form-label">PLZ *</label><input type="text" class="bf-input" data-bind="zip" value="${zip || ''}" placeholder="12345"></div><div class="bf-form-group"><label class="bf-form-label">Stadt *</label><input type="text" class="bf-input" data-bind="city" value="${city || ''}" placeholder="Berlin"></div></div>
+                        </div>
+                        <div class="bf-summary-column">
+                            <h3 style="margin-top:0">Zusammenfassung</h3>
+                            <table class="bf-summary"><tbody>${rows}</tbody></table>
+                            <hr>
+                            <table class="bf-prices"><tbody>${prices}</tbody></table>
+                        </div>
+                    </div>`;
+                c.querySelectorAll('input[data-bind]').forEach(i => { i.oninput = e => { state.sel[i.dataset.bind] = e.target.value; }; });
+            }
         }
 
-        if (td) td.innerHTML = `<strong>Gesamt: €${calcTotal().toFixed(2)}</strong>`;
+        if (td) td.innerHTML = `<strong>Gesamt: ${totalStr}</strong>`;
     };
 
     const updVoucher = () => {
         const c = disp('voucher-status');
         if (!c) return;
         const v = state.voucher;
-        c.innerHTML = v.status === 'valid' ? `<p data-voucher="valid">✅ ${v.data?.name}</p>` : v.status === 'invalid' ? `<p data-voucher="invalid">❌ ${v.error}</p>` : v.status === 'checking' ? '<p data-voucher="checking">⏳</p>' : '';
+        const templateEls = c.querySelectorAll('[data-bf-voucher]');
+        if (templateEls.length) {
+            templateEls.forEach(el => {
+                const type = el.dataset.bfVoucher;
+                if (type === v.status) {
+                    el.style.display = 'block';
+                    if (type === 'valid' && v.data?.name) el.textContent = `✅ ${v.data.name}`;
+                    if (type === 'invalid' && v.error) el.textContent = `❌ ${v.error}`;
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+        } else {
+            c.innerHTML = v.status === 'valid' ? `<p data-voucher="valid">✅ ${v.data?.name}</p>` : v.status === 'invalid' ? `<p data-voucher="invalid">❌ ${v.error}</p>` : v.status === 'checking' ? '<p data-voucher="checking">⏳</p>' : '';
+        }
     };
 
     // --- Preis-Berechnung ---
