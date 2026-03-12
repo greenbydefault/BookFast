@@ -191,32 +191,10 @@
             '.bf-variant-radios label{display:block;padding:.125rem 0;font-size:.85rem;cursor:pointer}',
             '.bf-variant-radios input{margin-right:.375rem}',
             '.bf-variant-select{padding:.25rem .5rem;border:.0625rem solid #d1d5db;border-radius:.25rem;font-size:.85rem}',
-            // Quantity controls
-            '.bf-qty-row{display:flex;align-items:center;gap:.375rem;margin-top:.25rem}',
-            '.bf-qty-btn{width:2.75rem;height:2.75rem;border:.0625rem solid #d1d5db;border-radius:.375rem;background:#fff;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}',
-            '.bf-qty-btn:hover{background:#f3f4f6}',
-            '.bf-qty-val{min-width:2ch;text-align:center;font-size:.95rem;font-weight:600}',
-            // Guest count
-            '.bf-guest-count{margin-bottom:.75rem}',
+            // Addon guest blocks (content rows)
             '.bf-guest-block{padding:.625rem 0;border-top:.0625rem solid #e5e7eb}',
             '.bf-guest-block:first-child{border-top:none;padding-top:0}',
             '.bf-guest-label{font-weight:600;font-size:.9rem;margin-bottom:.375rem;color:#1e40af}',
-            // Summary layout
-            '.bf-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:2rem}',
-            '@media(max-width:48em){.bf-grid-2{grid-template-columns:1fr}}',
-            '.bf-form-group{margin-bottom:1rem}',
-            '.bf-form-label{display:block;font-size:.9rem;font-weight:500;margin-bottom:.4rem}',
-            '.bf-input{width:100%;padding:.6rem;border:.0625rem solid #d1d5db;border-radius:.375rem;font-size:1rem;box-sizing:border-box}',
-            '.bf-row-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}',
-            // Step progress + inline errors
-            '.bf-step-progress{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1rem;padding:0;list-style:none}',
-            '.bf-step-progress-item{display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .65rem;border:.0625rem solid #d1d5db;border-radius:999rem;font-size:.85rem;color:#52525b;background:#fff}',
-            '.bf-step-progress-item::before{content:attr(data-step);display:inline-flex;align-items:center;justify-content:center;min-width:1.5rem;min-height:1.5rem;border-radius:50%;background:#e4e4e7;color:#18181b;font-size:.75rem;font-weight:700}',
-            '.bf-step-progress-item.is-complete{border-color:#86efac;background:#f0fdf4;color:#166534}',
-            '.bf-step-progress-item.is-complete::before{background:#16a34a;color:#fff}',
-            '.bf-step-progress-item.is-current{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;font-weight:600}',
-            '.bf-step-progress-item.is-current::before{background:#2563eb;color:#fff}',
-            '.bf-init-error{margin:0 0 .75rem;padding:.6rem .75rem;border:.0625rem solid #fecaca;background:#fef2f2;color:#991b1b;border-radius:.375rem;font-size:.92rem}',
             // Date info & availability
             '.bf-dateinfo{margin:.75rem 0}',
             '.bf-avail-status[data-status="available"]{color:#16a34a}',
@@ -262,6 +240,12 @@
             err.className = 'bf-init-error';
             err.setAttribute('data-bf-init-error', 'true');
             err.setAttribute('role', 'alert');
+            err.style.marginBottom = '.75rem';
+            err.style.padding = '.6rem .75rem';
+            err.style.border = '.0625rem solid #fecaca';
+            err.style.background = '#fef2f2';
+            err.style.color = '#991b1b';
+            err.style.borderRadius = '.375rem';
             root.prepend(err);
         }
         err.textContent = message;
@@ -359,6 +343,28 @@
     const dyn = n => $(`[data-bf-dynamic="${n}"]`);
     const disp = n => $(`[data-bf-display="${n}"]`);
 
+    const updateGuestCountUI = () => {
+        const count = state.sel.guestCount;
+        const max = state.sel.object?.capacity || 99;
+        const countEl = disp('guest-count');
+        const maxEl = disp('guest-max');
+        const minus = $('[data-bf-action="gc-minus"]');
+        const plus = $('[data-bf-action="gc-plus"]');
+
+        if (countEl) countEl.textContent = String(count);
+        if (maxEl) maxEl.textContent = max < 99 ? ` (Max: ${max})` : '';
+
+        const setDisabledState = (el, disabled) => {
+            if (!el) return;
+            el.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+            el.style.pointerEvents = disabled ? 'none' : '';
+            el.style.opacity = disabled ? '.5' : '';
+        };
+
+        setDisabledState(minus, count <= 1);
+        setDisabledState(plus, count >= max);
+    };
+
     // --- UI-Population ---
     const popObjects = () => {
         const sel = field('object');
@@ -426,15 +432,22 @@
     const popSlots = () => {
         const c = dyn('timeslots');
         if (!c) return;
-        if (!state.slots.length) { c.style.display = 'none'; c.innerHTML = ''; return; }
+        const hasStaticTitle = !!c.querySelector('[data-bf-static="timeslots-title"]');
+        let slotsWrap = c.querySelector('[data-bf-dynamic="timeslots-list"]');
+        if (!slotsWrap) {
+            slotsWrap = document.createElement('div');
+            slotsWrap.setAttribute('data-bf-dynamic', 'timeslots-list');
+            c.appendChild(slotsWrap);
+        }
+        if (!state.slots.length) { c.style.display = 'none'; slotsWrap.innerHTML = ''; return; }
         const anyAvail = state.slots.some(s => s.available);
         c.style.display = 'block';
-        c.innerHTML = `<p><strong>Uhrzeit wählen</strong></p>${!anyAvail ? '<p class="bf-slots-empty">Keine freien Termine an diesem Tag.</p>' : ''}${state.slots.map(s => {
+        slotsWrap.innerHTML = `${hasStaticTitle ? '' : '<p><strong>Uhrzeit wählen</strong></p>'}${!anyAvail ? '<p class="bf-slots-empty">Keine freien Termine an diesem Tag.</p>' : ''}${state.slots.map(s => {
             const sel = state.sel.time === s.start;
             const cls = `bf-slot${s.available ? '' : ' bf-slot-disabled'}${sel ? ' bf-slot-selected' : ''}`;
             return `<button type="button" class="${cls}" data-time="${s.start}"${!s.available ? ' disabled' : ''}>${s.start}</button>`;
         }).join('')}`;
-        c.querySelectorAll('.bf-slot:not(:disabled)').forEach(b => b.onclick = () => selTime(b.dataset.time));
+        slotsWrap.querySelectorAll('.bf-slot:not(:disabled)').forEach(b => b.onclick = () => selTime(b.dataset.time));
     };
 
     const popDateInfo = () => {
@@ -512,18 +525,22 @@
         const c = dyn('addons');
         if (!c) return;
         const adds = state.data.addons.filter(a => a.linked_service_ids?.includes(state.sel.service?.id));
-
-        // Guest count selector
+        const hasTemplateGuestCount = !!$('[data-bf-static="guest-count"]');
         const max = state.sel.object?.capacity || 99;
         const gc = state.sel.guestCount;
-        let html = `<div class="bf-guest-count">
-            <p><strong>Anzahl Gäste</strong>${max < 99 ? ` <small>(Max: ${max})</small>` : ''}</p>
-            <div class="bf-qty-row" style="margin-bottom:1rem">
-                <button class="bf-qty-btn" id="bf-gc-minus" type="button" ${gc <= 1 ? 'disabled' : ''}>−</button>
-                <span class="bf-qty-val" id="bf-gc-val">${gc}</span>
-                <button class="bf-qty-btn" id="bf-gc-plus" type="button" ${gc >= max ? 'disabled' : ''}>+</button>
-            </div>
-        </div>`;
+        updateGuestCountUI();
+
+        let html = '';
+        if (!hasTemplateGuestCount) {
+            html = `<div class="bf-guest-count">
+                <p><strong>Anzahl Gäste</strong>${max < 99 ? ` <small>(Max: ${max})</small>` : ''}</p>
+                <div class="bf-qty-row" style="margin-bottom:1rem">
+                    <button class="bf-qty-btn" id="bf-gc-minus" type="button" ${gc <= 1 ? 'disabled' : ''}>−</button>
+                    <span class="bf-qty-val" id="bf-gc-val">${gc}</span>
+                    <button class="bf-qty-btn" id="bf-gc-plus" type="button" ${gc >= max ? 'disabled' : ''}>+</button>
+                </div>
+            </div>`;
+        }
 
         if (!adds.length) { html += '<p>Keine Extras.</p>'; c.innerHTML = html; bindGuestCount(c); return; }
 
@@ -658,8 +675,19 @@
     };
 
     const bindGuestCount = (c) => {
-        c.querySelector('#bf-gc-minus')?.addEventListener('click', () => setGuestCount(state.sel.guestCount - 1));
-        c.querySelector('#bf-gc-plus')?.addEventListener('click', () => setGuestCount(state.sel.guestCount + 1));
+        const bindBtn = (btn, delta) => {
+            if (!btn) return;
+            btn.onclick = (e) => {
+                e.preventDefault();
+                if (btn.getAttribute('aria-disabled') === 'true') return;
+                setGuestCount(state.sel.guestCount + delta);
+            };
+        };
+        bindBtn(c?.querySelector('#bf-gc-minus'), -1);
+        bindBtn(c?.querySelector('#bf-gc-plus'), 1);
+        bindBtn($('[data-bf-action="gc-minus"]'), -1);
+        bindBtn($('[data-bf-action="gc-plus"]'), 1);
+        updateGuestCountUI();
     };
 
     const popSummary = () => {
@@ -670,40 +698,6 @@
         const base = isON ? +svc?.price * n : +svc?.price || 0;
         const stf = staff ? state.data.staff.find(s => s.id === staff) : null;
         let dt = fmtDisplay(sd); if (isON && ed) dt = `${fmtDisplay(sd)} → ${fmtDisplay(ed)} (${n} ${n === 1 ? 'Nacht' : 'Nächte'})`;
-
-        // Left Column: User Data Form
-        let formParams = `
-            <div class="bf-form-group">
-                <label class="bf-form-label">Vorname *</label>
-                <input type="text" class="bf-input" data-bind="fname" value="${fname || ''}" placeholder="Max">
-            </div>
-            <div class="bf-form-group">
-                <label class="bf-form-label">Nachname *</label>
-                <input type="text" class="bf-input" data-bind="lname" value="${lname || ''}" placeholder="Mustermann">
-            </div>
-            <div class="bf-form-group">
-                <label class="bf-form-label">E-Mail Adresse *</label>
-                <input type="email" class="bf-input" data-bind="email" value="${email || ''}" placeholder="max@beispiel.de">
-            </div>
-            <div class="bf-form-group">
-                <label class="bf-form-label">Telefonnummer</label>
-                <input type="tel" class="bf-input" data-bind="phone" value="${phone || ''}" placeholder="+49 123 456789">
-            </div>
-            <div class="bf-form-group">
-                <label class="bf-form-label">Adresse *</label>
-                <input type="text" class="bf-input" data-bind="address" value="${address || ''}" placeholder="Musterstraße 1">
-            </div>
-            <div class="bf-row-2">
-                <div class="bf-form-group">
-                    <label class="bf-form-label">PLZ *</label>
-                    <input type="text" class="bf-input" data-bind="zip" value="${zip || ''}" placeholder="12345">
-                </div>
-                <div class="bf-form-group">
-                    <label class="bf-form-label">Stadt *</label>
-                    <input type="text" class="bf-input" data-bind="city" value="${city || ''}" placeholder="Berlin">
-                </div>
-            </div>
-        `;
 
         // Right Column: Summary
         let rows = `<tr><td>Objekt</td><td>${obj?.name || '-'}</td></tr>`;
@@ -749,27 +743,77 @@
         if (state.voucher.data) prices += `<tr><td>🎫 ${state.voucher.data.name}</td><td>-€${calcDisc().toFixed(2)}</td></tr>`;
         prices += `<tr class="bf-total"><td><strong>Gesamt</strong></td><td><strong>€${calcTotal().toFixed(2)}</strong></td></tr>`;
 
-        c.innerHTML = `
-            <div class="bf-grid-2">
-                <div class="bf-form-column">
-                    <h3 style="margin-top:0">Ihre Daten</h3>
-                    ${formParams}
+        const summaryDetails = dyn('summary-details');
+        const summaryPrices = dyn('summary-prices');
+        const templateBindInputs = c.querySelectorAll('[data-bf-bind]');
+        const hasTemplateSummary = templateBindInputs.length > 0 && summaryDetails && summaryPrices;
+
+        if (hasTemplateSummary) {
+            templateBindInputs.forEach(i => {
+                const key = i.dataset.bfBind;
+                if (!key) return;
+                const value = state.sel[key] || '';
+                if (i.value !== value) i.value = value;
+                i.oninput = e => { state.sel[key] = e.target.value; };
+            });
+            summaryDetails.innerHTML = `<table class="bf-summary"><tbody>${rows}</tbody></table>`;
+            summaryPrices.innerHTML = `<table class="bf-prices"><tbody>${prices}</tbody></table>`;
+        } else {
+            // Fallback for old copied templates without static summary form.
+            let formParams = `
+                <div class="bf-form-group">
+                    <label class="bf-form-label">Vorname *</label>
+                    <input type="text" class="bf-input" data-bind="fname" value="${fname || ''}" placeholder="Max">
                 </div>
-                <div class="bf-summary-column">
-                    <h3 style="margin-top:0">Zusammenfassung</h3>
-                    <table class="bf-summary"><tbody>${rows}</tbody></table>
-                    <hr>
-                    <table class="bf-prices"><tbody>${prices}</tbody></table>
+                <div class="bf-form-group">
+                    <label class="bf-form-label">Nachname *</label>
+                    <input type="text" class="bf-input" data-bind="lname" value="${lname || ''}" placeholder="Mustermann">
                 </div>
-            </div>
-        `;
+                <div class="bf-form-group">
+                    <label class="bf-form-label">E-Mail Adresse *</label>
+                    <input type="email" class="bf-input" data-bind="email" value="${email || ''}" placeholder="max@beispiel.de">
+                </div>
+                <div class="bf-form-group">
+                    <label class="bf-form-label">Telefonnummer</label>
+                    <input type="tel" class="bf-input" data-bind="phone" value="${phone || ''}" placeholder="+49 123 456789">
+                </div>
+                <div class="bf-form-group">
+                    <label class="bf-form-label">Adresse *</label>
+                    <input type="text" class="bf-input" data-bind="address" value="${address || ''}" placeholder="Musterstraße 1">
+                </div>
+                <div class="bf-row-2">
+                    <div class="bf-form-group">
+                        <label class="bf-form-label">PLZ *</label>
+                        <input type="text" class="bf-input" data-bind="zip" value="${zip || ''}" placeholder="12345">
+                    </div>
+                    <div class="bf-form-group">
+                        <label class="bf-form-label">Stadt *</label>
+                        <input type="text" class="bf-input" data-bind="city" value="${city || ''}" placeholder="Berlin">
+                    </div>
+                </div>
+            `;
+
+            c.innerHTML = `
+                <div class="bf-grid-2">
+                    <div class="bf-form-column">
+                        <h3 style="margin-top:0">Ihre Daten</h3>
+                        ${formParams}
+                    </div>
+                    <div class="bf-summary-column">
+                        <h3 style="margin-top:0">Zusammenfassung</h3>
+                        <table class="bf-summary"><tbody>${rows}</tbody></table>
+                        <hr>
+                        <table class="bf-prices"><tbody>${prices}</tbody></table>
+                    </div>
+                </div>
+            `;
+
+            c.querySelectorAll('input[data-bind]').forEach(i => {
+                i.oninput = e => { state.sel[i.dataset.bind] = e.target.value; };
+            });
+        }
 
         if (td) td.innerHTML = `<strong>Gesamt: €${calcTotal().toFixed(2)}</strong>`;
-
-        // Bind inputs
-        c.querySelectorAll('input[data-bind]').forEach(i => {
-            i.oninput = e => { state.sel[i.dataset.bind] = e.target.value; };
-        });
     };
 
     const updVoucher = () => {

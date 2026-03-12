@@ -914,6 +914,21 @@ const getWebflowTemplate = () => {
   defClass('bf-voucher-row', 'display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; margin-bottom: 0.5rem;');
   defClass('bf-voucher-input', 'flex-grow: 1; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 0.95rem;');
   defClass('bf-btn-voucher', 'display: inline-block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 500; font-size: 0.9rem; text-decoration: none; cursor: pointer; background-color: #f4f4f5; color: #18181b;');
+  defClass('bf-step-progress', 'display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; padding-left: 0; list-style: none;');
+  defClass('bf-step-progress-item', 'display: inline-flex; align-items: center; gap: 0.35rem; padding-top: 0.35rem; padding-bottom: 0.35rem; padding-left: 0.65rem; padding-right: 0.65rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-left-radius: 999rem; border-top-right-radius: 999rem; border-bottom-left-radius: 999rem; border-bottom-right-radius: 999rem; font-size: 0.85rem; color: #52525b; background-color: #fff;');
+  defClass('is-current', 'border-top-color: #93c5fd; border-bottom-color: #93c5fd; border-left-color: #93c5fd; border-right-color: #93c5fd; background-color: #eff6ff; color: #1d4ed8; font-weight: 600;');
+  defClass('is-complete', 'border-top-color: #86efac; border-bottom-color: #86efac; border-left-color: #86efac; border-right-color: #86efac; background-color: #f0fdf4; color: #166534;');
+  defClass('bf-init-error', 'display: none; margin-bottom: 0.75rem; padding-top: 0.6rem; padding-bottom: 0.6rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #fecaca; border-bottom-color: #fecaca; border-left-color: #fecaca; border-right-color: #fecaca; background-color: #fef2f2; color: #991b1b; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 0.92rem;');
+  defClass('bf-guest-count', 'margin-bottom: 0.75rem;');
+  defClass('bf-qty-row', 'display: flex; align-items: center; gap: 0.375rem; margin-top: 0.25rem; margin-bottom: 1rem;');
+  defClass('bf-qty-btn', 'display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; background-color: #fff; color: #18181b; text-decoration: none; font-size: 1rem;');
+  defClass('bf-qty-val', 'min-width: 2ch; text-align: center; font-size: 0.95rem; font-weight: 600;');
+  defClass('bf-grid-2', 'display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;');
+  defClass('bf-form-group', 'margin-bottom: 1rem;');
+  defClass('bf-form-label', 'display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.4rem;');
+  defClass('bf-input', 'width: 100%; padding-top: 0.6rem; padding-bottom: 0.6rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 1rem; box-sizing: border-box;');
+  defClass('bf-row-2', 'display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;');
+  defClass('bf-summary-divider', 'height: 0.0625rem; background-color: #e5e7eb; margin-top: 0.75rem; margin-bottom: 0.75rem;');
   defClass('bf-total-display', 'margin-top: 0.75rem; font-size: 1.1rem; font-weight: 600;');
   defClass('bf-submit', 'width: 100%; padding-top: 0.75rem; padding-bottom: 0.75rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 600; font-size: 1rem; cursor: pointer; background-color: #18181b; color: #fff; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; margin-top: 1rem;');
   defClass('bf-success', 'text-align: center; padding-top: 3rem; padding-bottom: 3rem;');
@@ -924,7 +939,10 @@ const getWebflowTemplate = () => {
   const c = (name) => [cls[name]];
 
   const ids = {
-    root: mongoId(), form: mongoId(),
+    root: mongoId(), form: mongoId(), initError: mongoId(), initErrorText: mongoId(), stepProgress: mongoId(),
+    progressItem1: mongoId(), progressItem1Text: mongoId(), progressItem2: mongoId(), progressItem2Text: mongoId(),
+    progressItem3: mongoId(), progressItem3Text: mongoId(), progressItem4: mongoId(), progressItem4Text: mongoId(),
+    progressItem5: mongoId(), progressItem5Text: mongoId(),
     step1: mongoId(), step1Title: mongoId(), step1TitleText: mongoId(),
     objectLabel: mongoId(), objectLabelText: mongoId(), objectSelect: mongoId(),
     objectPlaceholder: mongoId(), objectPlaceholderText: mongoId(),
@@ -934,15 +952,26 @@ const getWebflowTemplate = () => {
     step2Nav: mongoId(), step2BtnNext: mongoId(), step2BtnNextText: mongoId(),
     step2BtnBack: mongoId(), step2BtnBackText: mongoId(),
     step3: mongoId(), step3Title: mongoId(), step3TitleText: mongoId(),
-    calendarContainer: mongoId(), timeslotsContainer: mongoId(), dateInfoContainer: mongoId(),
+    calendarContainer: mongoId(), timeslotsContainer: mongoId(), timeslotsTitle: mongoId(), timeslotsTitleStrong: mongoId(), timeslotsTitleText: mongoId(), dateInfoContainer: mongoId(),
     step3Nav: mongoId(), step3BtnNext: mongoId(), step3BtnNextText: mongoId(),
     step3BtnBack: mongoId(), step3BtnBackText: mongoId(),
     step4: mongoId(), step4Title: mongoId(), step4TitleText: mongoId(),
+    guestCountBlock: mongoId(), guestCountTitle: mongoId(), guestCountTitleStrong: mongoId(), guestCountTitleText: mongoId(), guestCountMaxText: mongoId(),
+    guestCountRow: mongoId(), guestCountMinus: mongoId(), guestCountMinusText: mongoId(), guestCountValue: mongoId(), guestCountValueText: mongoId(), guestCountPlus: mongoId(), guestCountPlusText: mongoId(),
     addonsContainer: mongoId(),
     step4Nav: mongoId(), step4BtnNext: mongoId(), step4BtnNextText: mongoId(),
     step4BtnBack: mongoId(), step4BtnBackText: mongoId(),
-    step5: mongoId(), step5Title: mongoId(), step5TitleText: mongoId(),
-    summaryContainer: mongoId(),
+    step5: mongoId(), step5Title: mongoId(), step5TitleText: mongoId(), summaryContainer: mongoId(), summaryGrid: mongoId(),
+    formColumn: mongoId(), formColumnTitle: mongoId(), formColumnTitleText: mongoId(),
+    fnameGroup: mongoId(), fnameLabel: mongoId(), fnameLabelText: mongoId(), fnameInput: mongoId(),
+    lnameGroup: mongoId(), lnameLabel: mongoId(), lnameLabelText: mongoId(), lnameInput: mongoId(),
+    emailGroup: mongoId(), emailLabel: mongoId(), emailLabelText: mongoId(), emailInput: mongoId(),
+    phoneGroup: mongoId(), phoneLabel: mongoId(), phoneLabelText: mongoId(), phoneInput: mongoId(),
+    addressGroup: mongoId(), addressLabel: mongoId(), addressLabelText: mongoId(), addressInput: mongoId(),
+    zipCityRow: mongoId(), zipGroup: mongoId(), zipLabel: mongoId(), zipLabelText: mongoId(), zipInput: mongoId(),
+    cityGroup: mongoId(), cityLabel: mongoId(), cityLabelText: mongoId(), cityInput: mongoId(),
+    summaryColumn: mongoId(), summaryColumnTitle: mongoId(), summaryColumnTitleText: mongoId(),
+    summaryDetails: mongoId(), summaryDivider: mongoId(), summaryPrices: mongoId(),
     voucherRow: mongoId(), voucherLabel: mongoId(), voucherLabelText: mongoId(), voucherInput: mongoId(),
     voucherBtn: mongoId(), voucherBtnText: mongoId(), voucherStatus: mongoId(),
     totalDisplay: mongoId(), submitBtn: mongoId(),
@@ -957,7 +986,20 @@ const getWebflowTemplate = () => {
 
   const nodes = [
     // Root & Form
-    { "_id": ids.root, "tag": "div", "classes": c('bf-root'), "children": [ids.form, ids.successMsg, ids.errorMsg], "type": "FormWrapper", "data": { "form": { "type": "wrapper" }, "attr": { "data-bf-root": "true" } } },
+    { "_id": ids.root, "tag": "div", "classes": c('bf-root'), "children": [ids.initError, ids.stepProgress, ids.form, ids.successMsg, ids.errorMsg], "type": "FormWrapper", "data": { "form": { "type": "wrapper" }, "attr": { "data-bf-root": "true" } } },
+    { "_id": ids.initError, "tag": "div", "classes": c('bf-init-error'), "children": [ids.initErrorText], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-init-error": "true", "role": "alert" } } },
+    { "_id": ids.initErrorText, "text": true, "v": "" },
+    { "_id": ids.stepProgress, "tag": "ol", "classes": c('bf-step-progress'), "children": [ids.progressItem1, ids.progressItem2, ids.progressItem3, ids.progressItem4, ids.progressItem5], "type": "Block", "data": { "tag": "ol", "attr": { "data-bf-step-progress": "true" } } },
+    { "_id": ids.progressItem1, "tag": "li", "classes": c('bf-step-progress-item'), "children": [ids.progressItem1Text], "type": "Block", "data": { "tag": "li", "attr": { "data-bf-progress-step": "1", "data-step": "1" } } },
+    { "_id": ids.progressItem1Text, "text": true, "v": "Objekt wählen" },
+    { "_id": ids.progressItem2, "tag": "li", "classes": c('bf-step-progress-item'), "children": [ids.progressItem2Text], "type": "Block", "data": { "tag": "li", "attr": { "data-bf-progress-step": "2", "data-step": "2" } } },
+    { "_id": ids.progressItem2Text, "text": true, "v": "Service wählen" },
+    { "_id": ids.progressItem3, "tag": "li", "classes": c('bf-step-progress-item'), "children": [ids.progressItem3Text], "type": "Block", "data": { "tag": "li", "attr": { "data-bf-progress-step": "3", "data-step": "3" } } },
+    { "_id": ids.progressItem3Text, "text": true, "v": "Datum & Zeit" },
+    { "_id": ids.progressItem4, "tag": "li", "classes": c('bf-step-progress-item'), "children": [ids.progressItem4Text], "type": "Block", "data": { "tag": "li", "attr": { "data-bf-progress-step": "4", "data-step": "4" } } },
+    { "_id": ids.progressItem4Text, "text": true, "v": "Extras" },
+    { "_id": ids.progressItem5, "tag": "li", "classes": c('bf-step-progress-item'), "children": [ids.progressItem5Text], "type": "Block", "data": { "tag": "li", "attr": { "data-bf-progress-step": "5", "data-step": "5" } } },
+    { "_id": ids.progressItem5Text, "text": true, "v": "Zusammenfassung" },
     { "_id": ids.form, "tag": "form", "classes": c('bf-form'), "children": [ids.step1, ids.step2, ids.step3, ids.step4, ids.step5, ids.stepSuccess], "type": "FormForm", "data": { "form": { "type": "form", "name": "booking-form" }, "attr": { "name": "booking-form", "data-name": "Booking Form" } } },
 
     // Step 1: Object
@@ -990,7 +1032,10 @@ const getWebflowTemplate = () => {
     { "_id": ids.step3Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step3TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step3TitleText, "text": true, "v": "Datum & Zeit" },
     { "_id": ids.calendarContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "calendar" } } },
-    { "_id": ids.timeslotsContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "timeslots", "style": "display: none;" } } },
+    { "_id": ids.timeslotsContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.timeslotsTitle], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "timeslots", "style": "display: none;" } } },
+    { "_id": ids.timeslotsTitle, "tag": "p", "classes": [], "children": [ids.timeslotsTitleStrong], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-static": "timeslots-title" } } },
+    { "_id": ids.timeslotsTitleStrong, "tag": "strong", "classes": [], "children": [ids.timeslotsTitleText], "type": "Block", "data": { "tag": "strong" } },
+    { "_id": ids.timeslotsTitleText, "text": true, "v": "Uhrzeit wählen" },
     { "_id": ids.dateInfoContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "dateinfo" } } },
     { "_id": ids.step3Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step3BtnNext, ids.step3BtnBack], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.step3BtnNext, "tag": "a", "classes": c('bf-btn-next'), "children": [ids.step3BtnNextText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "next", "data-bf-goto": "4" } } },
@@ -999,9 +1044,21 @@ const getWebflowTemplate = () => {
     { "_id": ids.step3BtnBackText, "text": true, "v": "Zurück" },
 
     // Step 4: Addons
-    { "_id": ids.step4, "tag": "div", "classes": c('bf-step'), "children": [ids.step4Title, ids.addonsContainer, ids.step4Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "4" } } },
+    { "_id": ids.step4, "tag": "div", "classes": c('bf-step'), "children": [ids.step4Title, ids.guestCountBlock, ids.addonsContainer, ids.step4Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "4" } } },
     { "_id": ids.step4Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step4TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step4TitleText, "text": true, "v": "Extras hinzufügen" },
+    { "_id": ids.guestCountBlock, "tag": "div", "classes": c('bf-guest-count'), "children": [ids.guestCountTitle, ids.guestCountRow], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "guest-count" } } },
+    { "_id": ids.guestCountTitle, "tag": "p", "classes": [], "children": [ids.guestCountTitleStrong, ids.guestCountMaxText], "type": "Paragraph", "data": { "tag": "p" } },
+    { "_id": ids.guestCountTitleStrong, "tag": "strong", "classes": [], "children": [ids.guestCountTitleText], "type": "Block", "data": { "tag": "strong" } },
+    { "_id": ids.guestCountTitleText, "text": true, "v": "Anzahl Gäste" },
+    { "_id": ids.guestCountMaxText, "tag": "small", "classes": [], "children": [], "type": "Block", "data": { "tag": "small", "attr": { "data-bf-display": "guest-max" } } },
+    { "_id": ids.guestCountRow, "tag": "div", "classes": c('bf-qty-row'), "children": [ids.guestCountMinus, ids.guestCountValue, ids.guestCountPlus], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.guestCountMinus, "tag": "a", "classes": c('bf-qty-btn'), "children": [ids.guestCountMinusText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "gc-minus" } } },
+    { "_id": ids.guestCountMinusText, "text": true, "v": "−" },
+    { "_id": ids.guestCountValue, "tag": "span", "classes": c('bf-qty-val'), "children": [ids.guestCountValueText], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "guest-count" } } },
+    { "_id": ids.guestCountValueText, "text": true, "v": "1" },
+    { "_id": ids.guestCountPlus, "tag": "a", "classes": c('bf-qty-btn'), "children": [ids.guestCountPlusText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "gc-plus" } } },
+    { "_id": ids.guestCountPlusText, "text": true, "v": "+" },
     { "_id": ids.addonsContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "addons" } } },
     { "_id": ids.step4Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step4BtnNext, ids.step4BtnBack], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.step4BtnNext, "tag": "a", "classes": c('bf-btn-next'), "children": [ids.step4BtnNextText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "next", "data-bf-goto": "5" } } },
@@ -1013,7 +1070,46 @@ const getWebflowTemplate = () => {
     { "_id": ids.step5, "tag": "div", "classes": c('bf-step'), "children": [ids.step5Title, ids.summaryContainer, ids.voucherLabel, ids.voucherRow, ids.voucherStatus, ids.totalDisplay, ids.submitBtn, ids.step5Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "5" } } },
     { "_id": ids.step5Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step5TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step5TitleText, "text": true, "v": "Zusammenfassung" },
-    { "_id": ids.summaryContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary" } } },
+    { "_id": ids.summaryContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.summaryGrid], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary" } } },
+    { "_id": ids.summaryGrid, "tag": "div", "classes": c('bf-grid-2'), "children": [ids.formColumn, ids.summaryColumn], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "summary-grid" } } },
+    { "_id": ids.formColumn, "tag": "div", "classes": [], "children": [ids.formColumnTitle, ids.fnameGroup, ids.lnameGroup, ids.emailGroup, ids.phoneGroup, ids.addressGroup, ids.zipCityRow], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.formColumnTitle, "tag": "h3", "classes": [], "children": [ids.formColumnTitleText], "type": "Heading", "data": { "tag": "h3" } },
+    { "_id": ids.formColumnTitleText, "text": true, "v": "Ihre Daten" },
+    { "_id": ids.fnameGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.fnameLabel, ids.fnameInput], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.fnameLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.fnameLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-fname" } } },
+    { "_id": ids.fnameLabelText, "text": true, "v": "Vorname *" },
+    { "_id": ids.fnameInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "fname" }, "attr": { "type": "text", "id": "bf-fname", "name": "fname", "placeholder": "Max", "data-bf-bind": "fname" } } },
+    { "_id": ids.lnameGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.lnameLabel, ids.lnameInput], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.lnameLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.lnameLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-lname" } } },
+    { "_id": ids.lnameLabelText, "text": true, "v": "Nachname *" },
+    { "_id": ids.lnameInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "lname" }, "attr": { "type": "text", "id": "bf-lname", "name": "lname", "placeholder": "Mustermann", "data-bf-bind": "lname" } } },
+    { "_id": ids.emailGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.emailLabel, ids.emailInput], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.emailLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.emailLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-email" } } },
+    { "_id": ids.emailLabelText, "text": true, "v": "E-Mail Adresse *" },
+    { "_id": ids.emailInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "email" }, "attr": { "type": "email", "id": "bf-email", "name": "email", "placeholder": "max@beispiel.de", "data-bf-bind": "email" } } },
+    { "_id": ids.phoneGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.phoneLabel, ids.phoneInput], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.phoneLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.phoneLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-phone" } } },
+    { "_id": ids.phoneLabelText, "text": true, "v": "Telefonnummer" },
+    { "_id": ids.phoneInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "phone" }, "attr": { "type": "tel", "id": "bf-phone", "name": "phone", "placeholder": "+49 123 456789", "data-bf-bind": "phone" } } },
+    { "_id": ids.addressGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.addressLabel, ids.addressInput], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.addressLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.addressLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-address" } } },
+    { "_id": ids.addressLabelText, "text": true, "v": "Adresse *" },
+    { "_id": ids.addressInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "address" }, "attr": { "type": "text", "id": "bf-address", "name": "address", "placeholder": "Musterstraße 1", "data-bf-bind": "address" } } },
+    { "_id": ids.zipCityRow, "tag": "div", "classes": c('bf-row-2'), "children": [ids.zipGroup, ids.cityGroup], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.zipGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.zipLabel, ids.zipInput], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.zipLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.zipLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-zip" } } },
+    { "_id": ids.zipLabelText, "text": true, "v": "PLZ *" },
+    { "_id": ids.zipInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "zip" }, "attr": { "type": "text", "id": "bf-zip", "name": "zip", "placeholder": "12345", "data-bf-bind": "zip" } } },
+    { "_id": ids.cityGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.cityLabel, ids.cityInput], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cityLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.cityLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-city" } } },
+    { "_id": ids.cityLabelText, "text": true, "v": "Stadt *" },
+    { "_id": ids.cityInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "city" }, "attr": { "type": "text", "id": "bf-city", "name": "city", "placeholder": "Berlin", "data-bf-bind": "city" } } },
+    { "_id": ids.summaryColumn, "tag": "div", "classes": [], "children": [ids.summaryColumnTitle, ids.summaryDetails, ids.summaryDivider, ids.summaryPrices], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.summaryColumnTitle, "tag": "h3", "classes": [], "children": [ids.summaryColumnTitleText], "type": "Heading", "data": { "tag": "h3" } },
+    { "_id": ids.summaryColumnTitleText, "text": true, "v": "Zusammenfassung" },
+    { "_id": ids.summaryDetails, "tag": "div", "classes": [], "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary-details" } } },
+    { "_id": ids.summaryDivider, "tag": "div", "classes": c('bf-summary-divider'), "children": [], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.summaryPrices, "tag": "div", "classes": [], "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary-prices" } } },
     { "_id": ids.voucherLabel, "tag": "label", "classes": c('bf-label'), "children": [ids.voucherLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "voucher" } } },
     { "_id": ids.voucherLabelText, "text": true, "v": "Gutscheincode" },
     { "_id": ids.voucherRow, "tag": "div", "classes": c('bf-voucher-row'), "children": [ids.voucherInput, ids.voucherBtn], "type": "Block", "data": { "tag": "div" } },
