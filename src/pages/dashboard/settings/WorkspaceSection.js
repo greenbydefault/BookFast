@@ -942,6 +942,47 @@ const getWebflowTemplate = () => {
   defClass('bf-success-title', 'font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; margin-top: 0;');
   defClass('bf-success-desc', 'color: #71717a; font-size: 1rem; margin-top: 0;');
 
+  // Dynamic calendar classes (used by embed.js popCal)
+  defClass('bf-cal', '');
+  defClass('bf-cal-header', 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;');
+  defClass('bf-cal-nav', 'background-color: transparent; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; cursor: pointer; padding-top: 0.4rem; padding-bottom: 0.4rem; padding-left: 0.8rem; padding-right: 0.8rem; font-size: inherit; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem;');
+  defClass('bf-cal-grid', 'user-select: none;');
+  defClass('bf-cal-weekdays', 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.125rem; text-align: center;');
+  defClass('bf-cal-weekday', 'padding-top: 0.4rem; padding-bottom: 0.4rem; font-size: 0.8rem; font-weight: 600; opacity: 0.6;');
+  defClass('bf-cal-days', 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.125rem; text-align: center;');
+  defClass('bf-day', 'min-width: 2.5rem; min-height: 2.5rem; padding-top: 0; padding-bottom: 0; padding-left: 0; padding-right: 0; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; border-top-left-radius: 50%; border-top-right-radius: 50%; border-bottom-left-radius: 50%; border-bottom-right-radius: 50%; background-color: transparent; cursor: pointer; font-size: inherit; display: flex; align-items: center; justify-content: center;');
+  defClass('bf-day-other', 'visibility: hidden;');
+  defClass('bf-day-disabled', 'opacity: 0.25; cursor: default;');
+  defClass('bf-day-selected', 'font-weight: 700; background-color: rgba(0, 0, 0, 0.1);');
+  defClass('bf-day-range', 'background-color: rgba(0, 0, 0, 0.04);');
+  defClass('bf-day-today', 'border-top-width: 0.125rem; border-bottom-width: 0.125rem; border-left-width: 0.125rem; border-right-width: 0.125rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: currentColor; border-bottom-color: currentColor; border-left-color: currentColor; border-right-color: currentColor;');
+
+  // Timeslot classes (used by embed.js popSlots)
+  defClass('bf-slot', 'display: inline-flex; align-items: center; justify-content: center; min-width: 4rem; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; background-color: transparent; cursor: pointer; font-size: inherit; margin-right: 0.375rem; margin-bottom: 0.375rem;');
+  defClass('bf-slot-disabled', 'opacity: 0.3; cursor: default; text-decoration: line-through;');
+  defClass('bf-slot-selected', 'font-weight: 700; border-top-color: currentColor; border-bottom-color: currentColor; border-left-color: currentColor; border-right-color: currentColor; background-color: rgba(0, 0, 0, 0.06);');
+
+  // Addon classes (used by embed.js popAddons)
+  defClass('bf-checkbox', 'display: block; cursor: pointer; padding-top: 0.5rem; padding-bottom: 0.5rem;');
+  defClass('bf-addon-card', 'border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e5e7eb; border-bottom-color: #e5e7eb; border-left-color: #e5e7eb; border-right-color: #e5e7eb; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem; margin-bottom: 0.5rem; background-color: #fafafa;');
+  defClass('bf-addon-active', 'border-top-color: #2563eb; border-bottom-color: #2563eb; border-left-color: #2563eb; border-right-color: #2563eb; background-color: #eff6ff;');
+  defClass('bf-addon-header', 'display: flex; align-items: center; gap: 0.5rem; cursor: pointer;');
+  defClass('bf-addon-body', 'margin-top: 0.5rem; padding-left: 1.5rem;');
+  defClass('bf-addon-item', 'margin-bottom: 0.375rem;');
+  defClass('bf-addon-item-label', 'font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;');
+  defClass('bf-variant-radios', '');
+  defClass('bf-variant-select', 'padding-top: 0.25rem; padding-bottom: 0.25rem; padding-left: 0.5rem; padding-right: 0.5rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border-bottom-left-radius: 0.25rem; border-bottom-right-radius: 0.25rem; font-size: 0.85rem;');
+  defClass('bf-guest-block', 'padding-top: 0.625rem; border-top-width: 0.0625rem; border-top-style: solid; border-top-color: #e5e7eb;');
+  defClass('bf-guest-label', 'font-weight: 600; font-size: 0.9rem; margin-bottom: 0.375rem; color: #1e40af;');
+  defClass('bf-dateinfo', 'margin-top: 0.75rem; margin-bottom: 0.75rem;');
+
+  // Layout helper classes
+  defClass('bf-form-column', '');
+  defClass('bf-summary-column', '');
+  defClass('bf-total', 'font-weight: 700;');
+  defClass('bf-timeslots-list', '');
+  defClass('bf-price-rows', '');
+
   const c = (name) => [cls[name]];
 
   const ids = {
@@ -1029,7 +1070,7 @@ const getWebflowTemplate = () => {
     { "_id": ids.form, "tag": "form", "classes": c('bf-form'), "children": [ids.step1, ids.step2, ids.step3, ids.step4, ids.step5, ids.stepSuccess], "type": "FormForm", "data": { "form": { "type": "form", "name": "booking-form" }, "attr": { "name": "booking-form", "data-name": "Booking Form" } } },
 
     // Step 1: Object
-    { "_id": ids.step1, "tag": "div", "classes": c('bf-step'), "children": [ids.step1Title, ids.objectLabel, ids.objectSelect, ids.step1Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "1" } } },
+    { "_id": ids.step1, "tag": "div", "classes": c('bf-step'), "children": [ids.step1Title, ids.objectLabel, ids.objectSelect, ids.step1Nav], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "1", "aria-label": "Objekt wählen" } } },
     { "_id": ids.step1Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step1TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step1TitleText, "text": true, "v": "Objekt wählen" },
     { "_id": ids.objectLabel, "tag": "label", "classes": c('bf-label'), "children": [ids.objectLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "object" } } },
@@ -1037,12 +1078,12 @@ const getWebflowTemplate = () => {
     { "_id": ids.objectSelect, "tag": "select", "classes": c('bf-select'), "children": [ids.objectPlaceholder], "type": "FormSelect", "data": { "form": { "type": "select", "name": "object" }, "attr": { "name": "object", "id": "object", "data-bf-field": "object", "data-bf-dynamic": "objects", "required": true } } },
     { "_id": ids.objectPlaceholder, "tag": "option", "classes": [], "children": [ids.objectPlaceholderText], "type": "FormSelectOption", "data": { "form": { "type": "select-option" }, "attr": { "value": "" } } },
     { "_id": ids.objectPlaceholderText, "text": true, "v": "Bitte wählen..." },
-    { "_id": ids.step1Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step1Btn], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.step1Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step1Btn], "type": "Block", "data": { "tag": "nav" } },
     { "_id": ids.step1Btn, "tag": "a", "classes": c('bf-btn-next'), "children": [ids.step1BtnText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "next", "data-bf-goto": "2" } } },
     { "_id": ids.step1BtnText, "text": true, "v": "Weiter" },
 
     // Step 2: Service
-    { "_id": ids.step2, "tag": "div", "classes": c('bf-step'), "children": [ids.step2Title, ids.servicesContainer, ids.staffContainer, ids.step2Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "2" } } },
+    { "_id": ids.step2, "tag": "div", "classes": c('bf-step'), "children": [ids.step2Title, ids.servicesContainer, ids.staffContainer, ids.step2Nav], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "2", "aria-label": "Service wählen" } } },
     { "_id": ids.step2Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step2TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step2TitleText, "text": true, "v": "Service wählen" },
     { "_id": ids.servicesContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "services" } } },
@@ -1055,14 +1096,14 @@ const getWebflowTemplate = () => {
     { "_id": ids.staffAnySpan, "tag": "span", "classes": [], "children": [ids.staffAnySpanText], "type": "Block", "data": { "tag": "span" } },
     { "_id": ids.staffAnySpanText, "text": true, "v": "Egal" },
     { "_id": ids.staffList, "tag": "div", "classes": [], "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "staff-list" } } },
-    { "_id": ids.step2Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step2BtnNext, ids.step2BtnBack], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.step2Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step2BtnNext, ids.step2BtnBack], "type": "Block", "data": { "tag": "nav" } },
     { "_id": ids.step2BtnNext, "tag": "a", "classes": c('bf-btn-next'), "children": [ids.step2BtnNextText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "next", "data-bf-goto": "3" } } },
     { "_id": ids.step2BtnNextText, "text": true, "v": "Weiter" },
     { "_id": ids.step2BtnBack, "tag": "a", "classes": c('bf-btn-back'), "children": [ids.step2BtnBackText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "back", "data-bf-goto": "1" } } },
     { "_id": ids.step2BtnBackText, "text": true, "v": "Zurück" },
 
     // Step 3: Date & Time
-    { "_id": ids.step3, "tag": "div", "classes": c('bf-step'), "children": [ids.step3Title, ids.calendarContainer, ids.timeslotsContainer, ids.dateInfoContainer, ids.step3Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "3" } } },
+    { "_id": ids.step3, "tag": "div", "classes": c('bf-step'), "children": [ids.step3Title, ids.calendarContainer, ids.timeslotsContainer, ids.dateInfoContainer, ids.step3Nav], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "3", "aria-label": "Datum & Zeit" } } },
     { "_id": ids.step3Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step3TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step3TitleText, "text": true, "v": "Datum & Zeit" },
     { "_id": ids.calendarContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "calendar" } } },
@@ -1081,14 +1122,14 @@ const getWebflowTemplate = () => {
     { "_id": ids.availAvailableText, "text": true, "v": "Verfügbar" },
     { "_id": ids.availUnavailable, "tag": "span", "classes": [], "children": [ids.availUnavailableText], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-status": "unavailable", "style": "display: none;" } } },
     { "_id": ids.availUnavailableText, "text": true, "v": "Nicht verfügbar" },
-    { "_id": ids.step3Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step3BtnNext, ids.step3BtnBack], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.step3Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step3BtnNext, ids.step3BtnBack], "type": "Block", "data": { "tag": "nav" } },
     { "_id": ids.step3BtnNext, "tag": "a", "classes": c('bf-btn-next'), "children": [ids.step3BtnNextText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "next", "data-bf-goto": "4" } } },
     { "_id": ids.step3BtnNextText, "text": true, "v": "Weiter" },
     { "_id": ids.step3BtnBack, "tag": "a", "classes": c('bf-btn-back'), "children": [ids.step3BtnBackText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "back", "data-bf-goto": "2" } } },
     { "_id": ids.step3BtnBackText, "text": true, "v": "Zurück" },
 
     // Step 4: Addons
-    { "_id": ids.step4, "tag": "div", "classes": c('bf-step'), "children": [ids.step4Title, ids.guestCountBlock, ids.addonsContainer, ids.step4Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "4" } } },
+    { "_id": ids.step4, "tag": "div", "classes": c('bf-step'), "children": [ids.step4Title, ids.guestCountBlock, ids.addonsContainer, ids.step4Nav], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "4", "aria-label": "Extras hinzufügen" } } },
     { "_id": ids.step4Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step4TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step4TitleText, "text": true, "v": "Extras hinzufügen" },
     { "_id": ids.guestCountBlock, "tag": "div", "classes": c('bf-guest-count'), "children": [ids.guestCountTitle, ids.guestCountRow], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "guest-count" } } },
@@ -1104,19 +1145,19 @@ const getWebflowTemplate = () => {
     { "_id": ids.guestCountPlus, "tag": "a", "classes": c('bf-qty-btn'), "children": [ids.guestCountPlusText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "gc-plus" } } },
     { "_id": ids.guestCountPlusText, "text": true, "v": "+" },
     { "_id": ids.addonsContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "addons" } } },
-    { "_id": ids.step4Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step4BtnNext, ids.step4BtnBack], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.step4Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step4BtnNext, ids.step4BtnBack], "type": "Block", "data": { "tag": "nav" } },
     { "_id": ids.step4BtnNext, "tag": "a", "classes": c('bf-btn-next'), "children": [ids.step4BtnNextText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "next", "data-bf-goto": "5" } } },
     { "_id": ids.step4BtnNextText, "text": true, "v": "Weiter" },
     { "_id": ids.step4BtnBack, "tag": "a", "classes": c('bf-btn-back'), "children": [ids.step4BtnBackText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "back", "data-bf-goto": "3" } } },
     { "_id": ids.step4BtnBackText, "text": true, "v": "Zurück" },
 
     // Step 5: Summary
-    { "_id": ids.step5, "tag": "div", "classes": c('bf-step'), "children": [ids.step5Title, ids.summaryContainer, ids.voucherLabel, ids.voucherRow, ids.voucherStatus, ids.totalDisplay, ids.submitBtn, ids.step5Nav], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "5" } } },
+    { "_id": ids.step5, "tag": "div", "classes": c('bf-step'), "children": [ids.step5Title, ids.summaryContainer, ids.voucherLabel, ids.voucherRow, ids.voucherStatus, ids.totalDisplay, ids.submitBtn, ids.step5Nav], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "5", "aria-label": "Zusammenfassung" } } },
     { "_id": ids.step5Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step5TitleText], "type": "Heading", "data": { "tag": "h2" } },
     { "_id": ids.step5TitleText, "text": true, "v": "Zusammenfassung" },
     { "_id": ids.summaryContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.summaryGrid], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary" } } },
     { "_id": ids.summaryGrid, "tag": "div", "classes": c('bf-grid-2'), "children": [ids.formColumn, ids.summaryColumn], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "summary-grid" } } },
-    { "_id": ids.formColumn, "tag": "div", "classes": [], "children": [ids.formColumnTitle, ids.fnameGroup, ids.lnameGroup, ids.emailGroup, ids.phoneGroup, ids.addressGroup, ids.zipCityRow], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.formColumn, "tag": "div", "classes": c('bf-form-column'), "children": [ids.formColumnTitle, ids.fnameGroup, ids.lnameGroup, ids.emailGroup, ids.phoneGroup, ids.addressGroup, ids.zipCityRow], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.formColumnTitle, "tag": "h3", "classes": [], "children": [ids.formColumnTitleText], "type": "Heading", "data": { "tag": "h3" } },
     { "_id": ids.formColumnTitleText, "text": true, "v": "Ihre Daten" },
     { "_id": ids.fnameGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.fnameLabel, ids.fnameInput], "type": "Block", "data": { "tag": "div" } },
@@ -1148,7 +1189,7 @@ const getWebflowTemplate = () => {
     { "_id": ids.cityLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.cityLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-city" } } },
     { "_id": ids.cityLabelText, "text": true, "v": "Stadt *" },
     { "_id": ids.cityInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "city" }, "attr": { "type": "text", "id": "bf-city", "name": "city", "placeholder": "Berlin", "data-bf-bind": "city" } } },
-    { "_id": ids.summaryColumn, "tag": "div", "classes": [], "children": [ids.summaryColumnTitle, ids.summaryDetails, ids.summaryDivider, ids.summaryPrices], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.summaryColumn, "tag": "div", "classes": c('bf-summary-column'), "children": [ids.summaryColumnTitle, ids.summaryDetails, ids.summaryDivider, ids.summaryPrices], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.summaryColumnTitle, "tag": "h3", "classes": [], "children": [ids.summaryColumnTitleText], "type": "Heading", "data": { "tag": "h3" } },
     { "_id": ids.summaryColumnTitleText, "text": true, "v": "Zusammenfassung" },
     { "_id": ids.summaryDetails, "tag": "div", "classes": [], "children": [ids.sumRowObject, ids.sumRowService, ids.sumRowStaff, ids.sumRowGuests, ids.sumRowDate, ids.sumRowTime], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary-details" } } },
@@ -1178,7 +1219,7 @@ const getWebflowTemplate = () => {
     { "_id": ids.sumRowTimeValue, "tag": "span", "classes": c('bf-summary-value'), "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-time" } } },
     { "_id": ids.summaryDivider, "tag": "div", "classes": c('bf-summary-divider'), "children": [], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.summaryPrices, "tag": "div", "classes": [], "children": [ids.priceRows, ids.sumRowTotal], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary-prices" } } },
-    { "_id": ids.priceRows, "tag": "div", "classes": [], "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "price-rows" } } },
+    { "_id": ids.priceRows, "tag": "div", "classes": c('bf-price-rows'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "price-rows" } } },
     { "_id": ids.sumRowTotal, "tag": "div", "classes": c('bf-summary-row'), "children": [ids.sumRowTotalLabel, ids.sumRowTotalValue], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-summary": "total" } } },
     { "_id": ids.sumRowTotalLabel, "tag": "span", "classes": c('bf-summary-label'), "children": [ids.sumRowTotalLabelText], "type": "Block", "data": { "tag": "span" } },
     { "_id": ids.sumRowTotalLabelText, "text": true, "v": "Gesamt" },
@@ -1198,12 +1239,12 @@ const getWebflowTemplate = () => {
     { "_id": ids.voucherCheckingText, "text": true, "v": "Wird geprüft..." },
     { "_id": ids.totalDisplay, "tag": "div", "classes": c('bf-total-display'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-display": "total" } } },
     { "_id": ids.submitBtn, "tag": "input", "classes": c('bf-submit'), "children": [], "type": "FormButton", "data": { "form": { "type": "button", "wait": "Wird gesendet..." }, "attr": { "type": "submit", "value": "Buchung anfragen", "data-bf-action": "submit" } } },
-    { "_id": ids.step5Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step5BtnBack], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.step5Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step5BtnBack], "type": "Block", "data": { "tag": "nav" } },
     { "_id": ids.step5BtnBack, "tag": "a", "classes": c('bf-btn-back'), "children": [ids.step5BtnBackText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "back", "data-bf-goto": "4" } } },
     { "_id": ids.step5BtnBackText, "text": true, "v": "Zurück" },
 
     // Success
-    { "_id": ids.stepSuccess, "tag": "div", "classes": c('bf-success'), "children": [ids.successIcon, ids.successTitle, ids.successDesc], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-step": "success" } } },
+    { "_id": ids.stepSuccess, "tag": "div", "classes": c('bf-success'), "children": [ids.successIcon, ids.successTitle, ids.successDesc], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "success", "role": "status", "aria-label": "Buchung erfolgreich" } } },
     { "_id": ids.successIcon, "tag": "div", "classes": c('bf-success-icon'), "children": [ids.successIconText], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.successIconText, "text": true, "v": "🎉" },
     { "_id": ids.successTitle, "tag": "h2", "classes": c('bf-success-title'), "children": [ids.successTitleText], "type": "Heading", "data": { "tag": "h2" } },

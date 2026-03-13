@@ -16,6 +16,12 @@
         try { localStorage.setItem(SESSION_KEY, id); } catch { }
         return id;
     })();
+    // Ping sofort beim Load – Domain-Verknuepfung braucht kein Root-Element
+    fetch(`${API}/rest/v1/rpc/ping_site`, {
+        method: 'POST', keepalive: true, headers: HDR,
+        body: JSON.stringify({ site_id: siteId, p_domain: location.hostname })
+    }).catch(() => {});
+
     const DAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
     const DAYS_FULL = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const MONTHS = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
@@ -160,58 +166,22 @@
         return slots.some(s => s.available);
     };
 
-    // --- Minimales Layout-CSS (nur dynamisch generierte Elemente) ---
+    // --- Minimal CSS: nur Pseudo-Klassen und Eigenschaften die Webflow styleLess nicht abbilden kann ---
     const css = () => {
         if (document.getElementById('bf-css')) return;
         const s = document.createElement('style'); s.id = 'bf-css';
         s.textContent = [
-            // Calendar
-            '.bf-cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}',
-            '.bf-cal-header button{background:none;border:none;cursor:pointer;padding:.4rem .8rem;font:inherit;border-radius:.375rem}',
-            '.bf-cal-header button:hover{background:rgba(0,0,0,.05)}',
-            '.bf-cal-grid{user-select:none}',
-            '.bf-cal-weekdays,.bf-cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:.125rem;text-align:center}',
-            '.bf-cal-weekdays span{padding:.4rem;font-size:.8rem;font-weight:600;opacity:.6}',
-            '.bf-day{min-width:2.5rem;min-height:2.5rem;padding:0;border:none;border-radius:50%;background:none;cursor:pointer;font:inherit;display:flex;align-items:center;justify-content:center;transition:background .15s,opacity .15s}',
             '.bf-day:hover:not(:disabled){background:rgba(0,0,0,.06)}',
             '.bf-day:disabled{cursor:default}',
-            '.bf-day-other{visibility:hidden}',
-            '.bf-day-disabled{opacity:.25;cursor:default}',
-            '.bf-day-selected{font-weight:700;background:rgba(0,0,0,.1);border-radius:50%}',
-            '.bf-day-range{background:rgba(0,0,0,.04)}',
-            '.bf-day-today{outline:.125rem solid currentColor;outline-offset:-.125rem}',
-            // Timeslots
-            '.bf-slot{display:inline-flex;align-items:center;justify-content:center;min-width:4rem;padding:.5rem .75rem;border:.0625rem solid #d1d5db;border-radius:.375rem;background:none;cursor:pointer;font:inherit;margin:0 .375rem .375rem 0;transition:background .15s,opacity .15s}',
             '.bf-slot:hover:not(:disabled){background:rgba(0,0,0,.05)}',
-            '.bf-slot-disabled{opacity:.3;cursor:default;text-decoration:line-through}',
-            '.bf-slot-selected{font-weight:700;border-color:currentColor;background:rgba(0,0,0,.06)}',
-            // Radio / Checkbox (dynamic service & staff lists)
-            '.bf-radio,.bf-checkbox{display:block;cursor:pointer;padding:.5rem 0}',
-            // Addon cards
-            '.bf-addon-card{border:.0625rem solid #e5e7eb;border-radius:.5rem;padding:.75rem;margin-bottom:.5rem;background:#fafafa}',
-            '.bf-addon-card.active{border-color:#2563eb;background:#eff6ff}',
-            '.bf-addon-header{display:flex;align-items:center;gap:.5rem;cursor:pointer}',
+            '.bf-cal-nav:hover{background:rgba(0,0,0,.05)}',
             '.bf-addon-header input{margin:0}',
-            '.bf-addon-body{margin-top:.5rem;padding-left:1.5rem}',
-            '.bf-addon-item{margin-bottom:.375rem}',
-            '.bf-addon-item-label{font-size:.85rem;font-weight:500;margin-bottom:.25rem}',
             '.bf-variant-radios label{display:block;padding:.125rem 0;font-size:.85rem;cursor:pointer}',
             '.bf-variant-radios input{margin-right:.375rem}',
-            '.bf-variant-select{padding:.25rem .5rem;border:.0625rem solid #d1d5db;border-radius:.25rem;font-size:.85rem}',
-            // Addon guest blocks (content rows)
-            '.bf-guest-block{padding:.625rem 0;border-top:.0625rem solid #e5e7eb}',
             '.bf-guest-block:first-child{border-top:none;padding-top:0}',
-            '.bf-guest-label{font-weight:600;font-size:.9rem;margin-bottom:.375rem;color:#1e40af}',
-            // Date info & availability
-            '.bf-dateinfo{margin:.75rem 0}',
-            '.bf-avail-status[data-status="available"]{color:#16a34a}',
-            '.bf-avail-status[data-status="unavailable"]{color:#dc2626}',
-            '.bf-avail-status[data-status="checking"]{opacity:.6}',
             '[data-bf-status="available"]{color:#16a34a}',
             '[data-bf-status="unavailable"]{color:#dc2626}',
             '[data-bf-status="checking"]{opacity:.6}',
-            // Summary rows (fallback for dynamically generated price rows)
-            '.bf-summary-row{display:flex;justify-content:space-between;padding:.35rem 0}',
         ].join('');
         document.head.appendChild(s);
     };
@@ -432,7 +402,7 @@
         const today = fmtDate(new Date());
         const isON = state.sel.service?.service_type === 'overnight';
 
-        c.innerHTML = `<div class="bf-cal"><div class="bf-cal-header"><button type="button" data-nav="-1">‹ Zurück</button><span><strong>${MONTHS[m]} ${y}</strong></span><button type="button" data-nav="1">Weiter ›</button></div><div class="bf-cal-grid"><div class="bf-cal-weekdays">${DAYS.map(d => `<span>${d}</span>`).join('')}</div><div class="bf-cal-days">${days.map(d => {
+        c.innerHTML = `<div class="bf-cal"><div class="bf-cal-header"><button type="button" class="bf-cal-nav" data-nav="-1">‹ Zurück</button><span><strong>${MONTHS[m]} ${y}</strong></span><button type="button" class="bf-cal-nav" data-nav="1">Weiter ›</button></div><div class="bf-cal-grid"><div class="bf-cal-weekdays">${DAYS.map(d => `<span class="bf-cal-weekday">${d}</span>`).join('')}</div><div class="bf-cal-days">${days.map(d => {
             const ds = fmtDate(d), other = d.getMonth() !== m, ok = bookable(d, state.sel.service, state.sel.object), bk = blocked.includes(ds);
             const isSel = sameDay(d, state.sel.startDate) || sameDay(d, state.sel.endDate);
             const inR = isON && inRange(d, state.sel.startDate, state.sel.endDate);
@@ -476,8 +446,6 @@
         }
 
         let html = '';
-        if (!hasStaticTitle) html += '<p><strong>Uhrzeit wählen</strong></p>';
-        if (!anyAvail && !staticEmpty) html += '<p class="bf-slots-empty">Keine freien Termine an diesem Tag.</p>';
         html += state.slots.map(s => {
             const sel = state.sel.time === s.start;
             const cls = `bf-slot${s.available ? '' : ' bf-slot-disabled'}${sel ? ' bf-slot-selected' : ''}`;
@@ -493,15 +461,10 @@
         const { service: svc, startDate: sd, endDate: ed, time } = state.sel;
         const staticText = c.querySelector('[data-bf-static="dateinfo-text"]');
         const staticAvail = c.querySelector('[data-bf-static="avail-status"]');
-        const hasTemplate = !!staticText && !!staticAvail;
 
         if (!svc || !sd) {
-            if (hasTemplate) {
-                staticText.innerHTML = '';
-                staticAvail.style.display = 'none';
-            } else {
-                c.innerHTML = '';
-            }
+            if (staticText) staticText.innerHTML = '';
+            if (staticAvail) staticAvail.style.display = 'none';
             return;
         }
 
@@ -511,8 +474,8 @@
         else if (isH && sd) dateHtml = `<p><strong>${fmtDisplay(sd)}</strong>${time ? `<br>${time} Uhr (${svc.duration_minutes} Min.)` : ''}</p>`;
         else if (sd) dateHtml = `<p><strong>${fmtDisplay(sd)}</strong><br>Ganztags</p>`;
 
-        if (hasTemplate) {
-            staticText.innerHTML = dateHtml;
+        if (staticText) staticText.innerHTML = dateHtml;
+        if (staticAvail) {
             if (state.availStatus) {
                 staticAvail.style.display = 'block';
                 staticAvail.querySelectorAll('[data-bf-status]').forEach(el => {
@@ -521,17 +484,9 @@
             } else {
                 staticAvail.style.display = 'none';
             }
-        } else {
-            let h = `<div class="bf-dateinfo">${dateHtml}</div>`;
-            if (state.availStatus) {
-                const t = { checking: '⏳ Prüfe Verfügbarkeit...', available: '✅ Verfügbar', unavailable: '❌ Nicht verfügbar' }[state.availStatus];
-                h += `<p class="bf-avail-status" data-status="${state.availStatus}"><strong>${t}</strong></p>`;
-            }
-            c.innerHTML = h;
         }
     };
 
-    // --- Gästezahl ändern ---
     // --- Gästezahl ändern ---
     const setGuestCount = (n) => {
         const max = state.sel.object?.capacity || 99;
@@ -588,24 +543,11 @@
         const c = dyn('addons');
         if (!c) return;
         const adds = state.data.addons.filter(a => a.linked_service_ids?.includes(state.sel.service?.id));
-        const hasTemplateGuestCount = !!$('[data-bf-static="guest-count"]');
-        const max = state.sel.object?.capacity || 99;
         const gc = state.sel.guestCount;
         updateGuestCountUI();
 
         let html = '';
-        if (!hasTemplateGuestCount) {
-            html = `<div class="bf-guest-count">
-                <p><strong>Anzahl Gäste</strong>${max < 99 ? ` <small>(Max: ${max})</small>` : ''}</p>
-                <div class="bf-qty-row" style="margin-bottom:1rem">
-                    <button class="bf-qty-btn" id="bf-gc-minus" type="button" ${gc <= 1 ? 'disabled' : ''}>−</button>
-                    <span class="bf-qty-val" id="bf-gc-val">${gc}</span>
-                    <button class="bf-qty-btn" id="bf-gc-plus" type="button" ${gc >= max ? 'disabled' : ''}>+</button>
-                </div>
-            </div>`;
-        }
-
-        if (!adds.length) { html += '<p>Keine Extras.</p>'; c.innerHTML = html; bindGuestCount(c); return; }
+        if (!adds.length) { c.innerHTML = '<p>Keine Extras.</p>'; bindGuestCount(c); return; }
 
         html += adds.map(a => {
             const sel = state.sel.addons.find(x => x.id === a.id);
@@ -678,7 +620,7 @@
                 }
             }
 
-            return `<div class="bf-addon-card${isActive ? ' active' : ''}" data-addon-card="${a.id}">
+            return `<div class="bf-addon-card${isActive ? ' bf-addon-active' : ''}" data-addon-card="${a.id}">
                 <div class="bf-addon-header"><input type="checkbox" name="bf-addon" value="${a.id}"${isActive ? ' checked' : ''}><strong>${a.name}</strong> <span>(+€${a.price})</span></div>
                 ${isActive ? `<div class="bf-addon-body">${body}</div>` : ''}
             </div>`;
@@ -801,17 +743,16 @@
         const priceRowsEl = c.querySelector('[data-bf-dynamic="price-rows"]');
         const hasTemplateRows = summaryRows.length > 0 && priceRowsEl;
 
-        if (hasTemplateRows) {
-            // Template-First: bind form inputs
-            templateBindInputs.forEach(i => {
-                const key = i.dataset.bfBind;
-                if (!key) return;
-                const value = state.sel[key] || '';
-                if (i.value !== value) i.value = value;
-                i.oninput = e => { state.sel[key] = e.target.value; };
-            });
+        // Bind form inputs
+        templateBindInputs.forEach(i => {
+            const key = i.dataset.bfBind;
+            if (!key) return;
+            const value = state.sel[key] || '';
+            if (i.value !== value) i.value = value;
+            i.oninput = e => { state.sel[key] = e.target.value; };
+        });
 
-            // Fill summary detail values via textContent
+        if (hasTemplateRows) {
             const setVal = (key, val) => { const el = c.querySelector(`[data-bf-display="summary-${key}"]`); if (el) el.textContent = val || '-'; };
             setVal('object', obj?.name);
             setVal('service', svc?.name);
@@ -820,65 +761,12 @@
             setVal('date', dt);
             setVal('time', isH && time ? `${time} (${svc?.duration_minutes}min)` : '');
 
-            // Show/hide conditional rows
             const showRow = (key, visible) => { const row = c.querySelector(`[data-bf-summary="${key}"]`); if (row) row.style.display = visible ? '' : 'none'; };
             showRow('staff', !!stf);
             showRow('time', isH && !!time);
 
-            // Price rows
             priceRowsEl.innerHTML = priceRowsHtml;
-
-            // Total
             setVal('total', totalStr);
-        } else {
-            // Fallback: build table-based HTML for old templates
-            let rows = `<tr><td>Objekt</td><td>${obj?.name || '-'}</td></tr>`;
-            rows += `<tr><td>Service</td><td>${svc?.name || '-'}</td></tr>`;
-            if (stf) rows += `<tr><td>Mitarbeiter</td><td>${stf.name}</td></tr>`;
-            rows += `<tr><td>Anzahl Gäste</td><td>${guestCount}</td></tr>`;
-            rows += `<tr><td>Datum</td><td>${dt}</td></tr>`;
-            if (isH && time) rows += `<tr><td>Uhrzeit</td><td>${time} (${svc?.duration_minutes}min)</td></tr>`;
-            let prices = `<tr><td>${svc?.name}</td><td>€${base.toFixed(2)}</td></tr>`;
-            state.sel.addons.forEach(sel => {
-                const a = state.data.addons.find(x => x.id === sel.id);
-                if (!a) return;
-                const items = a.addon_items || [];
-                if (items.length) {
-                    (sel.items || []).forEach((it, ii) => { if (!it) return; const def = items[ii]; if (!def) return; const detail = it.variant ? ` ${it.variant}` : ''; const qty = it.qty || 1; prices += `<tr><td>+ ${def.name}${detail}</td><td>€${(+a.price * qty).toFixed(2)}</td></tr>`; });
-                    (sel.guests || []).forEach((guest, gi) => { let gl = guestCount > 1 ? ` (G ${gi + 1})` : ''; (guest.items || []).forEach((it, ii) => { if (!it) return; const def = items[ii]; if (!def) return; const detail = it.variant ? ` ${it.variant}` : ''; const qty = it.qty || 1; prices += `<tr><td>+ ${def.name}${detail}${gl}</td><td>€${(+a.price * qty).toFixed(2)}</td></tr>`; }); });
-                } else { const total = +a.price * guestCount; prices += `<tr><td>+ ${a.name}${guestCount > 1 ? ` ×${guestCount}` : ''}</td><td>€${total.toFixed(2)}</td></tr>`; }
-            });
-            if (+svc?.cleaning_fee) prices += `<tr><td>Reinigung</td><td>€${(+svc.cleaning_fee).toFixed(2)}</td></tr>`;
-            if (state.voucher.data) prices += `<tr><td>🎫 ${state.voucher.data.name}</td><td>-€${calcDisc().toFixed(2)}</td></tr>`;
-            prices += `<tr class="bf-total"><td><strong>Gesamt</strong></td><td><strong>${totalStr}</strong></td></tr>`;
-
-            const summaryDetails = dyn('summary-details');
-            const summaryPrices = dyn('summary-prices');
-            if (templateBindInputs.length > 0 && summaryDetails && summaryPrices) {
-                templateBindInputs.forEach(i => { const key = i.dataset.bfBind; if (!key) return; const value = state.sel[key] || ''; if (i.value !== value) i.value = value; i.oninput = e => { state.sel[key] = e.target.value; }; });
-                summaryDetails.innerHTML = `<table class="bf-summary"><tbody>${rows}</tbody></table>`;
-                summaryPrices.innerHTML = `<table class="bf-prices"><tbody>${prices}</tbody></table>`;
-            } else {
-                c.innerHTML = `
-                    <div class="bf-grid-2">
-                        <div class="bf-form-column">
-                            <h3 style="margin-top:0">Ihre Daten</h3>
-                            <div class="bf-form-group"><label class="bf-form-label">Vorname *</label><input type="text" class="bf-input" data-bind="fname" value="${fname || ''}" placeholder="Max"></div>
-                            <div class="bf-form-group"><label class="bf-form-label">Nachname *</label><input type="text" class="bf-input" data-bind="lname" value="${lname || ''}" placeholder="Mustermann"></div>
-                            <div class="bf-form-group"><label class="bf-form-label">E-Mail Adresse *</label><input type="email" class="bf-input" data-bind="email" value="${email || ''}" placeholder="max@beispiel.de"></div>
-                            <div class="bf-form-group"><label class="bf-form-label">Telefonnummer</label><input type="tel" class="bf-input" data-bind="phone" value="${phone || ''}" placeholder="+49 123 456789"></div>
-                            <div class="bf-form-group"><label class="bf-form-label">Adresse *</label><input type="text" class="bf-input" data-bind="address" value="${address || ''}" placeholder="Musterstraße 1"></div>
-                            <div class="bf-row-2"><div class="bf-form-group"><label class="bf-form-label">PLZ *</label><input type="text" class="bf-input" data-bind="zip" value="${zip || ''}" placeholder="12345"></div><div class="bf-form-group"><label class="bf-form-label">Stadt *</label><input type="text" class="bf-input" data-bind="city" value="${city || ''}" placeholder="Berlin"></div></div>
-                        </div>
-                        <div class="bf-summary-column">
-                            <h3 style="margin-top:0">Zusammenfassung</h3>
-                            <table class="bf-summary"><tbody>${rows}</tbody></table>
-                            <hr>
-                            <table class="bf-prices"><tbody>${prices}</tbody></table>
-                        </div>
-                    </div>`;
-                c.querySelectorAll('input[data-bind]').forEach(i => { i.oninput = e => { state.sel[i.dataset.bind] = e.target.value; }; });
-            }
         }
 
         if (td) td.innerHTML = `<strong>Gesamt: ${totalStr}</strong>`;
@@ -888,21 +776,16 @@
         const c = disp('voucher-status');
         if (!c) return;
         const v = state.voucher;
-        const templateEls = c.querySelectorAll('[data-bf-voucher]');
-        if (templateEls.length) {
-            templateEls.forEach(el => {
-                const type = el.dataset.bfVoucher;
-                if (type === v.status) {
-                    el.style.display = 'block';
-                    if (type === 'valid' && v.data?.name) el.textContent = `✅ ${v.data.name}`;
-                    if (type === 'invalid' && v.error) el.textContent = `❌ ${v.error}`;
-                } else {
-                    el.style.display = 'none';
-                }
-            });
-        } else {
-            c.innerHTML = v.status === 'valid' ? `<p data-voucher="valid">✅ ${v.data?.name}</p>` : v.status === 'invalid' ? `<p data-voucher="invalid">❌ ${v.error}</p>` : v.status === 'checking' ? '<p data-voucher="checking">⏳</p>' : '';
-        }
+        c.querySelectorAll('[data-bf-voucher]').forEach(el => {
+            const type = el.dataset.bfVoucher;
+            if (type === v.status) {
+                el.style.display = 'block';
+                if (type === 'valid' && v.data?.name) el.textContent = `✅ ${v.data.name}`;
+                if (type === 'invalid' && v.error) el.textContent = `❌ ${v.error}`;
+            } else {
+                el.style.display = 'none';
+            }
+        });
     };
 
     // --- Preis-Berechnung ---
@@ -1301,11 +1184,6 @@
             return;
         }
         state.data = d;
-
-        fetch(`${API}/rest/v1/rpc/ping_site`, {
-            method: 'POST', keepalive: true, headers: HDR,
-            body: JSON.stringify({ site_id: siteId, p_domain: location.hostname })
-        }).catch(() => {});
 
         // Fetch deeply nested addon items via separate RPC
         if (state.data.addons?.length) {
