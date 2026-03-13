@@ -268,7 +268,7 @@
     align-items: center;
 
     height: var(--space-56);
-    padding: var(--space-12);
+    padding: 0 var(--space-12);
     border-bottom: 1px solid var(--border-color);
 }
 
