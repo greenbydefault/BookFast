@@ -1,7 +1,10 @@
 (function () {
     const script = document.currentScript;
     const siteId = script?.getAttribute('data-site-id');
-    if (!siteId) return;
+    if (!siteId) {
+        console.warn('[BookFast embed] Missing data-site-id on script tag.');
+        return;
+    }
 
     const API = '__SUPABASE_URL__';
     const KEY = '__SUPABASE_ANON_KEY__';
@@ -34,6 +37,11 @@
         availStatus: null,
         voucher: { code: '', data: null, status: null, error: null }
     };
+    let initialized = false;
+    let initInFlight = false;
+    let hasBoundHandlers = false;
+    let initObserver = null;
+    let initRetryTimer = null;
 
     // --- RPC: nur fuer Business-Logic (Buchung, Verfuegbarkeit, Voucher) ---
     const rpc = async (fn, p = {}) => {
@@ -1186,9 +1194,12 @@
         } catch (err) {
             console.error(err);
             const msg = err.message || 'Buchung fehlgeschlagen';
-            const errEl = root.querySelector('[data-bf-error]');
-            if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
-            else alert(msg);
+            const errEl = root.querySelector('[data-bf-error], .w-form-fail');
+            if (errEl) {
+                const errTextTarget = errEl.matches('.w-form-fail') ? errEl.querySelector('div') || errEl : errEl;
+                errTextTarget.textContent = msg;
+                errEl.style.display = 'block';
+            } else alert(msg);
             if (btn) { btn.value = originalBtnText; btn.disabled = false; }
             submitting = false;
         }
@@ -1248,9 +1259,18 @@
     };
 
     // --- Init ---
-    const init = async () => {
-        root = document.querySelector('[data-bf-root="true"]');
-        if (!root) return;
+    const stopInitDiscovery = () => {
+        if (initRetryTimer) {
+            clearTimeout(initRetryTimer);
+            initRetryTimer = null;
+        }
+        if (initObserver) {
+            initObserver.disconnect();
+            initObserver = null;
+        }
+    };
+
+    const initCore = async () => {
         css();
         ensureProgress();
         show(1);
@@ -1299,10 +1319,60 @@
             }
         }
         popObjects();
-        bind();
+        if (!hasBoundHandlers) {
+            bind();
+            hasBoundHandlers = true;
+        }
         show(1);
         track('widget_view');
+        initialized = true;
     };
 
-    document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
+    const tryInit = async () => {
+        if (initialized || initInFlight) return initialized;
+        const candidate = document.querySelector('[data-bf-root="true"]');
+        if (!candidate) return false;
+        root = candidate;
+        initInFlight = true;
+        try {
+            await initCore();
+            stopInitDiscovery();
+            return true;
+        } finally {
+            initInFlight = false;
+        }
+    };
+
+    const startInitDiscovery = () => {
+        const MAX_ATTEMPTS = 24;
+        const RETRY_MS = 250;
+        let attempts = 0;
+
+        const scheduleRetry = () => {
+            if (initialized) return;
+            initRetryTimer = setTimeout(async () => {
+                const ok = await tryInit();
+                if (ok) return;
+                attempts++;
+                if (attempts >= MAX_ATTEMPTS) {
+                    stopInitDiscovery();
+                    console.warn('[BookFast embed] Root element [data-bf-root="true"] not found. Initialization aborted.');
+                    return;
+                }
+                scheduleRetry();
+            }, RETRY_MS);
+        };
+
+        if (typeof MutationObserver !== 'undefined') {
+            initObserver = new MutationObserver(() => { void tryInit(); });
+            initObserver.observe(document.documentElement, { childList: true, subtree: true });
+        }
+
+        void tryInit();
+        scheduleRetry();
+    };
+
+    document.readyState === 'loading'
+        ? document.addEventListener('DOMContentLoaded', startInitDiscovery, { once: true })
+        : startInitDiscovery();
 })();
