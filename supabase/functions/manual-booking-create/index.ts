@@ -188,14 +188,16 @@ serve(async (req: Request) => {
 
         // 2. Calculate Price
         let servicePrice = Number(service.price);
-        if (service.service_type === 'overnight') {
-            const start = new Date(start_time);
-            const end = new Date(end_time);
-            const nights = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-            servicePrice = servicePrice * Math.max(1, nights);
-        }
-        if (service.price_type === 'per_person') {
-            servicePrice = servicePrice * Math.max(1, guest_count ?? 1);
+        if (service.price_type !== 'per_total') {
+            if (service.service_type === 'overnight') {
+                const start = new Date(start_time);
+                const end = new Date(end_time);
+                const nights = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+                servicePrice = servicePrice * Math.max(1, nights);
+            }
+            if (service.price_type === 'per_person') {
+                servicePrice = servicePrice * Math.max(1, guest_count ?? 1);
+            }
         }
 
         const cleaningFee = Number(service.cleaning_fee) || 0;

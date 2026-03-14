@@ -113,7 +113,7 @@ const buildCenterPreview = (service) => {
                 </div>
                 <div class="detail-preview-item">
                     <span class="detail-preview-label">Preis</span>
-                    <span class="detail-preview-value">${fmt(service.price)} ${service.price_type === 'per_person' ? 'pro Person' : PRICE_UNITS[service.service_type] || ''}</span>
+                    <span class="detail-preview-value">${fmt(service.price)} ${service.price_type === 'per_person' ? 'pro Person' : service.price_type === 'per_total' ? 'gesamt' : PRICE_UNITS[service.service_type] || ''}</span>
                 </div>
                 ${isHourly ? `
                 <div class="detail-preview-item">
@@ -293,6 +293,7 @@ const renderSideCard = (service) => {
                 ${navField({ label: 'Preisart', name: 'price_type', tag: 'select', options: `
                     <option value="per_unit" ${(service.price_type || 'per_unit') === 'per_unit' ? 'selected' : ''}>${PRICE_UNITS[type]}</option>
                     <option value="per_person" ${service.price_type === 'per_person' ? 'selected' : ''}>pro Person</option>
+                    <option value="per_total" ${service.price_type === 'per_total' ? 'selected' : ''}>gesamt</option>
                 ` })}
             `
         }),

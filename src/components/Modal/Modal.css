@@ -513,6 +513,10 @@
     gap: 0;
     border-bottom: 2px solid var(--border-color);
     margin-bottom: var(--space-24);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--bg-surface, #fff);
 }
 
 .modal-tab {

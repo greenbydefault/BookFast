@@ -58,7 +58,7 @@ export const createMultiSelectTags = (config) => {
 
         container.innerHTML = `
             <div class="multi-select-row">
-                <div class="multi-select-label">
+                <div class="multi-select-label modal-label">
                     ${icon ? getIconString(icon) : ''} ${label}
                 </div>
                 <div class="multi-select-dropdown-wrapper">

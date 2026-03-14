@@ -3,7 +3,8 @@ const ICON_ALIASES = {
     trash: 'delete',
     insights: 'chart',
     clock: 'clock-check',
-    folder: 'archive'
+    folder: 'archive',
+    bed: 'luggage'
 };
 
 const resolveIconName = (iconName) => ICON_ALIASES[iconName] ?? iconName;

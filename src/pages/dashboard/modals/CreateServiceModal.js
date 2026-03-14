@@ -412,6 +412,7 @@ export const openCreateServiceModal = async (onSuccess) => {
                         <select class="price-type-select" id="input-price-type">
                             <option value="per_unit" ${state.priceType === 'per_unit' ? 'selected' : ''}>${priceUnit}</option>
                             <option value="per_person" ${state.priceType === 'per_person' ? 'selected' : ''}>pro Person</option>
+                            <option value="per_total" ${state.priceType === 'per_total' ? 'selected' : ''}>gesamt</option>
                         </select>
                     </div>
                 </div>

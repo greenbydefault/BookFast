@@ -248,18 +248,20 @@ serve(async (req: Request) => {
     let servicePrice = Number(service.price) || 0;
     const cleaningFee = Number(service.cleaning_fee) || 0;
 
-    // For overnight: multiply by nights
-    if (service.service_type === 'overnight') {
-      const startDate = new Date(start_time);
-      const endDate = new Date(end_time);
-      const nights = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-      servicePrice = servicePrice * nights;
-    }
-
-    // For per_person: multiply by guest count
-    const guests = guest_count ?? 1;
-    if (service.price_type === 'per_person') {
-      servicePrice = servicePrice * guests;
+    // per_total: price is flat total, no multiplication
+    if (service.price_type !== 'per_total') {
+      // For overnight: multiply by nights
+      if (service.service_type === 'overnight') {
+        const startDate = new Date(start_time);
+        const endDate = new Date(end_time);
+        const nights = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+        servicePrice = servicePrice * nights;
+      }
+      // For per_person: multiply by guest count
+      const guests = guest_count ?? 1;
+      if (service.price_type === 'per_person') {
+        servicePrice = servicePrice * guests;
+      }
     }
 
     // Get addon prices
