@@ -139,7 +139,7 @@ serve(async (req: Request) => {
 
         const { data: service, error: serviceError } = await supabaseAdmin
             .from('services')
-            .select('id, workspace_id, price, cleaning_fee, service_type, name')
+            .select('id, workspace_id, price, price_type, cleaning_fee, service_type, name')
             .eq('id', service_id)
             .single();
 
@@ -193,6 +193,9 @@ serve(async (req: Request) => {
             const end = new Date(end_time);
             const nights = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
             servicePrice = servicePrice * Math.max(1, nights);
+        }
+        if (service.price_type === 'per_person') {
+            servicePrice = servicePrice * Math.max(1, guest_count ?? 1);
         }
 
         const cleaningFee = Number(service.cleaning_fee) || 0;

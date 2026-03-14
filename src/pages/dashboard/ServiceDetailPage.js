@@ -22,6 +22,7 @@ import { createCustomHoursManager } from '../../components/CustomHours/CustomHou
 const esc = (v) => (v || '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 const SERVICE_TYPE_LABELS = { hourly: 'Stündlich', daily: 'Tagesmiete', overnight: 'Übernachtung' };
+const PRICE_UNITS = { hourly: 'Stunde', daily: 'Tag', overnight: 'Nacht' };
 
 const DAY_IDS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 
@@ -112,7 +113,7 @@ const buildCenterPreview = (service) => {
                 </div>
                 <div class="detail-preview-item">
                     <span class="detail-preview-label">Preis</span>
-                    <span class="detail-preview-value">${fmt(service.price)}</span>
+                    <span class="detail-preview-value">${fmt(service.price)} ${service.price_type === 'per_person' ? 'pro Person' : PRICE_UNITS[service.service_type] || ''}</span>
                 </div>
                 ${isHourly ? `
                 <div class="detail-preview-item">
@@ -181,6 +182,14 @@ const buildCenterPreview = (service) => {
                 `}
             </div>
             ` : ''}
+
+            <div class="detail-preview-section">
+                <p class="detail-preview-section__title">Mehrfachbuchung</p>
+                <div class="detail-preview-item">
+                    <span class="detail-preview-label">Kapazitätsbasiert buchbar</span>
+                    <span class="detail-preview-value">${service.capacity_based_booking ? 'Ja' : 'Nein'}</span>
+                </div>
+            </div>
 
             <div class="detail-preview-section">
                 <p class="detail-preview-section__title">Puffer</p>
@@ -281,6 +290,10 @@ const renderSideCard = (service) => {
         sideCardSection({
             content: `
                 ${navField({ label: 'Preis (€)', name: 'price', value: service.price ?? '', type: 'number', placeholder: '0.00' })}
+                ${navField({ label: 'Preisart', name: 'price_type', tag: 'select', options: `
+                    <option value="per_unit" ${(service.price_type || 'per_unit') === 'per_unit' ? 'selected' : ''}>${PRICE_UNITS[type]}</option>
+                    <option value="per_person" ${service.price_type === 'per_person' ? 'selected' : ''}>pro Person</option>
+                ` })}
             `
         }),
         ...(isHourly ? [sideCardSection({
@@ -336,6 +349,19 @@ const renderSideCard = (service) => {
                     </label>
                 </div>
                 ` : ''}
+            `
+        }),
+        sideCardSection({
+            title: 'Mehrfachbuchung',
+            content: `
+                <div class="custom-hours-toggle-row">
+                    <span class="custom-hours-toggle-label">Kapazitätsbasiert buchbar</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="capacity_based_booking" ${service.capacity_based_booking ? 'checked' : ''}>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <p class="detail-nav-hint" style="margin-top: 6px; font-size: 0.8rem; color: var(--color-stone-500);">Mehrere Buchungen pro Slot möglich, solange Objekt-Kapazität nicht überschritten wird.</p>
             `
         }),
         sideCardSection({
@@ -406,9 +432,11 @@ const collectFormValues = (currentType) => {
         name: val('name'),
         description: val('description'),
         price: numOrNull('price'),
+        price_type: val('price_type') || 'per_unit',
         cleaning_fee: numOrNull('cleaning_fee'),
         buffer_before_minutes: intOrNull('buffer_before_minutes'),
         buffer_after_minutes: intOrNull('buffer_after_minutes'),
+        capacity_based_booking: checked('capacity_based_booking'),
         bookable_days,
         min_advance_hours: intOrNull('min_advance_hours'),
     };

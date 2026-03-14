@@ -200,7 +200,7 @@ serve(async (req: Request) => {
     // Get service details
     const { data: service, error: svcError } = await supabaseAdmin
       .from('services')
-      .select('id, name, price, cleaning_fee, deposit_enabled, deposit_percent, duration_minutes, service_type, buffer_before_minutes, buffer_after_minutes')
+      .select('id, name, price, price_type, cleaning_fee, deposit_enabled, deposit_percent, duration_minutes, service_type, buffer_before_minutes, buffer_after_minutes')
       .eq('id', service_id)
       .single();
 
@@ -254,6 +254,12 @@ serve(async (req: Request) => {
       const endDate = new Date(end_time);
       const nights = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
       servicePrice = servicePrice * nights;
+    }
+
+    // For per_person: multiply by guest count
+    const guests = guest_count ?? 1;
+    if (service.price_type === 'per_person') {
+      servicePrice = servicePrice * guests;
     }
 
     // Get addon prices

@@ -43,6 +43,7 @@ const getInitialState = () => ({
     description: '',
     serviceType: 'hourly',
     price: 120,
+    priceType: 'per_unit', // per_unit = pro Stunde/Tag/Nacht, per_person = pro Person
     objectIds: [], // Array for multi-select
     staffIds: [], // Array for multi-select
     bookableDays: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
@@ -77,7 +78,10 @@ const getInitialState = () => ({
 
     // Custom hours
     customHoursEnabled: false,
-    customHours: []
+    customHours: [],
+
+    // Mehrfachbuchung (kapazitätsbasiert buchbar)
+    capacityBasedBooking: false
 });
 
 export const openCreateServiceModal = async (onSuccess) => {
@@ -123,11 +127,13 @@ export const openCreateServiceModal = async (onSuccess) => {
             description: state.description,
             service_type: state.serviceType,
             price: state.price,
+            price_type: state.priceType,
             object_id: state.objectIds[0], // Using first selected object (schema limitation)
             bookable_days: state.bookableDays,
             cleaning_fee: state.cleaningFee,
             buffer_before_minutes: state.bufferBefore,
             buffer_after_minutes: state.bufferAfter,
+            capacity_based_booking: state.capacityBasedBooking,
             status: state.isDraft ? 'draft' : 'active'
         };
 
@@ -196,6 +202,9 @@ export const openCreateServiceModal = async (onSuccess) => {
         const price = parseFloat(qVal('#input-price'));
         if (!isNaN(price)) state.price = price;
 
+        const priceType = qVal('#input-price-type');
+        if (priceType) state.priceType = priceType;
+
         const cleaningFee = parseFloat(qVal('#input-cleaning-fee'));
         if (!isNaN(cleaningFee)) state.cleaningFee = cleaningFee;
 
@@ -213,6 +222,10 @@ export const openCreateServiceModal = async (onSuccess) => {
         if (activeDays.length > 0 || contentContainer.querySelector('.day-toggle')) {
             state.bookableDays = activeDays;
         }
+
+        // Mehrfachbuchung toggle (hourly & daily only)
+        const capToggle = contentContainer.querySelector('#toggle-capacity-based');
+        if (capToggle) state.capacityBasedBooking = capToggle.checked;
 
         // Type-specific fields
         if (state.serviceType === 'hourly') {
@@ -369,25 +382,22 @@ export const openCreateServiceModal = async (onSuccess) => {
                 `).join('')}
             </div>
 
-            <!-- SECTION: Basic Info -->
+            <!-- SECTION: Name und Beschreibung -->
             <div class="modal-content-section">
-                <!-- Name Input -->
                 <div class="modal-form-field">
                     <input type="text" class="modal-form-input modal-input-large" 
                            placeholder="z. B. Massage (60 Min.) oder Hausboot (4 Std.)"
                            value="${state.name}" id="input-name">
                 </div>
-                
-                <!-- Description -->
                 <div class="modal-form-field">
                     <label class="modal-label modal-form-label">Beschreibung <span class="modal-label-optional">(Optional)</span></label>
                     <textarea class="modal-form-input modal-textarea" placeholder="Optional: Was ist enthalten, was soll der Gast mitbringen, wichtige Hinweise ..." rows="2" id="input-desc">${state.description}</textarea>
                 </div>
+            </div>
 
-                <!-- Object Multi-Select -->
+            <!-- SECTION: Objekt und Mitarbeiter -->
+            <div class="modal-content-section">
                 <div class="modal-form-field" id="object-multi-select-container"></div>
-                
-                <!-- Staff Multi-Select -->
                 <div class="modal-form-field" id="staff-multi-select-container"></div>
             </div>
 
@@ -395,12 +405,13 @@ export const openCreateServiceModal = async (onSuccess) => {
             <div class="modal-content-section">
                 <!-- Price with unit -->
                 <div class="modal-row">
-                    <div class="modal-label">${getIconString('coins')} Preis</div>
+                    <div class="modal-label">${getIconString('money-hand')} Preis</div>
                     <div class="modal-controls addon-price-controls">
                         <input type="number" class="price-amount-input" value="${state.price}" id="input-price" step="1">
                         <span class="price-currency">€</span>
-                        <select class="price-type-select" id="input-price-unit" disabled>
-                            <option value="${priceUnit}">${priceUnit}</option>
+                        <select class="price-type-select" id="input-price-type">
+                            <option value="per_unit" ${state.priceType === 'per_unit' ? 'selected' : ''}>${priceUnit}</option>
+                            <option value="per_person" ${state.priceType === 'per_person' ? 'selected' : ''}>pro Person</option>
                         </select>
                     </div>
                 </div>
@@ -437,13 +448,26 @@ export const openCreateServiceModal = async (onSuccess) => {
             </div>
             <div class="modal-content-section">
                 ${showCustomHours ? `
-                <!-- Custom Hours Toggle -->
-                <div class="custom-hours-toggle-row">
-                    <span class="custom-hours-toggle-label">${getIconString('clock')} Individuelle Zeiten pro Tag</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-custom-hours" ${state.customHoursEnabled ? 'checked' : ''}>
-                        <span class="toggle-slider"></span>
-                    </label>
+                <!-- Custom Hours Toggle (modal-row wie Objekt-Modal) -->
+                <div class="modal-row">
+                    <div class="modal-label">${getIconString('date-cog')} Individuelle Zeiten pro Tag</div>
+                    <div class="modal-controls">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-custom-hours" ${state.customHoursEnabled ? 'checked' : ''}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Mehrfachbuchung Toggle -->
+                <div class="modal-row">
+                    <div class="modal-label">${getIconString('users-2')} Kapazitätsbasiert buchbar (Mehrfachbuchung)</div>
+                    <div class="modal-controls">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-capacity-based" ${state.capacityBasedBooking ? 'checked' : ''}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
                 </div>
 
                 <!-- Custom Hours Container -->
@@ -514,30 +538,30 @@ export const openCreateServiceModal = async (onSuccess) => {
             <div class="modal-content-section">
                 <!-- Cleaning Fee -->
                 <div class="modal-row">
-                    <div class="modal-label">${getIconString('sparkles')} Reinigungsgebühr</div>
+                    <div class="modal-label">${getIconString('clean')} Reinigungsgebühr</div>
                     <div class="modal-controls addon-price-controls">
                         <input type="number" class="price-amount-input" value="${state.cleaningFee}" id="input-cleaning-fee" step="1">
                         <span class="price-currency">€</span>
                     </div>
                 </div>
 
-                <!-- Buffer Times -->
-                <div class="modal-row modal-row-stacked">
-                    <div class="modal-label">${getIconString('clock')} Reinigungspuffer</div>
-                    <div class="modal-controls modal-controls-stacked">
-                        <div class="buffer-row">
-                            <span class="label-inline">Davor</span>
-                            <input type="number" class="price-amount-input" value="${state.bufferBefore}" id="input-buffer-before" min="0">
-                            <select class="price-type-select">
-                                <option value="Minuten">Minuten</option>
-                            </select>
+                <!-- Buffer Times (Layout wie Objekt-Modal) -->
+                <div class="modal-row">
+                    <div class="modal-label">${getIconString('clean')} Reinigungspuffer</div>
+                    <div class="modal-controls modal-controls-column">
+                        <div class="control-group-row">
+                            <span class="text-small-muted">Davor</span>
+                            <div class="number-control">
+                                <input type="number" class="number-input" value="${state.bufferBefore}" id="input-buffer-before" min="0">
+                            </div>
+                            <span class="text-small">Minuten</span>
                         </div>
-                        <div class="buffer-row">
-                            <span class="label-inline">Danach</span>
-                            <input type="number" class="price-amount-input" value="${state.bufferAfter}" id="input-buffer-after" min="0">
-                            <select class="price-type-select">
-                                <option value="Minuten">Minuten</option>
-                            </select>
+                        <div class="control-group-row">
+                            <span class="text-small-muted">Danach</span>
+                            <div class="number-control">
+                                <input type="number" class="number-input" value="${state.bufferAfter}" id="input-buffer-after" min="0">
+                            </div>
+                            <span class="text-small">Minuten</span>
                         </div>
                     </div>
                 </div>
@@ -567,7 +591,7 @@ export const openCreateServiceModal = async (onSuccess) => {
         // Create and insert the multi-select component for staff
         const staffMultiSelect = createMultiSelectTags({
             label: 'Mitarbeiter',
-            icon: 'user-circle',
+            icon: 'user',
             placeholder: 'Mitarbeiter auswählen...',
             options: state.availableStaff.map(s => ({
                 value: s.id,
@@ -611,6 +635,10 @@ export const openCreateServiceModal = async (onSuccess) => {
         // Price
         const priceInput = contentContainer.querySelector('#input-price');
         if (priceInput) priceInput.oninput = (e) => updateState('price', parseFloat(e.target.value) || 0);
+
+        // Price type (per_unit / per_person)
+        const priceTypeSelect = contentContainer.querySelector('#input-price-type');
+        if (priceTypeSelect) priceTypeSelect.onchange = (e) => updateState('priceType', e.target.value);
 
         // Duration
         const durationInput = contentContainer.querySelector('#input-duration');
@@ -699,6 +727,12 @@ export const openCreateServiceModal = async (onSuccess) => {
                     }
                 }
             };
+        }
+
+        // Mehrfachbuchung Toggle
+        const capacityBasedToggle = contentContainer.querySelector('#toggle-capacity-based');
+        if (capacityBasedToggle) {
+            capacityBasedToggle.onchange = (e) => updateState('capacityBasedBooking', e.target.checked);
         }
     };
 
