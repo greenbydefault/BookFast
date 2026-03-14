@@ -586,9 +586,9 @@
 
 /* Inline labels */
 .label-inline {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin: 0 6px;
+    font-size: var(--space-12);
+    color: var(--color-vulcan-900);
+    margin: 0 var(--space-4);
 }
 
 /* Disabled input styling */
@@ -1152,9 +1152,12 @@
 }
 
 .custom-hours-day-toggle.active {
-    background-color: var(--primary, #8b5cf6);
-    color: white;
-    font-weight: 500;
+    background-color: var(--color-majorelle-blue-50);
+    color: var(--primary);
+    font-weight: 400;
+    border: 1px solid var(--color-majorelle-blue-400);
+    position: relative;
+    z-index: 1;
 }
 
 .custom-hours-delete {

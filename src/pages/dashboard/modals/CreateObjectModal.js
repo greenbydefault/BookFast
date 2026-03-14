@@ -323,14 +323,14 @@ export const openObjectModal = (existingObject, onSuccess) => {
                             <div class="number-control">
                                 <input type="number" class="number-input" value="${state.bufferBefore}" id="input-buffer-before">
                             </div>
-                            <span class="text-small">Minuten ⌄</span>
+                            <span class="text-small">Minuten</span>
                         </div>
                         <div class="control-group-row">
                             <span class="text-small-muted">Danach</span>
                             <div class="number-control">
                                 <input type="number" class="number-input" value="${state.bufferAfter}" id="input-buffer-after">
                             </div>
-                            <span class="text-small">Minuten ⌄</span>
+                            <span class="text-small">Minuten</span>
                         </div>
                     </div>
                 </div>
