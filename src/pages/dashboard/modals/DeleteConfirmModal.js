@@ -27,9 +27,14 @@ export const openDeleteConfirmModal = ({
     let modalInstance = null;
 
     const handleConfirm = async () => {
-        modalInstance.close();
-        if (onConfirm) {
-            await onConfirm();
+        try {
+            if (onConfirm) {
+                await onConfirm();
+            }
+            modalInstance.close();
+        } catch (error) {
+            console.error('Delete failed:', error);
+            alert(error?.message || 'Fehler beim Löschen.');
         }
     };
 
@@ -70,7 +75,8 @@ export const openDeleteConfirmModal = ({
             text: 'Löschen',
             loadingText: 'wird gelöscht...',
             onClick: handleConfirm,
-            className: 'btn-danger'
+            className: 'btn-danger',
+            icon: 'trash'
         });
 
         container.appendChild(cancelBtn);

@@ -466,6 +466,16 @@
     border-color: var(--color-stone-500) !important;
 }
 
+.btn-danger {
+    background: var(--color-danger, #ef4444);
+    color: white;
+    border-color: transparent;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: var(--color-red-600, #dc2626);
+}
+
 .btn-sm {
     padding: var(--space-8) var(--space-16);
     font-size: 0.85rem;
