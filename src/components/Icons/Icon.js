@@ -1,7 +1,9 @@
 const ICON_ALIASES = {
     eye: 'view-eye-scan',
     trash: 'delete',
-    insights: 'chart'
+    insights: 'chart',
+    clock: 'clock-check',
+    folder: 'archive'
 };
 
 const resolveIconName = (iconName) => ICON_ALIASES[iconName] ?? iconName;

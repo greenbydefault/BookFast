@@ -3,6 +3,7 @@
  */
 import { createHeroNew, initHeroNew } from '../../components/landing/HeroNew.js';
 import { createHowItWorksInteractive, initHowItWorksInteractive } from '../../components/landing/HowItWorksInteractive.js';
+import { getDemoModule } from '../../components/landing/featureDemos/index.js';
 import { createObjectPreviewCard, initObjectPreviewCard } from '../../components/landing/featureDemos/ObjectPreviewCard.js';
 import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
@@ -10,8 +11,11 @@ import { setPageMeta, setFAQSchema } from '../../lib/seoHelper.js';
 import { SHARED_FAQ } from '../../data/faq.js';
 import { HOME_FEATURES_STEPS } from '../../data/homeFeatures.js';
 
-const createPreviewCardHTML = () =>
+const createObjectPreviewHTML = () =>
   `<div class="landing-frosted-frame feature-hero__card-frame">${createObjectPreviewCard()}</div>`;
+
+const createIntegrationPreviewHTML = () =>
+  `<div class="landing-frosted-frame feature-hero__card-frame">${getDemoModule('integration').create()}</div>`;
 
 export const renderHomePage = () => {
   const content = document.getElementById('landing-content');
@@ -24,7 +28,7 @@ export const renderHomePage = () => {
     label: 'Hauptfeatures',
     headline: 'Das Buchungstool für Webflow – die wichtigsten Vorteile.',
     steps: HOME_FEATURES_STEPS,
-    previewHTML: createPreviewCardHTML(),
+    previewHTML: createIntegrationPreviewHTML(),
   });
 
   content.innerHTML = `
@@ -51,8 +55,11 @@ export const renderHomePage = () => {
 
   initHeroNew();
   initHowItWorksInteractive(content, {
-    renderPreview: () => createPreviewCardHTML(),
-    onPreviewRendered: (previewNode) => initObjectPreviewCard(previewNode),
+    renderPreview: (nextIndex) => (nextIndex === 0 ? createIntegrationPreviewHTML() : createObjectPreviewHTML()),
+    onPreviewRendered: (previewNode, nextIndex) => {
+      if (nextIndex === 0) getDemoModule('integration').init(previewNode);
+      else initObjectPreviewCard(previewNode);
+    },
   });
   initFAQAccordion(content);
 };

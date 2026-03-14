@@ -22,7 +22,11 @@
   overflow: hidden;
   min-width: 100%;
   width: 100%;
-  max-height: clamp(calc(var(--space-128) + var(--space-128) + var(--space-128) + var(--space-32)), 62vw, calc(var(--space-128) * 5 + var(--space-40)));
+  max-height: clamp(
+  calc(var(--space-128) * 3 + var(--space-24)),
+  62vw,
+  calc(var(--space-128) * 4.8 + var(--space-12))
+);
 }
 
 .how-it-works__accordion {

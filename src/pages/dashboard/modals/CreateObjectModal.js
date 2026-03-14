@@ -290,15 +290,13 @@ export const openObjectModal = (existingObject, onSuccess) => {
                 <div class="modal-row">
                     <div class="modal-label">${getIconString('clock')} Buchungszeitfenster</div>
                     <div class="modal-controls">
-                        <div class="time-group">
-                            <span>Von</span>
-                            <input type="text" value="${state.timeFrom}" id="input-time-from">
-                            <button class="time-remove" type="button">×</button>
+                        <span class="label-inline">Von</span>
+                        <div class="time-input-group">
+                            <input type="time" class="time-input" value="${state.timeFrom}" id="input-time-from">
                         </div>
-                        <div class="time-group">
-                            <span>Bis</span>
-                            <input type="text" value="${state.timeTo}" id="input-time-to">
-                            <button class="time-remove" type="button">×</button>
+                        <span class="label-inline">Bis</span>
+                        <div class="time-input-group">
+                            <input type="time" class="time-input" value="${state.timeTo}" id="input-time-to">
                         </div>
                     </div>
                 </div>

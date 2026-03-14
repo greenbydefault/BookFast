@@ -52,7 +52,7 @@
 }
 
 .landing-btn-secondary:hover {
-  background: var(--color-majorelle-blue-50);
+  text-decoration: underline;
   
 }
 
