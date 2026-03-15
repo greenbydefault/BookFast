@@ -166,11 +166,99 @@
         return slots.some(s => s.available);
     };
 
-    // --- Minimal CSS: nur Pseudo-Klassen und Eigenschaften die Webflow styleLess nicht abbilden kann ---
+    // --- CSS: Split-Screen Layout + Pseudo-Klassen ---
     const css = () => {
         if (document.getElementById('bf-css')) return;
         const s = document.createElement('style'); s.id = 'bf-css';
         s.textContent = [
+            // Split-Screen Layout
+            '.bf-split{display:flex;min-height:600px}',
+            '.bf-split-left{flex:1;border-right:1px solid #e7e5e4;display:flex;flex-direction:column;overflow-y:auto}',
+            '.bf-split-right{flex:1;display:flex;flex-direction:column;padding:24px;opacity:.5;pointer-events:none;transition:opacity .3s}',
+            '.bf-split-right.is-active{opacity:1;pointer-events:auto}',
+            '.bf-split-header{padding:24px 24px 0;display:flex;flex-direction:column;gap:12px}',
+            '.bf-split-header-name{font-size:20px;font-weight:400;color:#000;line-height:1}',
+            '.bf-split-header-sub{font-size:16px;font-weight:400;color:#717079;line-height:1.2}',
+            '.bf-split-cards{padding:24px;display:flex;flex-direction:column;gap:24px;flex:1}',
+            // Accordion Cards
+            '.bf-split-card{border:1px solid #e7e5e4;border-radius:8px;transition:border-color .2s,opacity .2s}',
+            '.bf-split-card.is-active{border-color:#624cd8}',
+            '.bf-split-card.is-disabled{opacity:.5;pointer-events:none}',
+            '.bf-split-card.is-done{cursor:pointer}',
+            '.bf-split-card-header{display:flex;align-items:flex-start;gap:12px;padding:16px 16px 16px 16px;cursor:pointer}',
+            '.bf-split-card.is-disabled .bf-split-card-header{cursor:default}',
+            '.bf-split-card-num{min-width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #e7e5e4;border-radius:4px;font-size:16px;font-weight:500;color:#12111f;flex-shrink:0}',
+            '.bf-split-card-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}',
+            '.bf-split-card-title{font-size:16px;font-weight:500;color:#12111f;line-height:1.2}',
+            '.bf-split-card-desc{font-size:16px;font-weight:400;color:#78716c;line-height:1.2}',
+            '.bf-split-card-arrow{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:transform .2s}',
+            '.bf-split-card.is-active .bf-split-card-arrow{transform:rotate(180deg)}',
+            '.bf-split-card.is-done .bf-split-card-arrow{transform:rotate(180deg)}',
+            '.bf-split-card-check{display:none;width:20px;height:20px;flex-shrink:0;color:#624cd8}',
+            '.bf-split-card.is-done .bf-split-card-check{display:flex}',
+            '.bf-split-card-body{display:none;padding:0 16px 16px}',
+            '.bf-split-card.is-active .bf-split-card-body{display:block}',
+            // Object list items
+            '.bf-obj-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:8px;cursor:pointer;transition:background .15s}',
+            '.bf-obj-item:hover{background:rgba(0,0,0,.03)}',
+            '.bf-obj-item.is-selected{background:#f8f7fe}',
+            '.bf-obj-info{flex:1;min-width:0}',
+            '.bf-obj-name{font-size:16px;font-weight:600;color:#12111f;line-height:1.3}',
+            '.bf-obj-desc{font-size:14px;font-weight:400;color:#78716c;line-height:1.4;margin-top:2px}',
+            '.bf-obj-meta{display:flex;align-items:center;gap:6px;flex-shrink:0}',
+            '.bf-obj-cap{display:flex;align-items:center;gap:4px;font-size:14px;color:#717079;border:1px solid #e7e5e4;border-radius:6px;padding:4px 8px}',
+            '.bf-obj-check{display:none;color:#624cd8;flex-shrink:0}',
+            '.bf-obj-item.is-selected .bf-obj-check{display:block}',
+            // Service list items
+            '.bf-svc-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;cursor:pointer;transition:background .15s}',
+            '.bf-svc-item:hover{background:rgba(0,0,0,.03)}',
+            '.bf-svc-item.is-selected{background:#f8f7fe}',
+            '.bf-svc-info{flex:1;min-width:0}',
+            '.bf-svc-name{font-size:16px;font-weight:600;color:#12111f;line-height:1.3}',
+            '.bf-svc-time{font-size:14px;font-weight:400;color:#78716c;line-height:1.4;margin-top:2px}',
+            '.bf-svc-badges{display:flex;align-items:center;gap:8px;flex-shrink:0}',
+            '.bf-svc-badge{display:flex;align-items:center;gap:4px;font-size:14px;color:#717079;border:1px solid #e7e5e4;border-radius:6px;padding:4px 8px;white-space:nowrap}',
+            // Staff chips
+            '.bf-staff-chips{display:flex;flex-wrap:wrap;gap:8px}',
+            '.bf-staff-chip{display:inline-flex;align-items:center;padding:8px 16px;border:1px solid #e7e5e4;border-radius:999px;font-size:14px;font-weight:400;color:#12111f;cursor:pointer;transition:border-color .15s,background .15s;background:#fff}',
+            '.bf-staff-chip:hover{border-color:#a8a29e}',
+            '.bf-staff-chip.is-selected{border-color:#624cd8;background:#f8f7fe;font-weight:500}',
+            // Calendar (Split-Screen version)
+            '.bf-split-cal-header{display:flex;align-items:center;gap:4px;margin-bottom:40px}',
+            '.bf-split-cal-title{flex:1;display:flex;gap:4px;font-size:20px;font-weight:400}',
+            '.bf-split-cal-title-month{color:#12111f}',
+            '.bf-split-cal-title-year{color:#41414c}',
+            '.bf-split-cal-nav{background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:4px}',
+            '.bf-split-cal-nav:hover{background:rgba(0,0,0,.05)}',
+            '.bf-split-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}',
+            '.bf-split-cal-weekday{padding:24px 0;font-size:20px;font-weight:400;color:#12111f}',
+            '.bf-split-cal-day{padding:24px 0;font-size:20px;font-weight:400;color:#717079;border:none;background:none;cursor:pointer;border-radius:12px;transition:background .15s}',
+            '.bf-split-cal-day:hover:not(:disabled){background:rgba(0,0,0,.04)}',
+            '.bf-split-cal-day:disabled{cursor:default;opacity:.3}',
+            '.bf-split-cal-day.is-other{visibility:hidden}',
+            '.bf-split-cal-day.is-selected{background:#f8f7fe;font-weight:600;color:#12111f}',
+            '.bf-split-cal-day.is-range{background:rgba(248,247,254,.5)}',
+            '.bf-split-cal-day.is-today{box-shadow:inset 0 0 0 2px currentColor;border-radius:12px}',
+            // Time slots (Split-Screen version)
+            '.bf-split-time{border-top:1px solid #e7e5e4;padding-top:24px;margin-top:auto}',
+            '.bf-split-time-title{font-size:18px;font-weight:400;color:#12111f;line-height:1.2;margin-bottom:12px}',
+            '.bf-split-time-desc{font-size:16px;font-weight:400;color:#717079;line-height:1.2;margin-bottom:24px}',
+            '.bf-split-time-hint{font-size:16px;font-weight:400;color:#a8a29e;line-height:1.4}',
+            '.bf-split-slots{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}',
+            '.bf-split-slot{display:flex;align-items:center;justify-content:center;gap:4px;height:60px;border:1px solid #e7e5e4;border-radius:8px;font-size:16px;font-weight:400;color:#000;background:#fff;cursor:pointer;transition:border-color .15s,background .15s}',
+            '.bf-split-slot:hover:not(:disabled){background:rgba(0,0,0,.03)}',
+            '.bf-split-slot:disabled{opacity:.5;cursor:default}',
+            '.bf-split-slot.is-selected{border-color:#624cd8;background:#f8f7fe;font-weight:500}',
+            '.bf-split-slot-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}',
+            '.bf-split-slot-dot.is-available{background:#16a34a}',
+            '.bf-split-slot-dot.is-unavailable{background:#d6d3d1}',
+            // Footer
+            '.bf-split-footer{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:18px 24px;border-top:1px solid #e7e5e4;border-radius:0 0 12px 12px;background:#fff}',
+            '.bf-split-btn-back{display:inline-flex;align-items:center;justify-content:center;padding:12px;border:1px solid #d6d3d1;border-radius:8px;background:#fff;color:#12111f;font-size:16px;font-weight:400;cursor:pointer;text-decoration:none;line-height:1.2}',
+            '.bf-split-btn-back:hover{background:#fafaf9}',
+            '.bf-split-btn-next{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:46px;min-height:34px;padding:8px 12px;border:none;border-radius:8px;background:#7660f1;color:#f8f7fe;font-size:16px;font-weight:500;cursor:pointer;text-decoration:none;line-height:1.2}',
+            '.bf-split-btn-next:hover{background:#624cd8}',
+            // Legacy overrides
             '.bf-day:hover:not(:disabled){background:rgba(0,0,0,.06)}',
             '.bf-day:disabled{cursor:default}',
             '.bf-slot:hover:not(:disabled){background:rgba(0,0,0,.05)}',
@@ -182,8 +270,57 @@
             '[data-bf-status="available"]{color:#16a34a}',
             '[data-bf-status="unavailable"]{color:#dc2626}',
             '[data-bf-status="checking"]{opacity:.6}',
+            // Responsive: stack on mobile
+            '@media(max-width:768px){.bf-split{flex-direction:column}.bf-split-left{border-right:none;border-bottom:1px solid #e7e5e4}.bf-split-slots{grid-template-columns:repeat(3,1fr)}}',
         ].join('');
         document.head.appendChild(s);
+    };
+
+    // --- SVG Icons ---
+    const SVG_ARROW = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+    const SVG_CHECK = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg>';
+    const SVG_PEOPLE = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+    const SVG_CLOCK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+    const SVG_CHEVRON_LEFT = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
+    const SVG_CHEVRON_RIGHT = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>';
+
+    // --- Accordion Card Logic ---
+    const CARD_ORDER = ['object', 'service', 'staff', 'addon'];
+
+    const expandCard = (cardName) => {
+        const cards = root?.querySelectorAll('[data-bf-card]') || [];
+        const targetIdx = CARD_ORDER.indexOf(cardName);
+        cards.forEach(card => {
+            const name = card.dataset.bfCard;
+            const idx = CARD_ORDER.indexOf(name);
+            card.classList.remove('is-active', 'is-done', 'is-disabled');
+            if (idx < targetIdx) {
+                card.classList.add('is-done');
+            } else if (idx === targetIdx) {
+                card.classList.add('is-active');
+            } else {
+                card.classList.add('is-disabled');
+            }
+        });
+    };
+
+    const updateCardSummary = (cardName, titleText, descText) => {
+        const card = root?.querySelector(`[data-bf-card="${cardName}"]`);
+        if (!card) return;
+        const titleEl = card.querySelector('.bf-split-card-title');
+        const descEl = card.querySelector('.bf-split-card-desc');
+        if (titleEl && titleText) titleEl.textContent = titleText;
+        if (descEl) descEl.textContent = descText || '';
+    };
+
+    const activateRightSide = () => {
+        const right = root?.querySelector('.bf-split-right');
+        if (right) right.classList.add('is-active');
+    };
+
+    const deactivateRightSide = () => {
+        const right = root?.querySelector('.bf-split-right');
+        if (right) right.classList.remove('is-active');
     };
 
     // --- DOM-Helpers ---
@@ -262,8 +399,12 @@
         const exists = Array.from(steps).some(e => e.dataset.bfStep === target);
         const next = exists ? target : '1';
         state.step = next;
-        steps.forEach(e => { e.style.display = e.dataset.bfStep === next ? 'block' : 'none'; });
+        steps.forEach(e => { e.style.display = e.dataset.bfStep === next ? '' : 'none'; });
         updateProgress();
+        if (next === '1') {
+            const hasCards = root?.querySelector('[data-bf-card]');
+            if (hasCards && !state.sel.object) expandCard('object');
+        }
     };
 
     const isStepEmpty = (stepId) => {
@@ -349,6 +490,33 @@
 
     // --- UI-Population ---
     const popObjects = () => {
+        // Split mode: render clickable object rows
+        const dynEl = dyn('objects');
+        if (dynEl && isSplitMode()) {
+            const objs = state.data.objects;
+            dynEl.innerHTML = objs.length ? objs.map(o => {
+                const isSel = state.sel.object?.id === o.id;
+                return `<div class="bf-obj-item${isSel ? ' is-selected' : ''}" data-obj-id="${o.id}">
+                    <div class="bf-obj-info"><div class="bf-obj-name">${o.name}</div>${o.description ? `<div class="bf-obj-desc">${o.description}</div>` : ''}</div>
+                    <div class="bf-obj-meta"><span class="bf-obj-check">${SVG_CHECK}</span>${o.capacity ? `<span class="bf-obj-cap">${SVG_PEOPLE} ${o.capacity}</span>` : ''}</div>
+                </div>`;
+            }).join('') : '<p>Keine Objekte verfügbar.</p>';
+            dynEl.querySelectorAll('[data-obj-id]').forEach(el => el.onclick = () => {
+                const o = state.data.objects.find(x => x.id === el.dataset.objId);
+                if (!o) return;
+                state.sel.object = o;
+                state.sel.service = state.sel.startDate = state.sel.endDate = state.sel.time = null;
+                state.sel.staff = undefined;
+                state.slots = [];
+                state.availStatus = null;
+                deactivateRightSide();
+                updateCardSummary('object', o.name, o.address || o.description || '');
+                expandCard('service');
+                popServices();
+            });
+            return;
+        }
+        // Legacy mode: select dropdown
         const sel = field('object');
         if (!sel) return;
         while (sel.options.length > 1) sel.remove(1);
@@ -364,8 +532,22 @@
         const c = dyn('services');
         if (!c) return;
         const svcs = state.data.services.filter(s => s.object_id === state.sel.object?.id);
-        c.innerHTML = svcs.length ? svcs.map(s => `<label class="bf-radio"><input type="radio" name="bf-service" value="${s.id}"${state.sel.service?.id === s.id ? ' checked' : ''}><span><strong>${s.name}</strong> — €${s.price}${s.duration_minutes ? ` · ${s.duration_minutes}min` : ''}${s.service_type === 'overnight' ? '/Nacht' : ''}</span></label>`).join('') : '<p>Keine Services verfügbar.</p>';
-        c.querySelectorAll('input[name="bf-service"]').forEach(r => r.onchange = () => selService(r.value));
+        if (isSplitMode()) {
+            c.innerHTML = svcs.length ? svcs.map(s => {
+                const isSel = state.sel.service?.id === s.id;
+                const timeStr = s.booking_window_start && s.booking_window_end ? `${s.booking_window_start}–${s.booking_window_end} Uhr` : (s.service_type === 'overnight' ? 'Übernachtung' : '');
+                const durBadge = s.duration_minutes ? `<span class="bf-svc-badge">${SVG_CLOCK} ${s.duration_minutes >= 60 ? (s.duration_minutes / 60) : s.duration_minutes}${s.duration_minutes >= 60 ? '' : ' min'}</span>` : '';
+                const priceBadge = `<span class="bf-svc-badge">€${s.price}${s.service_type === 'overnight' ? '/N' : ' p.p'}</span>`;
+                return `<div class="bf-svc-item${isSel ? ' is-selected' : ''}" data-svc-id="${s.id}">
+                    <div class="bf-svc-info"><div class="bf-svc-name">${s.name}</div>${timeStr ? `<div class="bf-svc-time">${timeStr}</div>` : ''}</div>
+                    <div class="bf-svc-badges">${durBadge}${priceBadge}</div>
+                </div>`;
+            }).join('') : '<p>Keine Services verfügbar.</p>';
+            c.querySelectorAll('[data-svc-id]').forEach(el => el.onclick = () => selService(el.dataset.svcId));
+        } else {
+            c.innerHTML = svcs.length ? svcs.map(s => `<label class="bf-radio"><input type="radio" name="bf-service" value="${s.id}"${state.sel.service?.id === s.id ? ' checked' : ''}><span><strong>${s.name}</strong> — €${s.price}${s.duration_minutes ? ` · ${s.duration_minutes}min` : ''}${s.service_type === 'overnight' ? '/Nacht' : ''}</span></label>`).join('') : '<p>Keine Services verfügbar.</p>';
+            c.querySelectorAll('input[name="bf-service"]').forEach(r => r.onchange = () => selService(r.value));
+        }
     };
 
     const popStaff = () => {
@@ -373,8 +555,27 @@
         if (!c) return;
         const svc = state.sel.service;
         const staff = state.data.staff.filter(s => s.linked_service_ids?.includes(svc?.id));
-        if (!staff.length) { c.style.display = 'none'; state.sel.staff = null; return; }
+        if (!staff.length) {
+            c.style.display = 'none';
+            state.sel.staff = null;
+            if (isSplitMode()) {
+                const staffCard = root?.querySelector('[data-bf-card="staff"]');
+                if (staffCard) staffCard.style.display = 'none';
+            }
+            return;
+        }
         c.style.display = 'block';
+        if (isSplitMode()) {
+            const staffCard = root?.querySelector('[data-bf-card="staff"]');
+            if (staffCard) staffCard.style.display = '';
+            const isAny = state.sel.staff === null || state.sel.staff === undefined;
+            c.innerHTML = `<div class="bf-staff-chips">
+                <button type="button" class="bf-staff-chip${isAny ? ' is-selected' : ''}" data-staff-id="">Nächstverfügbaren</button>
+                ${staff.map(s => `<button type="button" class="bf-staff-chip${state.sel.staff === s.id ? ' is-selected' : ''}" data-staff-id="${s.id}">${s.name}</button>`).join('')}
+            </div>`;
+            c.querySelectorAll('[data-staff-id]').forEach(btn => btn.onclick = () => selStaff(btn.dataset.staffId || null));
+            return;
+        }
 
         const staffListEl = c.querySelector('[data-bf-dynamic="staff-list"]');
         const hasTemplateStaff = !!c.querySelector('[data-bf-static="staff-heading"]');
@@ -391,7 +592,7 @@
 
     const popCal = () => {
         const c = dyn('calendar');
-        if (!c || !state.sel.service || !state.sel.object) { if (c) c.innerHTML = '<p>Bitte Service wählen.</p>'; return; }
+        if (!c || !state.sel.service || !state.sel.object) { if (c) c.innerHTML = ''; return; }
         const { month } = state.cal;
         const y = month.getFullYear(), m = month.getMonth();
         const first = new Date(y, m, 1);
@@ -402,20 +603,40 @@
         const today = fmtDate(new Date());
         const isON = state.sel.service?.service_type === 'overnight';
 
-        c.innerHTML = `<div class="bf-cal"><div class="bf-cal-header"><button type="button" class="bf-cal-nav" data-nav="-1">‹ Zurück</button><span><strong>${MONTHS[m]} ${y}</strong></span><button type="button" class="bf-cal-nav" data-nav="1">Weiter ›</button></div><div class="bf-cal-grid"><div class="bf-cal-weekdays">${DAYS.map(d => `<span class="bf-cal-weekday">${d}</span>`).join('')}</div><div class="bf-cal-days">${days.map(d => {
-            const ds = fmtDate(d), other = d.getMonth() !== m, ok = bookable(d, state.sel.service, state.sel.object), bk = blocked.includes(ds);
-            const isSel = sameDay(d, state.sel.startDate) || sameDay(d, state.sel.endDate);
-            const inR = isON && inRange(d, state.sel.startDate, state.sel.endDate);
-            const hasSlots = hasAvailableSlots(ds);
-            const canClick = !other && ok && !bk && hasSlots;
-            let cls = 'bf-day';
-            if (other) cls += ' bf-day-other';
-            else if (!canClick) cls += ' bf-day-disabled';
-            if (isSel) cls += ' bf-day-selected';
-            if (inR) cls += ' bf-day-range';
-            if (ds === today && !other) cls += ' bf-day-today';
-            return `<button type="button" class="${cls}"${canClick ? ` data-d="${ds}"` : ''}${!canClick ? ' disabled' : ''}>${d.getDate()}</button>`;
-        }).join('')}</div></div></div>`;
+        if (isSplitMode()) {
+            c.innerHTML = `<div class="bf-split-cal-header">
+                <div class="bf-split-cal-title"><span class="bf-split-cal-title-month">${MONTHS[m]}</span><span class="bf-split-cal-title-year">${y}</span></div>
+                <button type="button" class="bf-split-cal-nav" data-nav="-1">${SVG_CHEVRON_LEFT}</button>
+                <button type="button" class="bf-split-cal-nav" data-nav="1">${SVG_CHEVRON_RIGHT}</button>
+            </div><div class="bf-split-cal-grid">${DAYS.map(d => `<span class="bf-split-cal-weekday">${d}</span>`).join('')}${days.map(d => {
+                const ds = fmtDate(d), other = d.getMonth() !== m, ok = bookable(d, state.sel.service, state.sel.object), bk = blocked.includes(ds);
+                const isSel = sameDay(d, state.sel.startDate) || sameDay(d, state.sel.endDate);
+                const inR = isON && inRange(d, state.sel.startDate, state.sel.endDate);
+                const hasSlots = hasAvailableSlots(ds);
+                const canClick = !other && ok && !bk && hasSlots;
+                let cls = 'bf-split-cal-day';
+                if (other) cls += ' is-other';
+                if (isSel) cls += ' is-selected';
+                if (inR) cls += ' is-range';
+                if (ds === today && !other) cls += ' is-today';
+                return `<button type="button" class="${cls}"${canClick ? ` data-d="${ds}"` : ''}${!canClick && !other ? ' disabled' : ''}>${d.getDate()}</button>`;
+            }).join('')}</div>`;
+        } else {
+            c.innerHTML = `<div class="bf-cal"><div class="bf-cal-header"><button type="button" class="bf-cal-nav" data-nav="-1">‹ Zurück</button><span><strong>${MONTHS[m]} ${y}</strong></span><button type="button" class="bf-cal-nav" data-nav="1">Weiter ›</button></div><div class="bf-cal-grid"><div class="bf-cal-weekdays">${DAYS.map(d => `<span class="bf-cal-weekday">${d}</span>`).join('')}</div><div class="bf-cal-days">${days.map(d => {
+                const ds = fmtDate(d), other = d.getMonth() !== m, ok = bookable(d, state.sel.service, state.sel.object), bk = blocked.includes(ds);
+                const isSel = sameDay(d, state.sel.startDate) || sameDay(d, state.sel.endDate);
+                const inR = isON && inRange(d, state.sel.startDate, state.sel.endDate);
+                const hasSlots = hasAvailableSlots(ds);
+                const canClick = !other && ok && !bk && hasSlots;
+                let cls = 'bf-day';
+                if (other) cls += ' bf-day-other';
+                else if (!canClick) cls += ' bf-day-disabled';
+                if (isSel) cls += ' bf-day-selected';
+                if (inR) cls += ' bf-day-range';
+                if (ds === today && !other) cls += ' bf-day-today';
+                return `<button type="button" class="${cls}"${canClick ? ` data-d="${ds}"` : ''}${!canClick ? ' disabled' : ''}>${d.getDate()}</button>`;
+            }).join('')}</div></div></div>`;
+        }
 
         c.querySelectorAll('[data-nav]').forEach(b => b.onclick = e => { e.preventDefault(); navMonth(+b.dataset.nav); });
         c.querySelectorAll('[data-d]').forEach(d => d.onclick = () => selDate(d.dataset.d));
@@ -424,6 +645,34 @@
     const popSlots = () => {
         const c = dyn('timeslots');
         if (!c) return;
+
+        if (isSplitMode()) {
+            const svc = state.sel.service;
+            const isHourly = svc?.service_type === 'hourly';
+            if (!isHourly) { c.style.display = 'none'; return; }
+            c.style.display = '';
+            let html = `<div class="bf-split-time"><div class="bf-split-time-title">Uhrzeit</div>`;
+            if (!state.sel.startDate) {
+                html += `<div class="bf-split-time-hint">Ich wähle zuerst das Datum aus, um einen passenden Zeitslot angezeigt zu bekommen.</div>`;
+            } else if (!state.slots.length) {
+                html += `<div class="bf-split-time-desc">Keine freien Termine an diesem Tag.</div>`;
+            } else {
+                html += `<div class="bf-split-time-desc">Wähle deine passende Uhrzeit aus.</div>`;
+                html += `<div class="bf-split-slots">`;
+                html += state.slots.map(s => {
+                    const sel = state.sel.time === s.start;
+                    const dotCls = s.available ? 'is-available' : 'is-unavailable';
+                    return `<button type="button" class="bf-split-slot${sel ? ' is-selected' : ''}" data-time="${s.start}"${!s.available ? ' disabled' : ''}><span class="bf-split-slot-dot ${dotCls}"></span>${s.start}</button>`;
+                }).join('');
+                html += `</div>`;
+            }
+            html += `</div>`;
+            c.innerHTML = html;
+            c.querySelectorAll('[data-time]').forEach(b => { if (!b.disabled) b.onclick = () => selTime(b.dataset.time); });
+            return;
+        }
+
+        // Legacy mode
         const hasStaticTitle = !!c.querySelector('[data-bf-static="timeslots-title"]');
         const staticEmpty = c.querySelector('[data-bf-static="slots-empty"]');
         let slotsWrap = c.querySelector('[data-bf-dynamic="timeslots-list"]');
@@ -824,6 +1073,8 @@
     const calcTotal = () => Math.max(0, calcSub() - calcDisc());
 
     // --- Interaktions-Handler ---
+    const isSplitMode = () => !!root?.querySelector('[data-bf-card]');
+
     const selService = async id => {
         state.sel.service = state.data.services.find(s => s.id === id);
         state.sel.startDate = state.sel.endDate = state.sel.time = null;
@@ -832,7 +1083,24 @@
         state.cal.selectingEnd = false;
         state.availStatus = null;
         popServices(); popStaff();
-        if (!state.data.staff.some(s => s.linked_service_ids?.includes(id))) { await loadAvail(); popCal(); }
+        if (isSplitMode()) {
+            const svc = state.sel.service;
+            const timeStr = svc?.booking_window_start && svc?.booking_window_end ? `${svc.booking_window_start}–${svc.booking_window_end} Uhr` : '';
+            updateCardSummary('service', svc?.name || 'Service', timeStr);
+            const hasStaff = state.data.staff.some(s => s.linked_service_ids?.includes(id));
+            if (hasStaff) {
+                expandCard('staff');
+                popStaff();
+            } else {
+                expandCard('addon');
+                deactivateRightSide();
+                await loadAvail();
+                activateRightSide();
+                popCal(); popSlots();
+            }
+        } else {
+            if (!state.data.staff.some(s => s.linked_service_ids?.includes(id))) { await loadAvail(); popCal(); }
+        }
     };
 
     const selStaff = async id => {
@@ -840,7 +1108,15 @@
         state.sel.startDate = state.sel.endDate = state.sel.time = null;
         state.slots = [];
         state.availStatus = null;
-        popStaff(); await loadAvail(); popCal();
+        popStaff();
+        if (isSplitMode()) {
+            const stf = id ? state.data.staff.find(s => s.id === id) : null;
+            updateCardSummary('staff', 'Mitarbeiter', stf?.name || 'Nächstverfügbaren');
+            activateRightSide();
+            await loadAvail(); popCal(); popSlots();
+        } else {
+            await loadAvail(); popCal();
+        }
     };
 
     const navMonth = async d => {
@@ -861,6 +1137,7 @@
         if (isON) {
             if (state.cal.selectingEnd && state.sel.startDate && parseLocal(ds) > parseLocal(state.sel.startDate)) {
                 state.sel.endDate = ds; state.cal.selectingEnd = false; await checkAvail();
+                if (isSplitMode()) { expandCard('addon'); popAddons(); }
             } else { state.sel.startDate = ds; state.sel.endDate = null; state.cal.selectingEnd = true; }
         } else {
             state.sel.startDate = ds; state.sel.endDate = state.sel.time = null;
@@ -869,6 +1146,7 @@
                 state.slots = genSlots(svc, state.sel.object, bookings);
             } else {
                 await checkAvail();
+                if (isSplitMode() && svc?.service_type === 'daily') { expandCard('addon'); popAddons(); }
             }
         }
         popCal(); popSlots(); popDateInfo();
@@ -879,6 +1157,7 @@
         popSlots();
         await checkAvail();
         popSlots(); popDateInfo();
+        if (isSplitMode()) { expandCard('addon'); popAddons(); }
     };
 
     const checkAvail = async () => {
@@ -1090,29 +1369,58 @@
 
     // --- Event-Binding ---
     const bind = () => {
+        // Split-Screen: Card header clicks (re-expand done cards)
+        $$('.bf-split-card-header').forEach(h => {
+            h.addEventListener('click', () => {
+                const card = h.closest('[data-bf-card]');
+                if (!card || card.classList.contains('is-disabled')) return;
+                const name = card.dataset.bfCard;
+                if (card.classList.contains('is-done')) {
+                    expandCard(name);
+                    if (name === 'object') popObjects();
+                    if (name === 'service') popServices();
+                    if (name === 'staff') popStaff();
+                    if (name === 'addon') popAddons();
+                }
+            });
+        });
+
+        // Next/Back navigation
         $$('[data-bf-action="next"],[data-bf-action="back"]').forEach(b => b.onclick = e => {
             e.preventDefault();
             const action = b.dataset.bfAction;
 
             if (action === 'next') {
-                const currentStepEl = $(`[data-bf-step="${state.step}"]`);
-                if (currentStepEl) {
-                    if (currentStepEl.querySelector('[data-bf-field="object"]')) {
-                        const oid = field('object')?.value;
-                        if (!oid) return alert('Objekt wählen.');
-                        state.sel.object = state.data.objects.find(o => o.id === oid);
-                        track('widget_start', { object_name: state.sel.object?.name });
-                    }
-                    if (currentStepEl.querySelector('[data-bf-dynamic="services"]')) {
-                        if (!state.sel.service) return alert('Service wählen.');
-                        track('step_3', { service_name: state.sel.service.name, service_type: state.sel.service.service_type });
-                    }
-                    if (currentStepEl.querySelector('[data-bf-dynamic="calendar"]')) {
-                        if (!state.sel.startDate) return alert('Datum wählen.');
-                        if (state.sel.service?.service_type === 'hourly' && !state.sel.time) return alert('Uhrzeit wählen.');
-                        if (state.sel.service?.service_type === 'overnight' && !state.sel.endDate) return alert('Abreisedatum wählen.');
-                        if (state.availStatus !== 'available') return alert('Termin nicht verfügbar.');
-                        track('step_4', { date: state.sel.startDate });
+                const isSplit = !!root?.querySelector('[data-bf-card]');
+                if (isSplit && state.step === 1 || state.step === '1') {
+                    if (!state.sel.object) return alert('Bitte Objekt wählen.');
+                    if (!state.sel.service) return alert('Bitte Service wählen.');
+                    if (!state.sel.startDate) return alert('Bitte Datum wählen.');
+                    if (state.sel.service?.service_type === 'hourly' && !state.sel.time) return alert('Bitte Uhrzeit wählen.');
+                    if (state.sel.service?.service_type === 'overnight' && !state.sel.endDate) return alert('Bitte Abreisedatum wählen.');
+                    track('widget_start', { object_name: state.sel.object?.name });
+                    track('step_3', { service_name: state.sel.service.name, service_type: state.sel.service.service_type });
+                    track('step_4', { date: state.sel.startDate });
+                } else {
+                    const currentStepEl = $(`[data-bf-step="${state.step}"]`);
+                    if (currentStepEl) {
+                        if (currentStepEl.querySelector('[data-bf-field="object"]')) {
+                            const oid = field('object')?.value;
+                            if (!oid) return alert('Objekt wählen.');
+                            state.sel.object = state.data.objects.find(o => o.id === oid);
+                            track('widget_start', { object_name: state.sel.object?.name });
+                        }
+                        if (currentStepEl.querySelector('[data-bf-dynamic="services"]')) {
+                            if (!state.sel.service) return alert('Service wählen.');
+                            track('step_3', { service_name: state.sel.service.name, service_type: state.sel.service.service_type });
+                        }
+                        if (currentStepEl.querySelector('[data-bf-dynamic="calendar"]')) {
+                            if (!state.sel.startDate) return alert('Datum wählen.');
+                            if (state.sel.service?.service_type === 'hourly' && !state.sel.time) return alert('Uhrzeit wählen.');
+                            if (state.sel.service?.service_type === 'overnight' && !state.sel.endDate) return alert('Abreisedatum wählen.');
+                            if (state.availStatus !== 'available') return alert('Termin nicht verfügbar.');
+                            track('step_4', { date: state.sel.startDate });
+                        }
                     }
                 }
             }
@@ -1129,6 +1437,7 @@
                 if (stepEl.querySelector('[data-bf-dynamic="summary"]')) { popSummary(); }
             }
         });
+        // Legacy: select-based object (for non-split layouts)
         field('object')?.addEventListener('change', e => {
             state.sel.object = state.data.objects.find(o => o.id === e.target.value);
             state.sel.service = state.sel.startDate = state.sel.endDate = state.sel.time = null;
@@ -1155,7 +1464,7 @@
 
     const initCore = async () => {
         css();
-        ensureProgress();
+        if (!isSplitMode()) ensureProgress();
         show(1);
         clearInitError();
 

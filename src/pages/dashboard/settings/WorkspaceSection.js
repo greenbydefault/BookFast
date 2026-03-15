@@ -891,7 +891,6 @@ const getWebflowTemplate = () => {
     ).toLowerCase();
   };
 
-  // --- Webflow class definitions (appear in Designer's style panel) ---
   const cls = {};
   const styleDefs = [];
   const defClass = (name, styleLess) => {
@@ -901,71 +900,60 @@ const getWebflowTemplate = () => {
     return id;
   };
 
-  defClass('bf-root', 'max-width: 40rem; margin-left: auto; margin-right: auto; font-family: inherit;');
+  // --- Split-Screen Layout classes ---
+  defClass('bf-root', 'max-width: 80rem; margin-left: auto; margin-right: auto; font-family: Inter, system-ui, sans-serif; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e7e5e4; border-bottom-color: #e7e5e4; border-left-color: #e7e5e4; border-right-color: #e7e5e4; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; border-bottom-left-radius: 0.75rem; border-bottom-right-radius: 0.75rem; overflow: hidden;');
   defClass('bf-form', 'display: flex; flex-direction: column;');
-  defClass('bf-step', 'padding-top: 1.25rem; padding-bottom: 1.25rem;');
+  defClass('bf-split', 'display: flex; min-height: 37.5rem;');
+  defClass('bf-split-left', 'flex-grow: 1; flex-basis: 50%; border-right-width: 0.0625rem; border-right-style: solid; border-right-color: #e7e5e4; display: flex; flex-direction: column; overflow-y: auto;');
+  defClass('bf-split-right', 'flex-grow: 1; flex-basis: 50%; display: flex; flex-direction: column; padding-top: 1.5rem; padding-bottom: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; opacity: 0.5;');
+  defClass('bf-split-header', 'padding-top: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; padding-bottom: 0; display: flex; flex-direction: column; gap: 0.75rem;');
+  defClass('bf-split-header-name', 'font-size: 1.25rem; font-weight: 400; color: #000; line-height: 1;');
+  defClass('bf-split-header-sub', 'font-size: 1rem; font-weight: 400; color: #717079; line-height: 1.2;');
+  defClass('bf-split-cards', 'padding-top: 1.5rem; padding-bottom: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; flex-grow: 1;');
+  defClass('bf-split-card', 'border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e7e5e4; border-bottom-color: #e7e5e4; border-left-color: #e7e5e4; border-right-color: #e7e5e4; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;');
+  defClass('bf-split-card-header', 'display: flex; align-items: flex-start; gap: 0.75rem; padding-top: 1rem; padding-bottom: 1rem; padding-left: 1rem; padding-right: 1rem; cursor: pointer;');
+  defClass('bf-split-card-num', 'min-width: 2.25rem; min-height: 2.25rem; display: flex; align-items: center; justify-content: center; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e7e5e4; border-bottom-color: #e7e5e4; border-left-color: #e7e5e4; border-right-color: #e7e5e4; border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border-bottom-left-radius: 0.25rem; border-bottom-right-radius: 0.25rem; font-size: 1rem; font-weight: 500; color: #12111f;');
+  defClass('bf-split-card-info', 'flex-grow: 1; display: flex; flex-direction: column; gap: 0.25rem;');
+  defClass('bf-split-card-title', 'font-size: 1rem; font-weight: 500; color: #12111f; line-height: 1.2;');
+  defClass('bf-split-card-desc', 'font-size: 1rem; font-weight: 400; color: #78716c; line-height: 1.2;');
+  defClass('bf-split-card-arrow', 'min-width: 1.5rem; min-height: 1.5rem; display: flex; align-items: center; justify-content: center;');
+  defClass('bf-split-card-body', 'padding-left: 1rem; padding-right: 1rem; padding-bottom: 1rem;');
+  defClass('bf-dynamic-area', 'min-height: 1rem;');
+  defClass('bf-split-footer', 'display: flex; align-items: center; justify-content: flex-end; gap: 0.625rem; padding-top: 1.125rem; padding-bottom: 1.125rem; padding-left: 1.5rem; padding-right: 1.5rem; border-top-width: 0.0625rem; border-top-style: solid; border-top-color: #e7e5e4; background-color: #fff;');
+  defClass('bf-split-btn-back', 'display: inline-flex; align-items: center; justify-content: center; padding-top: 0.75rem; padding-bottom: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #d6d3d1; border-bottom-color: #d6d3d1; border-left-color: #d6d3d1; border-right-color: #d6d3d1; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; background-color: #fff; color: #12111f; font-size: 1rem; font-weight: 400; cursor: pointer; text-decoration: none;');
+  defClass('bf-split-btn-next', 'display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; min-width: 2.875rem; min-height: 2.125rem; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; background-color: #7660f1; color: #f8f7fe; font-size: 1rem; font-weight: 500; cursor: pointer; text-decoration: none;');
+
+  // --- Step 2 classes (summary/form) ---
+  defClass('bf-step', 'padding-top: 1.5rem; padding-bottom: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem;');
   defClass('bf-step-title', 'font-size: 1.25rem; font-weight: 600; margin-bottom: 1.25rem; margin-top: 0;');
-  defClass('bf-label', 'display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem;');
-  defClass('bf-select', 'width: 100%; padding-top: 0.6rem; padding-bottom: 0.6rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 1rem; background-color: #fff; margin-bottom: 1rem;');
-  defClass('bf-dynamic-area', 'margin-top: 0.75rem; margin-bottom: 0.75rem; min-height: 2.5rem;');
-  defClass('bf-nav', 'display: flex; align-items: center; gap: 0.75rem; margin-top: 1.5rem;');
-  defClass('bf-btn-next', 'display: inline-block; padding-top: 0.65rem; padding-bottom: 0.65rem; padding-left: 1.5rem; padding-right: 1.5rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 600; font-size: 0.95rem; text-decoration: none; cursor: pointer; background-color: #18181b; color: #fff;');
-  defClass('bf-btn-back', 'display: inline-block; padding-top: 0.65rem; padding-bottom: 0.65rem; padding-left: 1.25rem; padding-right: 1.25rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 500; font-size: 0.95rem; text-decoration: none; cursor: pointer; background-color: transparent; color: #71717a;');
-  defClass('bf-voucher-row', 'display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; margin-bottom: 0.5rem;');
-  defClass('bf-voucher-input', 'flex-grow: 1; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 0.95rem;');
-  defClass('bf-btn-voucher', 'display: inline-block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 500; font-size: 0.9rem; text-decoration: none; cursor: pointer; background-color: #f4f4f5; color: #18181b;');
-  defClass('bf-step-progress', 'display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; padding-left: 0; list-style: none;');
-  defClass('bf-step-progress-item', 'display: inline-flex; align-items: center; gap: 0.35rem; padding-top: 0.35rem; padding-bottom: 0.35rem; padding-left: 0.65rem; padding-right: 0.65rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-left-radius: 999rem; border-top-right-radius: 999rem; border-bottom-left-radius: 999rem; border-bottom-right-radius: 999rem; font-size: 0.85rem; color: #52525b; background-color: #fff;');
-  defClass('is-current', 'border-top-color: #93c5fd; border-bottom-color: #93c5fd; border-left-color: #93c5fd; border-right-color: #93c5fd; background-color: #eff6ff; color: #1d4ed8; font-weight: 600;');
-  defClass('is-complete', 'border-top-color: #86efac; border-bottom-color: #86efac; border-left-color: #86efac; border-right-color: #86efac; background-color: #f0fdf4; color: #166534;');
-  defClass('bf-init-error', 'display: none; margin-bottom: 0.75rem; padding-top: 0.6rem; padding-bottom: 0.6rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #fecaca; border-bottom-color: #fecaca; border-left-color: #fecaca; border-right-color: #fecaca; background-color: #fef2f2; color: #991b1b; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 0.92rem;');
-  defClass('bf-guest-count', 'margin-bottom: 0.75rem;');
-  defClass('bf-qty-row', 'display: flex; align-items: center; gap: 0.375rem; margin-top: 0.25rem; margin-bottom: 1rem;');
-  defClass('bf-qty-btn', 'display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; background-color: #fff; color: #18181b; text-decoration: none; font-size: 1rem;');
-  defClass('bf-qty-val', 'min-width: 2ch; text-align: center; font-size: 0.95rem; font-weight: 600;');
   defClass('bf-grid-2', 'display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;');
   defClass('bf-form-group', 'margin-bottom: 1rem;');
   defClass('bf-form-label', 'display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.4rem;');
   defClass('bf-input', 'width: 100%; padding-top: 0.6rem; padding-bottom: 0.6rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 1rem; box-sizing: border-box;');
   defClass('bf-row-2', 'display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;');
-  defClass('bf-summary-divider', 'height: 0.0625rem; background-color: #e5e7eb; margin-top: 0.75rem; margin-bottom: 0.75rem;');
-  defClass('bf-total-display', 'margin-top: 0.75rem; font-size: 1.1rem; font-weight: 600;');
-  defClass('bf-submit', 'width: 100%; padding-top: 0.75rem; padding-bottom: 0.75rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 600; font-size: 1rem; cursor: pointer; background-color: #18181b; color: #fff; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; margin-top: 1rem;');
-  defClass('bf-radio', 'display: block; cursor: pointer; padding-top: 0.5rem; padding-bottom: 0.5rem;');
+  defClass('bf-label', 'display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem;');
+  defClass('bf-voucher-row', 'display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; margin-bottom: 0.5rem;');
+  defClass('bf-voucher-input', 'flex-grow: 1; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 0.95rem;');
+  defClass('bf-btn-voucher', 'display: inline-block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 500; font-size: 0.9rem; text-decoration: none; cursor: pointer; background-color: #f4f4f5; color: #18181b;');
   defClass('bf-summary-row', 'display: flex; justify-content: space-between; padding-top: 0.35rem; padding-bottom: 0.35rem;');
   defClass('bf-summary-label', 'color: #71717a; font-size: 0.9rem;');
   defClass('bf-summary-value', 'font-weight: 500; font-size: 0.9rem; text-align: right;');
-  defClass('bf-avail-status', 'font-weight: 600; margin-top: 0.5rem;');
-  defClass('bf-slots-empty', 'opacity: 0.6; font-size: 0.9rem;');
-  defClass('bf-success', 'text-align: center; padding-top: 3rem; padding-bottom: 3rem;');
-  defClass('bf-success-icon', 'font-size: 3rem; margin-bottom: 1rem;');
-  defClass('bf-success-title', 'font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; margin-top: 0;');
-  defClass('bf-success-desc', 'color: #71717a; font-size: 1rem; margin-top: 0;');
+  defClass('bf-summary-divider', 'height: 0.0625rem; background-color: #e5e7eb; margin-top: 0.75rem; margin-bottom: 0.75rem;');
+  defClass('bf-total-display', 'margin-top: 0.75rem; font-size: 1.1rem; font-weight: 600;');
+  defClass('bf-submit', 'width: 100%; padding-top: 0.75rem; padding-bottom: 0.75rem; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; font-weight: 600; font-size: 1rem; cursor: pointer; background-color: #7660f1; color: #f8f7fe; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; margin-top: 1rem;');
+  defClass('bf-form-column', '');
+  defClass('bf-summary-column', '');
+  defClass('bf-price-rows', '');
 
-  // Dynamic calendar classes (used by embed.js popCal)
-  defClass('bf-cal', '');
-  defClass('bf-cal-header', 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;');
-  defClass('bf-cal-nav', 'background-color: transparent; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; cursor: pointer; padding-top: 0.4rem; padding-bottom: 0.4rem; padding-left: 0.8rem; padding-right: 0.8rem; font-size: inherit; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem;');
-  defClass('bf-cal-grid', 'user-select: none;');
-  defClass('bf-cal-weekdays', 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.125rem; text-align: center;');
-  defClass('bf-cal-weekday', 'padding-top: 0.4rem; padding-bottom: 0.4rem; font-size: 0.8rem; font-weight: 600; opacity: 0.6;');
-  defClass('bf-cal-days', 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.125rem; text-align: center;');
-  defClass('bf-day', 'min-width: 2.5rem; min-height: 2.5rem; padding-top: 0; padding-bottom: 0; padding-left: 0; padding-right: 0; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; border-top-left-radius: 50%; border-top-right-radius: 50%; border-bottom-left-radius: 50%; border-bottom-right-radius: 50%; background-color: transparent; cursor: pointer; font-size: inherit; display: flex; align-items: center; justify-content: center;');
-  defClass('bf-day-other', 'visibility: hidden;');
-  defClass('bf-day-disabled', 'opacity: 0.25; cursor: default;');
-  defClass('bf-day-selected', 'font-weight: 700; background-color: rgba(0, 0, 0, 0.1);');
-  defClass('bf-day-range', 'background-color: rgba(0, 0, 0, 0.04);');
-  defClass('bf-day-today', 'border-top-width: 0.125rem; border-bottom-width: 0.125rem; border-left-width: 0.125rem; border-right-width: 0.125rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: currentColor; border-bottom-color: currentColor; border-left-color: currentColor; border-right-color: currentColor;');
+  // Guest count
+  defClass('bf-guest-count', 'margin-bottom: 0.75rem;');
+  defClass('bf-qty-row', 'display: flex; align-items: center; gap: 0.375rem; margin-top: 0.25rem; margin-bottom: 1rem;');
+  defClass('bf-qty-btn', 'display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; background-color: #fff; color: #18181b; text-decoration: none; font-size: 1rem;');
+  defClass('bf-qty-val', 'min-width: 2ch; text-align: center; font-size: 0.95rem; font-weight: 600;');
 
-  // Timeslot classes (used by embed.js popSlots)
-  defClass('bf-slot', 'display: inline-flex; align-items: center; justify-content: center; min-width: 4rem; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; background-color: transparent; cursor: pointer; font-size: inherit; margin-right: 0.375rem; margin-bottom: 0.375rem;');
-  defClass('bf-slot-disabled', 'opacity: 0.3; cursor: default; text-decoration: line-through;');
-  defClass('bf-slot-selected', 'font-weight: 700; border-top-color: currentColor; border-bottom-color: currentColor; border-left-color: currentColor; border-right-color: currentColor; background-color: rgba(0, 0, 0, 0.06);');
-
-  // Addon classes (used by embed.js popAddons)
-  defClass('bf-checkbox', 'display: block; cursor: pointer; padding-top: 0.5rem; padding-bottom: 0.5rem;');
+  // Legacy addons
   defClass('bf-addon-card', 'border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e5e7eb; border-bottom-color: #e5e7eb; border-left-color: #e5e7eb; border-right-color: #e5e7eb; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem; margin-bottom: 0.5rem; background-color: #fafafa;');
-  defClass('bf-addon-active', 'border-top-color: #2563eb; border-bottom-color: #2563eb; border-left-color: #2563eb; border-right-color: #2563eb; background-color: #eff6ff;');
+  defClass('bf-addon-active', 'border-top-color: #624cd8; border-bottom-color: #624cd8; border-left-color: #624cd8; border-right-color: #624cd8; background-color: #f8f7fe;');
   defClass('bf-addon-header', 'display: flex; align-items: center; gap: 0.5rem; cursor: pointer;');
   defClass('bf-addon-body', 'margin-top: 0.5rem; padding-left: 1.5rem;');
   defClass('bf-addon-item', 'margin-bottom: 0.375rem;');
@@ -974,50 +962,52 @@ const getWebflowTemplate = () => {
   defClass('bf-variant-select', 'padding-top: 0.25rem; padding-bottom: 0.25rem; padding-left: 0.5rem; padding-right: 0.5rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border-bottom-left-radius: 0.25rem; border-bottom-right-radius: 0.25rem; font-size: 0.85rem;');
   defClass('bf-guest-block', 'padding-top: 0.625rem; border-top-width: 0.0625rem; border-top-style: solid; border-top-color: #e5e7eb;');
   defClass('bf-guest-label', 'font-weight: 600; font-size: 0.9rem; margin-bottom: 0.375rem; color: #1e40af;');
-  defClass('bf-dateinfo', 'margin-top: 0.75rem; margin-bottom: 0.75rem;');
 
-  // Layout helper classes
-  defClass('bf-form-column', '');
-  defClass('bf-summary-column', '');
-  defClass('bf-total', 'font-weight: 700;');
-  defClass('bf-timeslots-list', '');
-  defClass('bf-price-rows', '');
+  // Success & errors
+  defClass('bf-init-error', 'display: none; margin-bottom: 0.75rem; padding-top: 0.6rem; padding-bottom: 0.6rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #fecaca; border-bottom-color: #fecaca; border-left-color: #fecaca; border-right-color: #fecaca; background-color: #fef2f2; color: #991b1b; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 0.92rem;');
+  defClass('bf-success', 'text-align: center; padding-top: 3rem; padding-bottom: 3rem;');
+  defClass('bf-success-icon', 'font-size: 3rem; margin-bottom: 1rem;');
+  defClass('bf-success-title', 'font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; margin-top: 0;');
+  defClass('bf-success-desc', 'color: #71717a; font-size: 1rem; margin-top: 0;');
+  defClass('bf-avail-status', 'font-weight: 600; margin-top: 0.5rem;');
+  defClass('bf-dateinfo', 'margin-top: 0.75rem; margin-bottom: 0.75rem;');
 
   const c = (name) => [cls[name]];
 
+  // --- Node IDs ---
   const ids = {
-    root: mongoId(), form: mongoId(), initError: mongoId(), initErrorText: mongoId(), stepProgress: mongoId(),
-    progressItem1: mongoId(), progressItem1Text: mongoId(), progressItem2: mongoId(), progressItem2Text: mongoId(),
-    progressItem3: mongoId(), progressItem3Text: mongoId(), progressItem4: mongoId(), progressItem4Text: mongoId(),
-    progressItem5: mongoId(), progressItem5Text: mongoId(),
-    step1: mongoId(), step1Title: mongoId(), step1TitleText: mongoId(),
-    objectLabel: mongoId(), objectLabelText: mongoId(), objectSelect: mongoId(),
-    objectPlaceholder: mongoId(), objectPlaceholderText: mongoId(),
-    step1Nav: mongoId(), step1Btn: mongoId(), step1BtnText: mongoId(),
-    step2: mongoId(), step2Title: mongoId(), step2TitleText: mongoId(),
-    servicesContainer: mongoId(), staffContainer: mongoId(),
-    staffHeading: mongoId(), staffHeadingStrong: mongoId(), staffHeadingText: mongoId(),
-    staffAnyLabel: mongoId(), staffAnyInput: mongoId(), staffAnySpan: mongoId(), staffAnySpanText: mongoId(),
-    staffList: mongoId(),
-    step2Nav: mongoId(), step2BtnNext: mongoId(), step2BtnNextText: mongoId(),
-    step2BtnBack: mongoId(), step2BtnBackText: mongoId(),
-    step3: mongoId(), step3Title: mongoId(), step3TitleText: mongoId(),
-    calendarContainer: mongoId(), timeslotsContainer: mongoId(), timeslotsTitle: mongoId(), timeslotsTitleStrong: mongoId(), timeslotsTitleText: mongoId(),
-    slotsEmpty: mongoId(), slotsEmptyText: mongoId(),
-    dateInfoContainer: mongoId(), dateInfoText: mongoId(),
-    availStatus: mongoId(),
-    availChecking: mongoId(), availCheckingText: mongoId(),
-    availAvailable: mongoId(), availAvailableText: mongoId(),
-    availUnavailable: mongoId(), availUnavailableText: mongoId(),
-    step3Nav: mongoId(), step3BtnNext: mongoId(), step3BtnNextText: mongoId(),
-    step3BtnBack: mongoId(), step3BtnBackText: mongoId(),
-    step4: mongoId(), step4Title: mongoId(), step4TitleText: mongoId(),
+    root: mongoId(), form: mongoId(), initError: mongoId(), initErrorText: mongoId(),
+    // Step 1: Split-Screen
+    step1: mongoId(), split: mongoId(),
+    splitLeft: mongoId(), splitHeader: mongoId(), splitHeaderName: mongoId(), splitHeaderNameText: mongoId(),
+    splitHeaderSub: mongoId(), splitHeaderSubText: mongoId(), splitCards: mongoId(),
+    // Object card
+    cardObj: mongoId(), cardObjHeader: mongoId(), cardObjNum: mongoId(), cardObjNumText: mongoId(),
+    cardObjInfo: mongoId(), cardObjTitle: mongoId(), cardObjTitleText: mongoId(), cardObjDesc: mongoId(), cardObjDescText: mongoId(),
+    cardObjArrow: mongoId(), cardObjArrowText: mongoId(), cardObjBody: mongoId(), objDynamic: mongoId(),
+    // Service card
+    cardSvc: mongoId(), cardSvcHeader: mongoId(), cardSvcNum: mongoId(), cardSvcNumText: mongoId(),
+    cardSvcInfo: mongoId(), cardSvcTitle: mongoId(), cardSvcTitleText: mongoId(), cardSvcDesc: mongoId(), cardSvcDescText: mongoId(),
+    cardSvcArrow: mongoId(), cardSvcArrowText: mongoId(), cardSvcBody: mongoId(), svcDynamic: mongoId(),
+    // Staff card
+    cardStaff: mongoId(), cardStaffHeader: mongoId(), cardStaffNum: mongoId(), cardStaffNumText: mongoId(),
+    cardStaffInfo: mongoId(), cardStaffTitle: mongoId(), cardStaffTitleText: mongoId(), cardStaffDesc: mongoId(), cardStaffDescText: mongoId(),
+    cardStaffArrow: mongoId(), cardStaffArrowText: mongoId(), cardStaffBody: mongoId(), staffDynamic: mongoId(),
+    // Addon card
+    cardAddon: mongoId(), cardAddonHeader: mongoId(), cardAddonNum: mongoId(), cardAddonNumText: mongoId(),
+    cardAddonInfo: mongoId(), cardAddonTitle: mongoId(), cardAddonTitleText: mongoId(), cardAddonDesc: mongoId(), cardAddonDescText: mongoId(),
+    cardAddonArrow: mongoId(), cardAddonArrowText: mongoId(), cardAddonBody: mongoId(),
     guestCountBlock: mongoId(), guestCountTitle: mongoId(), guestCountTitleStrong: mongoId(), guestCountTitleText: mongoId(), guestCountMaxText: mongoId(),
     guestCountRow: mongoId(), guestCountMinus: mongoId(), guestCountMinusText: mongoId(), guestCountValue: mongoId(), guestCountValueText: mongoId(), guestCountPlus: mongoId(), guestCountPlusText: mongoId(),
-    addonsContainer: mongoId(),
-    step4Nav: mongoId(), step4BtnNext: mongoId(), step4BtnNextText: mongoId(),
-    step4BtnBack: mongoId(), step4BtnBackText: mongoId(),
-    step5: mongoId(), step5Title: mongoId(), step5TitleText: mongoId(), summaryContainer: mongoId(), summaryGrid: mongoId(),
+    addonsDynamic: mongoId(),
+    // Right side
+    splitRight: mongoId(), calDynamic: mongoId(), slotsDynamic: mongoId(), dateInfoContainer: mongoId(), dateInfoText: mongoId(),
+    availStatus: mongoId(), availChecking: mongoId(), availCheckingText: mongoId(), availAvailable: mongoId(), availAvailableText: mongoId(), availUnavailable: mongoId(), availUnavailableText: mongoId(),
+    // Footer Step 1
+    footer1: mongoId(), footer1Next: mongoId(), footer1NextText: mongoId(),
+    // Step 2: Summary/Details
+    step2: mongoId(), step2Title: mongoId(), step2TitleText: mongoId(),
+    summaryContainer: mongoId(), summaryGrid: mongoId(),
     formColumn: mongoId(), formColumnTitle: mongoId(), formColumnTitleText: mongoId(),
     fnameGroup: mongoId(), fnameLabel: mongoId(), fnameLabelText: mongoId(), fnameInput: mongoId(),
     lnameGroup: mongoId(), lnameLabel: mongoId(), lnameLabelText: mongoId(), lnameInput: mongoId(),
@@ -1036,102 +1026,97 @@ const getWebflowTemplate = () => {
     sumRowTime: mongoId(), sumRowTimeLabel: mongoId(), sumRowTimeLabelText: mongoId(), sumRowTimeValue: mongoId(),
     priceRows: mongoId(),
     sumRowTotal: mongoId(), sumRowTotalLabel: mongoId(), sumRowTotalLabelText: mongoId(), sumRowTotalValue: mongoId(),
-    voucherRow: mongoId(), voucherLabel: mongoId(), voucherLabelText: mongoId(), voucherInput: mongoId(),
+    voucherLabel: mongoId(), voucherLabelText: mongoId(), voucherRow: mongoId(), voucherInput: mongoId(),
     voucherBtn: mongoId(), voucherBtnText: mongoId(), voucherStatus: mongoId(),
-    voucherValid: mongoId(), voucherValidText: mongoId(),
-    voucherInvalid: mongoId(), voucherInvalidText: mongoId(),
+    voucherValid: mongoId(), voucherValidText: mongoId(), voucherInvalid: mongoId(), voucherInvalidText: mongoId(),
     voucherChecking: mongoId(), voucherCheckingText: mongoId(),
     totalDisplay: mongoId(), submitBtn: mongoId(),
-    step5Nav: mongoId(), step5BtnBack: mongoId(), step5BtnBackText: mongoId(),
-    stepSuccess: mongoId(),
-    successIcon: mongoId(), successIconText: mongoId(),
-    successTitle: mongoId(), successTitleText: mongoId(),
-    successDesc: mongoId(), successDescText: mongoId(),
-    successMsg: mongoId(), successMsgText: mongoId(),
-    errorMsg: mongoId(), errorMsgText: mongoId()
+    footer2: mongoId(), footer2Back: mongoId(), footer2BackText: mongoId(),
+    // Success
+    stepSuccess: mongoId(), successIcon: mongoId(), successIconText: mongoId(),
+    successTitle: mongoId(), successTitleText: mongoId(), successDesc: mongoId(), successDescText: mongoId(),
+    successMsg: mongoId(), successMsgText: mongoId(), errorMsg: mongoId(), errorMsgText: mongoId()
   };
 
   const nodes = [
-    // Root & Form
-    { "_id": ids.root, "tag": "div", "classes": c('bf-root'), "children": [ids.initError, ids.stepProgress, ids.form, ids.successMsg, ids.errorMsg], "type": "FormWrapper", "data": { "form": { "type": "wrapper" }, "attr": { "data-bf-root": "true" } } },
+    // Root
+    { "_id": ids.root, "tag": "div", "classes": c('bf-root'), "children": [ids.initError, ids.form, ids.successMsg, ids.errorMsg], "type": "FormWrapper", "data": { "form": { "type": "wrapper" }, "attr": { "data-bf-root": "true" } } },
     { "_id": ids.initError, "tag": "div", "classes": c('bf-init-error'), "children": [ids.initErrorText], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-init-error": "true", "role": "alert" } } },
     { "_id": ids.initErrorText, "text": true, "v": "" },
-    { "_id": ids.stepProgress, "tag": "ol", "classes": c('bf-step-progress'), "children": [ids.progressItem1, ids.progressItem2, ids.progressItem3, ids.progressItem4, ids.progressItem5], "type": "Block", "data": { "tag": "ol", "attr": { "data-bf-step-progress": "true" } } },
-    { "_id": ids.progressItem1, "tag": "li", "classes": c('bf-step-progress-item'), "children": [ids.progressItem1Text], "type": "Block", "data": { "tag": "li", "attr": { "data-bf-progress-step": "1", "data-step": "1" } } },
-    { "_id": ids.progressItem1Text, "text": true, "v": "Objekt wählen" },
-    { "_id": ids.progressItem2, "tag": "li", "classes": c('bf-step-progress-item'), "children": [ids.progressItem2Text], "type": "Block", "data": { "tag": "li", "attr": { "data-bf-progress-step": "2", "data-step": "2" } } },
-    { "_id": ids.progressItem2Text, "text": true, "v": "Service wählen" },
-    { "_id": ids.progressItem3, "tag": "li", "classes": c('bf-step-progress-item'), "children": [ids.progressItem3Text], "type": "Block", "data": { "tag": "li", "attr": { "data-bf-progress-step": "3", "data-step": "3" } } },
-    { "_id": ids.progressItem3Text, "text": true, "v": "Datum & Zeit" },
-    { "_id": ids.progressItem4, "tag": "li", "classes": c('bf-step-progress-item'), "children": [ids.progressItem4Text], "type": "Block", "data": { "tag": "li", "attr": { "data-bf-progress-step": "4", "data-step": "4" } } },
-    { "_id": ids.progressItem4Text, "text": true, "v": "Extras" },
-    { "_id": ids.progressItem5, "tag": "li", "classes": c('bf-step-progress-item'), "children": [ids.progressItem5Text], "type": "Block", "data": { "tag": "li", "attr": { "data-bf-progress-step": "5", "data-step": "5" } } },
-    { "_id": ids.progressItem5Text, "text": true, "v": "Zusammenfassung" },
-    { "_id": ids.form, "tag": "form", "classes": c('bf-form'), "children": [ids.step1, ids.step2, ids.step3, ids.step4, ids.step5, ids.stepSuccess], "type": "FormForm", "data": { "form": { "type": "form", "name": "booking-form" }, "attr": { "name": "booking-form", "data-name": "Booking Form" } } },
+    { "_id": ids.form, "tag": "form", "classes": c('bf-form'), "children": [ids.step1, ids.step2, ids.stepSuccess], "type": "FormForm", "data": { "form": { "type": "form", "name": "booking-form" }, "attr": { "name": "booking-form", "data-name": "Booking Form" } } },
 
-    // Step 1: Object
-    { "_id": ids.step1, "tag": "div", "classes": c('bf-step'), "children": [ids.step1Title, ids.objectLabel, ids.objectSelect, ids.step1Nav], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "1", "aria-label": "Objekt wählen" } } },
-    { "_id": ids.step1Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step1TitleText], "type": "Heading", "data": { "tag": "h2" } },
-    { "_id": ids.step1TitleText, "text": true, "v": "Objekt wählen" },
-    { "_id": ids.objectLabel, "tag": "label", "classes": c('bf-label'), "children": [ids.objectLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "object" } } },
-    { "_id": ids.objectLabelText, "text": true, "v": "Objekt wählen" },
-    { "_id": ids.objectSelect, "tag": "select", "classes": c('bf-select'), "children": [ids.objectPlaceholder], "type": "FormSelect", "data": { "form": { "type": "select", "name": "object" }, "attr": { "name": "object", "id": "object", "data-bf-field": "object", "data-bf-dynamic": "objects", "required": true } } },
-    { "_id": ids.objectPlaceholder, "tag": "option", "classes": [], "children": [ids.objectPlaceholderText], "type": "FormSelectOption", "data": { "form": { "type": "select-option" }, "attr": { "value": "" } } },
-    { "_id": ids.objectPlaceholderText, "text": true, "v": "Bitte wählen..." },
-    { "_id": ids.step1Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step1Btn], "type": "Block", "data": { "tag": "nav" } },
-    { "_id": ids.step1Btn, "tag": "a", "classes": c('bf-btn-next'), "children": [ids.step1BtnText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "next", "data-bf-goto": "2" } } },
-    { "_id": ids.step1BtnText, "text": true, "v": "Weiter" },
+    // ===== STEP 1: Split-Screen =====
+    { "_id": ids.step1, "tag": "div", "classes": [], "children": [ids.split, ids.footer1], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "1", "aria-label": "Auswahl" } } },
+    { "_id": ids.split, "tag": "div", "classes": c('bf-split'), "children": [ids.splitLeft, ids.splitRight], "type": "Block", "data": { "tag": "div" } },
 
-    // Step 2: Service
-    { "_id": ids.step2, "tag": "div", "classes": c('bf-step'), "children": [ids.step2Title, ids.servicesContainer, ids.staffContainer, ids.step2Nav], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "2", "aria-label": "Service wählen" } } },
-    { "_id": ids.step2Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step2TitleText], "type": "Heading", "data": { "tag": "h2" } },
-    { "_id": ids.step2TitleText, "text": true, "v": "Service wählen" },
-    { "_id": ids.servicesContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "services" } } },
-    { "_id": ids.staffContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.staffHeading, ids.staffAnyLabel, ids.staffList], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "staff", "style": "display: none;" } } },
-    { "_id": ids.staffHeading, "tag": "p", "classes": [], "children": [ids.staffHeadingStrong], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-static": "staff-heading" } } },
-    { "_id": ids.staffHeadingStrong, "tag": "strong", "classes": [], "children": [ids.staffHeadingText], "type": "Block", "data": { "tag": "strong" } },
-    { "_id": ids.staffHeadingText, "text": true, "v": "Mitarbeiter" },
-    { "_id": ids.staffAnyLabel, "tag": "label", "classes": c('bf-radio'), "children": [ids.staffAnyInput, ids.staffAnySpan], "type": "Block", "data": { "tag": "label", "attr": { "data-bf-static": "staff-any" } } },
-    { "_id": ids.staffAnyInput, "tag": "input", "classes": [], "children": [], "type": "Block", "data": { "tag": "input", "attr": { "type": "radio", "name": "bf-staff", "value": "", "checked": "checked" } } },
-    { "_id": ids.staffAnySpan, "tag": "span", "classes": [], "children": [ids.staffAnySpanText], "type": "Block", "data": { "tag": "span" } },
-    { "_id": ids.staffAnySpanText, "text": true, "v": "Egal" },
-    { "_id": ids.staffList, "tag": "div", "classes": [], "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "staff-list" } } },
-    { "_id": ids.step2Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step2BtnNext, ids.step2BtnBack], "type": "Block", "data": { "tag": "nav" } },
-    { "_id": ids.step2BtnNext, "tag": "a", "classes": c('bf-btn-next'), "children": [ids.step2BtnNextText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "next", "data-bf-goto": "3" } } },
-    { "_id": ids.step2BtnNextText, "text": true, "v": "Weiter" },
-    { "_id": ids.step2BtnBack, "tag": "a", "classes": c('bf-btn-back'), "children": [ids.step2BtnBackText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "back", "data-bf-goto": "1" } } },
-    { "_id": ids.step2BtnBackText, "text": true, "v": "Zurück" },
+    // -- LEFT SIDE --
+    { "_id": ids.splitLeft, "tag": "div", "classes": c('bf-split-left'), "children": [ids.splitHeader, ids.splitCards], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.splitHeader, "tag": "div", "classes": c('bf-split-header'), "children": [ids.splitHeaderName, ids.splitHeaderSub], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.splitHeaderName, "tag": "div", "classes": c('bf-split-header-name'), "children": [ids.splitHeaderNameText], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-display": "workspace-name" } } },
+    { "_id": ids.splitHeaderNameText, "text": true, "v": "Buchung" },
+    { "_id": ids.splitHeaderSub, "tag": "div", "classes": c('bf-split-header-sub'), "children": [ids.splitHeaderSubText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.splitHeaderSubText, "text": true, "v": "Wähle deine Optionen aus" },
 
-    // Step 3: Date & Time
-    { "_id": ids.step3, "tag": "div", "classes": c('bf-step'), "children": [ids.step3Title, ids.calendarContainer, ids.timeslotsContainer, ids.dateInfoContainer, ids.step3Nav], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "3", "aria-label": "Datum & Zeit" } } },
-    { "_id": ids.step3Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step3TitleText], "type": "Heading", "data": { "tag": "h2" } },
-    { "_id": ids.step3TitleText, "text": true, "v": "Datum & Zeit" },
-    { "_id": ids.calendarContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "calendar" } } },
-    { "_id": ids.timeslotsContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.timeslotsTitle, ids.slotsEmpty], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "timeslots", "style": "display: none;" } } },
-    { "_id": ids.timeslotsTitle, "tag": "p", "classes": [], "children": [ids.timeslotsTitleStrong], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-static": "timeslots-title" } } },
-    { "_id": ids.timeslotsTitleStrong, "tag": "strong", "classes": [], "children": [ids.timeslotsTitleText], "type": "Block", "data": { "tag": "strong" } },
-    { "_id": ids.timeslotsTitleText, "text": true, "v": "Uhrzeit wählen" },
-    { "_id": ids.slotsEmpty, "tag": "p", "classes": c('bf-slots-empty'), "children": [ids.slotsEmptyText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-static": "slots-empty", "style": "display: none;" } } },
-    { "_id": ids.slotsEmptyText, "text": true, "v": "Keine freien Termine an diesem Tag." },
-    { "_id": ids.dateInfoContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.dateInfoText, ids.availStatus], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "dateinfo" } } },
-    { "_id": ids.dateInfoText, "tag": "div", "classes": [], "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "dateinfo-text" } } },
-    { "_id": ids.availStatus, "tag": "p", "classes": c('bf-avail-status'), "children": [ids.availChecking, ids.availAvailable, ids.availUnavailable], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-static": "avail-status", "style": "display: none;" } } },
-    { "_id": ids.availChecking, "tag": "span", "classes": [], "children": [ids.availCheckingText], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-status": "checking", "style": "display: none;" } } },
-    { "_id": ids.availCheckingText, "text": true, "v": "Prüfe Verfügbarkeit..." },
-    { "_id": ids.availAvailable, "tag": "span", "classes": [], "children": [ids.availAvailableText], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-status": "available", "style": "display: none;" } } },
-    { "_id": ids.availAvailableText, "text": true, "v": "Verfügbar" },
-    { "_id": ids.availUnavailable, "tag": "span", "classes": [], "children": [ids.availUnavailableText], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-status": "unavailable", "style": "display: none;" } } },
-    { "_id": ids.availUnavailableText, "text": true, "v": "Nicht verfügbar" },
-    { "_id": ids.step3Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step3BtnNext, ids.step3BtnBack], "type": "Block", "data": { "tag": "nav" } },
-    { "_id": ids.step3BtnNext, "tag": "a", "classes": c('bf-btn-next'), "children": [ids.step3BtnNextText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "next", "data-bf-goto": "4" } } },
-    { "_id": ids.step3BtnNextText, "text": true, "v": "Weiter" },
-    { "_id": ids.step3BtnBack, "tag": "a", "classes": c('bf-btn-back'), "children": [ids.step3BtnBackText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "back", "data-bf-goto": "2" } } },
-    { "_id": ids.step3BtnBackText, "text": true, "v": "Zurück" },
+    { "_id": ids.splitCards, "tag": "div", "classes": c('bf-split-cards'), "children": [ids.cardObj, ids.cardSvc, ids.cardStaff, ids.cardAddon], "type": "Block", "data": { "tag": "div" } },
 
-    // Step 4: Addons
-    { "_id": ids.step4, "tag": "div", "classes": c('bf-step'), "children": [ids.step4Title, ids.guestCountBlock, ids.addonsContainer, ids.step4Nav], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "4", "aria-label": "Extras hinzufügen" } } },
-    { "_id": ids.step4Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step4TitleText], "type": "Heading", "data": { "tag": "h2" } },
-    { "_id": ids.step4TitleText, "text": true, "v": "Extras hinzufügen" },
+    // Card: Object
+    { "_id": ids.cardObj, "tag": "div", "classes": c('bf-split-card'), "children": [ids.cardObjHeader, ids.cardObjBody], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-card": "object" } } },
+    { "_id": ids.cardObjHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardObjNum, ids.cardObjInfo, ids.cardObjArrow], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardObjNum, "tag": "div", "classes": c('bf-split-card-num'), "children": [ids.cardObjNumText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardObjNumText, "text": true, "v": "1" },
+    { "_id": ids.cardObjInfo, "tag": "div", "classes": c('bf-split-card-info'), "children": [ids.cardObjTitle, ids.cardObjDesc], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardObjTitle, "tag": "div", "classes": c('bf-split-card-title'), "children": [ids.cardObjTitleText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardObjTitleText, "text": true, "v": "Objekt" },
+    { "_id": ids.cardObjDesc, "tag": "div", "classes": c('bf-split-card-desc'), "children": [ids.cardObjDescText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardObjDescText, "text": true, "v": "Wähle das Objekt aus" },
+    { "_id": ids.cardObjArrow, "tag": "div", "classes": c('bf-split-card-arrow'), "children": [ids.cardObjArrowText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardObjArrowText, "text": true, "v": "▾" },
+    { "_id": ids.cardObjBody, "tag": "div", "classes": c('bf-split-card-body'), "children": [ids.objDynamic], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.objDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "objects" } } },
+
+    // Card: Service
+    { "_id": ids.cardSvc, "tag": "div", "classes": c('bf-split-card'), "children": [ids.cardSvcHeader, ids.cardSvcBody], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-card": "service" } } },
+    { "_id": ids.cardSvcHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardSvcNum, ids.cardSvcInfo, ids.cardSvcArrow], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardSvcNum, "tag": "div", "classes": c('bf-split-card-num'), "children": [ids.cardSvcNumText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardSvcNumText, "text": true, "v": "2" },
+    { "_id": ids.cardSvcInfo, "tag": "div", "classes": c('bf-split-card-info'), "children": [ids.cardSvcTitle, ids.cardSvcDesc], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardSvcTitle, "tag": "div", "classes": c('bf-split-card-title'), "children": [ids.cardSvcTitleText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardSvcTitleText, "text": true, "v": "Service" },
+    { "_id": ids.cardSvcDesc, "tag": "div", "classes": c('bf-split-card-desc'), "children": [ids.cardSvcDescText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardSvcDescText, "text": true, "v": "Wähle den Service aus" },
+    { "_id": ids.cardSvcArrow, "tag": "div", "classes": c('bf-split-card-arrow'), "children": [ids.cardSvcArrowText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardSvcArrowText, "text": true, "v": "▾" },
+    { "_id": ids.cardSvcBody, "tag": "div", "classes": c('bf-split-card-body'), "children": [ids.svcDynamic], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.svcDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "services" } } },
+
+    // Card: Staff
+    { "_id": ids.cardStaff, "tag": "div", "classes": c('bf-split-card'), "children": [ids.cardStaffHeader, ids.cardStaffBody], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-card": "staff" } } },
+    { "_id": ids.cardStaffHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardStaffNum, ids.cardStaffInfo, ids.cardStaffArrow], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardStaffNum, "tag": "div", "classes": c('bf-split-card-num'), "children": [ids.cardStaffNumText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardStaffNumText, "text": true, "v": "3" },
+    { "_id": ids.cardStaffInfo, "tag": "div", "classes": c('bf-split-card-info'), "children": [ids.cardStaffTitle, ids.cardStaffDesc], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardStaffTitle, "tag": "div", "classes": c('bf-split-card-title'), "children": [ids.cardStaffTitleText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardStaffTitleText, "text": true, "v": "Mitarbeiter" },
+    { "_id": ids.cardStaffDesc, "tag": "div", "classes": c('bf-split-card-desc'), "children": [ids.cardStaffDescText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardStaffDescText, "text": true, "v": "Wähle deinen Mitarbeiter" },
+    { "_id": ids.cardStaffArrow, "tag": "div", "classes": c('bf-split-card-arrow'), "children": [ids.cardStaffArrowText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardStaffArrowText, "text": true, "v": "▾" },
+    { "_id": ids.cardStaffBody, "tag": "div", "classes": c('bf-split-card-body'), "children": [ids.staffDynamic], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.staffDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "staff" } } },
+
+    // Card: Addon
+    { "_id": ids.cardAddon, "tag": "div", "classes": c('bf-split-card'), "children": [ids.cardAddonHeader, ids.cardAddonBody], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-card": "addon" } } },
+    { "_id": ids.cardAddonHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardAddonNum, ids.cardAddonInfo, ids.cardAddonArrow], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardAddonNum, "tag": "div", "classes": c('bf-split-card-num'), "children": [ids.cardAddonNumText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardAddonNumText, "text": true, "v": "4" },
+    { "_id": ids.cardAddonInfo, "tag": "div", "classes": c('bf-split-card-info'), "children": [ids.cardAddonTitle, ids.cardAddonDesc], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardAddonTitle, "tag": "div", "classes": c('bf-split-card-title'), "children": [ids.cardAddonTitleText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardAddonTitleText, "text": true, "v": "Addon" },
+    { "_id": ids.cardAddonDesc, "tag": "div", "classes": c('bf-split-card-desc'), "children": [ids.cardAddonDescText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardAddonDescText, "text": true, "v": "Extras hinzufügen" },
+    { "_id": ids.cardAddonArrow, "tag": "div", "classes": c('bf-split-card-arrow'), "children": [ids.cardAddonArrowText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardAddonArrowText, "text": true, "v": "▾" },
+    { "_id": ids.cardAddonBody, "tag": "div", "classes": c('bf-split-card-body'), "children": [ids.guestCountBlock, ids.addonsDynamic], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.guestCountBlock, "tag": "div", "classes": c('bf-guest-count'), "children": [ids.guestCountTitle, ids.guestCountRow], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "guest-count" } } },
     { "_id": ids.guestCountTitle, "tag": "p", "classes": [], "children": [ids.guestCountTitleStrong, ids.guestCountMaxText], "type": "Paragraph", "data": { "tag": "p" } },
     { "_id": ids.guestCountTitleStrong, "tag": "strong", "classes": [], "children": [ids.guestCountTitleText], "type": "Block", "data": { "tag": "strong" } },
@@ -1144,17 +1129,31 @@ const getWebflowTemplate = () => {
     { "_id": ids.guestCountValueText, "text": true, "v": "1" },
     { "_id": ids.guestCountPlus, "tag": "a", "classes": c('bf-qty-btn'), "children": [ids.guestCountPlusText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "gc-plus" } } },
     { "_id": ids.guestCountPlusText, "text": true, "v": "+" },
-    { "_id": ids.addonsContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "addons" } } },
-    { "_id": ids.step4Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step4BtnNext, ids.step4BtnBack], "type": "Block", "data": { "tag": "nav" } },
-    { "_id": ids.step4BtnNext, "tag": "a", "classes": c('bf-btn-next'), "children": [ids.step4BtnNextText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "next", "data-bf-goto": "5" } } },
-    { "_id": ids.step4BtnNextText, "text": true, "v": "Weiter" },
-    { "_id": ids.step4BtnBack, "tag": "a", "classes": c('bf-btn-back'), "children": [ids.step4BtnBackText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "back", "data-bf-goto": "3" } } },
-    { "_id": ids.step4BtnBackText, "text": true, "v": "Zurück" },
+    { "_id": ids.addonsDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "addons" } } },
 
-    // Step 5: Summary
-    { "_id": ids.step5, "tag": "div", "classes": c('bf-step'), "children": [ids.step5Title, ids.summaryContainer, ids.voucherLabel, ids.voucherRow, ids.voucherStatus, ids.totalDisplay, ids.submitBtn, ids.step5Nav], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "5", "aria-label": "Zusammenfassung" } } },
-    { "_id": ids.step5Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step5TitleText], "type": "Heading", "data": { "tag": "h2" } },
-    { "_id": ids.step5TitleText, "text": true, "v": "Zusammenfassung" },
+    // -- RIGHT SIDE --
+    { "_id": ids.splitRight, "tag": "div", "classes": c('bf-split-right'), "children": [ids.calDynamic, ids.slotsDynamic, ids.dateInfoContainer], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.calDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "calendar" } } },
+    { "_id": ids.slotsDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "timeslots" } } },
+    { "_id": ids.dateInfoContainer, "tag": "div", "classes": c('bf-dateinfo'), "children": [ids.dateInfoText, ids.availStatus], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "dateinfo" } } },
+    { "_id": ids.dateInfoText, "tag": "div", "classes": [], "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "dateinfo-text" } } },
+    { "_id": ids.availStatus, "tag": "p", "classes": c('bf-avail-status'), "children": [ids.availChecking, ids.availAvailable, ids.availUnavailable], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-static": "avail-status", "style": "display: none;" } } },
+    { "_id": ids.availChecking, "tag": "span", "classes": [], "children": [ids.availCheckingText], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-status": "checking", "style": "display: none;" } } },
+    { "_id": ids.availCheckingText, "text": true, "v": "Prüfe Verfügbarkeit..." },
+    { "_id": ids.availAvailable, "tag": "span", "classes": [], "children": [ids.availAvailableText], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-status": "available", "style": "display: none;" } } },
+    { "_id": ids.availAvailableText, "text": true, "v": "Verfügbar" },
+    { "_id": ids.availUnavailable, "tag": "span", "classes": [], "children": [ids.availUnavailableText], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-status": "unavailable", "style": "display: none;" } } },
+    { "_id": ids.availUnavailableText, "text": true, "v": "Nicht verfügbar" },
+
+    // Footer Step 1
+    { "_id": ids.footer1, "tag": "div", "classes": c('bf-split-footer'), "children": [ids.footer1Next], "type": "Block", "data": { "tag": "nav" } },
+    { "_id": ids.footer1Next, "tag": "a", "classes": c('bf-split-btn-next'), "children": [ids.footer1NextText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "next", "data-bf-goto": "2" } } },
+    { "_id": ids.footer1NextText, "text": true, "v": "Weiter" },
+
+    // ===== STEP 2: Summary + Form =====
+    { "_id": ids.step2, "tag": "div", "classes": c('bf-step'), "children": [ids.step2Title, ids.summaryContainer, ids.voucherLabel, ids.voucherRow, ids.voucherStatus, ids.totalDisplay, ids.submitBtn, ids.footer2], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "2", "aria-label": "Zusammenfassung" } } },
+    { "_id": ids.step2Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step2TitleText], "type": "Heading", "data": { "tag": "h2" } },
+    { "_id": ids.step2TitleText, "text": true, "v": "Zusammenfassung" },
     { "_id": ids.summaryContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.summaryGrid], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary" } } },
     { "_id": ids.summaryGrid, "tag": "div", "classes": c('bf-grid-2'), "children": [ids.formColumn, ids.summaryColumn], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "summary-grid" } } },
     { "_id": ids.formColumn, "tag": "div", "classes": c('bf-form-column'), "children": [ids.formColumnTitle, ids.fnameGroup, ids.lnameGroup, ids.emailGroup, ids.phoneGroup, ids.addressGroup, ids.zipCityRow], "type": "Block", "data": { "tag": "div" } },
@@ -1239,11 +1238,11 @@ const getWebflowTemplate = () => {
     { "_id": ids.voucherCheckingText, "text": true, "v": "Wird geprüft..." },
     { "_id": ids.totalDisplay, "tag": "div", "classes": c('bf-total-display'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-display": "total" } } },
     { "_id": ids.submitBtn, "tag": "input", "classes": c('bf-submit'), "children": [], "type": "FormButton", "data": { "form": { "type": "button", "wait": "Wird gesendet..." }, "attr": { "type": "submit", "value": "Buchung anfragen", "data-bf-action": "submit" } } },
-    { "_id": ids.step5Nav, "tag": "div", "classes": c('bf-nav'), "children": [ids.step5BtnBack], "type": "Block", "data": { "tag": "nav" } },
-    { "_id": ids.step5BtnBack, "tag": "a", "classes": c('bf-btn-back'), "children": [ids.step5BtnBackText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "back", "data-bf-goto": "4" } } },
-    { "_id": ids.step5BtnBackText, "text": true, "v": "Zurück" },
+    { "_id": ids.footer2, "tag": "div", "classes": c('bf-split-footer'), "children": [ids.footer2Back], "type": "Block", "data": { "tag": "nav" } },
+    { "_id": ids.footer2Back, "tag": "a", "classes": c('bf-split-btn-back'), "children": [ids.footer2BackText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "back", "data-bf-goto": "1" } } },
+    { "_id": ids.footer2BackText, "text": true, "v": "Zurück" },
 
-    // Success
+    // ===== SUCCESS =====
     { "_id": ids.stepSuccess, "tag": "div", "classes": c('bf-success'), "children": [ids.successIcon, ids.successTitle, ids.successDesc], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "success", "role": "status", "aria-label": "Buchung erfolgreich" } } },
     { "_id": ids.successIcon, "tag": "div", "classes": c('bf-success-icon'), "children": [ids.successIconText], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.successIconText, "text": true, "v": "🎉" },
