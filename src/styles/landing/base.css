@@ -1,6 +1,7 @@
 /* --- Reset for landing pages --- */
 body.landing-active {
   overflow: auto;
+  overflow-x: hidden;
   display: block;
 }
 

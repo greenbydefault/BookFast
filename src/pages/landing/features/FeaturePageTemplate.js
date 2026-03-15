@@ -12,7 +12,7 @@ import { createCTASection } from '../../../components/landing/CTASection.js';
 import { createFeatureRelatedSlider, initFeatureRelatedSlider } from '../../../components/landing/FeatureRelatedSlider.js';
 import { setPageMeta, setFAQSchema, setBreadcrumbSchema } from '../../../lib/seoHelper.js';
 import { escapeHtml } from '../../../lib/sanitize.js';
-import { svgAssetUrl } from '../../../lib/landingAssets.js';
+import { svgAssetUrl, resolveSvgAssetUrl } from '../../../lib/landingAssets.js';
 import { featurePages } from '../../../data/features/index.js';
 import { getRelatedFeaturesFor } from '../../../data/features/relatedFeatures.js';
 
@@ -101,7 +101,7 @@ export const renderFeaturePage = (slug) => {
   const heroHTML = createFeatureHero({
     headline: page.hero.headline,
     subheadline: page.hero.subheadline,
-    illustrationSrc: page.hero.illustration || defaultIllustration,
+    illustrationSrc: resolveSvgAssetUrl(page.hero.illustration) || defaultIllustration,
     illustrationAlt: `Illustration zum Feature ${page.meta.title} in BookFast`,
     breadcrumb: ['Home', 'Features', page.meta.title],
     demoModuleHTML: demoMod ? demoMod.create() : '',

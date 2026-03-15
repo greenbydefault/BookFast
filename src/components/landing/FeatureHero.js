@@ -8,7 +8,7 @@ import { escapeHtml, escapeAttr } from '../../lib/sanitize.js';
 import { getIconString } from '../Icons/Icon.js';
 import './FeatureHero.css';
 
-const BG_IMAGE = '/src/svg/illustrations/gradient_noise_bg.avif';
+const BG_IMAGE = new URL('../../svg/illustrations/gradient_noise_bg.avif', import.meta.url).href;
 
 /**
  * @param {Object} config
