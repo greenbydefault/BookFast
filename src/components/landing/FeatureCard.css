@@ -1,7 +1,7 @@
-/* Feature cards */
+/* Legacy feature cards (used outside /features hub) */
 .landing-feature-card {
   padding: clamp(var(--space-16), 2.5vw, var(--space-28));
-  background: white;
+  background: #fff;
   border: 1px solid var(--color-stone-200);
   border-radius: clamp(var(--space-10), 1.6vw, var(--space-12));
   transition: all 0.2s;
@@ -12,7 +12,7 @@
 
 .landing-feature-card:hover {
   border-color: var(--color-stone-300);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 6%);
   transform: translateY(-2px);
 }
 
@@ -26,4 +26,98 @@
   justify-content: center;
   margin-bottom: clamp(var(--space-10), 2vw, var(--space-16));
   font-size: clamp(var(--space-16), 2.2vw, var(--space-20));
+}
+
+/* Feature cards on /features overview (same card classes as slider) */
+.landing-grid .feature-related-slider__card {
+  position: relative;
+  width: 100%;
+  min-height: clamp(calc(var(--space-128) * 2 + var(--space-40)), 45vw, calc(var(--space-96) * 4));
+  border: 1px solid var(--color-stone-200);
+  border-radius: clamp(var(--space-12), 1.8vw, var(--space-12));
+  background: #fff;
+  padding: clamp(var(--space-12), var(--space-24), var(--space-24));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.landing-grid .feature-related-slider__card:hover {
+  
+  background-color: var(--color-majorelle-blue-25);
+  
+}
+
+.landing-grid .feature-related-slider__text {
+  min-height: 4.4rem;
+  height: 100%;
+}
+
+.landing-grid .feature-related-slider__card-title {
+  margin: 0;
+  font-size: clamp(var(--space-22), 2.2vw, var(--space-24));
+  line-height: 1.2;
+  color: var(--color-vulcan-900);
+  font-weight: 400;
+}
+
+.landing-grid .feature-related-slider__card-subtext {
+  margin: 0.35rem 0 0;
+  font-size: clamp(var(--space-14), 1.7vw, var(--space-14));
+  line-height: 1.45;
+  color: var(--color-vulcan-500);
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.landing-grid .feature-related-slider__footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.landing-grid .feature-related-slider__card-btn {
+  align-self: flex-start;
+  margin-right: 0;
+  margin-top: auto;
+  position: relative;
+  z-index: 1;
+  text-decoration: none;
+}
+
+.landing-grid .feature-related-slider__media {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  flex: 0 0 auto;
+  position: absolute;
+  bottom: -12%;
+  right: -15%;
+  width: clamp(calc(var(--space-256) + var(--space-24)), 45%, calc(var(--space-128) * 2));
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+}
+
+.landing-grid .feature-related-slider__media img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 600px) {
+  .landing-grid .feature-related-slider__card {
+    min-height: clamp(calc(var(--space-128) * 2 + var(--space-64)), 68vw, calc(var(--space-128) * 3));
+    padding-bottom: clamp(calc(var(--space-12) * 2), 24vw, calc(var(--space-12) * 2));
+  }
+
+  .landing-grid .feature-related-slider__media {
+    width: clamp(var(--space-256), 45%, calc(var(--space-128) * 4));
+    bottom: -24%;
+    right: -20%;
+  }
 }
