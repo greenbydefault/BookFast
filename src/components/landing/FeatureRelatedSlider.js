@@ -105,21 +105,32 @@ export const initFeatureRelatedSlider = (container) => {
       return;
     }
 
-    const firstClone = originals[0].cloneNode(true);
-    firstClone.dataset.clone = 'true';
-    const lastClone = originals[count - 1].cloneNode(true);
-    lastClone.dataset.clone = 'true';
-    track.insertBefore(lastClone, originals[0]);
-    track.append(firstClone);
+    // Clone ALL originals to both sides for a seamless infinite loop,
+    // even when multiple slides are visible simultaneously.
+    const clonesBefore = originals.map((el) => {
+      const clone = el.cloneNode(true);
+      clone.removeAttribute('data-related-slide-original');
+      clone.dataset.clone = 'true';
+      return clone;
+    });
+    const clonesAfter = originals.map((el) => {
+      const clone = el.cloneNode(true);
+      clone.removeAttribute('data-related-slide-original');
+      clone.dataset.clone = 'true';
+      return clone;
+    });
+    // Prepend full set in order (so last clones appear before first original)
+    clonesBefore.reverse().forEach((clone) => track.insertBefore(clone, originals[0]));
+    clonesAfter.forEach((clone) => track.append(clone));
 
     let slideWidth = 0;
     let slideGap = 0;
     let stride = 0;
-    let index = 1;
+    let index = count; // first original now sits at offset `count`
     let currentTranslate = 0;
     let isAnimating = false;
     let hasShiftedToBothEdges = false;
-    const getOriginalIndex = () => ((index - 1) % count + count) % count;
+    const getOriginalIndex = () => ((index - count) % count + count) % count;
 
     const setActiveBubble = () => {
       const active = getOriginalIndex();
@@ -147,34 +158,37 @@ export const initFeatureRelatedSlider = (container) => {
       if (hasShiftedToBothEdges) return;
       hasShiftedToBothEdges = true;
       viewport.classList.add('is-bleed-both');
-      // Recalculate stride after viewport width changes to avoid jumpy transforms.
       measure();
     };
 
     const jumpIfLoopBoundary = () => {
-      const needsReset = index === 0 || index === count + 1;
-      if (!needsReset) {
+      // If we scrolled into the clone zone, teleport back to the matching original.
+      if (index >= count && index < count + count) {
         isAnimating = false;
-        setActiveBubble();
         return;
       }
-      index = index === 0 ? count : 1;
+      if (index < count) {
+        index = index + count;
+      } else {
+        index = index - count;
+      }
       track.style.transition = 'none';
       setTransform(-index * stride);
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           isAnimating = false;
-          setActiveBubble();
         });
       });
     };
 
     const goTo = (nextIndex, { animate = true } = {}) => {
       if (animate && isAnimating) return;
-      const targetIndex = clampIndex(nextIndex, count + 1);
+      const maxIndex = count + count; // last clone set starts here
+      const targetIndex = clampIndex(nextIndex, maxIndex);
       if (targetIndex === index) return;
       enableBothEdgeBleed();
       index = targetIndex;
+      setActiveBubble(); // update dot immediately on click
       if (animate) {
         isAnimating = true;
         track.style.transition = 'transform 360ms cubic-bezier(0.22, 1, 0.36, 1)';
@@ -182,7 +196,6 @@ export const initFeatureRelatedSlider = (container) => {
         track.style.transition = 'none';
       }
       setTransform(-index * stride);
-      if (!animate) setActiveBubble();
     };
 
     track.addEventListener('transitionend', (e) => {
@@ -200,21 +213,18 @@ export const initFeatureRelatedSlider = (container) => {
       btn.addEventListener('click', () => {
         const bubbleIndex = Number.parseInt(btn.dataset.bubbleIndex || '', 10);
         if (!Number.isFinite(bubbleIndex)) return;
-        goTo(bubbleIndex + 1, { animate: true });
+        goTo(bubbleIndex + count, { animate: true });
       });
     });
 
-    // Kick off.
     measure();
     setActiveBubble();
 
-    // Keep DOM order stable if this section is rerendered.
     root.dataset.relatedSliderReady = 'true';
     root.relatedSliderCleanup = () => {
       window.removeEventListener('resize', measure);
     };
 
-    // If user lands after CSS loaded slowly, force a post-layout measurement.
     window.requestAnimationFrame(measure);
   });
 };
