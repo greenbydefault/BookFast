@@ -5,6 +5,7 @@
 const BASE_URL = 'https://book-fast.de';
 const DEFAULT_TITLE = 'BookFast – Buchungen in Webflow';
 const DEFAULT_IMAGE = `${BASE_URL}/Logo/logo.png`;
+const PRODUCT_IMAGE = `${BASE_URL}/Logo/logo-bookfast.svg`;
 const ORGANIZATION_ID = `${BASE_URL}/#organization`;
 
 const SCHEMA_SCRIPT_IDS = Object.freeze({
@@ -127,6 +128,24 @@ export const setProductSchema = (plans) => {
   if (!Array.isArray(plans) || plans.length === 0) return;
 
   const priceValidUntil = oneYearFromNowIsoDate();
+  const shippingDetails = {
+    '@type': 'OfferShippingDetails',
+    shippingRate: { '@type': 'MonetaryAmount', value: 0, currency: 'EUR' },
+    shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'DE' },
+    deliveryTime: {
+      '@type': 'ShippingDeliveryTime',
+      handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 0, unitCode: 'DAY' },
+      transitTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 0, unitCode: 'DAY' },
+    },
+  };
+  const hasMerchantReturnPolicy = {
+    '@type': 'MerchantReturnPolicy',
+    applicableCountry: 'DE',
+    returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+    merchantReturnDays: 14,
+    returnFees: 'https://schema.org/FreeReturn',
+  };
+
   const products = plans.map((plan) => {
     const monthlyPrice = parseEuroPrice(plan.price);
     const yearlyPrice = parseEuroPrice(plan.priceAnnual);
@@ -142,6 +161,8 @@ export const setProductSchema = (plans) => {
         priceValidUntil,
         category: 'monthly',
         url: toAbsoluteUrl('/preise'),
+        shippingDetails,
+        hasMerchantReturnPolicy,
       });
     }
 
@@ -155,6 +176,8 @@ export const setProductSchema = (plans) => {
         priceValidUntil,
         category: 'yearly',
         url: toAbsoluteUrl('/preise'),
+        shippingDetails,
+        hasMerchantReturnPolicy,
       });
     }
 
@@ -162,6 +185,7 @@ export const setProductSchema = (plans) => {
       '@type': 'Product',
       name: `BookFast ${plan.name}`,
       description: plan.description,
+      image: PRODUCT_IMAGE,
       brand: {
         '@type': 'Brand',
         name: 'BookFast',
