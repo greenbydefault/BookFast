@@ -73,7 +73,7 @@ export const core = {
       { question: 'Was passiert bei einer Ablehnung?', answer: 'Bei bezahlten Buchungen löst BookFast automatisch eine Rückerstattung über Stripe aus. Der Kunde wird per E-Mail informiert.' },
       { question: 'Gibt es eine Kalenderansicht?', answer: 'Ja, du schaltest zwischen Kalender- und Listenansicht um.' },
       { question: 'Kann ich nach Kunden oder Services filtern?', answer: 'Ja, die Buchungsübersicht filtert nach Kunde, Service, Objekt und Datum.' },
-      { question: 'Werden Bestätigungs-E-Mails automatisch versendet?', answer: 'Ja. Bei Bestätigung, Ablehnung und Abschluss werden automatisch E-Mails an den Kunden gesendet – inklusive Magic Link zum Kundenportal.' },
+      { question: 'Werden Bestätigungs-E-Mails automatisch versendet?', answer: 'Ja. Bei Bestätigung und Ablehnung werden automatische E-Mails an den Kunden versendet. Je nach Aktion folgen weitere Systemmails, z. B. bei Rückerstattungen.' },
     ],
   },
 
@@ -141,10 +141,10 @@ export const core = {
     tags: ['zahlungen', 'stripe', 'checkout', 'deposit', 'refund'],
     faq: [
       { question: 'Welche Zahlungsmethoden werden unterstützt?', answer: 'Aktuell Kreditkarte (Visa, Mastercard, Amex) über Stripe. Klarna und PayPal sind in Planung.' },
-      { question: 'Gibt es eine Provision pro Buchung?', answer: 'Nein. BookFast erhebt keine Provision. Du zahlst nur die Stripe-Transaktionsgebühren (1,4% + 0,25€ in Europa).' },
+      { question: 'Gibt es eine Provision pro Buchung?', answer: 'Nein. BookFast erhebt keine Provision pro Buchung. Es fallen nur die regulären Stripe-Transaktionsgebühren gemäß deinem Stripe-Tarif an.' },
       { question: 'Wie funktioniert die Anzahlung?', answer: 'Du konfigurierst pro Service einen Prozentsatz (z.B. 30%). Der Kunde zahlt den Betrag bei Buchung, den Rest bei Termin.' },
       { question: 'Was passiert bei Stornierung?', answer: 'Bei Ablehnung durch dich wird automatisch rückerstattet. Bei Kundenstornierung greift deine Stornierungspolicy.' },
-      { question: 'Wann erhalte ich die Auszahlung?', answer: '24 Stunden nach Bestätigung der Buchung wird der Betrag auf dein Bankkonto ausgezahlt. Stripe überweist automatisch.' },
+      { question: 'Wann erhalte ich die Auszahlung?', answer: 'Die Auszahlung läuft automatisch über Stripe. Der genaue Rhythmus hängt von deinem Stripe-Konto und den dort hinterlegten Auszahlungsregeln ab.' },
     ],
   },
 
@@ -212,7 +212,7 @@ export const core = {
     faq: [
       { question: 'Kann ich das Rechnungsdesign anpassen?', answer: 'Die Rechnung enthält automatisch deine Firmendaten und das BookFast-Standard-Layout. Custom-Templates sind für die Enterprise-Version geplant.' },
       { question: 'Werden Gutscheine auf der Rechnung berücksichtigt?', answer: 'Ja, eingelöste Gutscheine und deren Rabatt werden korrekt auf der Rechnung ausgewiesen.' },
-      { question: 'In welchem Format wird die Rechnung erstellt?', answer: 'Als PDF, die automatisch per E-Mail an den Kunden gesendet wird.' },
+      { question: 'In welchem Format wird die Rechnung erstellt?', answer: 'Als PDF. Kunden können die Rechnung im Kundenportal einsehen und herunterladen.' },
       { question: 'Kann ich Rechnungsnummern konfigurieren?', answer: 'Die Rechnungsnummern werden fortlaufend generiert. Custom-Formate sind in Planung.' },
       { question: 'Kann mein Kunde die Rechnung selbst einsehen?', answer: 'Ja. Über das Kundenportal per Magic Link kann der Kunde die Rechnung ansehen, als PDF herunterladen und offene Beträge direkt bezahlen.' },
     ],
@@ -284,7 +284,7 @@ export const core = {
       { question: 'Welche Zeiträume kann ich auswählen?', answer: 'Letzter Monat, letzte 3, 6 oder 12 Monate. Mit Vergleichswerten zum vorherigen Zeitraum.' },
       { question: 'Brauche ich ein externes Analytics-Tool?', answer: 'Nein, BookFast hat eigene Analytics. Du kannst aber weiterhin Google Analytics oder Plausible parallel nutzen.' },
       { question: 'Welche Daten werden erfasst?', answer: 'Widget-Aufrufe, Buchungsstarts, Checkouts, Zahlungen, Browser, OS, Geräte, Länder und Städte. Alles DSGVO-konform.' },
-      { question: 'Ist das Tracking DSGVO-konform?', answer: 'Ja. BookFast setzt keine externen Cookies und speichert keine personenbezogenen Daten im Tracking. Alle Daten bleiben auf EU-Servern.' },
+      { question: 'Ist das Tracking DSGVO-konform?', answer: 'Ja. Das Tracking läuft ohne externe Analytics-Cookies und die Daten werden auf EU-Servern verarbeitet.' },
     ],
   },
 
@@ -350,7 +350,7 @@ export const core = {
     relatedFeatures: ['services', 'verfuegbarkeit', 'buffer'],
     tags: ['objekte', 'resources', 'availability', 'capacity', 'locations'],
     faq: [
-      { question: 'Wie viele Objekte kann ich anlegen?', answer: 'Free-Plan: 1 Objekt. Pro und Enterprise: unbegrenzt.' },
+      { question: 'Wie viele Objekte kann ich anlegen?', answer: 'Objekte verwaltest du innerhalb deiner Workspaces. Welche Workspace-Anzahl du nutzen kannst, hängt von deinem Plan ab.' },
       { question: 'Kann ich Bilder hochladen?', answer: 'Ja. Bilder und Beschreibungen pro Objekt – Kunden sehen sie im Buchungs-Widget.' },
       { question: 'Kann ich buchbare Tage und Zeiten pro Objekt setzen?', answer: 'Ja. Du konfigurierst pro Objekt individuelle Verfügbarkeiten – z. B. Mo–Fr 8–20 Uhr. Außerhalb dieser Zeiten ist nicht buchbar.' },
       { question: 'Was ist ein Reinigungspuffer?', answer: 'Eine konfigurierbare Zeitspanne zwischen Buchungen – z. B. 2 Stunden für Reinigung oder Umbau. Kunden sehen den Puffer nicht, er wird im Hintergrund berechnet.' },

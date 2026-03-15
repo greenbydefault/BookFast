@@ -56,11 +56,11 @@ export const management = {
     relatedFeatures: ['buchungen', 'zeitfenster', 'services'],
     tags: ['mitarbeiter', 'team', 'staffing', 'scheduling', 'roles'],
     faq: [
-      { question: 'Wie viele Mitarbeiter kann ich anlegen?', answer: 'Unbegrenzt in Pro und Enterprise.' },
+      { question: 'Wie viele Mitarbeiter kann ich anlegen?', answer: 'Du kannst Mitarbeiter pro Workspace verwalten. Wie viele Workspaces dir zur Verfügung stehen, hängt von deinem Plan ab.' },
       { question: 'Können Mitarbeiter eigene Verfügbarkeiten haben?', answer: 'Aktuell werden Verfügbarkeiten über die Objekt-Einstellungen gesteuert. Mitarbeiter-eigene Kalender sind in Planung.' },
       { question: 'Sehen Kunden die Mitarbeiter im Widget?', answer: 'Ja. Kunden sehen Name und optional Bild und wählen ihren Wunsch-Mitarbeiter direkt bei der Buchung aus.' },
       { question: 'Kann ein Mitarbeiter mehrere Services anbieten?', answer: 'Ja. Du ordnest einem Mitarbeiter beliebig viele Services zu – z. B. Schnitt und Bart beim Friseur.' },
-      { question: 'Gibt es ein Limit für Mitarbeiter?', answer: 'In Pro und Enterprise kannst du unbegrenzt viele Mitarbeiter anlegen. Im Free-Plan ist die Anzahl limitiert.' },
+      { question: 'Gibt es ein Limit für Mitarbeiter?', answer: 'Mitarbeiter werden innerhalb deiner Workspaces verwaltet. Relevante Limits ergeben sich über die Workspace-Anzahl deines Plans.' },
     ],
   },
 
@@ -178,7 +178,7 @@ export const management = {
       { question: 'Wird der Rabatt auf der Rechnung angezeigt?', answer: 'Ja, eingelöste Gutscheine werden als Rabatt auf der Rechnung ausgewiesen.' },
       { question: 'Kann ich ein Nutzungslimit pro Code setzen?', answer: 'Ja. Du legst fest, wie oft ein Code eingelöst werden kann – z. B. maximal 50 Mal.' },
       { question: 'Kann ich Gutscheine zeitlich begrenzen?', answer: 'Ja. Du setzt ein Start- und Enddatum. Nach Ablauf wird der Code automatisch ungültig.' },
-      { question: 'Sehe ich, wie oft ein Code eingelöst wurde?', answer: 'Ja. Im Dashboard siehst du pro Code die Anzahl der Einlösungen und den kumulierten Rabattbetrag.' },
+      { question: 'Sehe ich, wie oft ein Code eingelöst wurde?', answer: 'Ja. Im Dashboard siehst du pro Code, wie oft er eingelöst wurde.' },
     ],
   },
 

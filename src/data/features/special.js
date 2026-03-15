@@ -550,7 +550,7 @@ export const special = {
       { question: 'Was passiert bei Stornierung?', answer: 'Bei Stornierung durch dich wird die Anzahlung automatisch rückerstattet. Bei Kundenstornierung greift deine Policy.' },
       { question: 'Kann ich die Anzahlung als Prozentsatz konfigurieren?', answer: 'Ja. Du wählst zwischen Prozent (z. B. 30 %) oder Festbetrag (z. B. 50 €) – pro Service individuell.' },
       { question: 'Kann der Kunde den Restbetrag online zahlen?', answer: 'Ja. Über das Kundenportal per Magic Link kann der Kunde offene Beträge direkt online bezahlen.' },
-      { question: 'Reduziert eine Anzahlung No-Shows?', answer: 'Ja. Erfahrungswerte zeigen, dass eine Anzahlung No-Shows um bis zu 60 % reduziert – weil Kunden finanziell gebunden sind.' },
+      { question: 'Reduziert eine Anzahlung No-Shows?', answer: 'In vielen Fällen ja. Eine Anzahlung erhöht die Verbindlichkeit bei der Buchung und senkt dadurch typischerweise die No-Show-Rate.' },
     ],
   },
 };

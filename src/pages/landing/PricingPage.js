@@ -84,7 +84,7 @@ const PAGE_FAQ = [
   { question: 'Kann ich später upgraden?', answer: 'Ja. Du kannst jederzeit auf Team oder Agentur wechseln.' },
   { question: 'Was bedeutet Nachhaltigkeits-Impact?', answer: 'Ein Teil deines Plans fließt in einen nachhaltigen Impact – messbar, transparent, ohne Extra-Aufwand für dich.' },
   { question: 'Was ist der Vorteil vom Jahresplan?', answer: 'Du sparst 20% (entspricht 2 Monaten gratis) und hast volle Planbarkeit.' },
-  { question: 'Founder Deal – wie lange gilt der?', answer: 'Der Founder Deal ist limitiert (z.B. auf die ersten X Kunden oder bis Datum Y) und gilt für das erste Jahr.' },
+  { question: 'Founder Deal – wie lange gilt der?', answer: 'Aktuell ist kein Founder Deal aktiv. Sobald ein Founder Deal verfügbar ist, kommunizieren wir Laufzeit und Bedingungen transparent auf dieser Seite.' },
 ];
 
 function getPlanByWorkspaces(workspaceCount) {

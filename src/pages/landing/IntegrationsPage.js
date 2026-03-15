@@ -15,7 +15,7 @@ const PAGE_FAQ = [
   { question: 'Brauche ich einen Stripe-Account?', answer: 'Ja, für Online-Zahlungen. Das Stripe-Connect-Onboarding dauert nur wenige Minuten. Ohne Stripe kannst du BookFast auch rein für Buchungsverwaltung nutzen – ohne Zahlungsfunktion.' },
   { question: 'Funktioniert BookFast auch ohne Webflow?', answer: 'Ja. Das Embed-Script funktioniert auf jeder Website. Template-Copy und native Datenattribute sind Webflow-exklusiv.' },
   { question: 'Welche Automatisierungen sind über Webhooks möglich?', answer: 'BookFast feuert Events bei Buchungs- und Zahlungsaktionen (erstellt, bestätigt, abgelehnt, abgeschlossen, erstattet). Du kannst diese Events an beliebige Endpunkte weiterleiten – z. B. Slack, E-Mail-Dienste oder eigene APIs.' },
-  { question: 'Ist Google Calendar bereits verfügbar?', answer: 'Google Calendar Sync ist aktuell in Entwicklung und kommt bald. Ebenso Zapier- und Make-Integrationen.' },
+  { question: 'Ist Google Calendar bereits verfügbar?', answer: 'Noch nicht live. Google Calendar Sync ist aktuell in Entwicklung, ebenso Zapier- und Make-Integrationen.' },
 ];
 
 export const renderIntegrationsPage = () => {

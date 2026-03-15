@@ -54,7 +54,7 @@ export const platform = {
     tags: ['integration', 'website', 'widget', 'embed', 'api'],
     faq: [
       { question: 'Funktioniert es nur mit Webflow?', answer: 'Nein, das Embed-Script funktioniert auf jeder Website. Template-Copy ist Webflow-exklusiv.' },
-      { question: 'Beeinflusst es die Ladezeit?', answer: 'Minimal. Das Script wird asynchron geladen und hat keinen Einfluss auf die Core Web Vitals.' },
+      { question: 'Beeinflusst es die Ladezeit?', answer: 'Das Script wird asynchron geladen und ist auf minimalen Performance-Impact ausgelegt.' },
       { question: 'Kann ich das Widget-Design anpassen?', answer: 'Bei Template-Copy hast du volle Design-Kontrolle im Webflow Designer. Beim Embed-Script übernimmt das Widget die Styles deiner Seite automatisch.' },
       { question: 'Brauche ich Programmierkenntnisse?', answer: 'Nein. Embed-Script: Copy-Paste eines Script-Tags. Template-Copy: Import im Webflow Designer. Beides ohne Code.' },
       { question: 'Kann ich mehrere Widgets auf einer Seite einbetten?', answer: 'Ja. Du kannst verschiedene Objekte oder Services über Datenattribute gezielt ansprechen – z. B. ein Widget pro Raum.' },
@@ -132,7 +132,7 @@ export const platform = {
       { question: 'Wird der Link automatisch verschickt?', answer: 'Ja, bei Bestätigung einer Buchung und bei manuell angelegten Buchungen (wenn aktiviert) verschickt BookFast den Magic Link per E-Mail.' },
       { question: 'Kann der Kunde auch bezahlen?', answer: 'Ja, bei unbezahlten Buchungen erscheint ein „Jetzt bezahlen"-Button. Die Zahlung läuft über Stripe.' },
       { question: 'Wie ist der Zugang geschützt?', answer: 'Jeder Link ist einzigartig pro Buchung. Zusätzlich ist der Zugang per PIN geschützt – nur wer beides hat, kommt ins Portal.' },
-      { question: 'Kann der Kunde im Portal stornieren?', answer: 'Ja, wenn du Stornierungen im Self-Service erlaubst. Der Kunde klickt „Stornieren" und die Rückerstattung wird automatisch ausgelöst.' },
+      { question: 'Kann der Kunde im Portal stornieren?', answer: 'Ja, wenn du Stornierungen im Self-Service erlaubst. Der Kunde kann über den Magic Link stornieren; was mit Zahlungen passiert, richtet sich nach deinem Buchungsstatus und deiner Stornoregel.' },
     ],
   },
 };
