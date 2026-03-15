@@ -121,14 +121,12 @@ export const openCreateServiceModal = async (onSuccess) => {
             throw new Error('Validierungsfehler');
         }
 
-        // Build the data object, only including relevant fields
         const data = {
             name: state.name,
             description: state.description,
             service_type: state.serviceType,
             price: state.price,
             price_type: state.priceType,
-            object_id: state.objectIds[0], // Using first selected object (schema limitation)
             bookable_days: state.bookableDays,
             cleaning_fee: state.cleaningFee,
             buffer_before_minutes: state.bufferBefore,
@@ -137,13 +135,11 @@ export const openCreateServiceModal = async (onSuccess) => {
             status: state.isDraft ? 'draft' : 'active'
         };
 
-        // Type-specific fields
         if (state.serviceType === 'hourly') {
             data.duration_minutes = state.durationHours * 60;
             data.booking_window_start = state.bookingWindowStart;
             data.booking_window_end = state.bookingWindowEnd;
             data.min_advance_hours = state.minAdvance;
-            // Don't send fixed_start_times as empty array - causes boolean error
         } else if (state.serviceType === 'daily') {
             data.booking_window_start = state.bookingWindowStart;
             data.booking_window_end = state.bookingWindowEnd;
@@ -157,21 +153,23 @@ export const openCreateServiceModal = async (onSuccess) => {
             }
         }
 
-        // Custom hours (only for hourly & daily)
         if (state.serviceType !== 'overnight' && state.customHoursEnabled && state.customHours.length > 0) {
             data.custom_hours = state.customHours.map(h => ({ days: h.days, from: h.from, to: h.to }));
         } else {
             data.custom_hours = null;
         }
 
-        const newService = await createEntity('services', data);
+        // Create one service per selected object
+        const createdServices = [];
+        for (const objectId of state.objectIds) {
+            const newService = await createEntity('services', { ...data, object_id: objectId });
+            createdServices.push(newService);
+        }
 
-        // Save Staff Associations
-        if (state.staffIds.length > 0 && newService?.id) {
-            const staffAssociations = state.staffIds.map(staffId => ({
-                service_id: newService.id,
-                staff_id: staffId
-            }));
+        if (state.staffIds.length > 0) {
+            const staffAssociations = createdServices.flatMap(svc =>
+                state.staffIds.map(staffId => ({ service_id: svc.id, staff_id: staffId }))
+            );
 
             const { error: staffError } = await supabase
                 .from('staff_services')
@@ -179,7 +177,6 @@ export const openCreateServiceModal = async (onSuccess) => {
 
             if (staffError) {
                 console.error('Error saving staff associations:', staffError);
-                // Non-fatal, but we should probably alert or log
             }
         }
 

@@ -40,4 +40,11 @@ schema_dump.sql
 AGENT_GUIDE.md
 STRIPE_SETUP.md
 Knowlage/
+Knowledge/
 .agent/
+
+# Local sensitive/runtime artifacts
+supabase/.temp/
+test-api.js
+test-api.cjs
+lude
