@@ -116,8 +116,8 @@
   }
 
   .landing-grid .feature-related-slider__media {
-    width: clamp(var(--space-256), 45%, calc(var(--space-128) * 4));
-    bottom: -24%;
-    right: -20%;
+    width: clamp(10rem, 50%, 14rem);
+    bottom: -8%;
+    right: -10%;
   }
 }
