@@ -5,8 +5,8 @@ export const core = {
   buchungen: {
     slug: 'buchungen',
     meta: {
-      title: 'Buchungsverwaltung',
-      description: 'Alle Buchungen zentral – Status, Kalender, Bestätigen und Ablehnen in einem Dashboard. Ohne E-Mail-Chaos.',
+      title: 'Webflow Terminbuchung verwalten',
+      description: 'Webflow Terminbuchung zentral verwalten: Status, Kalender, Bestätigen und Ablehnen in einem Dashboard.',
     },
     hero: {
       headline: 'Jede Buchung an einem Ort – statt in 5 Postfächern.',
@@ -80,8 +80,8 @@ export const core = {
   zahlungen: {
     slug: 'zahlungen',
     meta: {
-      title: 'Online-Zahlungen',
-      description: 'Stripe Connect, Anzahlungen, automatische Rückerstattungen. Zahlung vor Termin – ohne Provision.',
+      title: 'Online Buchung Webflow – Zahlungen',
+      description: 'Online Buchung Webflow mit Zahlung vor Termin. Stripe Connect, Anzahlungen, Rückerstattungen – 0 % Provision.',
     },
     hero: {
       headline: 'Geld auf deinem Konto, bevor der Termin startet.',

@@ -179,8 +179,8 @@
 
 .landing-pricing-feature-icon {
   flex-shrink: 0;
-  width: var(--space-14);
-  height: var(--space-14);
+  width: var(--space-18);
+  height: var(--space-18);
   object-fit: contain;
 }
 

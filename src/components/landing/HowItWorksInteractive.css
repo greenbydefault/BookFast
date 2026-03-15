@@ -30,6 +30,8 @@
 }
 
 .how-it-works__accordion {
+  --how-it-works-motion-duration: 360ms;
+  --how-it-works-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
   background: #fff;
   min-width: 0;
 }
@@ -91,7 +93,7 @@
   border-right: 1.4px solid currentColor;
   border-bottom: 1.4px solid currentColor;
   transform: rotate(45deg);
-  transition: transform 0.18s ease;
+  transition: transform var(--how-it-works-motion-duration) var(--how-it-works-motion-ease);
   flex-shrink: 0;
   margin-right: 3px;
   opacity: 0.8;
@@ -102,7 +104,34 @@
 }
 
 .how-it-works__panel {
-  padding: 0 clamp(var(--space-16), 2vw, var(--space-24)) clamp(var(--space-16), 2vw, var(--space-24));
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  padding: 0 clamp(var(--space-16), 2vw, var(--space-24));
+  padding-bottom: 0;
+  transition:
+    grid-template-rows var(--how-it-works-motion-duration) var(--how-it-works-motion-ease),
+    padding-bottom var(--how-it-works-motion-duration) var(--how-it-works-motion-ease);
+}
+
+.how-it-works__item.is-active .how-it-works__panel {
+  grid-template-rows: 1fr;
+  padding-bottom: clamp(var(--space-16), 2vw, var(--space-24));
+}
+
+.how-it-works__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity var(--how-it-works-motion-duration) var(--how-it-works-motion-ease),
+    transform var(--how-it-works-motion-duration) var(--how-it-works-motion-ease);
+}
+
+.how-it-works__item.is-active .how-it-works__panel-inner {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .how-it-works__bullets {
@@ -231,13 +260,19 @@
   }
 
   .how-it-works__panel {
-    padding: 0 1rem 1rem;
+    padding: 0 1rem;
+  }
+
+  .how-it-works__item.is-active .how-it-works__panel {
+    padding-bottom: 1rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .how-it-works__item,
   .how-it-works__chevron,
+  .how-it-works__panel,
+  .how-it-works__panel-inner,
   .how-it-works__preview.is-leaving,
   .how-it-works__preview.is-entering {
     animation: none !important;

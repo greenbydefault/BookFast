@@ -21,7 +21,7 @@ export const renderHomePage = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta(null, 'BookFast – Buchungen auf deiner Website. 0% Provision, Zahlung vor Termin. Webflow-native, in 5 Minuten eingerichtet.');
+  setPageMeta(null, 'Das Webflow Buchungstool für Terminbuchung & Online-Zahlungen. 0 % Provision, Zahlung vor Termin. In 5 Min. live.');
   setFAQSchema(SHARED_FAQ);
 
   const featuresSectionHTML = createHowItWorksInteractive({
@@ -33,7 +33,7 @@ export const renderHomePage = () => {
 
   content.innerHTML = `
     ${createHeroNew({
-      tagline: 'Buchungen & Zahlungen für Webflow',
+      tagline: 'Buchungstool für Webflow',
       subheadline: 'Workspace-Name eingeben und Live-Demo starten.',
       illustrationAlt: 'Startseiten-Illustration mit BookFast Demo, Buchungen und Zahlung vor Termin',
       formLabel: 'Workspace-Name',

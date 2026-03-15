@@ -22,7 +22,7 @@ export const renderProductPage = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta('Produkt', 'BookFast – Das Buchungssystem für Webflow. Widget + Dashboard für Buchungen, Zahlungen, Rechnungen und Analytics.');
+  setPageMeta('Buchungstool für Webflow – Produkt', 'Buchungstool für Webflow: Widget + Dashboard für Buchungen, Online-Zahlungen, Rechnungen und Analytics.');
   setFAQSchema([...SHARED_FAQ, ...PAGE_FAQ]);
   setBreadcrumbSchema([
     { name: 'Home', url: '/' },
@@ -31,8 +31,8 @@ export const renderProductPage = () => {
 
   content.innerHTML = `
     ${createHero({
-      headline: 'Alles an einem Ort – Buchungen, Zahlungen, Rechnungen.',
-      subheadline: 'BookFast ist Booking-Widget + Operator-Dashboard in einem. Für Webflow-Nutzer, die Buchungen, Zahlungen und Rechnungen ohne iFrames und Provision verwalten wollen.',
+      headline: 'Buchungstool für Webflow – Buchungen, Zahlungen, Rechnungen.',
+      subheadline: 'BookFast ist Booking-Widget + Dashboard in einem. Für Webflow-Nutzer, die Online-Buchung und Zahlungen ohne iFrame und Provision verwalten wollen.',
       illustrationAlt: 'Produkt-Illustration mit Buchungen, Zahlungen und Rechnungen in BookFast',
       variant: 'split',
       imageHTML: `<div style="background: var(--color-stone-100); border-radius: 16px; height: 400px; display: flex; align-items: center; justify-content: center; font-size: 4rem;">${iconImg('calender-days-date.svg')}</div>`,

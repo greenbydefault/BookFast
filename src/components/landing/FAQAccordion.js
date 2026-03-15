@@ -96,7 +96,9 @@ export const createFAQAccordion = (items) => {
         <span class="landing-faq-chevron" aria-hidden="true"></span>
       </button>
       <div class="landing-faq-answer" id="${answerId}" role="region" aria-labelledby="${questionId}" aria-hidden="true">
-        <p>${item.answer}</p>
+        <div class="landing-faq-answer-inner">
+          <p>${item.answer}</p>
+        </div>
       </div>
     </div>
   `;

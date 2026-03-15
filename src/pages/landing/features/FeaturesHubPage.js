@@ -35,7 +35,7 @@ export const renderFeaturesHubPage = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta('Features', 'Alle BookFast Features im Überblick – Buchungen, Zahlungen, Rechnungen, Analytics und mehr.');
+  setPageMeta('Features – Webflow Buchungstool', 'Alle Features des Webflow Buchungstools: Buchungsverwaltung, Terminbuchung, Online-Zahlungen, Rechnungen, Analytics.');
   setBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Features', url: '/features' },
@@ -63,7 +63,7 @@ export const renderFeaturesHubPage = () => {
 
   content.innerHTML = `
     ${createHero({
-      headline: 'Buchungen, Zahlungen, Rechnungen – alles in einem Tool.',
+      headline: 'Webflow Buchungstool – alle Features im Überblick',
       subheadline: 'Entdecke alle Features: Von der Buchungsverwaltung bis zu Analytics. Jedes Feature mit klarem Benefit für dein Business.',
       secondaryCTA: '',
     })}

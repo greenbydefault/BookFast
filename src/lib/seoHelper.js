@@ -3,7 +3,7 @@
  */
 
 const BASE_URL = 'https://book-fast.de';
-const DEFAULT_TITLE = 'BookFast – Buchungen in Webflow';
+const DEFAULT_TITLE = 'Webflow Buchungstool – BookFast';
 const DEFAULT_IMAGE = `${BASE_URL}/Logo/logo.png`;
 const PRODUCT_IMAGE = `${BASE_URL}/Logo/logo-bookfast.svg`;
 const ORGANIZATION_ID = `${BASE_URL}/#organization`;

@@ -22,7 +22,7 @@ export const renderIntegrationsPage = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta('Integrationen', 'BookFast integriert sich nahtlos mit Webflow, Stripe, Google Calendar und mehr.');
+  setPageMeta('Webflow Termine integrieren', 'Webflow Termine integrieren: Embed-Script oder Template-Copy. Stripe, Webhooks, Google Calendar – in 5 Min. verbunden.');
   setFAQSchema([...SHARED_FAQ, ...PAGE_FAQ]);
   setBreadcrumbSchema([
     { name: 'Home', url: '/' },
@@ -31,7 +31,7 @@ export const renderIntegrationsPage = () => {
 
   content.innerHTML = `
     ${createHero({
-      headline: 'Integrationen: Tools verbinden statt wechseln.',
+      headline: 'Webflow Termine integrieren – Tools verbinden statt wechseln',
       subheadline: 'Webflow, Stripe, Webhooks – BookFast verbindet sich mit den Tools, die du bereits nutzt. Kein iFrame, volle Kontrolle.',
       illustrationAlt: 'Integrations-Illustration mit Webflow, Stripe und Webhooks in BookFast',
       secondaryCTA: '',

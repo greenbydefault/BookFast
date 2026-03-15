@@ -79,9 +79,11 @@ export const createHowItWorksInteractive = ({
                     data-how-step-panel
                     role="region"
                     aria-labelledby="${triggerId}"
-                    ${isActive ? '' : 'hidden'}
+                    aria-hidden="${isActive ? 'false' : 'true'}"
                   >
-                    ${createBulletsHTML(step.bullets)}
+                    <div class="how-it-works__panel-inner">
+                      ${createBulletsHTML(step.bullets)}
+                    </div>
                   </div>
                 </article>
               `;
@@ -111,7 +113,7 @@ const updateAccordionState = (root, activeIndex) => {
     trigger.setAttribute('aria-expanded', index === activeIndex ? 'true' : 'false');
   });
   panels.forEach((panel, index) => {
-    panel.hidden = index !== activeIndex;
+    panel.setAttribute('aria-hidden', index === activeIndex ? 'false' : 'true');
   });
 };
 

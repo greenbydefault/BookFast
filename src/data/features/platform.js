@@ -4,7 +4,7 @@
 export const platform = {
   integration: {
     slug: 'integration',
-    meta: { title: 'Webflow-Integration', description: 'Embed-Script oder Template-Copy – BookFast lebt nativ in deiner Webflow-Seite.' },
+    meta: { title: 'Webflow Booking Widget', description: 'Webflow Booking Widget: Embed-Script oder Template-Copy. BookFast lebt nativ in deiner Webflow-Seite – kein iFrame.' },
     hero: {
       headline: 'Dein Booking-Widget lebt in Webflow – nicht in einem iFrame.',
       subheadline: 'Ein Script-Tag oder Template-Copy, und dein Buchungswidget ist Teil deiner Seite. Volle Design-Kontrolle, kein Redirect, keine Conversion-Verluste.',

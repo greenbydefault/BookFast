@@ -8,7 +8,7 @@ export const renderDatenschutzPage = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta('Datenschutz', 'Datenschutzerklaerung von BookFast.');
+  setPageMeta('Datenschutz', 'Datenschutzerklärung von BookFast.');
   setBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Datenschutz', url: '/datenschutz' },
