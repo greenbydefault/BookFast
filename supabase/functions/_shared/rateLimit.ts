@@ -1,3 +1,10 @@
+// SECURITY NOTE: In-memory rate limiting — per Edge Function isolate.
+// Each Supabase Edge Function instance has its own store, so limits are
+// NOT globally enforced across instances. This provides basic protection
+// but can be bypassed if requests hit different isolates.
+// For stronger guarantees, migrate to Upstash Redis or a similar
+// centralized store with @upstash/ratelimit.
+
 interface RateLimitOptions {
   bucket: string;
   maxRequests: number;

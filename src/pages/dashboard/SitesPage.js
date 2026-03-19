@@ -5,8 +5,9 @@ import { supabase } from '../../lib/supabaseClient.js';
 import { getState, setState } from '../../lib/store.js';
 import { fetchEntities, createEntity } from '../../lib/dataLayer.js';
 import { createButton } from '../../components/Button/Button.js';
+import { getEmbedBaseUrl } from '../../lib/urlHelpers.js';
 
-const EMBED_BASE_URL = import.meta.env.VITE_EMBED_BASE_URL || 'https://app.book-fast.de';
+const EMBED_BASE_URL = getEmbedBaseUrl();
 
 /**
  * Fetch sites using dataLayer

@@ -8,6 +8,7 @@ import { supabase } from '../../../lib/supabaseClient.js';
 import { getState } from '../../../lib/store.js';
 import { navigate } from '../../../lib/router.js';
 import { fetchEntities } from '../../../lib/dataLayer.js';
+import { getAppUrl } from '../../../lib/urlHelpers.js';
 import { createActionButton } from '../../../components/Button/Button.js';
 import { getIconString } from '../../../components/Icons/Icon.js';
 import {
@@ -80,7 +81,7 @@ const COMMON_PLACEHOLDERS = [
 ];
 
 const PORTAL_PLACEHOLDERS = [
-  { key: '{{portal_link}}', label: 'Kundenportal-Link', defaultPreview: 'https://app.book-fast.de/b/abc123' },
+  { key: '{{portal_link}}', label: 'Kundenportal-Link', defaultPreview: `${getAppUrl('/b/abc123')}` },
   { key: '{{pin_code}}', label: 'Zugangscode', defaultPreview: '847291' },
 ];
 

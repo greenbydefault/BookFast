@@ -8,8 +8,9 @@ import { updateEntity, invalidateCache, fetchEntities } from '../../../lib/dataL
 import { getIconString } from '../../../components/Icons/Icon.js';
 import { refreshWorkspace } from './settingsHelpers.js';
 import { uploadWorkspaceLogo, removeWorkspaceLogo } from '../../../lib/services/workspaceService.js';
+import { getEmbedBaseUrl } from '../../../lib/urlHelpers.js';
 
-const EMBED_BASE_URL = import.meta.env.VITE_EMBED_BASE_URL || 'https://app.book-fast.de';
+const EMBED_BASE_URL = getEmbedBaseUrl();
 
 const workspaceUiState = {
   embedOpen: false,

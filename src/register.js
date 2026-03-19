@@ -1,4 +1,5 @@
 import { supabase } from './lib/supabaseClient.js'
+import { getAppUrl } from './lib/urlHelpers.js'
 
 const registerForm = document.getElementById('registerForm')
 const errorMessage = document.getElementById('errorMessage')
@@ -163,7 +164,7 @@ async function handleSocialLogin(provider) {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: provider,
             options: {
-                redirectTo: 'https://app.book-fast.de/dashboard/bookings'
+                redirectTo: getAppUrl('/dashboard/bookings')
             }
         })
         if (error) throw error

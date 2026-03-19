@@ -10,6 +10,7 @@
  */
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
+import { checkRateLimit } from '../_shared/rateLimit.ts';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ADMIN_EMAIL = 'admin@bookfast.de';
@@ -43,6 +44,14 @@ serve(async (req: Request) => {
 
   if (req.method !== 'POST') {
     return jsonRes({ error: 'Method Not Allowed' }, 405, corsHeaders);
+  }
+
+  const rl = checkRateLimit(req, { bucket: 'contact-form', maxRequests: 5, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return new Response(
+      JSON.stringify({ error: 'Zu viele Anfragen. Bitte versuche es gleich nochmal.' }),
+      { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Retry-After': String(rl.retryAfterSeconds) } },
+    );
   }
 
   let body: Record<string, unknown>;

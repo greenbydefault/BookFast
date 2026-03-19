@@ -13,6 +13,7 @@ import { renderSidebar } from '../components/Sidebar/Sidebar.js';
 import { renderTopBar } from '../components/TopBar/TopBar.js';
 import { registerAllPages } from './dashboard/registry.js';
 import { getStorageItem, removeStorageItem, setStorageItem } from '../lib/storageService.js';
+import { getLandingUrl } from '../lib/urlHelpers.js';
 
 const app = document.querySelector('#app');
 
@@ -163,7 +164,7 @@ const renderLayout = (user) => {
         window.open(wishlistUrl, '_blank');
       } else if (value === 'logout') {
         await supabase.auth.signOut();
-        window.location.href = 'https://book-fast.de/';
+        window.location.href = getLandingUrl('/');
       }
     };
 

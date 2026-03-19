@@ -3,6 +3,7 @@ import { handleCors, getCorsHeaders } from '../_shared/cors.ts';
 import { supabaseAdmin } from '../_shared/supabase.ts';
 import { stripe, calculatePlatformFee } from '../_shared/stripe.ts';
 import { checkRateLimit } from '../_shared/rateLimit.ts';
+import { calculatePricing, type PricingVoucher } from '../_shared/pricing.ts';
 
 interface CheckoutCreateRequest {
   site_id: string;
@@ -244,28 +245,7 @@ serve(async (req: Request) => {
       );
     }
 
-    // Calculate prices
-    let servicePrice = Number(service.price) || 0;
-    const cleaningFee = Number(service.cleaning_fee) || 0;
-
-    // per_total: price is flat total, no multiplication
-    if (service.price_type !== 'per_total') {
-      // For overnight: multiply by nights
-      if (service.service_type === 'overnight') {
-        const startDate = new Date(start_time);
-        const endDate = new Date(end_time);
-        const nights = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-        servicePrice = servicePrice * nights;
-      }
-      // For per_person: multiply by guest count
-      const guests = guest_count ?? 1;
-      if (service.price_type === 'per_person') {
-        servicePrice = servicePrice * guests;
-      }
-    }
-
     // Get addon prices
-    let addonsPrice = 0;
     let addonItems: { id: string; name: string; price: number }[] = [];
 
     if (addon_ids && addon_ids.length > 0) {
@@ -275,13 +255,12 @@ serve(async (req: Request) => {
         .in('id', addon_ids);
 
       if (addons) {
-        addonsPrice = addons.reduce((sum, a) => sum + Number(a.price), 0);
         addonItems = addons.map(a => ({ id: a.id, name: a.name, price: Number(a.price) }));
       }
     }
 
     // Apply voucher if provided
-    let discountAmount = 0;
+    let voucher: PricingVoucher | undefined;
     let voucherId = null;
 
     if (voucher_code) {
@@ -293,31 +272,25 @@ serve(async (req: Request) => {
 
       if (voucherResult?.valid) {
         voucherId = voucherResult.id;
-        const subtotal = servicePrice + cleaningFee + addonsPrice;
-
-        if (voucherResult.discount_type === 'percentage') {
-          discountAmount = subtotal * (voucherResult.discount_value / 100);
-        } else {
-          discountAmount = Math.min(voucherResult.discount_value, subtotal);
-        }
+        voucher = {
+          id: voucherResult.id,
+          discount_type: voucherResult.discount_type,
+          discount_value: Number(voucherResult.discount_value) || 0,
+        };
       }
     }
 
-    // Calculate totals
-    const subtotal = servicePrice + cleaningFee + addonsPrice;
-    const totalPrice = Math.max(0, subtotal - discountAmount);
-
-    // Calculate deposit if enabled
-    let amountToCharge = totalPrice;
-    let amountDeposit = null;
-
-    if (service.deposit_enabled && service.deposit_percent > 0) {
-      amountDeposit = Math.round(totalPrice * (service.deposit_percent / 100));
-      amountToCharge = amountDeposit;
-    }
+    const pricing = calculatePricing({
+      service,
+      start_time,
+      end_time,
+      guest_count,
+      addons: addonItems,
+      voucher,
+    });
 
     // Convert to cents for Stripe
-    const amountCents = Math.round(amountToCharge * 100);
+    const amountCents = Math.round(pricing.amountToCharge * 100);
     const platformFeeCents = calculatePlatformFee(amountCents);
 
     // Create slot reservation
@@ -349,20 +322,20 @@ serve(async (req: Request) => {
               name: service.name,
               description: object?.name ? `${object.name}` : undefined,
             },
-            unit_amount: Math.round(servicePrice * 100),
+            unit_amount: Math.round(pricing.servicePrice * 100),
           },
           quantity: 1,
         },
       ];
 
-      if (cleaningFee > 0) {
+      if (pricing.cleaningFee > 0) {
         lineItems.push({
           price_data: {
             currency: 'eur',
             product_data: {
               name: 'Reinigungsgebühr',
             },
-            unit_amount: Math.round(cleaningFee * 100),
+            unit_amount: Math.round(pricing.cleaningFee * 100),
           },
           quantity: 1,
         });
@@ -395,15 +368,15 @@ serve(async (req: Request) => {
         addon_ids: JSON.stringify(addon_ids || []),
         staff_id: staff_id || '',
         voucher_id: voucherId || '',
-        service_price: servicePrice.toString(),
-        cleaning_fee: cleaningFee.toString(),
-        addons_price: addonsPrice.toString(),
-        discount_amount: discountAmount.toString(),
-        total_price: totalPrice.toString(),
-        amount_deposit: amountDeposit?.toString() || '',
+        service_price: pricing.servicePrice.toString(),
+        cleaning_fee: pricing.cleaningFee.toString(),
+        addons_price: pricing.addonsPrice.toString(),
+        discount_amount: pricing.discountAmount.toString(),
+        total_price: pricing.totalPrice.toString(),
+        amount_deposit: pricing.depositAmount?.toString() || '',
         reservation_id: checkoutSessionId,
         session_id: session_id || '',
-        guest_count: guest_count ? guest_count.toString() : '1',
+        guest_count: pricing.guests.toString(),
         addon_selections: addon_selections ? JSON.stringify(addon_selections) : '',
         customer_address: customer_address || '',
         customer_city: customer_city || '',
@@ -417,8 +390,8 @@ serve(async (req: Request) => {
         mode: 'payment',
         payment_method_types: ['card'],
         line_items: lineItems,
-        discounts: discountAmount > 0 ? [{
-          coupon: await createStripeCoupon(discountAmount, workspace.stripe_connected_account_id),
+        discounts: pricing.discountAmount > 0 ? [{
+          coupon: await createStripeCoupon(pricing.discountAmount, workspace.stripe_connected_account_id),
         }] : undefined,
         customer_email,
         metadata,
@@ -445,8 +418,8 @@ serve(async (req: Request) => {
           checkout_url: session.url,
           session_id: session.id,
           expires_at: expiresAt,
-          amount: amountToCharge,
-          is_deposit: amountDeposit !== null,
+          amount: pricing.amountToCharge,
+          is_deposit: pricing.depositAmount !== null,
         }),
         { status: 200, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
       );

@@ -9,9 +9,10 @@ const DASHBOARD_ORIGINS = [
 function getAllowedOrigin(req: Request): string {
   const origin = req.headers.get('origin') ?? '';
   if (DASHBOARD_ORIGINS.includes(origin)) return origin;
-  // Embed scripts run on arbitrary customer domains – reflect the origin
-  // so the browser accepts the response. This is safe because these
-  // functions authenticate via apikey/JWT, not cookies.
+  // SECURITY NOTE: Origin reflection for embed widgets on customer domains.
+  // Safe because auth uses apikey/JWT headers, NOT cookies — browsers won't
+  // attach cross-origin cookies, so CSRF is not possible. If cookie-based
+  // auth is ever added, this MUST be changed to a strict allowlist.
   if (origin) return origin;
   return DASHBOARD_ORIGINS[0];
 }

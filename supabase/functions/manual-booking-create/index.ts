@@ -1,8 +1,9 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { corsHeaders, handleCors } from '../_shared/cors.ts';
 import { supabaseAdmin, createUserClient } from '../_shared/supabase.ts';
-import { generateToken, hashToken, generatePin } from '../_shared/tokenUtils.ts';
+import { createPortalToken } from '../_shared/portalToken.ts';
 import { sendEmail, buildEmailHtml, DEFAULT_CONFIRMATION_SUBJECT, DEFAULT_CONFIRMATION_BODY, renderTemplate } from '../_shared/email.ts';
+import { calculatePricing } from '../_shared/pricing.ts';
 
 interface ManualBookingRequest {
     object_id: string;
@@ -187,22 +188,6 @@ serve(async (req: Request) => {
         }
 
         // 2. Calculate Price
-        let servicePrice = Number(service.price);
-        if (service.price_type !== 'per_total') {
-            if (service.service_type === 'overnight') {
-                const start = new Date(start_time);
-                const end = new Date(end_time);
-                const nights = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-                servicePrice = servicePrice * Math.max(1, nights);
-            }
-            if (service.price_type === 'per_person') {
-                servicePrice = servicePrice * Math.max(1, guest_count ?? 1);
-            }
-        }
-
-        const cleaningFee = Number(service.cleaning_fee) || 0;
-        const discountAmount = 0;
-        let addonsPrice = 0;
 
         // Addons
         let addons: Array<{ id: string; price: number | string | null }> = [];
@@ -214,16 +199,20 @@ serve(async (req: Request) => {
 
             if (addonRows) {
                 addons = addonRows;
-                // Basic addon price logic (simple sum, ignoring quantity structure for now in base price, 
-                // but `create_booking_request` just sums them up. Ideally we should parsing `addon_selections` for quantity)
-                // For consistency with `create_booking_request` (which uses simple sum of `addons` table prices based on IDs),
-                // we will stick to that or improve it?
-                // The SQL `create_booking_request` does: `SELECT COALESCE(SUM(price), 0) ... WHERE id = ANY(p_addon_ids)`.
-                // It ignores quantity/variants. We will match this behavior for now.
-                addonsPrice = addons.reduce((sum, a) => sum + Number(a.price), 0);
             }
         }
-        const total_price = servicePrice + cleaningFee + addonsPrice - discountAmount;
+
+        const pricing = calculatePricing({
+            service,
+            start_time,
+            end_time,
+            guest_count,
+            addons: addons.map((addon) => ({
+                id: addon.id,
+                price: addon.price,
+            })),
+        });
+        const total_price = pricing.totalPrice;
 
         // 3. Create Booking
         const { data: booking, error: bookingError } = await supabaseAdmin
@@ -241,9 +230,9 @@ serve(async (req: Request) => {
                 // Manual bookings start as payment_pending and switch to confirmed after successful payment
                 status: 'payment_pending',
                 payment_status: 'unpaid',  // Assume unpaid initially
-                service_price: servicePrice + cleaningFee,
-                addons_price: addonsPrice,
-                discount_amount: discountAmount,
+                service_price: pricing.servicePrice + pricing.cleaningFee,
+                addons_price: pricing.addonsPrice,
+                discount_amount: pricing.discountAmount,
                 total_price,
                 guest_count,
                 addon_selections,
@@ -287,24 +276,15 @@ serve(async (req: Request) => {
         }
 
         // 5. Generate Magic Link Token
-        const plainToken = generateToken();
-        const tokenHash = await hashToken(plainToken);
-        const pinCode = generatePin();
-
-        // Expiry: 60 days
-        const bookingDate = new Date(end_time || start_time);
-        const expiresAt = new Date(bookingDate.getTime() + 60 * 24 * 60 * 60 * 1000);
-
-        const { error: tokenInsertError } = await supabaseAdmin.from('booking_access_tokens').insert({
-            booking_id: booking.id,
-            workspace_id: service.workspace_id,
-            token_hash: tokenHash,
-            pin_code: pinCode,
-            expires_at: expiresAt.toISOString(),
+        const tokenResult = await createPortalToken({
+            bookingId: booking.id,
+            workspaceId: service.workspace_id,
+            endTime: end_time,
+            startTime: start_time,
+            adminClient: supabaseAdmin,
         });
-        if (tokenInsertError) {
-            throw new Error(`Failed to create booking access token: ${tokenInsertError.message}`);
-        }
+        const plainToken = tokenResult.plainToken;
+        const pinCode = tokenResult.pinCode;
 
         // 6. Send Email (if requested)
         let emailId = null;
@@ -343,7 +323,7 @@ serve(async (req: Request) => {
                 object_name: object.name,
                 start_date: new Date(start_time).toLocaleDateString('de-DE'),
                 end_date: new Date(end_time).toLocaleDateString('de-DE'),
-                total_price: `${total_price.toFixed(2)} €`,
+                total_price: `${pricing.totalPrice.toFixed(2)} €`,
                 portal_link: portalLink,
                 pin_code: pinCode,
                 company_name: workspace?.company_name || 'BookFast',

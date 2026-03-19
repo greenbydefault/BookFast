@@ -12,7 +12,7 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { corsHeaders, handleCors } from '../_shared/cors.ts';
 import { supabaseAdmin, createUserClient } from '../_shared/supabase.ts';
-import { generateToken, hashToken, generatePin } from '../_shared/tokenUtils.ts';
+import { createPortalToken } from '../_shared/portalToken.ts';
 
 interface TokenCreateRequest {
   booking_id: string;
@@ -56,55 +56,21 @@ serve(async (req: Request) => {
       );
     }
 
-    // Revoke any existing active tokens for this booking
-    await supabaseAdmin
-      .from('booking_access_tokens')
-      .update({ is_revoked: true })
-      .eq('booking_id', booking_id)
-      .eq('is_revoked', false);
-
-    // Generate new token + PIN
-    const plainToken = generateToken();
-    const tokenHash = await hashToken(plainToken);
-    const pinCode = generatePin();
-
-    // Calculate expiry: booking end_time + 60 days (or start_time + 60 if no end)
-    const bookingDate = new Date(booking.end_time || booking.start_time);
-    const expiresAt = new Date(bookingDate.getTime() + 60 * 24 * 60 * 60 * 1000);
-
-    // Store hashed token + plaintext + PIN
-    const { error: insertError } = await supabaseAdmin
-      .from('booking_access_tokens')
-      .insert({
-        booking_id: booking.id,
-        workspace_id: booking.workspace_id,
-        token_hash: tokenHash,
-        token_plaintext: plainToken,
-        pin_code: pinCode,
-        expires_at: expiresAt.toISOString(),
-      });
-
-    if (insertError) {
-      console.error('Failed to create token:', insertError);
-      return new Response(
-        JSON.stringify({ error: 'Failed to create portal link' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Build portal URL — token is returned once, never stored as plaintext
-    const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
-    // The portal URL uses the app's domain, not the Supabase URL
-    // The frontend will construct the full URL from the token
-    const portalPath = `/b/${plainToken}`;
+    const tokenResult = await createPortalToken({
+      bookingId: booking.id,
+      workspaceId: booking.workspace_id,
+      endTime: booking.end_time,
+      startTime: booking.start_time,
+      adminClient: supabaseAdmin,
+    });
 
     return new Response(
       JSON.stringify({
         success: true,
-        token: plainToken,
-        pin: pinCode,
-        path: portalPath,
-        expires_at: expiresAt.toISOString(),
+        token: tokenResult.plainToken,
+        pin: tokenResult.pinCode,
+        path: tokenResult.portalPath,
+        expires_at: tokenResult.expiresAt,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );

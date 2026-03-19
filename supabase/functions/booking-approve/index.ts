@@ -1,7 +1,7 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { corsHeaders, handleCors } from '../_shared/cors.ts';
 import { supabaseAdmin, createUserClient } from '../_shared/supabase.ts';
-import { generateToken, hashToken, generatePin } from '../_shared/tokenUtils.ts';
+import { createPortalToken } from '../_shared/portalToken.ts';
 import {
   sendEmail,
   buildEmailHtml,
@@ -121,42 +121,15 @@ serve(async (req: Request) => {
     }
 
     // Auto-generate Magic Link token + PIN for customer portal
-    let portalPath: string | null = null;
-    let pinCode: string | null = null;
-    try {
-      const plainToken = generateToken();
-      const tokenHash = await hashToken(plainToken);
-      pinCode = generatePin();
-
-      // Expiry: booking end_time + 60 days
-      const bookingDate = new Date(booking.end_time || booking.start_time);
-      const expiresAt = new Date(bookingDate.getTime() + 60 * 24 * 60 * 60 * 1000);
-
-      // Revoke any existing tokens for this booking
-      await supabaseAdmin
-        .from('booking_access_tokens')
-        .update({ is_revoked: true })
-        .eq('booking_id', booking_id)
-        .eq('is_revoked', false);
-
-      // Store hash + plaintext + PIN
-      await supabaseAdmin
-        .from('booking_access_tokens')
-        .insert({
-          booking_id: booking.id,
-          workspace_id: booking.workspace_id,
-          token_hash: tokenHash,
-          token_plaintext: plainToken,
-          pin_code: pinCode,
-          expires_at: expiresAt.toISOString(),
-        });
-
-      portalPath = `/b/${plainToken}`;
-      console.log('Magic Link token + PIN created for booking:', booking_id);
-    } catch (tokenErr) {
-      // Token creation failure should not block the approval
-      console.error('Failed to create portal token (non-blocking):', tokenErr);
-    }
+    const tokenResult = await createPortalToken({
+      bookingId: booking.id,
+      workspaceId: booking.workspace_id,
+      endTime: booking.end_time,
+      startTime: booking.start_time,
+      adminClient: supabaseAdmin,
+    });
+    const portalPath = tokenResult.portalPath;
+    const pinCode = tokenResult.pinCode;
 
     // ─── Send confirmation email (non-blocking) ───
     let emailSent = false;

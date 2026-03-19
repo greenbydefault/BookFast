@@ -1,4 +1,5 @@
 import { supabase } from './lib/supabaseClient.js'
+import { getAppUrl } from './lib/urlHelpers.js'
 
 const form = document.getElementById('forgotPasswordForm')
 const errorMessage = document.getElementById('errorMessage')
@@ -22,7 +23,7 @@ form.addEventListener('submit', async (e) => {
 
     try {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: 'https://app.book-fast.de/update-password.html',
+            redirectTo: getAppUrl('/update-password.html'),
         })
 
         if (error) throw error

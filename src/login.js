@@ -1,4 +1,5 @@
 import { supabase } from './lib/supabaseClient.js'
+import { getAppUrl } from './lib/urlHelpers.js'
 
 const loginForm = document.getElementById('loginForm')
 const errorMessage = document.getElementById('errorMessage')
@@ -30,7 +31,7 @@ async function handleSocialLogin(provider) {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: provider,
             options: {
-                redirectTo: 'https://app.book-fast.de/dashboard/bookings'
+                redirectTo: getAppUrl('/dashboard/bookings')
             }
         })
         if (error) throw error
@@ -64,7 +65,7 @@ loginForm.addEventListener('submit', async (e) => {
         if (error) throw error
 
         // Redirect to home/dashboard on success
-        window.location.href = 'https://app.book-fast.de/dashboard/bookings'
+        window.location.href = '/dashboard/bookings'
 
     } catch (error) {
         // Supabase liefert "Invalid login credentials" – ersetzen durch Guidelines-konforme DE-Meldung
