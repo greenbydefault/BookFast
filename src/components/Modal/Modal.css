@@ -60,6 +60,19 @@
     line-height: 1.4;
 }
 
+.modal-title-with-icon {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+}
+
+.modal-title-with-icon .icon {
+    width: var(--space-24);
+    height: var(--space-24);
+    color: var(--icon-color, var(--color-stone-600));
+    flex-shrink: 0;
+}
+
 .modal-title-group p {
     font-size: var(--space-14);
     color: var(--color-stone-500);

@@ -208,9 +208,6 @@ export const openCreateAddonModal = async (onSuccess) => {
                                 <input type="radio" name="mode-${item.id}" value="quantity" 
                                        ${item.selectionMode === 'quantity' ? 'checked' : ''} data-item-id="${item.id}">
                                 <span>Menge wählen</span>
-                                <input type="radio" name="mode-${item.id}" value="quantity" 
-                                       ${item.selectionMode === 'quantity' ? 'checked' : ''} data-item-id="${item.id}">
-                                <span>Menge wählen</span>
                             </label>
                             <label class="content-mode-option" style="margin-left:auto;">
                                 <select class="content-item-applicability" data-item-id="${item.id}" style="padding: 2px 6px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.8rem;">
@@ -294,40 +291,41 @@ export const openCreateAddonModal = async (onSuccess) => {
         const div = document.createElement('div');
 
         div.innerHTML = `
-            <input type="text" class="modal-form-input modal-input-large" 
-                   placeholder="Ganzkörpermassage 60 Min"
-                   value="${state.name}" id="input-name">
-            
-            <label class="modal-label modal-form-label">Beschreibung <span class="modal-label-optional">(Optional)</span></label>
-            <textarea class="modal-form-input" placeholder="Die perfekte Überraschung, für Euren Aufenthalt!" rows="2" id="input-desc">${state.description}</textarea>
-            
-            <div class="modal-separator"></div>
-
-            <div id="service-multi-select-container"></div>
-            
-            <div class="modal-row">
-                <div class="modal-label">${getIconString('coins')} Preis</div>
-                <div class="modal-controls addon-price-controls">
-                    <input type="number" class="price-amount-input" value="${state.price}" id="input-price" step="0.01">
-                    <span class="price-currency">€</span>
-                    <select class="price-type-select" id="input-pricing-type">
-                        ${PRICING_TYPES.map(t => `
-                            <option value="${t.value}" ${state.pricingType === t.value ? 'selected' : ''}>${t.label}</option>
-                        `).join('')}
-                    </select>
+            <div class="modal-content-section">
+                <div class="modal-form-field">
+                    <input type="text" class="modal-form-input modal-input-large" 
+                           placeholder="Ganzkörpermassage 60 Min"
+                           value="${state.name}" id="input-name">
+                </div>
+                <div class="modal-form-field">
+                    <label class="modal-label modal-form-label">Beschreibung <span class="modal-label-optional">(Optional)</span></label>
+                    <textarea class="modal-form-input" placeholder="Die perfekte Überraschung, für Euren Aufenthalt!" rows="2" id="input-desc">${state.description}</textarea>
                 </div>
             </div>
-            
 
-            
-            <div class="modal-separator"></div>
-
-            <div class="modal-section-header">
-                <div class="modal-label">${getIconString('package')} Inhalt</div>
-                <button class="add-content-btn" type="button" id="btn-add-content">+</button>
+            <div class="modal-content-section">
+                <div id="service-multi-select-container"></div>
+                <div class="modal-row">
+                    <div class="modal-label">${getIconString('money-hand')} Preis</div>
+                    <div class="modal-controls addon-price-controls">
+                        <input type="number" class="price-amount-input" value="${state.price}" id="input-price" step="0.01">
+                        <span class="price-currency">€</span>
+                        <select class="price-type-select" id="input-pricing-type">
+                            ${PRICING_TYPES.map(t => `
+                                <option value="${t.value}" ${state.pricingType === t.value ? 'selected' : ''}>${t.label}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                </div>
             </div>
-            
-            <div id="content-items-container" class="content-items-container"></div>
+
+            <div class="modal-content-section">
+                <div class="modal-section-header">
+                    <div class="modal-label">${getIconString('package')} Inhalt</div>
+                    <button class="add-content-btn" type="button" id="btn-add-content">+</button>
+                </div>
+                <div id="content-items-container" class="content-items-container"></div>
+            </div>
         `;
 
         // Create and insert the multi-select component for services
@@ -402,6 +400,7 @@ export const openCreateAddonModal = async (onSuccess) => {
     modalInstance = createModal({
         title: 'Addon Anlegen',
         subtitle: 'Lege einen Addon an.',
+        icon: 'package',
         content: renderContent(),
         footerLeft: renderFooterLeft(),
         footerRight: renderFooterRight(),

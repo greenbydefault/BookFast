@@ -5,7 +5,7 @@
 import './Modal.css';
 import { getIconString } from '../Icons/Icon.js';
 
-export const createModal = ({ title, subtitle, content, footerLeft, footerRight, onClose }) => {
+export const createModal = ({ title, subtitle, content, footerLeft, footerRight, onClose, icon }) => {
     // Backdrop
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
@@ -19,7 +19,7 @@ export const createModal = ({ title, subtitle, content, footerLeft, footerRight,
     header.className = 'modal-header';
     header.innerHTML = `
         <div class="modal-title-group">
-            <h2>${title}</h2>
+            <h2 class="${icon ? 'modal-title-with-icon' : ''}">${icon ? getIconString(icon) : ''}${icon ? ' ' : ''}${title}</h2>
             ${subtitle ? `<p>${subtitle}</p>` : ''}
         </div>
         <button class="modal-close-btn" aria-label="Close">
