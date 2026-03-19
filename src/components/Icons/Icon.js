@@ -4,7 +4,12 @@ const ICON_ALIASES = {
     insights: 'chart',
     clock: 'clock-check',
     folder: 'archive',
-    bed: 'luggage'
+    bed: 'luggage',
+    coins: 'receipt-euro',
+    briefcase: 'gear',
+    hash: 'chart',
+    'refresh-cw': 'cirlce-refresh',
+    layers: 'gear'
 };
 
 const resolveIconName = (iconName) => ICON_ALIASES[iconName] ?? iconName;

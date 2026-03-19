@@ -814,7 +814,7 @@
     height: 40px;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    background: var(--color-stone-50);
+    background: transparent;
     color: var(--stone-600);
     cursor: pointer;
     display: flex;
@@ -824,7 +824,7 @@
 }
 
 .voucher-generate-btn:hover {
-    background: var(--color-stone-100);
+    background: var(--color-stone-50);
     border-color: var(--stone-400);
 }
 

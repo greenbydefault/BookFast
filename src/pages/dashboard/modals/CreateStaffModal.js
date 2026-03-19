@@ -87,8 +87,7 @@ export const openCreateStaffModal = async (onSuccess) => {
             text: 'Mitarbeiter Speichern',
             loadingText: 'wird angelegt...',
             onClick: handleSave,
-            className: 'btn-primary',
-            icon: 'alert'
+            className: 'btn-primary'
         });
 
         container.appendChild(cancelBtn);
