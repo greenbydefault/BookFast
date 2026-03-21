@@ -111,7 +111,7 @@ export const featurePages = {
     },
     hero: {
       headline: 'Rechnungen? Erledigt. Automatisch.',
-      subheadline: 'Nach Bestätigung oder Abschluss einer Buchung wird die Rechnung automatisch generiert. Das Feature, das andere Buchungstools nicht haben.',
+      subheadline: 'Nach Bestätigung oder Abschluss einer Buchung wird die Rechnung automatisch generiert. Das Feature, das andere Buchungssysteme nicht haben.',
     },
     problem: {
       text: 'Manuelle Rechnungserstellung nach jeder Buchung kostet Stunden pro Woche. Fehler schleichen sich ein, Kunden warten.',
@@ -156,7 +156,7 @@ export const featurePages = {
       subheadline: 'Funnel-Analyse, Drop-off-Raten, Traffic-Statistiken und Payment-Tracking – verstehe wo Kunden abspringen.',
     },
     problem: {
-      text: 'Die meisten Buchungstools zeigen dir nur die Anzahl der Buchungen. Aber wo springen Kunden ab? Welche Services konvertieren am besten?',
+      text: 'Die meisten Buchungssysteme zeigen dir nur die Anzahl der Buchungen. Aber wo springen Kunden ab? Welche Services konvertieren am besten?',
       bullets: [
         'Conversion-Funnel: Widget geladen → Buchung gestartet → Checkout → Zahlung.',
         'Drop-off-Analyse zeigt, wo Kunden abspringen.',

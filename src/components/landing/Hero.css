@@ -73,6 +73,10 @@
   color: var(--color-stone-500);
 }
 
+.landing-trust-claim span {
+  text-wrap: balance;
+}
+
 .landing-trust-claim svg {
   width: 18px;
   height: 18px;

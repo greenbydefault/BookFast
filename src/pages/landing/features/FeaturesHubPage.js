@@ -26,7 +26,7 @@ export const renderFeaturesHubPage = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta('Features – Webflow Buchungstool', 'Alle Features des Webflow Buchungstools: Buchungsverwaltung, Terminbuchung, Online-Zahlungen, Rechnungen, Analytics.');
+  setPageMeta('Features – Webflow Buchungssystem', 'Alle Features des Webflow Buchungssystems: Buchungsverwaltung, Terminbuchung, Online-Zahlungen, Rechnungen, Analytics.');
   setBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Features', url: '/features' },
@@ -55,7 +55,7 @@ export const renderFeaturesHubPage = () => {
 
   content.innerHTML = `
     ${createHero({
-      headline: 'Webflow Buchungstool – alle Features im Überblick',
+      headline: 'Webflow Buchungssystem – alle Features im Überblick',
       subheadline: 'Entdecke alle Features: Von der Buchungsverwaltung bis zu Analytics. Jedes Feature mit klarem Benefit für dein Business.',
       secondaryCTA: '',
     })}

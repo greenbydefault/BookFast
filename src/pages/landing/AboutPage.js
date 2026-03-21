@@ -10,7 +10,7 @@ export const renderAboutPage = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta('Über uns', 'Die Geschichte hinter BookFast – warum wir das Buchungstool für Webflow gebaut haben.');
+  setPageMeta('Über uns', 'Die Geschichte hinter BookFast – warum wir das Buchungssystem für Webflow gebaut haben.');
   setBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Über uns', url: '/ueber-uns' },

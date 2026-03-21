@@ -6,6 +6,7 @@
   letter-spacing: -0.03em;
   color: var(--color-vulcan-900);
   margin: 0 0 1rem;
+  text-wrap: balance;
 }
 
 .landing-h2 {
@@ -15,6 +16,7 @@
   letter-spacing: -0.02em;
   color: var(--color-vulcan-900);
   margin: 0 0 1rem;
+  text-wrap: balance;
 }
 
 .landing-h3 {
@@ -23,6 +25,7 @@
   line-height: 1.3;
   color: var(--color-vulcan-900);
   margin: var(--space-44) 0 var(--space-12);
+  text-wrap: balance;
 }
 
 .landing-h4 {
@@ -31,6 +34,7 @@
   line-height: 1.4;
   color: var(--color-vulcan-900);
   margin: 0 0 0.5rem;
+  text-wrap: balance;
 }
 
 .landing-text {
@@ -38,18 +42,21 @@
   line-height: 1.4;
   color: var(--color-stone-600);
   margin: 0;
+  text-wrap: balance;
 }
 
 .landing-text-sm {
   font-size: var(--space-14);
   line-height: 1.4;
   color: var(--color-stone-500);
+  text-wrap: balance;
 }
 
 .landing-text-lg {
   font-size: 1.25rem;
   line-height: 1.6;
   color: var(--color-stone-600);
+  text-wrap: balance;
 }
 
 .landing-label {
@@ -59,6 +66,7 @@
   letter-spacing: 0.08em;
   color: var(--color-stone-400);
   margin: 0 0 0.75rem;
+  text-wrap: balance;
 }
 
 .landing-label--pill {
@@ -71,6 +79,7 @@
   letter-spacing: 0;
   font-size: 0.88rem;
   font-weight: 500;
+  text-wrap: balance;
 }
 
 .text-center { text-align: center; }

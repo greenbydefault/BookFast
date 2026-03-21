@@ -21,19 +21,19 @@ export const renderHomePage = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta(null, 'Das Webflow Buchungstool für Terminbuchung & Online-Zahlungen. 0 % Provision, Zahlung vor Termin. In 5 Min. live.');
+  setPageMeta(null, 'Das Webflow Buchungssystem für Terminbuchung & Online-Zahlungen. 0 % Provision, Zahlung vor Termin. In 5 Min. live.');
   setFAQSchema(SHARED_FAQ);
 
   const featuresSectionHTML = createHowItWorksInteractive({
     label: 'Hauptfeatures',
-    headline: 'Das Buchungstool für Webflow – die wichtigsten Vorteile.',
+    headline: 'Das Buchungssystem für Webflow – die wichtigsten Vorteile.',
     steps: HOME_FEATURES_STEPS,
     previewHTML: createIntegrationPreviewHTML(),
   });
 
   content.innerHTML = `
     ${createHeroNew({
-      tagline: 'Buchungstool für Webflow',
+      tagline: 'Buchungssystem für Webflow',
       subheadline: 'Workspace-Name eingeben und Live-Demo starten.',
       illustrationAlt: 'Startseiten-Illustration mit BookFast Demo, Buchungen und Zahlung vor Termin',
       formLabel: 'Workspace-Name',

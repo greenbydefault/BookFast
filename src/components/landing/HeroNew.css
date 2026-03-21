@@ -37,6 +37,7 @@
     margin: 0 0 1.25rem;
     display: inline-block;
     width: fit-content;
+    text-wrap: balance;
 }
 
 /* ── Group 2: Headline ── */
@@ -207,6 +208,7 @@
     font-size: 0.8rem;
     color: var(--color-stone-400);
     text-align: center;
+    text-wrap: balance;
 }
 
 /* ── Form visibility during expansion ── */

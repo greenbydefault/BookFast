@@ -25,12 +25,14 @@
   color: var(--color-stone-500);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  text-wrap: balance;
 }
 
 .landing-faq-empty {
   margin: 0;
   font-size: 0.9rem;
   color: var(--color-stone-500);
+  text-wrap: balance;
 }
 
 @media (max-width: 900px) {
@@ -81,7 +83,7 @@
 
 .landing-faq-question > span:first-child {
   min-width: 0;
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
 .landing-faq-question:hover {
@@ -141,7 +143,7 @@
   font-size: clamp(var(--space-14), var(--space-14), var(--space-16));
   line-height: 1.65;
   color: var(--color-stone-600);
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
 @media (max-width: 768px) {

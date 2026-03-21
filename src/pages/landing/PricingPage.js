@@ -129,7 +129,7 @@ export const renderPricingPage = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta('Preise – Webflow Buchungstool', 'Webflow Buchungstool ab 9,49 €/Monat. Alle Features in jedem Plan – 0 % Provision. Nur Workspaces unterscheiden sich.');
+  setPageMeta('Preise – Webflow Buchungssystem', 'Webflow Buchungssystem ab 9,49 €/Monat. Alle Features in jedem Plan – 0 % Provision. Nur Workspaces unterscheiden sich.');
   setFAQSchema(PAGE_FAQ);
   setProductSchema(PLANS);
   setBreadcrumbSchema([
@@ -157,7 +157,7 @@ export const renderPricingPage = () => {
 
   content.innerHTML = `
     ${createHero({
-      headline: 'Preise – Buchungstool für Webflow',
+      headline: 'Preise – Buchungssystem für Webflow',
       subheadline: 'BookFast verbindet Buchungen, Online-Zahlungen und Analytics in einem System – für Services, Tagesmieten und Übernachtungen.',
       illustrationAlt: 'Preisübersicht und Analytics-Illustration für BookFast Workspaces',
       primaryCTA: '',

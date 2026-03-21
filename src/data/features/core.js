@@ -156,7 +156,7 @@ export const core = {
     },
     hero: {
       headline: 'Rechnungen, die sich selbst schreiben.',
-      subheadline: 'Nach Bestätigung oder Abschluss wird die Rechnung automatisch erstellt – mit allen Positionen, Add-ons und deinen Firmendaten. Das Feature, das andere Buchungstools nicht haben.',
+      subheadline: 'Nach Bestätigung oder Abschluss wird die Rechnung automatisch erstellt – mit allen Positionen, Add-ons und deinen Firmendaten. Das Feature, das andere Buchungssysteme nicht haben.',
       illustration: '/src/svg/illustrations/landingpage/features/ft_automatische_rechnung.svg',
     },
     problem: {
@@ -230,7 +230,7 @@ export const core = {
       illustration: '/src/svg/illustrations/empty-state-analytics.svg',
     },
     problem: {
-      text: 'Andere Buchungstools zeigen dir Buchungszahlen. Aber nicht, warum 70% deiner Besucher den Checkout nicht abschließen.',
+      text: 'Andere Buchungssysteme zeigen dir Buchungszahlen. Aber nicht, warum 70% deiner Besucher den Checkout nicht abschließen.',
       bullets: [
         'Conversion-Funnel: Widget geladen → Buchung gestartet → Checkout → Zahlung.',
         'Drop-off-Analyse zeigt, wo Kunden abspringen.',
