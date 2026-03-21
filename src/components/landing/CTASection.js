@@ -26,7 +26,7 @@ export const createCTASection = (config) => {
     <section class="landing-section">
       <div class="landing-container">
         <div class="landing-cta-section">
-          <img src="${CTA_ILLUSTRATION_URL}" alt="BookFast Call-to-Action Illustration zur Einrichtung des Buchungssystems" class="landing-cta-illustration" />
+          <img src="${CTA_ILLUSTRATION_URL}" alt="BookFast Call-to-Action Illustration zur Einrichtung des Buchungssystems" class="landing-cta-illustration" width="380" height="380" />
           <h2 class="landing-h2">${headline}</h2>
           ${subheadline ? `<p class="landing-text">${subheadline}</p>` : ''}
           <div class="landing-cta-buttons">

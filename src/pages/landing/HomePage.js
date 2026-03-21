@@ -3,7 +3,10 @@
  */
 import { createHeroNew, initHeroNew } from '../../components/landing/HeroNew.js';
 import { createHowItWorksInteractive, initHowItWorksInteractive } from '../../components/landing/HowItWorksInteractive.js';
-import { getDemoModule } from '../../components/landing/featureDemos/index.js';
+import {
+  createIntegrationStatusPreviewCard,
+  initIntegrationStatusPreviewCard,
+} from '../../components/landing/featureDemos/IntegrationStatusPreviewCard.js';
 import { createObjectPreviewCard, initObjectPreviewCard } from '../../components/landing/featureDemos/ObjectPreviewCard.js';
 import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
@@ -15,7 +18,7 @@ const createObjectPreviewHTML = () =>
   `<div class="landing-frosted-frame feature-hero__card-frame">${createObjectPreviewCard()}</div>`;
 
 const createIntegrationPreviewHTML = () =>
-  `<div class="landing-frosted-frame feature-hero__card-frame">${getDemoModule('integration').create()}</div>`;
+  `<div class="landing-frosted-frame feature-hero__card-frame">${createIntegrationStatusPreviewCard()}</div>`;
 
 export const renderHomePage = () => {
   const content = document.getElementById('landing-content');
@@ -57,7 +60,7 @@ export const renderHomePage = () => {
   initHowItWorksInteractive(content, {
     renderPreview: (nextIndex) => (nextIndex === 0 ? createIntegrationPreviewHTML() : createObjectPreviewHTML()),
     onPreviewRendered: (previewNode, nextIndex) => {
-      if (nextIndex === 0) getDemoModule('integration').init(previewNode);
+      if (nextIndex === 0) initIntegrationStatusPreviewCard(previewNode);
       else initObjectPreviewCard(previewNode);
     },
   });

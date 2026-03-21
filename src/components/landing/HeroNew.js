@@ -77,7 +77,7 @@ export const createHeroNew = (config = {}) => {
         <div class="hero-new__workspace">
           <!-- Group 4: Illustration -->
           <div class="hero-new__illustration">
-            <img src="${illustrationSrc}" alt="${illustrationAlt}" width="280" height="280" loading="eager">
+            <img src="${illustrationSrc}" alt="${illustrationAlt}" width="280" height="280" loading="eager" fetchpriority="high" decoding="async">
           </div>
 
           <!-- Group 5: Workspace Card -->

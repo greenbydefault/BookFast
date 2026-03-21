@@ -4,6 +4,7 @@
  * Uses same detail layout as Object/Service/Addon pages: sidecard as main-wrapper child (full height)
  */
 
+import './booking-detail/booking-detail.css';
 import { getState } from '../../lib/store.js';
 import { supabase } from '../../lib/supabaseClient.js';
 import { getIconString } from '../../components/Icons/Icon.js';

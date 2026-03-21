@@ -176,6 +176,28 @@ const init = async () => {
   });
 };
 
-// Start the app
-injectSpeedInsights();
+// Speed Insights after first paint / idle — avoids competing with LCP-critical work
+const scheduleSpeedInsights = () => {
+  const run = () => injectSpeedInsights();
+  if (document.readyState === 'complete') {
+    if (typeof requestIdleCallback === 'function') {
+      requestIdleCallback(run, { timeout: 4000 });
+    } else {
+      setTimeout(run, 0);
+    }
+  } else {
+    window.addEventListener(
+      'load',
+      () => {
+        if (typeof requestIdleCallback === 'function') {
+          requestIdleCallback(run, { timeout: 4000 });
+        } else {
+          setTimeout(run, 0);
+        }
+      },
+      { once: true },
+    );
+  }
+};
+scheduleSpeedInsights();
 init();

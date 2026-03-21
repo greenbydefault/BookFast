@@ -47,11 +47,11 @@ export const createHowItWorksInteractive = ({
       <div class="landing-container">
         <div class="how-it-works__header">
           <p class="landing-label landing-label--pill">${escapeHtml(label)}</p>
-          <h2 class="landing-h2">${escapeHtml(headline)}</h2>
+          <h2 class="landing-h2" id="${uid}-headline">${escapeHtml(headline)}</h2>
         </div>
 
         <div class="how-it-works__layout">
-          <div class="how-it-works__accordion" role="tablist" aria-label="${escapeHtml(label)}">
+          <div class="how-it-works__accordion" role="group" aria-labelledby="${uid}-headline">
             ${steps.map((step, index) => {
               const isActive = index === safeActiveIndex;
               const panelId = `${uid}-panel-${index}`;

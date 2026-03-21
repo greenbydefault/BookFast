@@ -1,6 +1,4 @@
 @import './variables.css';
-@import '../components/MultiSelectTags/MultiSelectTags.css';
-@import '../pages/dashboard/booking-detail/booking-detail.css';
 
 * {
     box-sizing: border-box;

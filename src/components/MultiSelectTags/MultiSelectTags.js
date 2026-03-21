@@ -21,6 +21,7 @@
  */
 
 import { getIconString } from '../Icons/Icon.js';
+import './MultiSelectTags.css';
 
 /**
  * Creates a multi-select tags component

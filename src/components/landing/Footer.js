@@ -77,7 +77,7 @@ export const renderFooter = (container) => {
     </div>
 
     <div class="landing-footer-stage">
-      <img src="${FOOTER_ILLUSTRATION_URL}" alt="BookFast Footer Illustration mit digitalem Buchungs- und Zahlungsfluss" class="landing-footer-illustration">
+      <img src="${FOOTER_ILLUSTRATION_URL}" alt="BookFast Footer Illustration mit digitalem Buchungs- und Zahlungsfluss" class="landing-footer-illustration" width="1725" height="535">
     </div>
 
     <div class="landing-container">
