@@ -195,7 +195,7 @@
             // Object list items
             '.bf-obj-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:8px;cursor:pointer;transition:background .15s;width:100%;border:0;background:transparent;text-align:left}',
             '.bf-obj-item:hover{background:rgba(0,0,0,.03)}',
-            '.bf-obj-item.is-selected{background:#f8f7fe}',
+            '.bf-obj-item.is-selected{background:#f8f7fe;box-shadow:inset 0 0 0 1px #624cd8}',
             '.bf-obj-info{flex:1;min-width:0}',
             '.bf-obj-name{font-size:16px;font-weight:600;color:#12111f;line-height:1.3}',
             '.bf-obj-desc{font-size:14px;font-weight:400;color:#78716c;line-height:1.4;margin-top:2px}',
@@ -206,7 +206,7 @@
             // Service list items
             '.bf-svc-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;cursor:pointer;transition:background .15s;width:100%;border:0;background:transparent;text-align:left}',
             '.bf-svc-item:hover{background:rgba(0,0,0,.03)}',
-            '.bf-svc-item.is-selected{background:#f8f7fe}',
+            '.bf-svc-item.is-selected{background:#f8f7fe;box-shadow:inset 0 0 0 1px #624cd8}',
             '.bf-svc-info{flex:1;min-width:0}',
             '.bf-svc-name{font-size:16px;font-weight:600;color:#12111f;line-height:1.3}',
             '.bf-svc-time{font-size:14px;font-weight:400;color:#78716c;line-height:1.4;margin-top:2px}',
@@ -399,6 +399,7 @@
         if (next === '1') {
             const hasCards = root?.querySelector('[data-bf-card]');
             if (hasCards && !state.sel.object) expandCard('object');
+            if (hasCards) renumberSplitCards();
         }
     };
 
@@ -476,6 +477,19 @@
         el.setAttribute('data-bf-generated', 'true');
         container.appendChild(el);
     };
+    const isVisibleCard = (card) => {
+        if (!card) return false;
+        if (card.style.display === 'none') return false;
+        return card.getClientRects().length > 0;
+    };
+    const renumberSplitCards = () => {
+        if (!isSplitMode()) return;
+        const visibleCards = Array.from($$('[data-bf-card]')).filter(isVisibleCard);
+        visibleCards.forEach((card, idx) => {
+            const numEl = card.querySelector('.bf-split-card-num');
+            if (numEl) numEl.textContent = String(idx + 1);
+        });
+    };
 
     const updateGuestCountUI = () => {
         const count = state.sel.guestCount;
@@ -538,11 +552,13 @@
                     state.availStatus = null;
                     deactivateRightSide();
                     updateCardSummary('object', o.name, o.address || o.description || '');
+                    popObjects();
                     expandCard('service');
                     popServices();
                 };
                 appendGenerated(dynEl, row);
             });
+            renumberSplitCards();
             return;
         }
         // Legacy mode: select dropdown
@@ -595,6 +611,7 @@
                 row.onclick = () => selService(s.id);
                 appendGenerated(c, row);
             });
+            renumberSplitCards();
         } else {
             c.innerHTML = svcs.length ? svcs.map(s => `<label class="bf-radio"><input type="radio" name="bf-service" value="${s.id}"${state.sel.service?.id === s.id ? ' checked' : ''}><span><strong>${s.name}</strong> — €${s.price}${s.duration_minutes ? ` · ${s.duration_minutes}min` : ''}${s.service_type === 'overnight' ? '/Nacht' : ''}</span></label>`).join('') : '<p>Keine Services verfügbar.</p>';
             c.querySelectorAll('input[name="bf-service"]').forEach(r => r.onchange = () => selService(r.value));
@@ -612,6 +629,7 @@
             if (isSplitMode()) {
                 const staffCard = root?.querySelector('[data-bf-card="staff"]');
                 if (staffCard) staffCard.style.display = 'none';
+                renumberSplitCards();
             }
             return;
         }
@@ -643,6 +661,7 @@
                 chips.appendChild(btn);
             });
             c.appendChild(chips);
+            renumberSplitCards();
             return;
         }
 
@@ -732,26 +751,23 @@
 
         if (isSplitMode()) {
             const svc = state.sel.service;
-            const isHourly = svc?.service_type === 'hourly';
-            if (!isHourly) {
-                c.style.display = 'none';
-                clearGenerated(c);
-                showTemplate(c, 'timeslot-item', true);
-                showEmpty(c, 'timeslots', false);
-                return;
-            }
             c.style.display = '';
             clearGenerated(c);
-            showTemplate(c, 'timeslot-item', false);
+            showTemplate(c, 'timeslot-item', true);
             showEmpty(c, 'timeslots', false);
             let html = `<div class="bf-split-time" data-bf-generated="true"><div class="bf-split-time-title">Uhrzeit</div>`;
-            if (!state.sel.startDate) {
+            if (!svc) {
+                html += `<div class="bf-split-time-hint">Ich waehle zuerst Studio und Service aus, um passende Zeitslots zu sehen.</div>`;
+            } else if (svc.service_type !== 'hourly') {
+                html += `<div class="bf-split-time-hint">Fuer diesen Service ist keine Uhrzeit-Auswahl erforderlich.</div>`;
+            } else if (!state.sel.startDate) {
                 html += `<div class="bf-split-time-hint">Ich wähle zuerst das Datum aus, um einen passenden Zeitslot angezeigt zu bekommen.</div>`;
             } else if (!state.slots.length) {
                 html += `<div class="bf-split-time-desc">Keine freien Termine an diesem Tag.</div>`;
                 showEmpty(c, 'timeslots', true);
             } else {
                 html += `<div class="bf-split-time-desc">Wähle deine passende Uhrzeit aus.</div>`;
+                showTemplate(c, 'timeslot-item', false);
                 html += `<div class="bf-split-slots">`;
                 html += state.slots.map(s => {
                     const sel = state.sel.time === s.start;
@@ -889,6 +905,8 @@
         const c = dyn('addons');
         if (!c) return;
         const adds = state.data.addons.filter(a => a.linked_service_ids?.includes(state.sel.service?.id));
+        const addonCard = root?.querySelector('[data-bf-card="addon"]');
+        if (isSplitMode() && addonCard) addonCard.style.display = adds.length ? '' : 'none';
         const gc = state.sel.guestCount;
         updateGuestCountUI();
         clearGenerated(c);
@@ -900,6 +918,7 @@
             showTemplate(c, 'addon-item', true);
             showEmpty(c, 'addons', true);
             bindGuestCount(c);
+            renumberSplitCards();
             return;
         }
 
@@ -1034,6 +1053,7 @@
                 }
             };
         });
+        renumberSplitCards();
     };
 
     const bindGuestCount = (c) => {
@@ -1670,6 +1690,7 @@
             }
         }
         popObjects();
+        renumberSplitCards();
         if (!hasBoundHandlers) {
             bind();
             hasBoundHandlers = true;

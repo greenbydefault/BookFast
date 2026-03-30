@@ -902,7 +902,7 @@ const getWebflowTemplate = () => {
   };
 
   // --- Split-Screen Layout classes ---
-  defClass('bf-root', 'max-width: 80rem; margin-left: auto; margin-right: auto; font-family: Inter, system-ui, sans-serif; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e7e5e4; border-bottom-color: #e7e5e4; border-left-color: #e7e5e4; border-right-color: #e7e5e4; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; border-bottom-left-radius: 0.75rem; border-bottom-right-radius: 0.75rem; overflow: hidden;');
+  defClass('bf-root', 'width: 60rem; max-width: 100%; margin-left: auto; margin-right: auto; font-family: Inter, system-ui, sans-serif; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e7e5e4; border-bottom-color: #e7e5e4; border-left-color: #e7e5e4; border-right-color: #e7e5e4; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; border-bottom-left-radius: 0.75rem; border-bottom-right-radius: 0.75rem; overflow: hidden;');
   defClass('bf-form', 'display: flex; flex-direction: column;');
   defClass('bf-split', 'display: flex; min-height: 37.5rem;');
   defClass('bf-split-left', 'flex-grow: 1; flex-basis: 50%; border-right-width: 0.0625rem; border-right-style: solid; border-right-color: #e7e5e4; display: flex; flex-direction: column; overflow-y: auto;');
