@@ -911,15 +911,23 @@ const getWebflowTemplate = () => {
   defClass('bf-split-header-name', 'font-size: 1.25rem; font-weight: 400; color: #000; line-height: 1;');
   defClass('bf-split-header-sub', 'font-size: 1rem; font-weight: 400; color: #717079; line-height: 1.2;');
   defClass('bf-split-cards', 'padding-top: 1.5rem; padding-bottom: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; flex-grow: 1;');
-  defClass('bf-split-card', 'border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e7e5e4; border-bottom-color: #e7e5e4; border-left-color: #e7e5e4; border-right-color: #e7e5e4; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;');
-  defClass('bf-split-card-header', 'display: flex; align-items: flex-start; gap: 0.75rem; padding-top: 1rem; padding-bottom: 1rem; padding-left: 1rem; padding-right: 1rem; cursor: pointer;');
+  defClass('bf-split-card', 'border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e7e5e4; border-bottom-color: #e7e5e4; border-left-color: #e7e5e4; border-right-color: #e7e5e4; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; transition: border-top-color 0.2s, border-bottom-color 0.2s, border-left-color 0.2s, border-right-color 0.2s;');
+  defClass('bf-split-card-open', 'border-top-color: #624cd8; border-bottom-color: #624cd8; border-left-color: #624cd8; border-right-color: #624cd8;');
+  defClass('bf-split-card-header', 'display: flex; align-items: flex-start; gap: 0.75rem; padding-top: 1rem; padding-bottom: 1rem; padding-left: 1rem; padding-right: 1rem; cursor: pointer; width: 100%; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; background-color: transparent; text-align: left;');
   defClass('bf-split-card-num', 'min-width: 2.25rem; min-height: 2.25rem; display: flex; align-items: center; justify-content: center; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e7e5e4; border-bottom-color: #e7e5e4; border-left-color: #e7e5e4; border-right-color: #e7e5e4; border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border-bottom-left-radius: 0.25rem; border-bottom-right-radius: 0.25rem; font-size: 1rem; font-weight: 500; color: #12111f;');
   defClass('bf-split-card-info', 'flex-grow: 1; display: flex; flex-direction: column; gap: 0.25rem;');
   defClass('bf-split-card-title', 'font-size: 1rem; font-weight: 500; color: #12111f; line-height: 1.2;');
   defClass('bf-split-card-desc', 'font-size: 1rem; font-weight: 400; color: #78716c; line-height: 1.2;');
-  defClass('bf-split-card-arrow', 'min-width: 1.5rem; min-height: 1.5rem; display: flex; align-items: center; justify-content: center;');
-  defClass('bf-split-card-body', 'padding-left: 1rem; padding-right: 1rem; padding-bottom: 1rem;');
+  defClass('bf-split-card-arrow', 'min-width: 1.5rem; min-height: 1.5rem; display: flex; align-items: center; justify-content: center; transition: transform 0.2s;');
+  defClass('bf-split-card-arrow-open', 'transform: rotate(180deg);');
+  defClass('bf-split-card-arrow-svg', 'width: 1.25rem; height: 1.25rem; display: block;');
+  defClass('bf-split-card-body', 'display: none; padding-left: 1rem; padding-right: 1rem; padding-bottom: 1rem;');
+  defClass('bf-split-card-body-open', 'display: block;');
   defClass('bf-dynamic-area', 'min-height: 1rem;');
+  defClass('bf-template-empty', 'font-size: 0.95rem; color: #78716c;');
+  defClass('bf-template-item', 'display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding-top: 0.75rem; padding-bottom: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e7e5e4; border-bottom-color: #e7e5e4; border-left-color: #e7e5e4; border-right-color: #e7e5e4; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;');
+  defClass('bf-template-item-title', 'font-size: 1rem; font-weight: 500; color: #12111f;');
+  defClass('bf-template-item-sub', 'font-size: 0.875rem; color: #78716c; margin-top: 0.125rem;');
   defClass('bf-split-footer', 'display: flex; align-items: center; justify-content: flex-end; gap: 0.625rem; padding-top: 1.125rem; padding-bottom: 1.125rem; padding-left: 1.5rem; padding-right: 1.5rem; border-top-width: 0.0625rem; border-top-style: solid; border-top-color: #e7e5e4; background-color: #fff;');
   defClass('bf-split-btn-back', 'display: inline-flex; align-items: center; justify-content: center; padding-top: 0.75rem; padding-bottom: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #d6d3d1; border-bottom-color: #d6d3d1; border-left-color: #d6d3d1; border-right-color: #d6d3d1; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; background-color: #fff; color: #12111f; font-size: 1rem; font-weight: 400; cursor: pointer; text-decoration: none;');
   defClass('bf-split-btn-next', 'display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; min-width: 2.875rem; min-height: 2.125rem; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; background-color: #7660f1; color: #f8f7fe; font-size: 1rem; font-weight: 500; cursor: pointer; text-decoration: none;');
@@ -985,24 +993,29 @@ const getWebflowTemplate = () => {
     // Object card
     cardObj: mongoId(), cardObjHeader: mongoId(), cardObjNum: mongoId(), cardObjNumText: mongoId(),
     cardObjInfo: mongoId(), cardObjTitle: mongoId(), cardObjTitleText: mongoId(), cardObjDesc: mongoId(), cardObjDescText: mongoId(),
-    cardObjArrow: mongoId(), cardObjArrowText: mongoId(), cardObjBody: mongoId(), objDynamic: mongoId(),
+    cardObjArrow: mongoId(), cardObjArrowSvg: mongoId(), cardObjArrowPolyline: mongoId(), cardObjBody: mongoId(), objDynamic: mongoId(),
+    objEmpty: mongoId(), objEmptyText: mongoId(), objSample: mongoId(), objSampleMain: mongoId(), objSampleTitle: mongoId(), objSampleTitleText: mongoId(), objSampleSub: mongoId(), objSampleSubText: mongoId(), objSampleMeta: mongoId(), objSampleMetaText: mongoId(),
     // Service card
     cardSvc: mongoId(), cardSvcHeader: mongoId(), cardSvcNum: mongoId(), cardSvcNumText: mongoId(),
     cardSvcInfo: mongoId(), cardSvcTitle: mongoId(), cardSvcTitleText: mongoId(), cardSvcDesc: mongoId(), cardSvcDescText: mongoId(),
-    cardSvcArrow: mongoId(), cardSvcArrowText: mongoId(), cardSvcBody: mongoId(), svcDynamic: mongoId(),
+    cardSvcArrow: mongoId(), cardSvcArrowSvg: mongoId(), cardSvcArrowPolyline: mongoId(), cardSvcBody: mongoId(), svcDynamic: mongoId(),
+    svcEmpty: mongoId(), svcEmptyText: mongoId(), svcSample: mongoId(), svcSampleMain: mongoId(), svcSampleTitle: mongoId(), svcSampleTitleText: mongoId(), svcSampleSub: mongoId(), svcSampleSubText: mongoId(), svcSampleMeta: mongoId(), svcSampleMetaText: mongoId(),
     // Staff card
     cardStaff: mongoId(), cardStaffHeader: mongoId(), cardStaffNum: mongoId(), cardStaffNumText: mongoId(),
     cardStaffInfo: mongoId(), cardStaffTitle: mongoId(), cardStaffTitleText: mongoId(), cardStaffDesc: mongoId(), cardStaffDescText: mongoId(),
-    cardStaffArrow: mongoId(), cardStaffArrowText: mongoId(), cardStaffBody: mongoId(), staffDynamic: mongoId(),
+    cardStaffArrow: mongoId(), cardStaffArrowSvg: mongoId(), cardStaffArrowPolyline: mongoId(), cardStaffBody: mongoId(), staffDynamic: mongoId(),
+    staffEmpty: mongoId(), staffEmptyText: mongoId(), staffSample: mongoId(), staffSampleMain: mongoId(), staffSampleTitle: mongoId(), staffSampleTitleText: mongoId(), staffSampleSub: mongoId(), staffSampleSubText: mongoId(),
     // Addon card
     cardAddon: mongoId(), cardAddonHeader: mongoId(), cardAddonNum: mongoId(), cardAddonNumText: mongoId(),
     cardAddonInfo: mongoId(), cardAddonTitle: mongoId(), cardAddonTitleText: mongoId(), cardAddonDesc: mongoId(), cardAddonDescText: mongoId(),
-    cardAddonArrow: mongoId(), cardAddonArrowText: mongoId(), cardAddonBody: mongoId(),
+    cardAddonArrow: mongoId(), cardAddonArrowSvg: mongoId(), cardAddonArrowPolyline: mongoId(), cardAddonBody: mongoId(),
     guestCountBlock: mongoId(), guestCountTitle: mongoId(), guestCountTitleStrong: mongoId(), guestCountTitleText: mongoId(), guestCountMaxText: mongoId(),
     guestCountRow: mongoId(), guestCountMinus: mongoId(), guestCountMinusText: mongoId(), guestCountValue: mongoId(), guestCountValueText: mongoId(), guestCountPlus: mongoId(), guestCountPlusText: mongoId(),
-    addonsDynamic: mongoId(),
+    addonsDynamic: mongoId(), addonsEmpty: mongoId(), addonsEmptyText: mongoId(), addonsSample: mongoId(), addonsSampleMain: mongoId(), addonsSampleMainText: mongoId(), addonsSamplePrice: mongoId(), addonsSamplePriceText: mongoId(),
     // Right side
-    splitRight: mongoId(), calDynamic: mongoId(), slotsDynamic: mongoId(), dateInfoContainer: mongoId(), dateInfoText: mongoId(),
+    splitRight: mongoId(), calDynamic: mongoId(), calEmpty: mongoId(), calEmptyText: mongoId(), calSampleHeader: mongoId(), calSampleHeaderText: mongoId(), calSampleGrid: mongoId(), calSampleDay: mongoId(), calSampleDayText: mongoId(),
+    slotsDynamic: mongoId(), slotsEmpty: mongoId(), slotsEmptyText: mongoId(), slotsSampleWrap: mongoId(), slotsSampleTitle: mongoId(), slotsSampleTitleText: mongoId(), slotsSampleDesc: mongoId(), slotsSampleDescText: mongoId(), slotsSampleItem: mongoId(), slotsSampleItemText: mongoId(),
+    dateInfoContainer: mongoId(), dateInfoText: mongoId(),
     availStatus: mongoId(), availChecking: mongoId(), availCheckingText: mongoId(), availAvailable: mongoId(), availAvailableText: mongoId(), availUnavailable: mongoId(), availUnavailableText: mongoId(),
     // Footer Step 1
     footer1: mongoId(), footer1Next: mongoId(), footer1NextText: mongoId(),
@@ -1061,8 +1074,8 @@ const getWebflowTemplate = () => {
     { "_id": ids.splitCards, "tag": "div", "classes": c('bf-split-cards'), "children": [ids.cardObj, ids.cardSvc, ids.cardStaff, ids.cardAddon], "type": "Block", "data": { "tag": "div" } },
 
     // Card: Object
-    { "_id": ids.cardObj, "tag": "div", "classes": c('bf-split-card'), "children": [ids.cardObjHeader, ids.cardObjBody], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-card": "object" } } },
-    { "_id": ids.cardObjHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardObjNum, ids.cardObjInfo, ids.cardObjArrow], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardObj, "tag": "div", "classes": c('bf-split-card').concat(c('bf-split-card-open')), "children": [ids.cardObjHeader, ids.cardObjBody], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-card": "object" } } },
+    { "_id": ids.cardObjHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardObjNum, ids.cardObjInfo, ids.cardObjArrow], "type": "Block", "data": { "tag": "button", "attr": { "type": "button", "aria-expanded": "true" } } },
     { "_id": ids.cardObjNum, "tag": "div", "classes": c('bf-split-card-num'), "children": [ids.cardObjNumText], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.cardObjNumText, "text": true, "v": "1" },
     { "_id": ids.cardObjInfo, "tag": "div", "classes": c('bf-split-card-info'), "children": [ids.cardObjTitle, ids.cardObjDesc], "type": "Block", "data": { "tag": "div" } },
@@ -1070,14 +1083,25 @@ const getWebflowTemplate = () => {
     { "_id": ids.cardObjTitleText, "text": true, "v": "Objekt" },
     { "_id": ids.cardObjDesc, "tag": "div", "classes": c('bf-split-card-desc'), "children": [ids.cardObjDescText], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.cardObjDescText, "text": true, "v": "Wähle das Objekt aus" },
-    { "_id": ids.cardObjArrow, "tag": "div", "classes": c('bf-split-card-arrow'), "children": [ids.cardObjArrowText], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.cardObjArrowText, "text": true, "v": "▾" },
-    { "_id": ids.cardObjBody, "tag": "div", "classes": c('bf-split-card-body'), "children": [ids.objDynamic], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.objDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "objects" } } },
+    { "_id": ids.cardObjArrow, "tag": "div", "classes": c('bf-split-card-arrow').concat(c('bf-split-card-arrow-open')), "children": [ids.cardObjArrowSvg], "type": "Block", "data": { "tag": "span" } },
+    { "_id": ids.cardObjArrowSvg, "tag": "svg", "classes": c('bf-split-card-arrow-svg'), "children": [ids.cardObjArrowPolyline], "type": "Block", "data": { "tag": "svg", "attr": { "xmlns": "http://www.w3.org/2000/svg", "viewBox": "0 0 24 24", "fill": "none", "stroke": "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" } } },
+    { "_id": ids.cardObjArrowPolyline, "tag": "polyline", "classes": [], "children": [], "type": "Block", "data": { "tag": "polyline", "attr": { "points": "6 9 12 15 18 9" } } },
+    { "_id": ids.cardObjBody, "tag": "div", "classes": c('bf-split-card-body').concat(c('bf-split-card-body-open')), "children": [ids.objDynamic], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-panel": "object" } } },
+    { "_id": ids.objDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.objEmpty, ids.objSample], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "objects" } } },
+    { "_id": ids.objEmpty, "tag": "p", "classes": c('bf-template-empty'), "children": [ids.objEmptyText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-empty": "objects", "style": "display: none;" } } },
+    { "_id": ids.objEmptyText, "text": true, "v": "Keine Objekte verfügbar." },
+    { "_id": ids.objSample, "tag": "div", "classes": c('bf-template-item'), "children": [ids.objSampleMain, ids.objSampleMeta], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-template": "object-item" } } },
+    { "_id": ids.objSampleMain, "tag": "div", "classes": [], "children": [ids.objSampleTitle, ids.objSampleSub], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.objSampleTitle, "tag": "div", "classes": c('bf-template-item-title'), "children": [ids.objSampleTitleText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.objSampleTitleText, "text": true, "v": "Beispiel Objekt" },
+    { "_id": ids.objSampleSub, "tag": "div", "classes": c('bf-template-item-sub'), "children": [ids.objSampleSubText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.objSampleSubText, "text": true, "v": "Adresse oder Beschreibung" },
+    { "_id": ids.objSampleMeta, "tag": "div", "classes": c('bf-template-item-sub'), "children": [ids.objSampleMetaText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.objSampleMetaText, "text": true, "v": "Max. 4 Gäste" },
 
     // Card: Service
     { "_id": ids.cardSvc, "tag": "div", "classes": c('bf-split-card'), "children": [ids.cardSvcHeader, ids.cardSvcBody], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-card": "service" } } },
-    { "_id": ids.cardSvcHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardSvcNum, ids.cardSvcInfo, ids.cardSvcArrow], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardSvcHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardSvcNum, ids.cardSvcInfo, ids.cardSvcArrow], "type": "Block", "data": { "tag": "button", "attr": { "type": "button", "aria-expanded": "false" } } },
     { "_id": ids.cardSvcNum, "tag": "div", "classes": c('bf-split-card-num'), "children": [ids.cardSvcNumText], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.cardSvcNumText, "text": true, "v": "2" },
     { "_id": ids.cardSvcInfo, "tag": "div", "classes": c('bf-split-card-info'), "children": [ids.cardSvcTitle, ids.cardSvcDesc], "type": "Block", "data": { "tag": "div" } },
@@ -1085,14 +1109,25 @@ const getWebflowTemplate = () => {
     { "_id": ids.cardSvcTitleText, "text": true, "v": "Service" },
     { "_id": ids.cardSvcDesc, "tag": "div", "classes": c('bf-split-card-desc'), "children": [ids.cardSvcDescText], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.cardSvcDescText, "text": true, "v": "Wähle den Service aus" },
-    { "_id": ids.cardSvcArrow, "tag": "div", "classes": c('bf-split-card-arrow'), "children": [ids.cardSvcArrowText], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.cardSvcArrowText, "text": true, "v": "▾" },
-    { "_id": ids.cardSvcBody, "tag": "div", "classes": c('bf-split-card-body'), "children": [ids.svcDynamic], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.svcDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "services" } } },
+    { "_id": ids.cardSvcArrow, "tag": "div", "classes": c('bf-split-card-arrow'), "children": [ids.cardSvcArrowSvg], "type": "Block", "data": { "tag": "span" } },
+    { "_id": ids.cardSvcArrowSvg, "tag": "svg", "classes": c('bf-split-card-arrow-svg'), "children": [ids.cardSvcArrowPolyline], "type": "Block", "data": { "tag": "svg", "attr": { "xmlns": "http://www.w3.org/2000/svg", "viewBox": "0 0 24 24", "fill": "none", "stroke": "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" } } },
+    { "_id": ids.cardSvcArrowPolyline, "tag": "polyline", "classes": [], "children": [], "type": "Block", "data": { "tag": "polyline", "attr": { "points": "6 9 12 15 18 9" } } },
+    { "_id": ids.cardSvcBody, "tag": "div", "classes": c('bf-split-card-body'), "children": [ids.svcDynamic], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-panel": "service" } } },
+    { "_id": ids.svcDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.svcEmpty, ids.svcSample], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "services" } } },
+    { "_id": ids.svcEmpty, "tag": "p", "classes": c('bf-template-empty'), "children": [ids.svcEmptyText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-empty": "services", "style": "display: none;" } } },
+    { "_id": ids.svcEmptyText, "text": true, "v": "Keine Services verfügbar." },
+    { "_id": ids.svcSample, "tag": "div", "classes": c('bf-template-item'), "children": [ids.svcSampleMain, ids.svcSampleMeta], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-template": "service-item" } } },
+    { "_id": ids.svcSampleMain, "tag": "div", "classes": [], "children": [ids.svcSampleTitle, ids.svcSampleSub], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.svcSampleTitle, "tag": "div", "classes": c('bf-template-item-title'), "children": [ids.svcSampleTitleText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.svcSampleTitleText, "text": true, "v": "Beispiel Service" },
+    { "_id": ids.svcSampleSub, "tag": "div", "classes": c('bf-template-item-sub'), "children": [ids.svcSampleSubText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.svcSampleSubText, "text": true, "v": "09:00-12:00 Uhr" },
+    { "_id": ids.svcSampleMeta, "tag": "div", "classes": c('bf-template-item-sub'), "children": [ids.svcSampleMetaText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.svcSampleMetaText, "text": true, "v": "120 Min. - EUR 49" },
 
     // Card: Staff
     { "_id": ids.cardStaff, "tag": "div", "classes": c('bf-split-card'), "children": [ids.cardStaffHeader, ids.cardStaffBody], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-card": "staff" } } },
-    { "_id": ids.cardStaffHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardStaffNum, ids.cardStaffInfo, ids.cardStaffArrow], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardStaffHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardStaffNum, ids.cardStaffInfo, ids.cardStaffArrow], "type": "Block", "data": { "tag": "button", "attr": { "type": "button", "aria-expanded": "false" } } },
     { "_id": ids.cardStaffNum, "tag": "div", "classes": c('bf-split-card-num'), "children": [ids.cardStaffNumText], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.cardStaffNumText, "text": true, "v": "3" },
     { "_id": ids.cardStaffInfo, "tag": "div", "classes": c('bf-split-card-info'), "children": [ids.cardStaffTitle, ids.cardStaffDesc], "type": "Block", "data": { "tag": "div" } },
@@ -1100,14 +1135,23 @@ const getWebflowTemplate = () => {
     { "_id": ids.cardStaffTitleText, "text": true, "v": "Mitarbeiter" },
     { "_id": ids.cardStaffDesc, "tag": "div", "classes": c('bf-split-card-desc'), "children": [ids.cardStaffDescText], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.cardStaffDescText, "text": true, "v": "Wähle deinen Mitarbeiter" },
-    { "_id": ids.cardStaffArrow, "tag": "div", "classes": c('bf-split-card-arrow'), "children": [ids.cardStaffArrowText], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.cardStaffArrowText, "text": true, "v": "▾" },
-    { "_id": ids.cardStaffBody, "tag": "div", "classes": c('bf-split-card-body'), "children": [ids.staffDynamic], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.staffDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "staff" } } },
+    { "_id": ids.cardStaffArrow, "tag": "div", "classes": c('bf-split-card-arrow'), "children": [ids.cardStaffArrowSvg], "type": "Block", "data": { "tag": "span" } },
+    { "_id": ids.cardStaffArrowSvg, "tag": "svg", "classes": c('bf-split-card-arrow-svg'), "children": [ids.cardStaffArrowPolyline], "type": "Block", "data": { "tag": "svg", "attr": { "xmlns": "http://www.w3.org/2000/svg", "viewBox": "0 0 24 24", "fill": "none", "stroke": "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" } } },
+    { "_id": ids.cardStaffArrowPolyline, "tag": "polyline", "classes": [], "children": [], "type": "Block", "data": { "tag": "polyline", "attr": { "points": "6 9 12 15 18 9" } } },
+    { "_id": ids.cardStaffBody, "tag": "div", "classes": c('bf-split-card-body'), "children": [ids.staffDynamic], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-panel": "staff" } } },
+    { "_id": ids.staffDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.staffEmpty, ids.staffSample], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "staff" } } },
+    { "_id": ids.staffEmpty, "tag": "p", "classes": c('bf-template-empty'), "children": [ids.staffEmptyText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-empty": "staff", "style": "display: none;" } } },
+    { "_id": ids.staffEmptyText, "text": true, "v": "Kein Mitarbeiter verfugbar." },
+    { "_id": ids.staffSample, "tag": "div", "classes": c('bf-template-item'), "children": [ids.staffSampleMain], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-template": "staff-item" } } },
+    { "_id": ids.staffSampleMain, "tag": "div", "classes": [], "children": [ids.staffSampleTitle, ids.staffSampleSub], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.staffSampleTitle, "tag": "div", "classes": c('bf-template-item-title'), "children": [ids.staffSampleTitleText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.staffSampleTitleText, "text": true, "v": "Naechstverfuegbaren" },
+    { "_id": ids.staffSampleSub, "tag": "div", "classes": c('bf-template-item-sub'), "children": [ids.staffSampleSubText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.staffSampleSubText, "text": true, "v": "Oder festen Mitarbeiter waehlen" },
 
     // Card: Addon
     { "_id": ids.cardAddon, "tag": "div", "classes": c('bf-split-card'), "children": [ids.cardAddonHeader, ids.cardAddonBody], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-card": "addon" } } },
-    { "_id": ids.cardAddonHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardAddonNum, ids.cardAddonInfo, ids.cardAddonArrow], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardAddonHeader, "tag": "div", "classes": c('bf-split-card-header'), "children": [ids.cardAddonNum, ids.cardAddonInfo, ids.cardAddonArrow], "type": "Block", "data": { "tag": "button", "attr": { "type": "button", "aria-expanded": "false" } } },
     { "_id": ids.cardAddonNum, "tag": "div", "classes": c('bf-split-card-num'), "children": [ids.cardAddonNumText], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.cardAddonNumText, "text": true, "v": "4" },
     { "_id": ids.cardAddonInfo, "tag": "div", "classes": c('bf-split-card-info'), "children": [ids.cardAddonTitle, ids.cardAddonDesc], "type": "Block", "data": { "tag": "div" } },
@@ -1115,9 +1159,10 @@ const getWebflowTemplate = () => {
     { "_id": ids.cardAddonTitleText, "text": true, "v": "Addon" },
     { "_id": ids.cardAddonDesc, "tag": "div", "classes": c('bf-split-card-desc'), "children": [ids.cardAddonDescText], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.cardAddonDescText, "text": true, "v": "Extras hinzufügen" },
-    { "_id": ids.cardAddonArrow, "tag": "div", "classes": c('bf-split-card-arrow'), "children": [ids.cardAddonArrowText], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.cardAddonArrowText, "text": true, "v": "▾" },
-    { "_id": ids.cardAddonBody, "tag": "div", "classes": c('bf-split-card-body'), "children": [ids.guestCountBlock, ids.addonsDynamic], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.cardAddonArrow, "tag": "div", "classes": c('bf-split-card-arrow'), "children": [ids.cardAddonArrowSvg], "type": "Block", "data": { "tag": "span" } },
+    { "_id": ids.cardAddonArrowSvg, "tag": "svg", "classes": c('bf-split-card-arrow-svg'), "children": [ids.cardAddonArrowPolyline], "type": "Block", "data": { "tag": "svg", "attr": { "xmlns": "http://www.w3.org/2000/svg", "viewBox": "0 0 24 24", "fill": "none", "stroke": "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" } } },
+    { "_id": ids.cardAddonArrowPolyline, "tag": "polyline", "classes": [], "children": [], "type": "Block", "data": { "tag": "polyline", "attr": { "points": "6 9 12 15 18 9" } } },
+    { "_id": ids.cardAddonBody, "tag": "div", "classes": c('bf-split-card-body'), "children": [ids.guestCountBlock, ids.addonsDynamic], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-panel": "addon" } } },
     { "_id": ids.guestCountBlock, "tag": "div", "classes": c('bf-guest-count'), "children": [ids.guestCountTitle, ids.guestCountRow], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "guest-count" } } },
     { "_id": ids.guestCountTitle, "tag": "p", "classes": [], "children": [ids.guestCountTitleStrong, ids.guestCountMaxText], "type": "Paragraph", "data": { "tag": "p" } },
     { "_id": ids.guestCountTitleStrong, "tag": "strong", "classes": [], "children": [ids.guestCountTitleText], "type": "Block", "data": { "tag": "strong" } },
@@ -1130,12 +1175,35 @@ const getWebflowTemplate = () => {
     { "_id": ids.guestCountValueText, "text": true, "v": "1" },
     { "_id": ids.guestCountPlus, "tag": "a", "classes": c('bf-qty-btn'), "children": [ids.guestCountPlusText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "gc-plus" } } },
     { "_id": ids.guestCountPlusText, "text": true, "v": "+" },
-    { "_id": ids.addonsDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "addons" } } },
+    { "_id": ids.addonsDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.addonsEmpty, ids.addonsSample], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "addons" } } },
+    { "_id": ids.addonsEmpty, "tag": "p", "classes": c('bf-template-empty'), "children": [ids.addonsEmptyText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-empty": "addons", "style": "display: none;" } } },
+    { "_id": ids.addonsEmptyText, "text": true, "v": "Keine Extras verfugbar." },
+    { "_id": ids.addonsSample, "tag": "div", "classes": c('bf-template-item'), "children": [ids.addonsSampleMain, ids.addonsSamplePrice], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-template": "addon-item" } } },
+    { "_id": ids.addonsSampleMain, "tag": "div", "classes": c('bf-template-item-title'), "children": [ids.addonsSampleMainText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.addonsSampleMainText, "text": true, "v": "Beispiel Extra" },
+    { "_id": ids.addonsSamplePrice, "tag": "div", "classes": c('bf-template-item-sub'), "children": [ids.addonsSamplePriceText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.addonsSamplePriceText, "text": true, "v": "+ EUR 15" },
 
     // -- RIGHT SIDE --
     { "_id": ids.splitRight, "tag": "div", "classes": c('bf-split-right'), "children": [ids.calDynamic, ids.slotsDynamic, ids.dateInfoContainer], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.calDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "calendar" } } },
-    { "_id": ids.slotsDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "timeslots" } } },
+    { "_id": ids.calDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.calEmpty, ids.calSampleHeader, ids.calSampleGrid], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "calendar" } } },
+    { "_id": ids.calEmpty, "tag": "p", "classes": c('bf-template-empty'), "children": [ids.calEmptyText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-empty": "calendar", "style": "display: none;" } } },
+    { "_id": ids.calEmptyText, "text": true, "v": "Kalender wird nach Auswahl geladen." },
+    { "_id": ids.calSampleHeader, "tag": "div", "classes": c('bf-template-item-title'), "children": [ids.calSampleHeaderText], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-template": "calendar-header" } } },
+    { "_id": ids.calSampleHeaderText, "text": true, "v": "April 2026" },
+    { "_id": ids.calSampleGrid, "tag": "div", "classes": c('bf-template-item'), "children": [ids.calSampleDay], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-template": "calendar-day" } } },
+    { "_id": ids.calSampleDay, "tag": "span", "classes": c('bf-template-item-sub'), "children": [ids.calSampleDayText], "type": "Block", "data": { "tag": "span" } },
+    { "_id": ids.calSampleDayText, "text": true, "v": "15" },
+    { "_id": ids.slotsDynamic, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.slotsEmpty, ids.slotsSampleWrap], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "timeslots" } } },
+    { "_id": ids.slotsEmpty, "tag": "p", "classes": c('bf-template-empty'), "children": [ids.slotsEmptyText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-empty": "timeslots", "style": "display: none;" } } },
+    { "_id": ids.slotsEmptyText, "text": true, "v": "Keine freien Termine an diesem Tag." },
+    { "_id": ids.slotsSampleWrap, "tag": "div", "classes": c('bf-template-item'), "children": [ids.slotsSampleTitle, ids.slotsSampleDesc, ids.slotsSampleItem], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-template": "timeslot-item" } } },
+    { "_id": ids.slotsSampleTitle, "tag": "div", "classes": c('bf-template-item-title'), "children": [ids.slotsSampleTitleText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.slotsSampleTitleText, "text": true, "v": "Uhrzeit" },
+    { "_id": ids.slotsSampleDesc, "tag": "div", "classes": c('bf-template-item-sub'), "children": [ids.slotsSampleDescText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.slotsSampleDescText, "text": true, "v": "Waehle einen passenden Slot" },
+    { "_id": ids.slotsSampleItem, "tag": "div", "classes": c('bf-template-item-sub'), "children": [ids.slotsSampleItemText], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.slotsSampleItemText, "text": true, "v": "10:00" },
     { "_id": ids.dateInfoContainer, "tag": "div", "classes": c('bf-dateinfo'), "children": [ids.dateInfoText, ids.availStatus], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "dateinfo" } } },
     { "_id": ids.dateInfoText, "tag": "div", "classes": [], "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "dateinfo-text" } } },
     { "_id": ids.availStatus, "tag": "p", "classes": c('bf-avail-status'), "children": [ids.availChecking, ids.availAvailable, ids.availUnavailable], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-static": "avail-status", "style": "display: none;" } } },

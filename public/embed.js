@@ -181,25 +181,19 @@
             '.bf-split-header-sub{font-size:16px;font-weight:400;color:#717079;line-height:1.2}',
             '.bf-split-cards{padding:24px;display:flex;flex-direction:column;gap:24px;flex:1}',
             // Accordion Cards
-            '.bf-split-card{border:1px solid #e7e5e4;border-radius:8px;transition:border-color .2s,opacity .2s}',
-            '.bf-split-card.is-active{border-color:#624cd8}',
-            '.bf-split-card.is-disabled{opacity:.5;pointer-events:none}',
-            '.bf-split-card.is-done{cursor:pointer}',
-            '.bf-split-card-header{display:flex;align-items:flex-start;gap:12px;padding:16px 16px 16px 16px;cursor:pointer}',
-            '.bf-split-card.is-disabled .bf-split-card-header{cursor:default}',
+            '.bf-split-card{border:1px solid #e7e5e4;border-radius:8px;transition:border-color .2s}',
+            '.bf-split-card.is-open{border-color:#624cd8}',
+            '.bf-split-card-header{display:flex;align-items:flex-start;gap:12px;padding:16px 16px 16px 16px;cursor:pointer;width:100%;border:0;background:transparent;text-align:left}',
             '.bf-split-card-num{min-width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #e7e5e4;border-radius:4px;font-size:16px;font-weight:500;color:#12111f;flex-shrink:0}',
             '.bf-split-card-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}',
             '.bf-split-card-title{font-size:16px;font-weight:500;color:#12111f;line-height:1.2}',
             '.bf-split-card-desc{font-size:16px;font-weight:400;color:#78716c;line-height:1.2}',
             '.bf-split-card-arrow{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:transform .2s}',
-            '.bf-split-card.is-active .bf-split-card-arrow{transform:rotate(180deg)}',
-            '.bf-split-card.is-done .bf-split-card-arrow{transform:rotate(180deg)}',
-            '.bf-split-card-check{display:none;width:20px;height:20px;flex-shrink:0;color:#624cd8}',
-            '.bf-split-card.is-done .bf-split-card-check{display:flex}',
+            '.bf-split-card.is-open .bf-split-card-arrow{transform:rotate(180deg)}',
             '.bf-split-card-body{display:none;padding:0 16px 16px}',
-            '.bf-split-card.is-active .bf-split-card-body{display:block}',
+            '.bf-split-card.is-open .bf-split-card-body{display:block}',
             // Object list items
-            '.bf-obj-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:8px;cursor:pointer;transition:background .15s}',
+            '.bf-obj-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:8px;cursor:pointer;transition:background .15s;width:100%;border:0;background:transparent;text-align:left}',
             '.bf-obj-item:hover{background:rgba(0,0,0,.03)}',
             '.bf-obj-item.is-selected{background:#f8f7fe}',
             '.bf-obj-info{flex:1;min-width:0}',
@@ -210,7 +204,7 @@
             '.bf-obj-check{display:none;color:#624cd8;flex-shrink:0}',
             '.bf-obj-item.is-selected .bf-obj-check{display:block}',
             // Service list items
-            '.bf-svc-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;cursor:pointer;transition:background .15s}',
+            '.bf-svc-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;cursor:pointer;transition:background .15s;width:100%;border:0;background:transparent;text-align:left}',
             '.bf-svc-item:hover{background:rgba(0,0,0,.03)}',
             '.bf-svc-item.is-selected{background:#f8f7fe}',
             '.bf-svc-info{flex:1;min-width:0}',
@@ -285,23 +279,24 @@
     const SVG_CHEVRON_RIGHT = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>';
 
     // --- Accordion Card Logic ---
-    const CARD_ORDER = ['object', 'service', 'staff', 'addon'];
+    const setCardOpenState = (card, isOpen) => {
+        if (!card) return;
+        card.classList.toggle('is-open', !!isOpen);
+        const header = card.querySelector('.bf-split-card-header');
+        const panel = card.querySelector('.bf-split-card-body');
+        if (header) header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        if (panel) panel.hidden = !isOpen;
+    };
 
     const expandCard = (cardName) => {
-        const cards = root?.querySelectorAll('[data-bf-card]') || [];
-        const targetIdx = CARD_ORDER.indexOf(cardName);
-        cards.forEach(card => {
-            const name = card.dataset.bfCard;
-            const idx = CARD_ORDER.indexOf(name);
-            card.classList.remove('is-active', 'is-done', 'is-disabled');
-            if (idx < targetIdx) {
-                card.classList.add('is-done');
-            } else if (idx === targetIdx) {
-                card.classList.add('is-active');
-            } else {
-                card.classList.add('is-disabled');
-            }
-        });
+        const card = root?.querySelector(`[data-bf-card="${cardName}"]`);
+        setCardOpenState(card, true);
+    };
+
+    const toggleCard = (cardName) => {
+        const card = root?.querySelector(`[data-bf-card="${cardName}"]`);
+        if (!card) return;
+        setCardOpenState(card, !card.classList.contains('is-open'));
     };
 
     const updateCardSummary = (cardName, titleText, descText) => {
@@ -465,6 +460,22 @@
     const field = n => $(`[data-bf-field="${n}"]`);
     const dyn = n => $(`[data-bf-dynamic="${n}"]`);
     const disp = n => $(`[data-bf-display="${n}"]`);
+    const tpl = (container, key) => container?.querySelector(`[data-bf-template="${key}"]`);
+    const empty = (container, key) => container?.querySelector(`[data-bf-empty="${key}"]`);
+    const clearGenerated = (container) => container?.querySelectorAll('[data-bf-generated="true"]').forEach(el => el.remove());
+    const showTemplate = (container, key, visible) => {
+        const el = tpl(container, key);
+        if (el) el.style.display = visible ? '' : 'none';
+    };
+    const showEmpty = (container, key, visible) => {
+        const el = empty(container, key);
+        if (el) el.style.display = visible ? '' : 'none';
+    };
+    const appendGenerated = (container, el) => {
+        if (!container || !el) return;
+        el.setAttribute('data-bf-generated', 'true');
+        container.appendChild(el);
+    };
 
     const updateGuestCountUI = () => {
         const count = state.sel.guestCount;
@@ -494,25 +505,43 @@
         const dynEl = dyn('objects');
         if (dynEl && isSplitMode()) {
             const objs = state.data.objects;
-            dynEl.innerHTML = objs.length ? objs.map(o => {
+            clearGenerated(dynEl);
+            showTemplate(dynEl, 'object-item', !objs.length);
+            showEmpty(dynEl, 'objects', !objs.length);
+            objs.forEach(o => {
+                const row = document.createElement('button');
                 const isSel = state.sel.object?.id === o.id;
-                return `<div class="bf-obj-item${isSel ? ' is-selected' : ''}" data-obj-id="${o.id}">
-                    <div class="bf-obj-info"><div class="bf-obj-name">${o.name}</div>${o.description ? `<div class="bf-obj-desc">${o.description}</div>` : ''}</div>
-                    <div class="bf-obj-meta"><span class="bf-obj-check">${SVG_CHECK}</span>${o.capacity ? `<span class="bf-obj-cap">${SVG_PEOPLE} ${o.capacity}</span>` : ''}</div>
-                </div>`;
-            }).join('') : '<p>Keine Objekte verfügbar.</p>';
-            dynEl.querySelectorAll('[data-obj-id]').forEach(el => el.onclick = () => {
-                const o = state.data.objects.find(x => x.id === el.dataset.objId);
-                if (!o) return;
-                state.sel.object = o;
-                state.sel.service = state.sel.startDate = state.sel.endDate = state.sel.time = null;
-                state.sel.staff = undefined;
-                state.slots = [];
-                state.availStatus = null;
-                deactivateRightSide();
-                updateCardSummary('object', o.name, o.address || o.description || '');
-                expandCard('service');
-                popServices();
+                row.type = 'button';
+                row.className = `bf-obj-item${isSel ? ' is-selected' : ''}`;
+                row.setAttribute('data-obj-id', o.id);
+                row.innerHTML = `<div class="bf-obj-info"><div class="bf-obj-name"></div><div class="bf-obj-desc"></div></div><div class="bf-obj-meta"><span class="bf-obj-check">${SVG_CHECK}</span><span class="bf-obj-cap"></span></div>`;
+                row.querySelector('.bf-obj-name').textContent = o.name || '';
+                const desc = row.querySelector('.bf-obj-desc');
+                if (o.description) {
+                    desc.textContent = o.description;
+                    desc.style.display = '';
+                } else {
+                    desc.style.display = 'none';
+                }
+                const cap = row.querySelector('.bf-obj-cap');
+                if (o.capacity) {
+                    cap.innerHTML = `${SVG_PEOPLE} ${o.capacity}`;
+                    cap.style.display = '';
+                } else {
+                    cap.style.display = 'none';
+                }
+                row.onclick = () => {
+                    state.sel.object = o;
+                    state.sel.service = state.sel.startDate = state.sel.endDate = state.sel.time = null;
+                    state.sel.staff = undefined;
+                    state.slots = [];
+                    state.availStatus = null;
+                    deactivateRightSide();
+                    updateCardSummary('object', o.name, o.address || o.description || '');
+                    expandCard('service');
+                    popServices();
+                };
+                appendGenerated(dynEl, row);
             });
             return;
         }
@@ -533,17 +562,39 @@
         if (!c) return;
         const svcs = state.data.services.filter(s => s.object_id === state.sel.object?.id);
         if (isSplitMode()) {
-            c.innerHTML = svcs.length ? svcs.map(s => {
+            clearGenerated(c);
+            showTemplate(c, 'service-item', !svcs.length);
+            showEmpty(c, 'services', !svcs.length);
+            svcs.forEach(s => {
+                const row = document.createElement('button');
                 const isSel = state.sel.service?.id === s.id;
-                const timeStr = s.booking_window_start && s.booking_window_end ? `${s.booking_window_start}–${s.booking_window_end} Uhr` : (s.service_type === 'overnight' ? 'Übernachtung' : '');
-                const durBadge = s.duration_minutes ? `<span class="bf-svc-badge">${SVG_CLOCK} ${s.duration_minutes >= 60 ? (s.duration_minutes / 60) : s.duration_minutes}${s.duration_minutes >= 60 ? '' : ' min'}</span>` : '';
-                const priceBadge = `<span class="bf-svc-badge">€${s.price}${s.service_type === 'overnight' ? '/N' : ' p.p'}</span>`;
-                return `<div class="bf-svc-item${isSel ? ' is-selected' : ''}" data-svc-id="${s.id}">
-                    <div class="bf-svc-info"><div class="bf-svc-name">${s.name}</div>${timeStr ? `<div class="bf-svc-time">${timeStr}</div>` : ''}</div>
-                    <div class="bf-svc-badges">${durBadge}${priceBadge}</div>
-                </div>`;
-            }).join('') : '<p>Keine Services verfügbar.</p>';
-            c.querySelectorAll('[data-svc-id]').forEach(el => el.onclick = () => selService(el.dataset.svcId));
+                const timeStr = s.booking_window_start && s.booking_window_end ? `${s.booking_window_start}-${s.booking_window_end} Uhr` : (s.service_type === 'overnight' ? 'Uebernachtung' : '');
+                row.type = 'button';
+                row.className = `bf-svc-item${isSel ? ' is-selected' : ''}`;
+                row.setAttribute('data-svc-id', s.id);
+                row.innerHTML = '<div class="bf-svc-info"><div class="bf-svc-name"></div><div class="bf-svc-time"></div></div><div class="bf-svc-badges"></div>';
+                row.querySelector('.bf-svc-name').textContent = s.name || '';
+                const timeEl = row.querySelector('.bf-svc-time');
+                if (timeStr) {
+                    timeEl.textContent = timeStr;
+                    timeEl.style.display = '';
+                } else {
+                    timeEl.style.display = 'none';
+                }
+                const badges = row.querySelector('.bf-svc-badges');
+                if (s.duration_minutes) {
+                    const dur = document.createElement('span');
+                    dur.className = 'bf-svc-badge';
+                    dur.innerHTML = `${SVG_CLOCK} ${s.duration_minutes >= 60 ? (s.duration_minutes / 60) : s.duration_minutes}${s.duration_minutes >= 60 ? '' : ' min'}`;
+                    badges.appendChild(dur);
+                }
+                const price = document.createElement('span');
+                price.className = 'bf-svc-badge';
+                price.textContent = `EUR${s.price}${s.service_type === 'overnight' ? '/N' : ' p.p'}`;
+                badges.appendChild(price);
+                row.onclick = () => selService(s.id);
+                appendGenerated(c, row);
+            });
         } else {
             c.innerHTML = svcs.length ? svcs.map(s => `<label class="bf-radio"><input type="radio" name="bf-service" value="${s.id}"${state.sel.service?.id === s.id ? ' checked' : ''}><span><strong>${s.name}</strong> — €${s.price}${s.duration_minutes ? ` · ${s.duration_minutes}min` : ''}${s.service_type === 'overnight' ? '/Nacht' : ''}</span></label>`).join('') : '<p>Keine Services verfügbar.</p>';
             c.querySelectorAll('input[name="bf-service"]').forEach(r => r.onchange = () => selService(r.value));
@@ -569,11 +620,29 @@
             const staffCard = root?.querySelector('[data-bf-card="staff"]');
             if (staffCard) staffCard.style.display = '';
             const isAny = state.sel.staff === null || state.sel.staff === undefined;
-            c.innerHTML = `<div class="bf-staff-chips">
-                <button type="button" class="bf-staff-chip${isAny ? ' is-selected' : ''}" data-staff-id="">Nächstverfügbaren</button>
-                ${staff.map(s => `<button type="button" class="bf-staff-chip${state.sel.staff === s.id ? ' is-selected' : ''}" data-staff-id="${s.id}">${s.name}</button>`).join('')}
-            </div>`;
-            c.querySelectorAll('[data-staff-id]').forEach(btn => btn.onclick = () => selStaff(btn.dataset.staffId || null));
+            clearGenerated(c);
+            showTemplate(c, 'staff-item', false);
+            showEmpty(c, 'staff', false);
+            const chips = document.createElement('div');
+            chips.className = 'bf-staff-chips';
+            chips.setAttribute('data-bf-generated', 'true');
+            const anyBtn = document.createElement('button');
+            anyBtn.type = 'button';
+            anyBtn.className = `bf-staff-chip${isAny ? ' is-selected' : ''}`;
+            anyBtn.setAttribute('data-staff-id', '');
+            anyBtn.textContent = 'Naechstverfuegbaren';
+            anyBtn.onclick = () => selStaff(null);
+            chips.appendChild(anyBtn);
+            staff.forEach(s => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `bf-staff-chip${state.sel.staff === s.id ? ' is-selected' : ''}`;
+                btn.setAttribute('data-staff-id', s.id);
+                btn.textContent = s.name;
+                btn.onclick = () => selStaff(s.id);
+                chips.appendChild(btn);
+            });
+            c.appendChild(chips);
             return;
         }
 
@@ -592,7 +661,15 @@
 
     const popCal = () => {
         const c = dyn('calendar');
-        if (!c || !state.sel.service || !state.sel.object) { if (c) c.innerHTML = ''; return; }
+        if (!c || !state.sel.service || !state.sel.object) {
+            if (c) {
+                clearGenerated(c);
+                showTemplate(c, 'calendar-header', true);
+                showTemplate(c, 'calendar-day', true);
+                showEmpty(c, 'calendar', false);
+            }
+            return;
+        }
         const { month } = state.cal;
         const y = month.getFullYear(), m = month.getMonth();
         const first = new Date(y, m, 1);
@@ -604,7 +681,13 @@
         const isON = state.sel.service?.service_type === 'overnight';
 
         if (isSplitMode()) {
-            c.innerHTML = `<div class="bf-split-cal-header">
+            clearGenerated(c);
+            showTemplate(c, 'calendar-header', false);
+            showTemplate(c, 'calendar-day', false);
+            showEmpty(c, 'calendar', false);
+            const wrap = document.createElement('div');
+            wrap.setAttribute('data-bf-generated', 'true');
+            wrap.innerHTML = `<div class="bf-split-cal-header">
                 <div class="bf-split-cal-title"><span class="bf-split-cal-title-month">${MONTHS[m]}</span><span class="bf-split-cal-title-year">${y}</span></div>
                 <button type="button" class="bf-split-cal-nav" data-nav="-1">${SVG_CHEVRON_LEFT}</button>
                 <button type="button" class="bf-split-cal-nav" data-nav="1">${SVG_CHEVRON_RIGHT}</button>
@@ -621,6 +704,7 @@
                 if (ds === today && !other) cls += ' is-today';
                 return `<button type="button" class="${cls}"${canClick ? ` data-d="${ds}"` : ''}${!canClick && !other ? ' disabled' : ''}>${d.getDate()}</button>`;
             }).join('')}</div>`;
+            c.appendChild(wrap);
         } else {
             c.innerHTML = `<div class="bf-cal"><div class="bf-cal-header"><button type="button" class="bf-cal-nav" data-nav="-1">‹ Zurück</button><span><strong>${MONTHS[m]} ${y}</strong></span><button type="button" class="bf-cal-nav" data-nav="1">Weiter ›</button></div><div class="bf-cal-grid"><div class="bf-cal-weekdays">${DAYS.map(d => `<span class="bf-cal-weekday">${d}</span>`).join('')}</div><div class="bf-cal-days">${days.map(d => {
                 const ds = fmtDate(d), other = d.getMonth() !== m, ok = bookable(d, state.sel.service, state.sel.object), bk = blocked.includes(ds);
@@ -649,13 +733,23 @@
         if (isSplitMode()) {
             const svc = state.sel.service;
             const isHourly = svc?.service_type === 'hourly';
-            if (!isHourly) { c.style.display = 'none'; return; }
+            if (!isHourly) {
+                c.style.display = 'none';
+                clearGenerated(c);
+                showTemplate(c, 'timeslot-item', true);
+                showEmpty(c, 'timeslots', false);
+                return;
+            }
             c.style.display = '';
-            let html = `<div class="bf-split-time"><div class="bf-split-time-title">Uhrzeit</div>`;
+            clearGenerated(c);
+            showTemplate(c, 'timeslot-item', false);
+            showEmpty(c, 'timeslots', false);
+            let html = `<div class="bf-split-time" data-bf-generated="true"><div class="bf-split-time-title">Uhrzeit</div>`;
             if (!state.sel.startDate) {
                 html += `<div class="bf-split-time-hint">Ich wähle zuerst das Datum aus, um einen passenden Zeitslot angezeigt zu bekommen.</div>`;
             } else if (!state.slots.length) {
                 html += `<div class="bf-split-time-desc">Keine freien Termine an diesem Tag.</div>`;
+                showEmpty(c, 'timeslots', true);
             } else {
                 html += `<div class="bf-split-time-desc">Wähle deine passende Uhrzeit aus.</div>`;
                 html += `<div class="bf-split-slots">`;
@@ -667,7 +761,10 @@
                 html += `</div>`;
             }
             html += `</div>`;
-            c.innerHTML = html;
+            const wrap = document.createElement('div');
+            wrap.setAttribute('data-bf-generated', 'true');
+            wrap.innerHTML = html;
+            c.appendChild(wrap);
             c.querySelectorAll('[data-time]').forEach(b => { if (!b.disabled) b.onclick = () => selTime(b.dataset.time); });
             return;
         }
@@ -794,9 +891,17 @@
         const adds = state.data.addons.filter(a => a.linked_service_ids?.includes(state.sel.service?.id));
         const gc = state.sel.guestCount;
         updateGuestCountUI();
+        clearGenerated(c);
+        showTemplate(c, 'addon-item', false);
+        showEmpty(c, 'addons', false);
 
         let html = '';
-        if (!adds.length) { c.innerHTML = '<p>Keine Extras.</p>'; bindGuestCount(c); return; }
+        if (!adds.length) {
+            showTemplate(c, 'addon-item', true);
+            showEmpty(c, 'addons', true);
+            bindGuestCount(c);
+            return;
+        }
 
         html += adds.map(a => {
             const sel = state.sel.addons.find(x => x.id === a.id);
@@ -875,7 +980,10 @@
             </div>`;
         }).join('');
 
-        c.innerHTML = html;
+        const wrap = document.createElement('div');
+        wrap.setAttribute('data-bf-generated', 'true');
+        wrap.innerHTML = html;
+        c.appendChild(wrap);
 
         // Bind guest count buttons
         bindGuestCount(c);
@@ -1369,18 +1477,37 @@
 
     // --- Event-Binding ---
     const bind = () => {
-        // Split-Screen: Card header clicks (re-expand done cards)
+        // Split-Screen: free accordion toggle
         $$('.bf-split-card-header').forEach(h => {
+            const card = h.closest('[data-bf-card]');
+            const name = card?.dataset?.bfCard;
+            const panel = card?.querySelector('.bf-split-card-body');
+            if (h.tagName !== 'BUTTON') {
+                h.setAttribute('role', 'button');
+                h.setAttribute('tabindex', '0');
+            }
+            if (name && panel) {
+                const panelId = panel.id || `bf-panel-${name}`;
+                panel.id = panelId;
+                h.setAttribute('aria-controls', panelId);
+                h.setAttribute('aria-expanded', card.classList.contains('is-open') ? 'true' : 'false');
+                panel.hidden = !card.classList.contains('is-open');
+            }
+            const toggle = () => {
+                if (!name) return;
+                toggleCard(name);
+                if (name === 'object') popObjects();
+                if (name === 'service') popServices();
+                if (name === 'staff') popStaff();
+                if (name === 'addon') popAddons();
+            };
             h.addEventListener('click', () => {
-                const card = h.closest('[data-bf-card]');
-                if (!card || card.classList.contains('is-disabled')) return;
-                const name = card.dataset.bfCard;
-                if (card.classList.contains('is-done')) {
-                    expandCard(name);
-                    if (name === 'object') popObjects();
-                    if (name === 'service') popServices();
-                    if (name === 'staff') popStaff();
-                    if (name === 'addon') popAddons();
+                toggle();
+            });
+            h.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggle();
                 }
             });
         });
@@ -1493,6 +1620,8 @@
             return;
         }
         state.data = d;
+        const workspaceNameEl = disp('workspace-name');
+        if (workspaceNameEl && state.data?.workspace_name) workspaceNameEl.textContent = state.data.workspace_name;
 
         // Fetch deeply nested addon items via separate RPC
         if (state.data.addons?.length) {
