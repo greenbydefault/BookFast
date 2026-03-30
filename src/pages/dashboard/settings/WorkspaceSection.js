@@ -933,26 +933,43 @@ const getWebflowTemplate = () => {
   defClass('bf-split-btn-next', 'display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; min-width: 2.875rem; min-height: 2.125rem; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; background-color: #7660f1; color: #f8f7fe; font-size: 1rem; font-weight: 500; cursor: pointer; text-decoration: none;');
 
   // --- Step 2 classes (summary/form) ---
-  defClass('bf-step', 'padding-top: 1.5rem; padding-bottom: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem;');
-  defClass('bf-step-title', 'font-size: 1.25rem; font-weight: 600; margin-bottom: 1.25rem; margin-top: 0;');
-  defClass('bf-grid-2', 'display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;');
-  defClass('bf-form-group', 'margin-bottom: 1rem;');
-  defClass('bf-form-label', 'display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.4rem;');
-  defClass('bf-input', 'width: 100%; padding-top: 0.6rem; padding-bottom: 0.6rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 1rem; box-sizing: border-box;');
-  defClass('bf-row-2', 'display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;');
-  defClass('bf-label', 'display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem;');
-  defClass('bf-voucher-row', 'display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; margin-bottom: 0.5rem;');
-  defClass('bf-voucher-input', 'flex-grow: 1; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d1d5db; border-bottom-color: #d1d5db; border-left-color: #d1d5db; border-right-color: #d1d5db; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-size: 0.95rem;');
-  defClass('bf-btn-voucher', 'display: inline-block; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 1rem; padding-right: 1rem; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-left-radius: 0.375rem; border-bottom-right-radius: 0.375rem; font-weight: 500; font-size: 0.9rem; text-decoration: none; cursor: pointer; background-color: #f4f4f5; color: #18181b;');
-  defClass('bf-summary-row', 'display: flex; justify-content: space-between; padding-top: 0.35rem; padding-bottom: 0.35rem;');
-  defClass('bf-summary-label', 'color: #71717a; font-size: 0.9rem;');
-  defClass('bf-summary-value', 'font-weight: 500; font-size: 0.9rem; text-align: right;');
-  defClass('bf-summary-divider', 'height: 0.0625rem; background-color: #e5e7eb; margin-top: 0.75rem; margin-bottom: 0.75rem;');
-  defClass('bf-total-display', 'margin-top: 0.75rem; font-size: 1.1rem; font-weight: 600;');
-  defClass('bf-submit', 'width: 100%; padding-top: 0.75rem; padding-bottom: 0.75rem; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; font-weight: 600; font-size: 1rem; cursor: pointer; background-color: #7660f1; color: #f8f7fe; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; margin-top: 1rem;');
+  defClass('bf-step', 'padding-top: 0; padding-bottom: 0; padding-left: 0; padding-right: 0;');
+  defClass('bf-step2-layout', 'display: flex; min-height: 37.5rem;');
+  defClass('bf-step2-left', 'flex-grow: 1; flex-basis: 50%; border-right-width: 0.0625rem; border-right-style: solid; border-right-color: #e7e5e4; display: flex; flex-direction: column;');
+  defClass('bf-step2-right', 'flex-grow: 1; flex-basis: 50%; display: flex; flex-direction: column;');
+  defClass('bf-step2-header', 'display: flex; align-items: center; justify-content: space-between; border-bottom-width: 0.0625rem; border-bottom-style: solid; border-bottom-color: #e7e5e4; padding-top: 1.5rem; padding-bottom: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem;');
+  defClass('bf-step-title', 'font-size: 1.25rem; font-weight: 400; color: #12111f; line-height: 1; margin-top: 0; margin-bottom: 0;');
+  defClass('bf-step-counter', 'font-size: 1rem; font-weight: 500; color: #717079; line-height: 1.2;');
+  defClass('bf-step2-form', 'padding-top: 1.5rem; padding-bottom: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; display: flex; flex-direction: column; gap: 2rem;');
+  defClass('bf-grid-2', 'display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;');
+  defClass('bf-form-group', 'display: flex; flex-direction: column; gap: 0.75rem;');
+  defClass('bf-form-label', 'display: block; font-size: 1rem; font-weight: 500; line-height: 1.2; color: #12111f;');
+  defClass('bf-input', 'width: 100%; min-height: 3rem; padding-top: 1.125rem; padding-bottom: 1.125rem; padding-left: 1rem; padding-right: 1rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-color: #e7e5e4; border-bottom-color: #e7e5e4; border-left-color: #e7e5e4; border-right-color: #e7e5e4; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; box-sizing: border-box; font-size: 1rem; color: #12111f;');
+  defClass('bf-row-2', 'display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;');
+  defClass('bf-step2-section', 'border-top-width: 0.0625rem; border-top-style: solid; border-top-color: #e7e5e4;');
+  defClass('bf-step2-voucher-wrap', 'padding-top: 1.5rem; padding-bottom: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;');
+  defClass('bf-label', 'display: block; font-size: 1.125rem; font-weight: 400; color: #12111f; line-height: 1.2; margin-top: 0; margin-bottom: 0;');
+  defClass('bf-voucher-help', 'font-size: 1rem; color: #717079; line-height: 1.2; margin-top: 0; margin-bottom: 0;');
+  defClass('bf-voucher-row', 'display: flex; align-items: stretch; gap: 0.75rem;');
+  defClass('bf-voucher-input', 'flex-grow: 1; min-height: 3rem; padding-top: 1rem; padding-bottom: 1rem; padding-left: 1rem; padding-right: 1rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #e7e5e4; border-bottom-color: #e7e5e4; border-left-color: #e7e5e4; border-right-color: #e7e5e4; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; font-size: 1rem;');
+  defClass('bf-btn-voucher', 'display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding-top: 0.75rem; padding-bottom: 0.75rem; padding-left: 1rem; padding-right: 1rem; border-top-width: 0.0625rem; border-bottom-width: 0.0625rem; border-left-width: 0.0625rem; border-right-width: 0.0625rem; border-top-color: #d6d3d1; border-bottom-color: #d6d3d1; border-left-color: #d6d3d1; border-right-color: #d6d3d1; border-top-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; background-color: #fff; color: #12111f; font-size: 1rem; text-decoration: none; cursor: pointer;');
+  defClass('bf-voucher-status-box', 'display: none; background-color: #f8f7fe; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; border-bottom-left-radius: 0.75rem; border-bottom-right-radius: 0.75rem; padding-top: 1rem; padding-bottom: 1rem; padding-left: 1rem; padding-right: 1rem;');
+  defClass('bf-summary-column', 'display: flex; flex-direction: column;');
+  defClass('bf-step2-summary-wrap', 'padding-top: 1.5rem; padding-bottom: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem;');
   defClass('bf-form-column', '');
-  defClass('bf-summary-column', '');
-  defClass('bf-price-rows', '');
+  defClass('bf-summary-details', 'display: flex; flex-direction: column; gap: 1.5rem;');
+  defClass('bf-summary-row', 'display: flex; justify-content: space-between; align-items: center; padding-top: 0.5rem; padding-bottom: 0.5rem;');
+  defClass('bf-summary-label', 'color: #12111f; font-size: 1rem; font-weight: 400; line-height: 1.2;');
+  defClass('bf-summary-value', 'font-size: 1rem; font-weight: 400; color: #78716c; text-align: right; line-height: 1.2;');
+  defClass('bf-summary-divider', 'height: 0.0625rem; background-color: #e7e5e4;');
+  defClass('bf-price-rows', 'display: flex; flex-direction: column; gap: 1.5rem;');
+  defClass('bf-summary-row-muted', 'display: flex; justify-content: space-between; align-items: center; padding-top: 0.25rem; padding-bottom: 0.25rem;');
+  defClass('bf-summary-label-muted', 'color: #717079; font-size: 1rem; font-weight: 400; line-height: 1.2;');
+  defClass('bf-summary-value-muted', 'color: #717079; font-size: 1rem; font-weight: 400; line-height: 1.2; text-align: right;');
+  defClass('bf-total-display', 'display: flex; justify-content: space-between; align-items: center; font-size: 1rem; margin-top: 0;');
+  defClass('bf-total-label', 'color: #12111f; font-weight: 400;');
+  defClass('bf-total-value', 'color: #717079; font-weight: 400;');
+  defClass('bf-submit', 'display: inline-flex; align-items: center; justify-content: center; min-height: 2.125rem; padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; border-top-width: 0; border-bottom-width: 0; border-left-width: 0; border-right-width: 0; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; font-size: 1rem; font-weight: 500; cursor: pointer; background-color: #7660f1; color: #f8f7fe;');
 
   // Guest count
   defClass('bf-guest-count', 'margin-bottom: 0.75rem;');
@@ -1020,31 +1037,36 @@ const getWebflowTemplate = () => {
     // Footer Step 1
     footer1: mongoId(), footer1Next: mongoId(), footer1NextText: mongoId(),
     // Step 2: Summary/Details
-    step2: mongoId(), step2Title: mongoId(), step2TitleText: mongoId(),
-    summaryContainer: mongoId(), summaryGrid: mongoId(),
+    step2: mongoId(), step2Layout: mongoId(),
+    step2Left: mongoId(), step2LeftHeader: mongoId(), step2Title: mongoId(), step2TitleText: mongoId(), step2Counter: mongoId(), step2CounterText: mongoId(),
+    step2FormWrap: mongoId(), summaryContainer: mongoId(), summaryGrid: mongoId(),
     formColumn: mongoId(), formColumnTitle: mongoId(), formColumnTitleText: mongoId(),
     fnameGroup: mongoId(), fnameLabel: mongoId(), fnameLabelText: mongoId(), fnameInput: mongoId(),
     lnameGroup: mongoId(), lnameLabel: mongoId(), lnameLabelText: mongoId(), lnameInput: mongoId(),
     emailGroup: mongoId(), emailLabel: mongoId(), emailLabelText: mongoId(), emailInput: mongoId(),
     phoneGroup: mongoId(), phoneLabel: mongoId(), phoneLabelText: mongoId(), phoneInput: mongoId(),
-    addressGroup: mongoId(), addressLabel: mongoId(), addressLabelText: mongoId(), addressInput: mongoId(),
+    streetHouseRow: mongoId(), streetGroup: mongoId(), streetLabel: mongoId(), streetLabelText: mongoId(), streetInput: mongoId(),
+    houseGroup: mongoId(), houseLabel: mongoId(), houseLabelText: mongoId(), houseInput: mongoId(),
     zipCityRow: mongoId(), zipGroup: mongoId(), zipLabel: mongoId(), zipLabelText: mongoId(), zipInput: mongoId(),
     cityGroup: mongoId(), cityLabel: mongoId(), cityLabelText: mongoId(), cityInput: mongoId(),
-    summaryColumn: mongoId(), summaryColumnTitle: mongoId(), summaryColumnTitleText: mongoId(),
-    summaryDetails: mongoId(), summaryDivider: mongoId(), summaryPrices: mongoId(),
+    voucherSection: mongoId(), voucherHeader: mongoId(), voucherLabel: mongoId(), voucherLabelText: mongoId(), voucherHelp: mongoId(), voucherHelpText: mongoId(),
+    voucherRow: mongoId(), voucherInputRow: mongoId(), voucherInput: mongoId(), voucherBtn: mongoId(), voucherBtnText: mongoId(), voucherStatus: mongoId(),
+    voucherValid: mongoId(), voucherValidText: mongoId(), voucherInvalid: mongoId(), voucherInvalidText: mongoId(), voucherChecking: mongoId(), voucherCheckingText: mongoId(),
+    step2Right: mongoId(), summaryColumn: mongoId(), summaryColumnHeader: mongoId(), summaryColumnTitle: mongoId(), summaryColumnTitleText: mongoId(),
+    summaryDetailsWrap: mongoId(), summaryDetails: mongoId(), summaryDivider: mongoId(), summaryPrices: mongoId(),
     sumRowObject: mongoId(), sumRowObjectLabel: mongoId(), sumRowObjectLabelText: mongoId(), sumRowObjectValue: mongoId(),
     sumRowService: mongoId(), sumRowServiceLabel: mongoId(), sumRowServiceLabelText: mongoId(), sumRowServiceValue: mongoId(),
+    sumRowAddon: mongoId(), sumRowAddonLabel: mongoId(), sumRowAddonLabelText: mongoId(), sumRowAddonValue: mongoId(),
     sumRowStaff: mongoId(), sumRowStaffLabel: mongoId(), sumRowStaffLabelText: mongoId(), sumRowStaffValue: mongoId(),
     sumRowGuests: mongoId(), sumRowGuestsLabel: mongoId(), sumRowGuestsLabelText: mongoId(), sumRowGuestsValue: mongoId(),
     sumRowDate: mongoId(), sumRowDateLabel: mongoId(), sumRowDateLabelText: mongoId(), sumRowDateValue: mongoId(),
     sumRowTime: mongoId(), sumRowTimeLabel: mongoId(), sumRowTimeLabelText: mongoId(), sumRowTimeValue: mongoId(),
-    priceRows: mongoId(),
+    priceRows: mongoId(), sumRowSubtotal: mongoId(), sumRowSubtotalLabel: mongoId(), sumRowSubtotalLabelText: mongoId(), sumRowSubtotalValue: mongoId(),
+    sumRowDiscount: mongoId(), sumRowDiscountLabel: mongoId(), sumRowDiscountLabelText: mongoId(), sumRowDiscountValue: mongoId(),
+    sumRowTax: mongoId(), sumRowTaxLabel: mongoId(), sumRowTaxLabelText: mongoId(), sumRowTaxValue: mongoId(),
     sumRowTotal: mongoId(), sumRowTotalLabel: mongoId(), sumRowTotalLabelText: mongoId(), sumRowTotalValue: mongoId(),
-    voucherLabel: mongoId(), voucherLabelText: mongoId(), voucherRow: mongoId(), voucherInput: mongoId(),
-    voucherBtn: mongoId(), voucherBtnText: mongoId(), voucherStatus: mongoId(),
-    voucherValid: mongoId(), voucherValidText: mongoId(), voucherInvalid: mongoId(), voucherInvalidText: mongoId(),
-    voucherChecking: mongoId(), voucherCheckingText: mongoId(),
-    totalDisplay: mongoId(), submitBtn: mongoId(),
+    totalDisplay: mongoId(), totalLabel: mongoId(), totalLabelText: mongoId(), totalValue: mongoId(),
+    submitBtn: mongoId(),
     footer2: mongoId(), footer2Back: mongoId(), footer2BackText: mongoId(),
     // Success
     stepSuccess: mongoId(), successIcon: mongoId(), successIconText: mongoId(),
@@ -1220,47 +1242,74 @@ const getWebflowTemplate = () => {
     { "_id": ids.footer1NextText, "text": true, "v": "Weiter" },
 
     // ===== STEP 2: Summary + Form =====
-    { "_id": ids.step2, "tag": "div", "classes": c('bf-step'), "children": [ids.step2Title, ids.summaryContainer, ids.voucherLabel, ids.voucherRow, ids.voucherStatus, ids.totalDisplay, ids.submitBtn, ids.footer2], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "2", "aria-label": "Zusammenfassung" } } },
+    { "_id": ids.step2, "tag": "div", "classes": c('bf-step'), "children": [ids.step2Layout, ids.footer2], "type": "Block", "data": { "tag": "section", "attr": { "data-bf-step": "2", "aria-label": "Zusammenfassung" } } },
+    { "_id": ids.step2Layout, "tag": "div", "classes": c('bf-step2-layout'), "children": [ids.step2Left, ids.step2Right], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.step2Left, "tag": "div", "classes": c('bf-step2-left'), "children": [ids.step2LeftHeader, ids.step2FormWrap, ids.voucherSection], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.step2LeftHeader, "tag": "div", "classes": c('bf-step2-header'), "children": [ids.step2Title, ids.step2Counter], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.step2Title, "tag": "h2", "classes": c('bf-step-title'), "children": [ids.step2TitleText], "type": "Heading", "data": { "tag": "h2" } },
-    { "_id": ids.step2TitleText, "text": true, "v": "Zusammenfassung" },
+    { "_id": ids.step2TitleText, "text": true, "v": "Persönliche Angaben" },
+    { "_id": ids.step2Counter, "tag": "p", "classes": c('bf-step-counter'), "children": [ids.step2CounterText], "type": "Paragraph", "data": { "tag": "p" } },
+    { "_id": ids.step2CounterText, "text": true, "v": "Schritt 2/2" },
+    { "_id": ids.step2FormWrap, "tag": "div", "classes": c('bf-step2-form'), "children": [ids.summaryContainer], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.summaryContainer, "tag": "div", "classes": c('bf-dynamic-area'), "children": [ids.summaryGrid], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary" } } },
-    { "_id": ids.summaryGrid, "tag": "div", "classes": c('bf-grid-2'), "children": [ids.formColumn, ids.summaryColumn], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "summary-grid" } } },
-    { "_id": ids.formColumn, "tag": "div", "classes": c('bf-form-column'), "children": [ids.formColumnTitle, ids.fnameGroup, ids.lnameGroup, ids.emailGroup, ids.phoneGroup, ids.addressGroup, ids.zipCityRow], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.formColumnTitle, "tag": "h3", "classes": [], "children": [ids.formColumnTitleText], "type": "Heading", "data": { "tag": "h3" } },
-    { "_id": ids.formColumnTitleText, "text": true, "v": "Ihre Daten" },
+    { "_id": ids.summaryGrid, "tag": "div", "classes": c('bf-grid-2'), "children": [ids.fnameGroup, ids.lnameGroup, ids.emailGroup, ids.phoneGroup, ids.streetGroup, ids.houseGroup, ids.zipGroup, ids.cityGroup], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-static": "summary-grid" } } },
     { "_id": ids.fnameGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.fnameLabel, ids.fnameInput], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.fnameLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.fnameLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-fname" } } },
-    { "_id": ids.fnameLabelText, "text": true, "v": "Vorname *" },
+    { "_id": ids.fnameLabelText, "text": true, "v": "Vorname" },
     { "_id": ids.fnameInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "fname" }, "attr": { "type": "text", "id": "bf-fname", "name": "fname", "placeholder": "Max", "data-bf-bind": "fname" } } },
     { "_id": ids.lnameGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.lnameLabel, ids.lnameInput], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.lnameLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.lnameLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-lname" } } },
-    { "_id": ids.lnameLabelText, "text": true, "v": "Nachname *" },
+    { "_id": ids.lnameLabelText, "text": true, "v": "Nachname" },
     { "_id": ids.lnameInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "lname" }, "attr": { "type": "text", "id": "bf-lname", "name": "lname", "placeholder": "Mustermann", "data-bf-bind": "lname" } } },
     { "_id": ids.emailGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.emailLabel, ids.emailInput], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.emailLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.emailLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-email" } } },
-    { "_id": ids.emailLabelText, "text": true, "v": "E-Mail Adresse *" },
+    { "_id": ids.emailLabelText, "text": true, "v": "E-Mail Adresse" },
     { "_id": ids.emailInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "email" }, "attr": { "type": "email", "id": "bf-email", "name": "email", "placeholder": "max@beispiel.de", "data-bf-bind": "email" } } },
     { "_id": ids.phoneGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.phoneLabel, ids.phoneInput], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.phoneLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.phoneLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-phone" } } },
     { "_id": ids.phoneLabelText, "text": true, "v": "Telefonnummer" },
-    { "_id": ids.phoneInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "phone" }, "attr": { "type": "tel", "id": "bf-phone", "name": "phone", "placeholder": "+49 123 456789", "data-bf-bind": "phone" } } },
-    { "_id": ids.addressGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.addressLabel, ids.addressInput], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.addressLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.addressLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-address" } } },
-    { "_id": ids.addressLabelText, "text": true, "v": "Adresse *" },
-    { "_id": ids.addressInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "address" }, "attr": { "type": "text", "id": "bf-address", "name": "address", "placeholder": "Musterstraße 1", "data-bf-bind": "address" } } },
-    { "_id": ids.zipCityRow, "tag": "div", "classes": c('bf-row-2'), "children": [ids.zipGroup, ids.cityGroup], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.phoneInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "phone" }, "attr": { "type": "tel", "id": "bf-phone", "name": "phone", "placeholder": "+49 123 59492354", "data-bf-bind": "phone" } } },
+    { "_id": ids.streetGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.streetLabel, ids.streetInput], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.streetLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.streetLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-street" } } },
+    { "_id": ids.streetLabelText, "text": true, "v": "Straße" },
+    { "_id": ids.streetInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "street" }, "attr": { "type": "text", "id": "bf-street", "name": "street", "placeholder": "Musterstraße", "data-bf-bind": "street" } } },
+    { "_id": ids.houseGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.houseLabel, ids.houseInput], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.houseLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.houseLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-house" } } },
+    { "_id": ids.houseLabelText, "text": true, "v": "Hausnummer" },
+    { "_id": ids.houseInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "houseNumber" }, "attr": { "type": "text", "id": "bf-house", "name": "houseNumber", "placeholder": "74", "data-bf-bind": "houseNumber" } } },
     { "_id": ids.zipGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.zipLabel, ids.zipInput], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.zipLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.zipLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-zip" } } },
-    { "_id": ids.zipLabelText, "text": true, "v": "PLZ *" },
+    { "_id": ids.zipLabelText, "text": true, "v": "PLZ" },
     { "_id": ids.zipInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "zip" }, "attr": { "type": "text", "id": "bf-zip", "name": "zip", "placeholder": "12345", "data-bf-bind": "zip" } } },
     { "_id": ids.cityGroup, "tag": "div", "classes": c('bf-form-group'), "children": [ids.cityLabel, ids.cityInput], "type": "Block", "data": { "tag": "div" } },
     { "_id": ids.cityLabel, "tag": "label", "classes": c('bf-form-label'), "children": [ids.cityLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "bf-city" } } },
-    { "_id": ids.cityLabelText, "text": true, "v": "Stadt *" },
+    { "_id": ids.cityLabelText, "text": true, "v": "Stadt" },
     { "_id": ids.cityInput, "tag": "input", "classes": c('bf-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "city" }, "attr": { "type": "text", "id": "bf-city", "name": "city", "placeholder": "Berlin", "data-bf-bind": "city" } } },
-    { "_id": ids.summaryColumn, "tag": "div", "classes": c('bf-summary-column'), "children": [ids.summaryColumnTitle, ids.summaryDetails, ids.summaryDivider, ids.summaryPrices], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.summaryColumnTitle, "tag": "h3", "classes": [], "children": [ids.summaryColumnTitleText], "type": "Heading", "data": { "tag": "h3" } },
-    { "_id": ids.summaryColumnTitleText, "text": true, "v": "Zusammenfassung" },
-    { "_id": ids.summaryDetails, "tag": "div", "classes": [], "children": [ids.sumRowObject, ids.sumRowService, ids.sumRowStaff, ids.sumRowGuests, ids.sumRowDate, ids.sumRowTime], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary-details" } } },
+    { "_id": ids.voucherSection, "tag": "div", "classes": c('bf-step2-section'), "children": [ids.voucherHeader, ids.voucherRow], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.voucherHeader, "tag": "div", "classes": c('bf-step2-voucher-wrap'), "children": [ids.voucherLabel, ids.voucherHelp], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.voucherLabel, "tag": "p", "classes": c('bf-label'), "children": [ids.voucherLabelText], "type": "Paragraph", "data": { "tag": "p" } },
+    { "_id": ids.voucherLabelText, "text": true, "v": "Gutschein" },
+    { "_id": ids.voucherHelp, "tag": "p", "classes": c('bf-voucher-help'), "children": [ids.voucherHelpText], "type": "Paragraph", "data": { "tag": "p" } },
+    { "_id": ids.voucherHelpText, "text": true, "v": "Wähle deine passende Uhrzeit aus." },
+    { "_id": ids.voucherRow, "tag": "div", "classes": c('bf-step2-voucher-wrap'), "children": [ids.voucherInputRow, ids.voucherStatus], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.voucherInputRow, "tag": "div", "classes": c('bf-voucher-row'), "children": [ids.voucherInput, ids.voucherBtn], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.voucherInput, "tag": "input", "classes": c('bf-voucher-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "voucher" }, "attr": { "type": "text", "name": "voucher", "placeholder": "BookFast15", "id": "voucher", "data-bf-field": "voucher" } } },
+    { "_id": ids.voucherBtn, "tag": "a", "classes": c('bf-btn-voucher'), "children": [ids.voucherBtnText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "apply-voucher" } } },
+    { "_id": ids.voucherBtnText, "text": true, "v": "Einlösen" },
+    { "_id": ids.voucherStatus, "tag": "div", "classes": c('bf-voucher-status-box'), "children": [ids.voucherValid, ids.voucherInvalid, ids.voucherChecking], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-display": "voucher-status" } } },
+    { "_id": ids.voucherValid, "tag": "p", "classes": [], "children": [ids.voucherValidText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-voucher": "valid", "style": "display: none;" } } },
+    { "_id": ids.voucherValidText, "text": true, "v": "Dein Gutschein wurde erfolgreich angewendet" },
+    { "_id": ids.voucherInvalid, "tag": "p", "classes": [], "children": [ids.voucherInvalidText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-voucher": "invalid", "style": "display: none;" } } },
+    { "_id": ids.voucherInvalidText, "text": true, "v": "Ungültiger Code" },
+    { "_id": ids.voucherChecking, "tag": "p", "classes": [], "children": [ids.voucherCheckingText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-voucher": "checking", "style": "display: none;" } } },
+    { "_id": ids.voucherCheckingText, "text": true, "v": "Wird geprüft..." },
+    { "_id": ids.step2Right, "tag": "div", "classes": c('bf-step2-right'), "children": [ids.summaryColumn], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.summaryColumn, "tag": "div", "classes": c('bf-summary-column'), "children": [ids.summaryColumnHeader, ids.summaryDetailsWrap], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.summaryColumnHeader, "tag": "div", "classes": c('bf-step2-header'), "children": [ids.summaryColumnTitle], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.summaryColumnTitle, "tag": "h3", "classes": c('bf-step-title'), "children": [ids.summaryColumnTitleText], "type": "Heading", "data": { "tag": "h3" } },
+    { "_id": ids.summaryColumnTitleText, "text": true, "v": "Deine Buchungsübersicht" },
+    { "_id": ids.summaryDetailsWrap, "tag": "div", "classes": c('bf-step2-section'), "children": [ids.summaryDetails, ids.summaryDivider, ids.summaryPrices, ids.totalDisplay], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.summaryDetails, "tag": "div", "classes": c('bf-step2-summary-wrap').concat(c('bf-summary-details')), "children": [ids.sumRowObject, ids.sumRowService, ids.sumRowAddon, ids.sumRowStaff, ids.sumRowGuests, ids.sumRowDate, ids.sumRowTime], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary-details" } } },
     { "_id": ids.sumRowObject, "tag": "div", "classes": c('bf-summary-row'), "children": [ids.sumRowObjectLabel, ids.sumRowObjectValue], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-summary": "object" } } },
     { "_id": ids.sumRowObjectLabel, "tag": "span", "classes": c('bf-summary-label'), "children": [ids.sumRowObjectLabelText], "type": "Block", "data": { "tag": "span" } },
     { "_id": ids.sumRowObjectLabelText, "text": true, "v": "Objekt" },
@@ -1269,45 +1318,48 @@ const getWebflowTemplate = () => {
     { "_id": ids.sumRowServiceLabel, "tag": "span", "classes": c('bf-summary-label'), "children": [ids.sumRowServiceLabelText], "type": "Block", "data": { "tag": "span" } },
     { "_id": ids.sumRowServiceLabelText, "text": true, "v": "Service" },
     { "_id": ids.sumRowServiceValue, "tag": "span", "classes": c('bf-summary-value'), "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-service" } } },
-    { "_id": ids.sumRowStaff, "tag": "div", "classes": c('bf-summary-row'), "children": [ids.sumRowStaffLabel, ids.sumRowStaffValue], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-summary": "staff", "style": "display: none;" } } },
+    { "_id": ids.sumRowAddon, "tag": "div", "classes": c('bf-summary-row'), "children": [ids.sumRowAddonLabel, ids.sumRowAddonValue], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-summary": "addon" } } },
+    { "_id": ids.sumRowAddonLabel, "tag": "span", "classes": c('bf-summary-label'), "children": [ids.sumRowAddonLabelText], "type": "Block", "data": { "tag": "span" } },
+    { "_id": ids.sumRowAddonLabelText, "text": true, "v": "Addon" },
+    { "_id": ids.sumRowAddonValue, "tag": "span", "classes": c('bf-summary-value'), "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-addon" } } },
+    { "_id": ids.sumRowStaff, "tag": "div", "classes": c('bf-summary-row'), "children": [ids.sumRowStaffLabel, ids.sumRowStaffValue], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-summary": "staff" } } },
     { "_id": ids.sumRowStaffLabel, "tag": "span", "classes": c('bf-summary-label'), "children": [ids.sumRowStaffLabelText], "type": "Block", "data": { "tag": "span" } },
     { "_id": ids.sumRowStaffLabelText, "text": true, "v": "Mitarbeiter" },
     { "_id": ids.sumRowStaffValue, "tag": "span", "classes": c('bf-summary-value'), "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-staff" } } },
     { "_id": ids.sumRowGuests, "tag": "div", "classes": c('bf-summary-row'), "children": [ids.sumRowGuestsLabel, ids.sumRowGuestsValue], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-summary": "guests" } } },
     { "_id": ids.sumRowGuestsLabel, "tag": "span", "classes": c('bf-summary-label'), "children": [ids.sumRowGuestsLabelText], "type": "Block", "data": { "tag": "span" } },
-    { "_id": ids.sumRowGuestsLabelText, "text": true, "v": "Anzahl Gäste" },
+    { "_id": ids.sumRowGuestsLabelText, "text": true, "v": "Anzahl der Gäste" },
     { "_id": ids.sumRowGuestsValue, "tag": "span", "classes": c('bf-summary-value'), "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-guests" } } },
     { "_id": ids.sumRowDate, "tag": "div", "classes": c('bf-summary-row'), "children": [ids.sumRowDateLabel, ids.sumRowDateValue], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-summary": "date" } } },
     { "_id": ids.sumRowDateLabel, "tag": "span", "classes": c('bf-summary-label'), "children": [ids.sumRowDateLabelText], "type": "Block", "data": { "tag": "span" } },
     { "_id": ids.sumRowDateLabelText, "text": true, "v": "Datum" },
     { "_id": ids.sumRowDateValue, "tag": "span", "classes": c('bf-summary-value'), "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-date" } } },
-    { "_id": ids.sumRowTime, "tag": "div", "classes": c('bf-summary-row'), "children": [ids.sumRowTimeLabel, ids.sumRowTimeValue], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-summary": "time", "style": "display: none;" } } },
+    { "_id": ids.sumRowTime, "tag": "div", "classes": c('bf-summary-row'), "children": [ids.sumRowTimeLabel, ids.sumRowTimeValue], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-summary": "time" } } },
     { "_id": ids.sumRowTimeLabel, "tag": "span", "classes": c('bf-summary-label'), "children": [ids.sumRowTimeLabelText], "type": "Block", "data": { "tag": "span" } },
     { "_id": ids.sumRowTimeLabelText, "text": true, "v": "Uhrzeit" },
     { "_id": ids.sumRowTimeValue, "tag": "span", "classes": c('bf-summary-value'), "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-time" } } },
     { "_id": ids.summaryDivider, "tag": "div", "classes": c('bf-summary-divider'), "children": [], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.summaryPrices, "tag": "div", "classes": [], "children": [ids.priceRows, ids.sumRowTotal], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary-prices" } } },
-    { "_id": ids.priceRows, "tag": "div", "classes": c('bf-price-rows'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "price-rows" } } },
-    { "_id": ids.sumRowTotal, "tag": "div", "classes": c('bf-summary-row'), "children": [ids.sumRowTotalLabel, ids.sumRowTotalValue], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-summary": "total" } } },
-    { "_id": ids.sumRowTotalLabel, "tag": "span", "classes": c('bf-summary-label'), "children": [ids.sumRowTotalLabelText], "type": "Block", "data": { "tag": "span" } },
-    { "_id": ids.sumRowTotalLabelText, "text": true, "v": "Gesamt" },
-    { "_id": ids.sumRowTotalValue, "tag": "span", "classes": c('bf-summary-value'), "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-total" } } },
-    { "_id": ids.voucherLabel, "tag": "label", "classes": c('bf-label'), "children": [ids.voucherLabelText], "type": "FormBlockLabel", "data": { "form": { "type": "label" }, "attr": { "for": "voucher" } } },
-    { "_id": ids.voucherLabelText, "text": true, "v": "Gutscheincode" },
-    { "_id": ids.voucherRow, "tag": "div", "classes": c('bf-voucher-row'), "children": [ids.voucherInput, ids.voucherBtn], "type": "Block", "data": { "tag": "div" } },
-    { "_id": ids.voucherInput, "tag": "input", "classes": c('bf-voucher-input'), "children": [], "type": "FormTextInput", "data": { "form": { "type": "input", "name": "voucher" }, "attr": { "type": "text", "name": "voucher", "placeholder": "Code eingeben", "id": "voucher", "data-bf-field": "voucher" } } },
-    { "_id": ids.voucherBtn, "tag": "a", "classes": c('bf-btn-voucher'), "children": [ids.voucherBtnText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "apply-voucher" } } },
-    { "_id": ids.voucherBtnText, "text": true, "v": "Einlösen" },
-    { "_id": ids.voucherStatus, "tag": "div", "classes": [], "children": [ids.voucherValid, ids.voucherInvalid, ids.voucherChecking], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-display": "voucher-status" } } },
-    { "_id": ids.voucherValid, "tag": "p", "classes": [], "children": [ids.voucherValidText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-voucher": "valid", "style": "display: none;" } } },
-    { "_id": ids.voucherValidText, "text": true, "v": "Gutschein eingelöst" },
-    { "_id": ids.voucherInvalid, "tag": "p", "classes": [], "children": [ids.voucherInvalidText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-voucher": "invalid", "style": "display: none;" } } },
-    { "_id": ids.voucherInvalidText, "text": true, "v": "Ungültiger Code" },
-    { "_id": ids.voucherChecking, "tag": "p", "classes": [], "children": [ids.voucherCheckingText], "type": "Paragraph", "data": { "tag": "p", "attr": { "data-bf-voucher": "checking", "style": "display: none;" } } },
-    { "_id": ids.voucherCheckingText, "text": true, "v": "Wird geprüft..." },
-    { "_id": ids.totalDisplay, "tag": "div", "classes": c('bf-total-display'), "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-display": "total" } } },
+    { "_id": ids.summaryPrices, "tag": "div", "classes": c('bf-step2-summary-wrap').concat(c('bf-price-rows')), "children": [ids.sumRowSubtotal, ids.sumRowDiscount, ids.sumRowTax, ids.priceRows], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "summary-prices" } } },
+    { "_id": ids.sumRowSubtotal, "tag": "div", "classes": c('bf-summary-row-muted'), "children": [ids.sumRowSubtotalLabel, ids.sumRowSubtotalValue], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.sumRowSubtotalLabel, "tag": "span", "classes": c('bf-summary-label-muted'), "children": [ids.sumRowSubtotalLabelText], "type": "Block", "data": { "tag": "span" } },
+    { "_id": ids.sumRowSubtotalLabelText, "text": true, "v": "Subtotel" },
+    { "_id": ids.sumRowSubtotalValue, "tag": "span", "classes": c('bf-summary-value-muted'), "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-subtotal" } } },
+    { "_id": ids.sumRowDiscount, "tag": "div", "classes": c('bf-summary-row-muted'), "children": [ids.sumRowDiscountLabel, ids.sumRowDiscountValue], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.sumRowDiscountLabel, "tag": "span", "classes": c('bf-summary-label-muted'), "children": [ids.sumRowDiscountLabelText], "type": "Block", "data": { "tag": "span" } },
+    { "_id": ids.sumRowDiscountLabelText, "text": true, "v": "Discount" },
+    { "_id": ids.sumRowDiscountValue, "tag": "span", "classes": c('bf-summary-value-muted'), "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-discount" } } },
+    { "_id": ids.sumRowTax, "tag": "div", "classes": c('bf-summary-row-muted'), "children": [ids.sumRowTaxLabel, ids.sumRowTaxValue], "type": "Block", "data": { "tag": "div" } },
+    { "_id": ids.sumRowTaxLabel, "tag": "span", "classes": c('bf-summary-label-muted'), "children": [ids.sumRowTaxLabelText], "type": "Block", "data": { "tag": "span" } },
+    { "_id": ids.sumRowTaxLabelText, "text": true, "v": "Steuer 19 %" },
+    { "_id": ids.sumRowTaxValue, "tag": "span", "classes": c('bf-summary-value-muted'), "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-tax" } } },
+    { "_id": ids.priceRows, "tag": "div", "classes": [], "children": [], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-dynamic": "price-rows", "style": "display: none;" } } },
+    { "_id": ids.totalDisplay, "tag": "div", "classes": c('bf-step2-summary-wrap').concat(c('bf-total-display')), "children": [ids.totalLabel, ids.totalValue], "type": "Block", "data": { "tag": "div", "attr": { "data-bf-summary": "total" } } },
+    { "_id": ids.totalLabel, "tag": "span", "classes": c('bf-total-label'), "children": [ids.totalLabelText], "type": "Block", "data": { "tag": "span" } },
+    { "_id": ids.totalLabelText, "text": true, "v": "Gesamtpreis" },
+    { "_id": ids.totalValue, "tag": "span", "classes": c('bf-total-value'), "children": [ids.sumRowTotalValue], "type": "Block", "data": { "tag": "span" } },
+    { "_id": ids.sumRowTotalValue, "tag": "span", "classes": [], "children": [], "type": "Block", "data": { "tag": "span", "attr": { "data-bf-display": "summary-total" } } },
     { "_id": ids.submitBtn, "tag": "input", "classes": c('bf-submit'), "children": [], "type": "FormButton", "data": { "form": { "type": "button", "wait": "Wird gesendet..." }, "attr": { "type": "submit", "value": "Buchung anfragen", "data-bf-action": "submit" } } },
-    { "_id": ids.footer2, "tag": "div", "classes": c('bf-split-footer'), "children": [ids.footer2Back], "type": "Block", "data": { "tag": "nav" } },
+    { "_id": ids.footer2, "tag": "div", "classes": c('bf-split-footer'), "children": [ids.footer2Back, ids.submitBtn], "type": "Block", "data": { "tag": "nav" } },
     { "_id": ids.footer2Back, "tag": "a", "classes": c('bf-split-btn-back'), "children": [ids.footer2BackText], "type": "Link", "data": { "link": { "mode": "external", "url": "#" }, "attr": { "data-bf-action": "back", "data-bf-goto": "1" } } },
     { "_id": ids.footer2BackText, "text": true, "v": "Zurück" },
 

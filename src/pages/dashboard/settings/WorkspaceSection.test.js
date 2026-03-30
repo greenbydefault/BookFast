@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { copyWebflowTemplate } from './WorkspaceSection';
 
 describe('copyWebflowTemplate', () => {
-  it('enthaelt editierbare Placeholder und inline SVG arrows', async () => {
+  it('enthaelt editierbare Placeholder, inline SVG arrows und Step-2 Figma-Struktur', async () => {
     const clipboardStore = {};
     const originalExec = document.execCommand;
 
@@ -34,6 +34,12 @@ describe('copyWebflowTemplate', () => {
       const hasTimeslotPlaceholder = nodes.some((n) => n?.data?.attr?.['data-bf-template'] === 'timeslot-item');
       const hasInlineArrowSvg = nodes.some((n) => n?.tag === 'svg' && n?.classes?.length);
       const hasAccordionButtonHeader = nodes.some((n) => n?.classes?.length && n?.data?.tag === 'button' && n?.data?.attr?.type === 'button');
+      const hasStepCounter = nodes.some((n) => n?.text === true && n?.v === 'Schritt 2/2');
+      const hasStreetBind = nodes.some((n) => n?.data?.attr?.['data-bf-bind'] === 'street');
+      const hasHouseBind = nodes.some((n) => n?.data?.attr?.['data-bf-bind'] === 'houseNumber');
+      const hasSummaryAddon = nodes.some((n) => n?.data?.attr?.['data-bf-display'] === 'summary-addon');
+      const hasSummarySubtotal = nodes.some((n) => n?.data?.attr?.['data-bf-display'] === 'summary-subtotal');
+      const hasSummaryTax = nodes.some((n) => n?.data?.attr?.['data-bf-display'] === 'summary-tax');
 
       expect(hasObjectPlaceholder).toBe(true);
       expect(hasServicePlaceholder).toBe(true);
@@ -41,6 +47,12 @@ describe('copyWebflowTemplate', () => {
       expect(hasTimeslotPlaceholder).toBe(true);
       expect(hasInlineArrowSvg).toBe(true);
       expect(hasAccordionButtonHeader).toBe(true);
+      expect(hasStepCounter).toBe(true);
+      expect(hasStreetBind).toBe(true);
+      expect(hasHouseBind).toBe(true);
+      expect(hasSummaryAddon).toBe(true);
+      expect(hasSummarySubtotal).toBe(true);
+      expect(hasSummaryTax).toBe(true);
     } finally {
       document.execCommand = originalExec;
     }

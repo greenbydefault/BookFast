@@ -1052,10 +1052,24 @@
         updateGuestCountUI();
     };
 
+    const splitAddress = (address) => {
+        const raw = (address || '').trim();
+        if (!raw) return { street: '', houseNumber: '' };
+        const m = raw.match(/^(.*?)(?:\s+(\d+[a-zA-Z0-9/-]*))$/);
+        if (!m) return { street: raw, houseNumber: '' };
+        return { street: (m[1] || '').trim(), houseNumber: (m[2] || '').trim() };
+    };
+
+    const composeAddress = (street, houseNumber) => {
+        const s = (street || '').trim();
+        const h = (houseNumber || '').trim();
+        return [s, h].filter(Boolean).join(' ').trim();
+    };
+
     const popSummary = () => {
         const c = dyn('summary'), td = disp('total');
         if (!c) return;
-        const { service: svc, object: obj, startDate: sd, endDate: ed, fname, lname, email, phone, address, city, zip, time, staff, guestCount } = state.sel;
+        const { service: svc, object: obj, startDate: sd, endDate: ed, city, zip, time, staff, guestCount } = state.sel;
         const isON = svc?.service_type === 'overnight', isH = svc?.service_type === 'hourly', n = nights(sd, ed);
         const base = isON ? +svc?.price * n : +svc?.price || 0;
         const stf = staff ? state.data.staff.find(s => s.id === staff) : null;
@@ -1099,28 +1113,48 @@
         const summaryRows = c.querySelectorAll('[data-bf-summary]');
         const priceRowsEl = c.querySelector('[data-bf-dynamic="price-rows"]');
         const hasTemplateRows = summaryRows.length > 0 && priceRowsEl;
+        const addressParts = splitAddress(state.sel.address || '');
 
         // Bind form inputs
         templateBindInputs.forEach(i => {
             const key = i.dataset.bfBind;
             if (!key) return;
-            const value = state.sel[key] || '';
+            const value = key === 'street'
+                ? addressParts.street
+                : key === 'houseNumber'
+                    ? addressParts.houseNumber
+                    : (state.sel[key] || '');
             if (i.value !== value) i.value = value;
-            i.oninput = e => { state.sel[key] = e.target.value; };
+            i.oninput = e => {
+                if (key === 'street' || key === 'houseNumber') {
+                    const street = c.querySelector('[data-bf-bind="street"]')?.value || '';
+                    const houseNumber = c.querySelector('[data-bf-bind="houseNumber"]')?.value || '';
+                    state.sel.address = composeAddress(street, houseNumber);
+                    return;
+                }
+                state.sel[key] = e.target.value;
+            };
         });
 
         if (hasTemplateRows) {
             const setVal = (key, val) => { const el = c.querySelector(`[data-bf-display="summary-${key}"]`); if (el) el.textContent = val || '-'; };
+            const addonNames = state.sel.addons.map(sel => state.data.addons.find(a => a.id === sel.id)?.name).filter(Boolean);
+            const discount = calcDisc();
+            const tax = calcTotal() * 0.19;
             setVal('object', obj?.name);
             setVal('service', svc?.name);
+            setVal('addon', addonNames.length ? addonNames.join(', ') : '-');
             setVal('staff', stf?.name);
             setVal('guests', guestCount);
             setVal('date', dt);
             setVal('time', isH && time ? `${time} (${svc?.duration_minutes}min)` : '');
+            setVal('subtotal', `€${calcSub().toFixed(2)}`);
+            setVal('discount', discount > 0 ? `-€${discount.toFixed(2)}` : '€0.00');
+            setVal('tax', `€${tax.toFixed(2)}`);
 
             const showRow = (key, visible) => { const row = c.querySelector(`[data-bf-summary="${key}"]`); if (row) row.style.display = visible ? '' : 'none'; };
-            showRow('staff', !!stf);
-            showRow('time', isH && !!time);
+            showRow('staff', true);
+            showRow('time', true);
 
             priceRowsEl.innerHTML = priceRowsHtml;
             setVal('total', totalStr);
@@ -1133,6 +1167,7 @@
         const c = disp('voucher-status');
         if (!c) return;
         const v = state.voucher;
+        c.style.display = v.status ? 'block' : 'none';
         c.querySelectorAll('[data-bf-voucher]').forEach(el => {
             const type = el.dataset.bfVoucher;
             if (type === v.status) {
