@@ -1087,8 +1087,10 @@
     };
 
     const popSummary = () => {
-        const c = dyn('summary'), td = disp('total');
-        if (!c) return;
+        const c = dyn('summary');
+        const step2Scope = root?.querySelector('[data-bf-step="2"]') || root;
+        if (!c || !step2Scope) return;
+        const td = step2Scope.querySelector('[data-bf-display="total"]');
         const { service: svc, object: obj, startDate: sd, endDate: ed, city, zip, time, staff, guestCount } = state.sel;
         const isON = svc?.service_type === 'overnight', isH = svc?.service_type === 'hourly', n = nights(sd, ed);
         const base = isON ? +svc?.price * n : +svc?.price || 0;
@@ -1129,9 +1131,9 @@
 
         const totalStr = `€${calcTotal().toFixed(2)}`;
 
-        const templateBindInputs = c.querySelectorAll('[data-bf-bind]');
-        const summaryRows = c.querySelectorAll('[data-bf-summary]');
-        const priceRowsEl = c.querySelector('[data-bf-dynamic="price-rows"]');
+        const templateBindInputs = step2Scope.querySelectorAll('[data-bf-bind]');
+        const summaryRows = step2Scope.querySelectorAll('[data-bf-summary]');
+        const priceRowsEl = step2Scope.querySelector('[data-bf-dynamic="price-rows"]');
         const hasTemplateRows = summaryRows.length > 0 && priceRowsEl;
         const addressParts = splitAddress(state.sel.address || '');
 
@@ -1147,8 +1149,8 @@
             if (i.value !== value) i.value = value;
             i.oninput = e => {
                 if (key === 'street' || key === 'houseNumber') {
-                    const street = c.querySelector('[data-bf-bind="street"]')?.value || '';
-                    const houseNumber = c.querySelector('[data-bf-bind="houseNumber"]')?.value || '';
+                    const street = step2Scope.querySelector('[data-bf-bind="street"]')?.value || '';
+                    const houseNumber = step2Scope.querySelector('[data-bf-bind="houseNumber"]')?.value || '';
                     state.sel.address = composeAddress(street, houseNumber);
                     return;
                 }
@@ -1157,7 +1159,10 @@
         });
 
         if (hasTemplateRows) {
-            const setVal = (key, val) => { const el = c.querySelector(`[data-bf-display="summary-${key}"]`); if (el) el.textContent = val || '-'; };
+            const setVal = (key, val) => {
+                const el = step2Scope.querySelector(`[data-bf-display="summary-${key}"]`);
+                if (el) el.textContent = val || '-';
+            };
             const addonNames = state.sel.addons.map(sel => state.data.addons.find(a => a.id === sel.id)?.name).filter(Boolean);
             const discount = calcDisc();
             const tax = calcTotal() * 0.19;
@@ -1172,9 +1177,13 @@
             setVal('discount', discount > 0 ? `-€${discount.toFixed(2)}` : '€0.00');
             setVal('tax', `€${tax.toFixed(2)}`);
 
-            const showRow = (key, visible) => { const row = c.querySelector(`[data-bf-summary="${key}"]`); if (row) row.style.display = visible ? '' : 'none'; };
-            showRow('staff', true);
-            showRow('time', true);
+            const showRow = (key, visible) => {
+                const row = step2Scope.querySelector(`[data-bf-summary="${key}"]`);
+                if (row) row.style.display = visible ? '' : 'none';
+            };
+            showRow('addon', addonNames.length > 0);
+            showRow('staff', !!stf);
+            showRow('time', isH && !!time);
 
             priceRowsEl.innerHTML = priceRowsHtml;
             setVal('total', totalStr);
