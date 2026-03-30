@@ -318,6 +318,30 @@
         if (right) right.classList.remove('is-active');
     };
 
+    const getAvailableStaff = () => {
+        const svcId = state.sel.service?.id;
+        if (!svcId) return [];
+        return state.data.staff.filter(s => s.linked_service_ids?.includes(svcId));
+    };
+
+    const getAvailableAddons = () => {
+        const svcId = state.sel.service?.id;
+        if (!svcId) return [];
+        return state.data.addons.filter(a => a.linked_service_ids?.includes(svcId));
+    };
+
+    const canActivateRightSide = () => {
+        if (!isSplitMode()) return false;
+        if (!state.sel.object || !state.sel.service) return false;
+        return !getAvailableStaff().length || state.sel.staff !== undefined;
+    };
+
+    const syncRightSideState = () => {
+        if (!isSplitMode()) return;
+        if (canActivateRightSide()) activateRightSide();
+        else deactivateRightSide();
+    };
+
     // --- DOM-Helpers ---
     const $ = s => root?.querySelector(s);
     const $$ = s => root?.querySelectorAll(s) || [];
@@ -548,13 +572,24 @@
                     state.sel.object = o;
                     state.sel.service = state.sel.startDate = state.sel.endDate = state.sel.time = null;
                     state.sel.staff = undefined;
+                    state.sel.addons = [];
                     state.slots = [];
+                    state.cal.avail = null;
+                    state.cal.selectingEnd = false;
                     state.availStatus = null;
-                    deactivateRightSide();
                     updateCardSummary('object', o.name, o.address || o.description || '');
+                    updateCardSummary('service', 'Service', 'Wähle den Service aus');
+                    updateCardSummary('staff', 'Mitarbeiter', 'Wähle deinen Mitarbeiter');
+                    updateCardSummary('addon', 'Addon', 'Extras hinzufügen');
                     popObjects();
                     expandCard('service');
                     popServices();
+                    popStaff();
+                    popAddons();
+                    syncRightSideState();
+                    popCal();
+                    popSlots();
+                    popDateInfo();
                 };
                 appendGenerated(dynEl, row);
             });
@@ -621,8 +656,7 @@
     const popStaff = () => {
         const c = dyn('staff');
         if (!c) return;
-        const svc = state.sel.service;
-        const staff = state.data.staff.filter(s => s.linked_service_ids?.includes(svc?.id));
+        const staff = getAvailableStaff();
         if (!staff.length) {
             c.style.display = 'none';
             state.sel.staff = null;
@@ -680,12 +714,36 @@
 
     const popCal = () => {
         const c = dyn('calendar');
-        if (!c || !state.sel.service || !state.sel.object) {
-            if (c) {
-                clearGenerated(c);
-                showTemplate(c, 'calendar-header', true);
-                showTemplate(c, 'calendar-day', true);
-                showEmpty(c, 'calendar', false);
+        if (!c) return;
+        if (!state.sel.service || !state.sel.object) {
+            clearGenerated(c);
+            showTemplate(c, 'calendar-header', false);
+            showTemplate(c, 'calendar-day', false);
+            showEmpty(c, 'calendar', false);
+            if (isSplitMode()) {
+                const { month } = state.cal;
+                const y = month.getFullYear(), m = month.getMonth();
+                const first = new Date(y, m, 1);
+                let start = new Date(first);
+                start.setDate(start.getDate() - ((start.getDay() + 6) % 7));
+                const days = Array.from({ length: 42 }, (_, i) => {
+                    const d = new Date(start);
+                    d.setDate(d.getDate() + i);
+                    return d;
+                });
+                const wrap = document.createElement('div');
+                wrap.setAttribute('data-bf-generated', 'true');
+                wrap.innerHTML = `<div class="bf-split-cal-header">
+                <div class="bf-split-cal-title"><span class="bf-split-cal-title-month">${MONTHS[m]}</span><span class="bf-split-cal-title-year">${y}</span></div>
+                <button type="button" class="bf-split-cal-nav" disabled>${SVG_CHEVRON_LEFT}</button>
+                <button type="button" class="bf-split-cal-nav" disabled>${SVG_CHEVRON_RIGHT}</button>
+            </div><div class="bf-split-cal-grid">${DAYS.map(d => `<span class="bf-split-cal-weekday">${d}</span>`).join('')}${days.map(d => {
+                    const other = d.getMonth() !== m;
+                    let cls = 'bf-split-cal-day';
+                    if (other) cls += ' is-other';
+                    return `<button type="button" class="${cls}" disabled>${d.getDate()}</button>`;
+                }).join('')}</div>`;
+                c.appendChild(wrap);
             }
             return;
         }
@@ -753,7 +811,7 @@
             const svc = state.sel.service;
             c.style.display = '';
             clearGenerated(c);
-            showTemplate(c, 'timeslot-item', true);
+            showTemplate(c, 'timeslot-item', false);
             showEmpty(c, 'timeslots', false);
             let html = `<div class="bf-split-time" data-bf-generated="true"><div class="bf-split-time-title">Uhrzeit</div>`;
             if (!svc) {
@@ -764,10 +822,8 @@
                 html += `<div class="bf-split-time-hint">Ich wähle zuerst das Datum aus, um einen passenden Zeitslot angezeigt zu bekommen.</div>`;
             } else if (!state.slots.length) {
                 html += `<div class="bf-split-time-desc">Keine freien Termine an diesem Tag.</div>`;
-                showEmpty(c, 'timeslots', true);
             } else {
                 html += `<div class="bf-split-time-desc">Wähle deine passende Uhrzeit aus.</div>`;
-                showTemplate(c, 'timeslot-item', false);
                 html += `<div class="bf-split-slots">`;
                 html += state.slots.map(s => {
                     const sel = state.sel.time === s.start;
@@ -904,7 +960,7 @@
     const popAddons = () => {
         const c = dyn('addons');
         if (!c) return;
-        const adds = state.data.addons.filter(a => a.linked_service_ids?.includes(state.sel.service?.id));
+        const adds = getAvailableAddons();
         const addonCard = root?.querySelector('[data-bf-card="addon"]');
         if (isSplitMode() && addonCard) addonCard.style.display = adds.length ? '' : 'none';
         const gc = state.sel.guestCount;
@@ -915,8 +971,10 @@
 
         let html = '';
         if (!adds.length) {
-            showTemplate(c, 'addon-item', true);
-            showEmpty(c, 'addons', true);
+            if (!isSplitMode()) {
+                showTemplate(c, 'addon-item', true);
+                showEmpty(c, 'addons', true);
+            }
             bindGuestCount(c);
             renumberSplitCards();
             return;
@@ -1251,27 +1309,30 @@
         state.sel.service = state.data.services.find(s => s.id === id);
         state.sel.startDate = state.sel.endDate = state.sel.time = null;
         state.sel.staff = undefined;
+        state.sel.addons = [];
         state.slots = [];
+        state.cal.avail = null;
         state.cal.selectingEnd = false;
         state.availStatus = null;
-        popServices(); popStaff();
+        popServices(); popStaff(); popAddons(); popSlots(); popDateInfo(); syncRightSideState();
         if (isSplitMode()) {
             const svc = state.sel.service;
             const timeStr = svc?.booking_window_start && svc?.booking_window_end ? `${svc.booking_window_start}–${svc.booking_window_end} Uhr` : '';
             updateCardSummary('service', svc?.name || 'Service', timeStr);
-            const hasStaff = state.data.staff.some(s => s.linked_service_ids?.includes(id));
+            updateCardSummary('staff', 'Mitarbeiter', 'Wähle deinen Mitarbeiter');
+            updateCardSummary('addon', 'Addon', 'Extras hinzufügen');
+            const hasStaff = getAvailableStaff().length > 0;
             if (hasStaff) {
                 expandCard('staff');
-                popStaff();
+                popCal();
             } else {
                 expandCard('addon');
-                deactivateRightSide();
+                syncRightSideState();
                 await loadAvail();
-                activateRightSide();
                 popCal(); popSlots();
             }
         } else {
-            if (!state.data.staff.some(s => s.linked_service_ids?.includes(id))) { await loadAvail(); popCal(); }
+            if (!getAvailableStaff().length) { await loadAvail(); popCal(); }
         }
     };
 
@@ -1279,12 +1340,14 @@
         state.sel.staff = id;
         state.sel.startDate = state.sel.endDate = state.sel.time = null;
         state.slots = [];
+        state.cal.avail = null;
+        state.cal.selectingEnd = false;
         state.availStatus = null;
         popStaff();
         if (isSplitMode()) {
             const stf = id ? state.data.staff.find(s => s.id === id) : null;
             updateCardSummary('staff', 'Mitarbeiter', stf?.name || 'Nächstverfügbaren');
-            activateRightSide();
+            syncRightSideState();
             await loadAvail(); popCal(); popSlots();
         } else {
             await loadAvail(); popCal();
@@ -1699,6 +1762,13 @@
             }
         }
         popObjects();
+        popServices();
+        popStaff();
+        popAddons();
+        syncRightSideState();
+        popCal();
+        popSlots();
+        popDateInfo();
         renumberSplitCards();
         if (!hasBoundHandlers) {
             bind();
