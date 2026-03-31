@@ -6,6 +6,7 @@
 import { clearSEO, setCanonical } from './seoHelper.js';
 import { renderNotFoundPage } from '../pages/landing/NotFoundPage.js';
 import { applyLandingAccessibilityTitles } from './landingAccessibility.js';
+import { normalizeLandingPath, getLocaleFromPath, applyDocumentLang } from './landingLocale.js';
 
 // Page registry: path → renderFn
 const landingPages = new Map();
@@ -57,10 +58,12 @@ const findRoute = (path) => {
  * Check if a path is a landing route
  */
 export const isLandingRoute = (path) => {
-  if (path === '/' || path === '/index.html') return true;
-  if (landingPages.has(path)) return true;
+  const p = normalizeLandingPath(path);
+  if (p === '/') return true;
+  if (p === '/en' || p.startsWith('/en/')) return true;
+  if (landingPages.has(p)) return true;
   for (const prefix of wildcardPages.keys()) {
-    if (path.startsWith(prefix)) return true;
+    if (p.startsWith(prefix)) return true;
   }
   return false;
 };
@@ -69,19 +72,20 @@ export const isLandingRoute = (path) => {
  * Navigate to a landing page
  */
 export const navigateLanding = (path, replace = false) => {
+  const p = normalizeLandingPath(path);
   if (replace) {
-    history.replaceState({ landingPath: path }, '', path);
+    history.replaceState({ landingPath: p }, '', p);
   } else {
-    history.pushState({ landingPath: path }, '', path);
+    history.pushState({ landingPath: p }, '', p);
   }
-  renderLandingRoute(path);
+  renderLandingRoute(p);
 };
 
 /**
  * Render the matching landing page
  */
 const renderLandingRoute = (path) => {
-  const normalizedPath = path === '/index.html' ? '/' : path;
+  const normalizedPath = normalizeLandingPath(path === '/index.html' ? '/' : path);
 
   // Cleanup previous
   if (currentCleanup && typeof currentCleanup === 'function') {
@@ -92,18 +96,22 @@ const renderLandingRoute = (path) => {
   // Remove stale SEO artifacts (e.g. FAQ JSON-LD) between route changes
   clearSEO();
   setCanonical(normalizedPath);
+  applyDocumentLang(getLocaleFromPath(normalizedPath));
 
   // Scroll to top
   window.scrollTo(0, 0);
 
+  const locale = getLocaleFromPath(normalizedPath);
   const route = findRoute(normalizedPath);
   if (route) {
-    const result = route.slug ? route.renderFn(route.slug) : route.renderFn();
+    const result = route.slug
+      ? route.renderFn(route.slug, locale)
+      : route.renderFn(locale);
     if (typeof result === 'function') {
       currentCleanup = result;
     }
   } else {
-    render404();
+    render404(locale);
   }
 
   // Update active nav links
@@ -130,8 +138,8 @@ const renderLandingRoute = (path) => {
 /**
  * 404 fallback
  */
-const render404 = () => {
-  renderNotFoundPage();
+const render404 = (locale) => {
+  renderNotFoundPage(locale);
 };
 
 /**
@@ -141,8 +149,8 @@ export const initLandingRouter = () => {
   // Handle browser back/forward
   window.addEventListener('popstate', (event) => {
     const path = event.state?.landingPath || window.location.pathname;
-    if (isLandingRoute(path) || path === '/') {
-      renderLandingRoute(path === '/index.html' ? '/' : path);
+    if (isLandingRoute(path)) {
+      renderLandingRoute(path);
     }
   });
 
@@ -153,8 +161,11 @@ export const initLandingRouter = () => {
       e.preventDefault();
       const href = link.getAttribute('href');
       if (href && href.startsWith('/')) {
-        const current = window.location.pathname === '/index.html' ? '/' : window.location.pathname;
-        if (href === current || (href === '/' && current === '/')) {
+        const current = normalizeLandingPath(
+          window.location.pathname === '/index.html' ? '/' : window.location.pathname,
+        );
+        const target = normalizeLandingPath(href);
+        if (target === current) {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           navigateLanding(href);
@@ -164,6 +175,5 @@ export const initLandingRouter = () => {
   });
 
   // Initial render
-  const path = window.location.pathname;
-  renderLandingRoute(path === '/index.html' ? '/' : path);
+  renderLandingRoute(window.location.pathname);
 };

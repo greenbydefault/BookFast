@@ -2,12 +2,11 @@
  * Object Detail Page - Orchestrator
  * 2-column layout: Center (preview card) | Side Card (edit fields + meta + actions)
  */
-import { fetchEntity, fetchEntities, updateEntity, invalidateCache } from '../../lib/dataLayer.js';
-import { supabase } from '../../lib/supabaseClient.js';
+import { fetchEntity, fetchEntities, updateEntity, invalidateCache, syncJunctionTable, syncServicePrimaryObjectIds } from '../../lib/dataLayer.js';
 import { createMultiSelectTags } from '../../components/MultiSelectTags/MultiSelectTags.js';
 import { navigate, getNavigationGeneration } from '../../lib/router.js';
 import { getIconString } from '../../components/Icons/Icon.js';
-import { createActionButton } from '../../components/Button/Button.js';
+import { getLinkedEntityItems } from '../../lib/uiHelpers.js';
 import {
     renderDetailLayout,
     updateCenter,
@@ -35,7 +34,7 @@ const fmtTime = (v) => v ? v.slice(0, 5) : '—';
 // ── Center Preview ──
 
 const buildCenterPreview = (obj) => {
-    const linkedServices = obj.services || [];
+    const linkedServices = getLinkedEntityItems(obj.services);
     const bookableDays = normalizeDays(obj.bookable_days);
     const isActive = obj.status !== 'draft';
     const badgeClass = isActive ? 'detail-preview-card__badge--active' : 'detail-preview-card__badge--draft';
@@ -384,7 +383,7 @@ const loadAndRender = async (objectId, gen, signal) => {
     // Load all services for link selector
     const servicesResult = await fetchEntities('services', { perPage: 999 });
     const allServices = servicesResult.items;
-    const linkedServiceIds = (obj.services || []).map(s => s.id);
+    const linkedServiceIds = getLinkedEntityItems(obj.services).map(s => s.id);
 
     const serviceContainer = document.getElementById('link-services-container');
     if (serviceContainer) {
@@ -394,26 +393,25 @@ const loadAndRender = async (objectId, gen, signal) => {
             options: allServices.map(s => ({ value: s.id, label: s.name })),
             selectedValues: linkedServiceIds,
             onChange: async (ids) => {
-                // Removed services: set object_id to null
-                const removed = linkedServiceIds.filter(id => !ids.includes(id));
-                // Added services: set object_id to this object
-                const added = ids.filter(id => !linkedServiceIds.includes(id));
-
-                const promises = [];
-                for (const sId of removed) {
-                    promises.push(supabase.from('services').update({ object_id: null }).eq('id', sId));
-                }
-                for (const sId of added) {
-                    promises.push(supabase.from('services').update({ object_id: objectId }).eq('id', sId));
-                }
-                await Promise.all(promises);
+                const changedIds = [...new Set([...linkedServiceIds, ...ids])];
+                await syncJunctionTable(
+                    'service_objects',
+                    'object_id',
+                    objectId,
+                    'service_id',
+                    ids,
+                    { workspace_id: obj.workspace_id }
+                );
+                await syncServicePrimaryObjectIds(changedIds);
+                invalidateCache('objects');
+                invalidateCache('services');
 
                 // Update local state
                 linkedServiceIds.length = 0;
                 linkedServiceIds.push(...ids);
                 obj.services = ids.map(id => {
                     const found = allServices.find(s => s.id === id);
-                    return found ? { id: found.id, name: found.name } : { id, name: '—' };
+                    return found ? { service_id: found.id, services: { id: found.id, name: found.name } } : { service_id: id, services: { id, name: '—' } };
                 });
 
                 const values = collectFormValues();

@@ -1,24 +1,42 @@
 /**
  * AGB (Terms of Service) Page
  */
-import { setPageMeta, setBreadcrumbSchema } from '../../../lib/seoHelper.js';
+import { setPageMeta, setBreadcrumbSchema, setHreflangAlternates } from '../../../lib/seoHelper.js';
 import { legalConfig } from '../../../data/legalConfig.js';
 
-export const renderAGBPage = () => {
+export const renderAGBPage = (locale = 'de') => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta('AGB', 'Allgemeine Geschäftsbedingungen von BookFast.');
-  setBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'AGB', url: '/agb' },
+  const isEn = locale === 'en';
+  const pricingPath = isEn ? '/en/pricing' : '/preise';
+
+  setPageMeta(
+    isEn ? 'Terms of Service' : 'AGB',
+    isEn ? 'Terms of service of BookFast.' : 'Allgemeine Geschäftsbedingungen von BookFast.',
+    { locale },
+  );
+  setBreadcrumbSchema(
+    isEn
+      ? [
+          { name: 'Home', url: '/en' },
+          { name: 'Terms of Service', url: '/en/terms' },
+        ]
+      : [
+          { name: 'Home', url: '/' },
+          { name: 'AGB', url: '/agb' },
+        ],
+  );
+  setHreflangAlternates([
+    { hreflang: 'de', path: '/agb' },
+    { hreflang: 'en', path: '/en/terms' },
   ]);
 
   const c = legalConfig;
   content.innerHTML = `
     <section class="landing-section">
       <div class="landing-container-narrow">
-        <h1 class="landing-h1">Allgemeine Geschäftsbedingungen</h1>
+        <h1 class="landing-h1">${isEn ? 'Terms of Service' : 'Allgemeine Geschäftsbedingungen'}</h1>
         <div class="landing-text landing-legal-content">
 
           <h2 class="landing-h3">§ 1 Geltungsbereich</h2>
@@ -31,7 +49,7 @@ export const renderAGBPage = () => {
           <p>Für die Nutzung von BookFast ist eine Registrierung erforderlich. Du bist für die Sicherheit deines Kontos verantwortlich und darfst deine Zugangsdaten nicht an Dritte weitergeben.</p>
 
           <h2 class="landing-h3">§ 4 Preise und Zahlung</h2>
-          <p>Die aktuellen Preise findest du auf unserer <a href="/preise" data-landing-link title="Preisseite öffnen">Preisseite</a>. Bezahlte Pläne werden monatlich oder jährlich abgerechnet. Alle Preise verstehen sich zzgl. MwSt.</p>
+          <p>Die aktuellen Preise findest du auf unserer <a href="${pricingPath}" data-landing-link title="Preisseite öffnen">Preisseite</a>. Bezahlte Pläne werden monatlich oder jährlich abgerechnet. Alle Preise verstehen sich zzgl. MwSt.</p>
 
           <h2 class="landing-h3">§ 5 Kündigung</h2>
           <p>Monatliche Pläne können jederzeit zum Ende des Abrechnungszeitraums gekündigt werden. Jährliche Pläne können zum Ende der Laufzeit gekündigt werden.</p>

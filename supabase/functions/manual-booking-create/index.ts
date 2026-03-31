@@ -3,7 +3,7 @@ import { corsHeaders, handleCors } from '../_shared/cors.ts';
 import { supabaseAdmin, createUserClient } from '../_shared/supabase.ts';
 import { createPortalToken } from '../_shared/portalToken.ts';
 import { sendEmail, buildEmailHtml, DEFAULT_CONFIRMATION_SUBJECT, DEFAULT_CONFIRMATION_BODY, renderTemplate } from '../_shared/email.ts';
-import { calculatePricing } from '../_shared/pricing.ts';
+import { calculateAddonQuantity, calculatePricing } from '../_shared/pricing.ts';
 
 interface ManualBookingRequest {
     object_id: string;
@@ -170,6 +170,24 @@ serve(async (req: Request) => {
             );
         }
 
+        const { data: serviceObjectLink, error: serviceObjectError } = await supabaseAdmin
+            .from('service_objects')
+            .select('service_id')
+            .eq('service_id', service_id)
+            .eq('object_id', object_id)
+            .maybeSingle();
+
+        if (serviceObjectError) {
+            throw new Error(`Failed to validate service/object link: ${serviceObjectError.message}`);
+        }
+
+        if (!serviceObjectLink) {
+            return new Response(
+                JSON.stringify({ error: 'Selected service is not linked to the selected object' }),
+                { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
+        }
+
         // Verify user belongs to this workspace?
         // UserClient.from('workspaces').select('id').eq('id', service.workspace_id) ...
         // For now assuming if they can call the function with a valid JWT, they are okay (RLS on frontend usually prevents selecting wrong IDs).
@@ -190,11 +208,11 @@ serve(async (req: Request) => {
         // 2. Calculate Price
 
         // Addons
-        let addons: Array<{ id: string; price: number | string | null }> = [];
+        let addons: Array<{ id: string; price: number | string | null; pricing_type?: string | null }> = [];
         if (addon_ids && addon_ids.length > 0) {
             const { data: addonRows } = await supabaseAdmin
                 .from('addons')
-                .select('id, price')
+                .select('id, price, pricing_type')
                 .in('id', addon_ids);
 
             if (addonRows) {
@@ -210,7 +228,9 @@ serve(async (req: Request) => {
             addons: addons.map((addon) => ({
                 id: addon.id,
                 price: addon.price,
+                pricing_type: addon.pricing_type,
             })),
+            addon_selections,
         });
         const total_price = pricing.totalPrice;
 
@@ -250,16 +270,27 @@ serve(async (req: Request) => {
         // 4. Link Addons & Staff
         if (addon_ids && addon_ids.length > 0) {
             const addonPriceMap = new Map(addons.map((addon) => [addon.id, Number(addon.price) || 0]));
+            const addonSelectionsById = new Map(
+                (Array.isArray(addon_selections) ? addon_selections : [])
+                    .filter((selection) => selection?.addon_id)
+                    .map((selection) => [selection.addon_id, selection]),
+            );
             const addonInserts = addon_ids.map((aid) => {
                 const unitPrice = addonPriceMap.get(aid) || 0;
+                const addon = addons.find((entry) => entry.id === aid);
+                const quantity = addon ? calculateAddonQuantity(
+                    addon,
+                    guest_count,
+                    addonSelectionsById.get(aid) || null,
+                ) : 1;
                 return {
                     booking_id: booking.id,
                     addon_id: aid,
                     price_per_unit: unitPrice,
-                    quantity: 1,
-                    total_price: unitPrice,
+                    quantity,
+                    total_price: unitPrice * quantity,
                 };
-            });
+            }).filter((addon) => addon.quantity > 0);
             const { error: bookingAddonsError } = await supabaseAdmin.from('booking_addons').insert(addonInserts);
             if (bookingAddonsError) {
                 throw new Error(`Failed to link addons: ${bookingAddonsError.message}`);

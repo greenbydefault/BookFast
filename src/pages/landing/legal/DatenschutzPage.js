@@ -1,30 +1,48 @@
 /**
  * Datenschutz (Privacy Policy) Page
  */
-import { setPageMeta, setBreadcrumbSchema } from '../../../lib/seoHelper.js';
+import { setPageMeta, setBreadcrumbSchema, setHreflangAlternates } from '../../../lib/seoHelper.js';
 import { legalConfig } from '../../../data/legalConfig.js';
 
-export const renderDatenschutzPage = () => {
+export const renderDatenschutzPage = (locale = 'de') => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta('Datenschutz', 'Datenschutzerklärung von BookFast.');
-  setBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'Datenschutz', url: '/datenschutz' },
+  const isEn = locale === 'en';
+  const impressumPath = isEn ? '/en/imprint' : '/impressum';
+
+  setPageMeta(
+    isEn ? 'Privacy Policy' : 'Datenschutz',
+    isEn ? 'Privacy policy of BookFast.' : 'Datenschutzerklärung von BookFast.',
+    { locale },
+  );
+  setBreadcrumbSchema(
+    isEn
+      ? [
+          { name: 'Home', url: '/en' },
+          { name: 'Privacy Policy', url: '/en/privacy' },
+        ]
+      : [
+          { name: 'Home', url: '/' },
+          { name: 'Datenschutz', url: '/datenschutz' },
+        ],
+  );
+  setHreflangAlternates([
+    { hreflang: 'de', path: '/datenschutz' },
+    { hreflang: 'en', path: '/en/privacy' },
   ]);
 
   const c = legalConfig;
   content.innerHTML = `
     <section class="landing-section">
       <div class="landing-container-narrow">
-        <h1 class="landing-h1">Datenschutzerklärung</h1>
+        <h1 class="landing-h1">${isEn ? 'Privacy Policy' : 'Datenschutzerklärung'}</h1>
         <div class="landing-text landing-legal-content">
 
           <p><strong>Stand:</strong> 09.03.2026</p>
 
           <h2 class="landing-h3">1. Verantwortlicher</h2>
-          <p>Verantwortlich für die Datenverarbeitung ist ${c.responsibleName}, ${c.responsibleAddress}. Weitere Kontaktdaten findest du im <a href="/impressum" data-landing-link title="Impressum anzeigen">Impressum</a>.</p>
+          <p>Verantwortlich für die Datenverarbeitung ist ${c.responsibleName}, ${c.responsibleAddress}. Weitere Kontaktdaten findest du im <a href="${impressumPath}" data-landing-link title="Impressum anzeigen">Impressum</a>.</p>
 
           <h2 class="landing-h3">2. Verarbeitete Daten</h2>
           <p>Wir verarbeiten Daten, die du uns mitteilst (z.B. Name, E-Mail, Telefonnummer, Buchungsdaten, Kontaktformular-Inhalte) sowie technische Daten (z.B. Browser, Gerätetyp, Betriebssystem, Zeitstempel).</p>

@@ -34,11 +34,26 @@
         os: /Win/.test(ua) ? 'Windows' : /Mac/.test(ua) ? 'macOS' : /Linux/.test(ua) ? 'Linux' : /Android/.test(ua) ? 'Android' : /iPhone|iPad/.test(ua) ? 'iOS' : 'Other'
     };
 
+    const createAvailabilityState = (overrides = {}) => ({
+        blocked_dates: [],
+        bookings: [],
+        error: null,
+        ...overrides
+    });
+    const normalizeAvailability = (payload, fallbackError = 'Verfügbarkeit konnte nicht geladen werden.') => {
+        if (!payload || payload.__rpc_failed) {
+            return createAvailabilityState({ error: payload?.error || fallbackError });
+        }
+        const bookings = Array.isArray(payload.bookings) ? payload.bookings : [];
+        const blockedDates = Array.isArray(payload.blocked_dates) ? payload.blocked_dates : [];
+        return createAvailabilityState({ bookings, blocked_dates: blockedDates });
+    };
+
     let root, state = {
         step: 1,
         data: { objects: [], services: [], addons: [], staff: [] },
         sel: { fname: '', lname: '', email: '', phone: '', address: '', city: '', zip: '', object: null, service: null, startDate: null, endDate: null, time: null, addons: [], staff: null, guestCount: 1 },
-        cal: { month: new Date(), avail: null, selectingEnd: false },
+        cal: { month: new Date(), avail: createAvailabilityState(), selectingEnd: false },
         slots: [],
         availStatus: null,
         voucher: { code: '', data: null, status: null, error: null }
@@ -53,8 +68,13 @@
     const rpc = async (fn, p = {}) => {
         try {
             const r = await fetch(`${API}/rest/v1/rpc/${fn}`, { method: 'POST', headers: HDR, body: JSON.stringify(p) });
-            return r.ok ? await r.json() : null;
-        } catch { return null; }
+            let body = null;
+            try { body = await r.json(); } catch { }
+            if (r.ok) return body;
+            return { __rpc_failed: true, status: r.status, error: body?.message || body?.error || `RPC ${fn} fehlgeschlagen.` };
+        } catch (err) {
+            return { __rpc_failed: true, status: 0, error: err?.message || `RPC ${fn} fehlgeschlagen.` };
+        }
     };
 
     const safeMetadata = (m = {}) => {
@@ -161,6 +181,7 @@
     const hasAvailableSlots = (ds) => {
         const svc = state.sel.service, obj = state.sel.object;
         if (!svc || svc.service_type !== 'hourly') return true;
+        if (!state.cal.avail || state.cal.avail.error) return false;
         const bookings = state.cal.avail?.bookings?.filter(b => normDate(b?.date) === ds) || [];
         const slots = genSlots(svc, obj, bookings, ds);
         return slots.some(s => s.available);
@@ -245,7 +266,7 @@
             '.bf-split-slot.is-selected{border-color:#624cd8;background:#f8f7fe;font-weight:500}',
             '.bf-split-slot-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}',
             '.bf-split-slot-dot.is-available{background:#16a34a}',
-            '.bf-split-slot-dot.is-unavailable{background:#d6d3d1}',
+            '.bf-split-slot-dot.is-unavailable{background:#dc2626}',
             // Footer
             '.bf-split-footer{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:18px 24px;border-top:1px solid #e7e5e4;border-radius:0 0 12px 12px;background:#fff}',
             '.bf-split-btn-back{display:inline-flex;align-items:center;justify-content:center;padding:12px;border:1px solid #d6d3d1;border-radius:8px;background:#fff;color:#12111f;font-size:16px;font-weight:400;cursor:pointer;text-decoration:none;line-height:1.2}',
@@ -342,6 +363,13 @@
         const svcId = state.sel.service?.id;
         if (!svcId) return [];
         return state.data.addons.filter(a => a.linked_service_ids?.includes(svcId));
+    };
+
+    const serviceMatchesObject = (service, objectId) => {
+        if (!service || !objectId) return false;
+        const linkedObjectIds = Array.isArray(service.linked_object_ids) ? service.linked_object_ids : [];
+        if (linkedObjectIds.length > 0) return linkedObjectIds.includes(objectId);
+        return service.object_id === objectId;
     };
 
     const canActivateRightSide = () => {
@@ -596,7 +624,7 @@
                     state.sel.staff = undefined;
                     state.sel.addons = [];
                     state.slots = [];
-                    state.cal.avail = null;
+                    state.cal.avail = createAvailabilityState();
                     state.cal.selectingEnd = false;
                     state.availStatus = null;
                     updateCardSummary('object', o.name, o.address || o.description || '');
@@ -633,7 +661,7 @@
     const popServices = () => {
         const c = dyn('services');
         if (!c) return;
-        const svcs = state.data.services.filter(s => s.object_id === state.sel.object?.id);
+        const svcs = state.data.services.filter(s => serviceMatchesObject(s, state.sel.object?.id));
         if (isSplitMode()) {
             clearGenerated(c);
             showTemplate(c, 'service-item', !svcs.length);
@@ -666,14 +694,14 @@
                     badges.appendChild(dur);
                 }
                 const price = createEl('span', { className: 'bf-svc-badge', attrs: { 'data-bf-part': 'service-badge' } });
-                price.textContent = `EUR${s.price}${s.service_type === 'overnight' ? '/N' : ' p.p'}`;
+                price.textContent = `EUR${s.price}${servicePriceLabel(s)}`;
                 badges.appendChild(price);
                 row.onclick = () => selService(s.id);
                 appendGenerated(c, row);
             });
             renumberSplitCards();
         } else {
-            c.innerHTML = svcs.length ? svcs.map(s => `<label class="bf-radio"><input type="radio" name="bf-service" value="${s.id}"${state.sel.service?.id === s.id ? ' checked' : ''}><span><strong>${s.name}</strong> — €${s.price}${s.duration_minutes ? ` · ${s.duration_minutes}min` : ''}${s.service_type === 'overnight' ? '/Nacht' : ''}</span></label>`).join('') : '<p>Keine Services verfügbar.</p>';
+            c.innerHTML = svcs.length ? svcs.map(s => `<label class="bf-radio"><input type="radio" name="bf-service" value="${s.id}"${state.sel.service?.id === s.id ? ' checked' : ''}><span><strong>${s.name}</strong> — €${s.price}${servicePriceLabel(s)}${s.duration_minutes ? ` · ${s.duration_minutes}min` : ''}</span></label>`).join('') : '<p>Keine Services verfügbar.</p>';
             c.querySelectorAll('input[name="bf-service"]').forEach(r => r.onchange = () => selService(r.value));
         }
     };
@@ -779,6 +807,7 @@
         start.setDate(start.getDate() - ((start.getDay() + 6) % 7));
         const days = Array.from({ length: 42 }, (_, i) => { const d = new Date(start); d.setDate(d.getDate() + i); return d; });
         const blocked = state.cal.avail?.blocked_dates || [];
+        const availReady = !!state.cal.avail && !state.cal.avail.error;
         const today = fmtDate(new Date());
         const isON = state.sel.service?.service_type === 'overnight';
 
@@ -798,7 +827,7 @@
                 const isSel = sameDay(d, state.sel.startDate) || sameDay(d, state.sel.endDate);
                 const inR = isON && inRange(d, state.sel.startDate, state.sel.endDate);
                 const hasSlots = hasAvailableSlots(ds);
-                const canClick = !other && ok && !bk && hasSlots;
+                const canClick = availReady && !other && ok && !bk && hasSlots;
                 let cls = 'bf-split-cal-day';
                 if (other) cls += ' is-other';
                 if (isSel) cls += ' is-selected';
@@ -813,7 +842,7 @@
                 const isSel = sameDay(d, state.sel.startDate) || sameDay(d, state.sel.endDate);
                 const inR = isON && inRange(d, state.sel.startDate, state.sel.endDate);
                 const hasSlots = hasAvailableSlots(ds);
-                const canClick = !other && ok && !bk && hasSlots;
+                const canClick = availReady && !other && ok && !bk && hasSlots;
                 let cls = 'bf-day';
                 if (other) cls += ' bf-day-other';
                 else if (!canClick) cls += ' bf-day-disabled';
@@ -845,6 +874,8 @@
                 html += `<p class="bf-split-time-hint" data-bf-part="timeslots-hint">Fuer diesen Service ist keine Uhrzeit-Auswahl erforderlich.</p>`;
             } else if (!state.sel.startDate) {
                 html += `<p class="bf-split-time-hint" data-bf-part="timeslots-hint">Ich wähle zuerst das Datum aus, um einen passenden Zeitslot angezeigt zu bekommen.</p>`;
+            } else if (state.cal.avail?.error) {
+                html += `<p class="bf-split-time-desc" data-bf-part="timeslots-desc">${state.cal.avail.error}</p>`;
             } else if (!state.slots.length) {
                 html += `<p class="bf-split-time-desc" data-bf-part="timeslots-desc">Keine freien Termine an diesem Tag.</p>`;
             } else {
@@ -874,6 +905,12 @@
             slotsWrap = document.createElement('div');
             slotsWrap.setAttribute('data-bf-dynamic', 'timeslots-list');
             c.appendChild(slotsWrap);
+        }
+        if (state.cal.avail?.error) {
+            c.style.display = 'block';
+            slotsWrap.innerHTML = `<p>${state.cal.avail.error}</p>`;
+            if (staticEmpty) staticEmpty.style.display = 'none';
+            return;
         }
         if (!state.slots.length) {
             c.style.display = 'none';
@@ -1182,7 +1219,7 @@
         const td = step2Scope.querySelector('[data-bf-display="total"]');
         const { service: svc, object: obj, startDate: sd, endDate: ed, city, zip, time, staff, guestCount } = state.sel;
         const isON = svc?.service_type === 'overnight', isH = svc?.service_type === 'hourly', n = nights(sd, ed);
-        const base = isON ? +svc?.price * n : +svc?.price || 0;
+        const base = serviceBasePrice(svc, guestCount, sd, ed);
         const stf = staff ? state.data.staff.find(s => s.id === staff) : null;
         let dt = fmtDisplay(sd); if (isON && ed) dt = `${fmtDisplay(sd)} → ${fmtDisplay(ed)} (${n} ${n === 1 ? 'Nacht' : 'Nächte'})`;
 
@@ -1210,8 +1247,9 @@
                     });
                 });
             } else {
-                const total = +a.price * guestCount;
-                priceRows.push(buildPriceRow(`+ ${a.name}${guestCount > 1 ? ` ×${guestCount}` : ''}`, `€${total.toFixed(2)}`));
+                const qty = addonQuantity(a, guestCount, sel);
+                const total = (+a.price || 0) * qty;
+                priceRows.push(buildPriceRow(`+ ${a.name}${qty > 1 ? ` ×${qty}` : ''}`, `€${total.toFixed(2)}`));
             }
         });
         if (+svc?.cleaning_fee) priceRows.push(buildPriceRow('Reinigung', `€${(+svc.cleaning_fee).toFixed(2)}`));
@@ -1298,6 +1336,50 @@
         });
     };
 
+    function normalizeServicePriceType(type) {
+        return type === 'per_total' || type === 'per_person' ? type : 'per_unit';
+    }
+
+    function normalizeAddonPricingType(type) {
+        return ['per_person', 'per_guest', 'per_ticket'].includes(type) ? 'per_guest' : 'per_booking';
+    }
+
+    function countAddonUnits(sel) {
+        if (!sel) return 0;
+        const bookingUnits = (sel.items || []).reduce((sum, it) => sum + Math.max(1, +(it?.qty || 1)), 0);
+        const guestUnits = (sel.guests || []).reduce((sum, guest) => {
+            return sum + (guest.items || []).reduce((guestSum, it) => guestSum + Math.max(1, +(it?.qty || 1)), 0);
+        }, 0);
+        return bookingUnits + guestUnits;
+    }
+
+    function addonQuantity(addon, guestCount, sel) {
+        const selectedUnits = countAddonUnits(sel);
+        if (selectedUnits > 0) return selectedUnits;
+        return normalizeAddonPricingType(addon?.pricing_type) === 'per_guest' ? (guestCount || 1) : 1;
+    }
+
+    function serviceBasePrice(svc, guestCount, startDate, endDate) {
+        if (!svc) return 0;
+        const priceType = normalizeServicePriceType(svc.price_type);
+        const guestMultiplier = Math.max(1, guestCount || 1);
+        const nightCount = svc.service_type === 'overnight' ? nights(startDate, endDate) : 1;
+        let total = +svc.price || 0;
+        if (priceType !== 'per_total') {
+            if (svc.service_type === 'overnight') total *= nightCount;
+            if (priceType === 'per_person') total *= guestMultiplier;
+        }
+        return total;
+    }
+
+    function servicePriceLabel(svc) {
+        const priceType = normalizeServicePriceType(svc?.price_type);
+        if (priceType === 'per_total') return ' gesamt';
+        if (priceType === 'per_person') return ' p.P.';
+        if (svc?.service_type === 'overnight') return '/Nacht';
+        return '';
+    }
+
     // --- Preis-Berechnung ---
     const calcDisc = () => {
         const v = state.voucher.data; if (!v) return 0;
@@ -1305,10 +1387,9 @@
         return v.discount_type === 'percentage' ? sub * v.discount_value / 100 : Math.min(+v.discount_value, sub);
     };
     const calcSub = () => {
-        const svc = state.sel.service, n = svc?.service_type === 'overnight' ? nights(state.sel.startDate, state.sel.endDate) : 1;
-        let t = (svc?.service_type === 'overnight' ? +svc?.price * n : +svc?.price) || 0;
+        const svc = state.sel.service;
+        let t = serviceBasePrice(svc, state.sel.guestCount, state.sel.startDate, state.sel.endDate);
         t += +svc?.cleaning_fee || 0;
-        const gc = state.sel.guestCount || 1;
         state.sel.addons.forEach(sel => {
             const a = state.data.addons.find(x => x.id === sel.id);
             if (!a) return;
@@ -1326,7 +1407,7 @@
                 });
             } else {
                 // Simple addon
-                t += +a.price * gc;
+                t += (+a.price || 0) * addonQuantity(a, state.sel.guestCount, sel);
             }
         });
         return t;
@@ -1342,7 +1423,7 @@
         state.sel.staff = undefined;
         state.sel.addons = [];
         state.slots = [];
-        state.cal.avail = null;
+        state.cal.avail = createAvailabilityState();
         state.cal.selectingEnd = false;
         state.availStatus = null;
         popServices(); popStaff(); popAddons(); popSlots(); popDateInfo(); syncRightSideState();
@@ -1371,7 +1452,7 @@
         state.sel.staff = id;
         state.sel.startDate = state.sel.endDate = state.sel.time = null;
         state.slots = [];
-        state.cal.avail = null;
+        state.cal.avail = createAvailabilityState();
         state.cal.selectingEnd = false;
         state.availStatus = null;
         popStaff();
@@ -1395,7 +1476,12 @@
         const obj = state.sel.object; if (!obj) return;
         const m = state.cal.month, s = new Date(m.getFullYear(), m.getMonth(), 1), e = new Date(m.getFullYear(), m.getMonth() + 1, 0);
         const d = await rpc('get_availability_for_range', { p_object_id: obj.id, p_start_date: fmtDate(s), p_end_date: fmtDate(e), p_session_id: sessionId });
-        if (d) state.cal.avail = d;
+        state.cal.avail = normalizeAvailability(d);
+        if (state.cal.avail.error) {
+            state.slots = [];
+            state.sel.time = null;
+            state.availStatus = 'unavailable';
+        }
     };
 
     const selDate = async ds => {
@@ -1437,6 +1523,13 @@
         else { state.availStatus = null; return; }
         const ok = await rpc('check_availability', { p_object_id: obj.id, p_start_time: st.toISOString(), p_end_time: et.toISOString(), p_buffer_before: svc.buffer_before_minutes || 0, p_buffer_after: svc.buffer_after_minutes || 0, p_session_id: sessionId });
         state.availStatus = ok === true ? 'available' : 'unavailable';
+        if (ok !== true) {
+            await loadAvail();
+            if (svc.service_type === 'hourly' && sd) {
+                const bookings = state.cal.avail?.bookings?.filter(b => normDate(b?.date) === sd) || [];
+                state.slots = genSlots(svc, obj, bookings, sd);
+            }
+        }
         popDateInfo();
     };
 

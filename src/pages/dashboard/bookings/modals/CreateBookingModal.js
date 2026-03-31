@@ -2,6 +2,7 @@ import { getIconString } from '../../../../components/Icons/Icon.js';
 import { getState } from '../../../../lib/store.js';
 import { formatDate } from '../../../../lib/dateUtils.js';
 import { SearchDropdown } from '../../../../components/SearchDropdown/SearchDropdown.js';
+import { isServiceLinkedToObject } from '../../../../lib/serviceObjectLinks.js';
 import {
     fetchBookingCustomers,
     fetchBookingModalData,
@@ -524,7 +525,9 @@ const getStepContent = (step) => {
                 </div>
             `;
         case STEPS.SELECT_SERVICE: {
-            const services = modalState.data.services.filter((s) => s.object_id === modalState.object?.id && s.status === 'active');
+            const services = modalState.data.services.filter((s) => (
+                s.status === 'active' && isServiceLinkedToObject(s, modalState.object?.id)
+            ));
             return `
                 <div class="cb-option-list">
                     ${services.length === 0 ? '<p class="cb-muted-text">Keine Services fuer dieses Objekt verfuegbar.</p>' : ''}

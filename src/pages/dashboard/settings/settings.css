@@ -734,19 +734,6 @@
   gap: var(--space-16);
 }
 
-.integration-setup__title {
-  margin: 0;
-  font-size: 1.75rem;
-  font-weight: 500;
-  color: var(--color-vulcan-900);
-}
-
-.integration-setup__subtitle {
-  margin: 0;
-  color: var(--color-stone-500);
-  font-size: 1.4rem;
-}
-
 .integration-setup__percent {
   font-size: 1rem;
   font-weight: 500;
@@ -813,19 +800,6 @@
   display: flex;
   gap: var(--space-10);
   flex-wrap: wrap;
-}
-
-.integration-payment-methods__title {
-  margin: 0;
-  font-size: 1.75rem;
-  font-weight: 500;
-  color: var(--color-vulcan-900);
-}
-
-.integration-payment-methods__subtitle {
-  margin: 0;
-  color: var(--color-stone-500);
-  font-size: 1.4rem;
 }
 
 .integration-payment-methods__list {

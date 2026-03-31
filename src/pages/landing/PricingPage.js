@@ -6,7 +6,7 @@ import { createPricingCard } from '../../components/landing/PricingCard.js';
 import { createFeatureRelatedSlider, initFeatureRelatedSlider } from '../../components/landing/FeatureRelatedSlider.js';
 import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
 import { featurePages } from '../../data/features/index.js';
-import { setPageMeta, setFAQSchema, setProductSchema, setBreadcrumbSchema } from '../../lib/seoHelper.js';
+import { setPageMeta, setFAQSchema, setProductSchema, setBreadcrumbSchema, setHreflangAlternates } from '../../lib/seoHelper.js';
 import { createNumberReel } from '../../lib/animation/numberReel.js';
 
 const FOUNDER_DEAL_ACTIVE = false;
@@ -59,6 +59,12 @@ const PLANS = [
   },
 ];
 
+const PLANS_EN = [
+  { name: 'Basic', price: '9,49', priceAnnual: '91,10', priceEffectiveMonthly: '7,59', workspaces: 1, description: 'Solo operators, 1 website. One setup — everything you need to start.', cta: 'Start with Basic' },
+  { name: 'Team', price: '16,49', priceAnnual: '158,30', priceEffectiveMonthly: '13,19', workspaces: 3, description: 'Multiple offerings/setups, 2–3 websites, growth.', cta: 'Start with Team' },
+  { name: 'Agentur', price: '29,49', priceAnnual: '283,10', priceEffectiveMonthly: '23,59', workspaces: 10, description: 'Agencies, franchise, portfolio operators, many websites.', cta: 'Start with Agency' },
+];
+
 const SECURITY_BADGES = [
   { label: 'DSGVO-konform', icon: 'check.svg' },
   { label: 'SSL-Verschlüsselung', icon: 'lock.svg' },
@@ -77,6 +83,17 @@ const PLAN_FEATURES = [
   { label: 'EU-Server', icon: 'Globe.svg' },
 ];
 
+const PLAN_FEATURES_EN = [
+  { label: 'No commission per booking', icon: 'money-hand.svg' },
+  { label: '1 kg ocean plastic removed monthly', icon: 'clean.svg' },
+  { label: 'Full analytics included', icon: 'chart.svg' },
+  { label: 'Multiple websites per account', icon: 'Building-comapny.svg' },
+  { label: 'GDPR compliant', icon: 'check.svg' },
+  { label: 'SSL encryption', icon: 'lock.svg' },
+  { label: 'Secure data', icon: 'key.svg' },
+  { label: 'EU servers', icon: 'Globe.svg' },
+];
+
 const PAGE_FAQ = [
   { question: 'Was ist ein Workspace?', answer: 'Ein Workspace ist ein eigenes Setup – z.B. eine Website oder ein Projekt mit eigenen Angeboten, Regeln und Buchungen.' },
   { question: 'Ist Analytics in jedem Plan gleich?', answer: 'Ja. Du bekommst den vollen Analytics-Umfang in jedem Plan – damit du sofort siehst, was funktioniert.' },
@@ -87,20 +104,37 @@ const PAGE_FAQ = [
   { question: 'Founder Deal – wie lange gilt der?', answer: 'Aktuell ist kein Founder Deal aktiv. Sobald ein Founder Deal verfügbar ist, kommunizieren wir Laufzeit und Bedingungen transparent auf dieser Seite.' },
 ];
 
-function getPlanByWorkspaces(workspaceCount) {
-  if (workspaceCount <= 1) return PLANS[0];
-  if (workspaceCount <= 3) return PLANS[1];
-  return PLANS[2];
+const PAGE_FAQ_EN = [
+  { question: 'What is a workspace?', answer: 'A workspace is its own setup — e.g. a website or project with its own offerings, rules, and bookings.' },
+  { question: 'Is Analytics the same in every plan?', answer: 'Yes. You get full analytics in every plan — so you see what works right away.' },
+  { question: 'Are there booking fees or commissions?', answer: 'No. BookFast charges no commission per booking.' },
+  { question: 'Can I upgrade later?', answer: 'Yes. You can switch to Team or Agency at any time.' },
+  { question: 'What does sustainability impact mean?', answer: 'Part of your plan flows into a sustainable impact — measurable, transparent, no extra effort for you.' },
+  { question: 'What is the annual plan advantage?', answer: 'You save 20% (equivalent to 2 months free) with full planning certainty.' },
+  { question: 'Founder Deal — how long does it last?', answer: 'Currently no Founder Deal is active. When available, we will communicate duration and conditions transparently on this page.' },
+];
+
+const SECURITY_BADGES_EN = [
+  { label: 'GDPR compliant', icon: 'check.svg' },
+  { label: 'SSL encryption', icon: 'lock.svg' },
+  { label: 'Secure data', icon: 'check.svg' },
+  { label: 'EU servers', icon: 'Globe.svg' },
+];
+
+function getPlanByWorkspaces(workspaceCount, plans) {
+  if (workspaceCount <= 1) return plans[0];
+  if (workspaceCount <= 3) return plans[1];
+  return plans[2];
 }
 
-function renderActivePricingCard(workspaceCount, isAnnual) {
-  const activePlan = getPlanByWorkspaces(workspaceCount);
+function renderActivePricingCard(workspaceCount, isAnnual, { plans, planFeatures, securityBadges }) {
+  const activePlan = getPlanByWorkspaces(workspaceCount, plans);
   return createPricingCard({
     ...activePlan,
     workspaces: workspaceCount,
     isAnnual,
-    planFeatures: PLAN_FEATURES,
-    securityBadges: SECURITY_BADGES,
+    planFeatures,
+    securityBadges,
   });
 }
 
@@ -114,27 +148,47 @@ function getPriceNumericValue(plan, isAnnual) {
   return Number(String(raw).replace(',', '.')) || 0;
 }
 
-function getPeriodDisplay(plan, isAnnual) {
-  return isAnnual && plan.priceAnnual ? '/Jahr' : '/Monat';
+function getPeriodDisplay(plan, isAnnual, isEn) {
+  if (!(isAnnual && plan.priceAnnual)) return isEn ? '/month' : '/Monat';
+  return isEn ? '/year' : '/Jahr';
 }
 
-function getAnnualHintDisplay(plan, isAnnual) {
+function getAnnualHintDisplay(plan, isAnnual, isEn) {
   if (isAnnual && plan.priceEffectiveMonthly) {
-    return `≈ ${plan.priceEffectiveMonthly.replace('.', ',')} €/Monat, 2 Monate gratis`;
+    return isEn
+      ? `≈ ${plan.priceEffectiveMonthly.replace('.', ',')} €/month, 2 months free`
+      : `≈ ${plan.priceEffectiveMonthly.replace('.', ',')} €/Monat, 2 Monate gratis`;
   }
   return '';
 }
 
-export const renderPricingPage = () => {
+export const renderPricingPage = (locale = 'de') => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta('Preise – Webflow Buchungssystem', 'Webflow Buchungssystem ab 9,49 €/Monat. Alle Features in jedem Plan – 0 % Provision. Nur Workspaces unterscheiden sich.');
-  setFAQSchema(PAGE_FAQ);
-  setProductSchema(PLANS);
+  const isEn = locale === 'en';
+  const plans = isEn ? PLANS_EN : PLANS;
+  const planFeatures = isEn ? PLAN_FEATURES_EN : PLAN_FEATURES;
+  const securityBadges = isEn ? SECURITY_BADGES_EN : SECURITY_BADGES;
+  const pageFaq = isEn ? PAGE_FAQ_EN : PAGE_FAQ;
+  const pricingCardOpts = { plans, planFeatures, securityBadges };
+
+  setPageMeta(
+    isEn ? 'Pricing – Webflow booking system' : 'Preise – Webflow Buchungssystem',
+    isEn
+      ? 'Webflow booking system from €9.49/month. Every feature in every plan — 0% commission. Only workspaces differ.'
+      : 'Webflow Buchungssystem ab 9,49 €/Monat. Alle Features in jedem Plan – 0 % Provision. Nur Workspaces unterscheiden sich.',
+    { locale },
+  );
+  setFAQSchema(pageFaq);
+  setProductSchema(plans);
   setBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'Preise', url: '/preise' },
+    { name: 'Home', url: isEn ? '/en' : '/' },
+    { name: isEn ? 'Pricing' : 'Preise', url: isEn ? '/en/pricing' : '/preise' },
+  ]);
+  setHreflangAlternates([
+    { hreflang: 'de', path: '/preise' },
+    { hreflang: 'en', path: '/en/pricing' },
   ]);
 
   const founderNoteHTML = FOUNDER_DEAL_ACTIVE
@@ -149,7 +203,7 @@ export const renderPricingPage = () => {
     <div class="landing-pricing-module-shell">
       <div class="landing-frosted-frame landing-pricing-module-frame">
         <div class="landing-pricing-single-card" id="pricing-cards-container">
-          ${renderActivePricingCard(1, false)}
+          ${renderActivePricingCard(1, false, pricingCardOpts)}
         </div>
       </div>
     </div>
@@ -157,21 +211,29 @@ export const renderPricingPage = () => {
 
   content.innerHTML = `
     ${createHero({
-      headline: 'Preise – Buchungssystem für Webflow',
-      subheadline: 'BookFast verbindet Buchungen, Online-Zahlungen und Analytics in einem System – für Services, Tagesmieten und Übernachtungen.',
-      illustrationAlt: 'Preisübersicht und Analytics-Illustration für BookFast Workspaces',
+      headline: isEn ? 'Pricing – booking for Webflow' : 'Preise – Buchungssystem für Webflow',
+      subheadline: isEn
+        ? 'BookFast brings bookings, online payments, and analytics together — for services, day rentals, and overnight stays.'
+        : 'BookFast verbindet Buchungen, Online-Zahlungen und Analytics in einem System – für Services, Tagesmieten und Übernachtungen.',
+      illustrationAlt: isEn
+        ? 'Pricing overview and analytics illustration for BookFast workspaces'
+        : 'Preisübersicht und Analytics-Illustration für BookFast Workspaces',
       primaryCTA: '',
       secondaryCTA: '',
       trustClaims: [],
       slotContent: pricingSlotContent,
     })}
 
-    ${createFAQSection({ pageFaq: PAGE_FAQ, pageTitle: 'Preise', featureOnly: true })}
+    ${createFAQSection({ pageFaq, pageTitle: isEn ? 'Pricing' : 'Preise', featureOnly: true })}
 
-    ${createFeatureRelatedSlider({ features: Object.values(featurePages), label: 'In allen Plänen enthalten', headline: 'Immer dabei.' })}
+    ${createFeatureRelatedSlider({
+      features: Object.values(featurePages),
+      label: isEn ? 'Included in all plans' : 'In allen Plänen enthalten',
+      headline: isEn ? 'Always included.' : 'Immer dabei.',
+    })}
   `;
 
-  const cleanupPricingControls = initPricingControls(content);
+  const cleanupPricingControls = initPricingControls(content, { isEn, ...pricingCardOpts });
   initFeatureRelatedSlider(content);
   initFAQAccordion(content);
 
@@ -182,9 +244,11 @@ export const renderPricingPage = () => {
   };
 };
 
-function initPricingControls(content) {
+function initPricingControls(content, { isEn, plans, planFeatures, securityBadges }) {
   const container = content.querySelector('#pricing-cards-container');
   if (!container) return;
+
+  const pricingCardOpts = { plans, planFeatures, securityBadges };
 
   const state = {
     isAnnual: false,
@@ -203,7 +267,7 @@ function initPricingControls(content) {
     }
   };
 
-  container.innerHTML = renderActivePricingCard(state.workspaceCount, state.isAnnual);
+  container.innerHTML = renderActivePricingCard(state.workspaceCount, state.isAnnual, pricingCardOpts);
 
   const nodes = {
     nameEl: container.querySelector('.landing-pricing-card__name'),
@@ -233,10 +297,10 @@ function initPricingControls(content) {
   };
 
   const applyStateToCard = (animateReel = true) => {
-    const activePlan = getPlanByWorkspaces(state.workspaceCount);
+    const activePlan = getPlanByWorkspaces(state.workspaceCount, plans);
     const priceNumeric = getPriceNumericValue(activePlan, state.isAnnual);
-    const periodText = getPeriodDisplay(activePlan, state.isAnnual);
-    const annualHintText = getAnnualHintDisplay(activePlan, state.isAnnual);
+    const periodText = getPeriodDisplay(activePlan, state.isAnnual, isEn);
+    const annualHintText = getAnnualHintDisplay(activePlan, state.isAnnual, isEn);
 
     if (nodes.nameEl && nodes.nameEl.textContent !== activePlan.name) {
       nodes.nameEl.textContent = activePlan.name;

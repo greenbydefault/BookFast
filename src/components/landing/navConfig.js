@@ -12,27 +12,14 @@ export const FEATURE_ICON_MAP = {
   integration: 'blocks-integration',
   kundenportal: 'spark-magic',
   mitarbeiter: 'users-2',
-  addons: 'blocks-integration',
-  gutscheine: 'ticket-percent',
-  kunden: 'user-square',
-  verfuegbarkeit: 'target',
-  buffer: 'clean',
-  zeitfenster: 'clock',
-  approval: 'check',
-  overnight: 'clock',
   workspaces: 'home',
-  kaution: 'bank-card',
-  urlaub: 'calender-days-date',
-  'email-templates': 'mails',
 };
 
-export const DISABLED_FEATURE_SLUGS = new Set(['kaution']);
+export const DISABLED_FEATURE_SLUGS = new Set();
 
 export const MEGA_FEATURE_CATEGORIES = [
-  { label: 'Setup & Struktur', slugs: ['objekte', 'services', 'zeitfenster', 'integration', 'workspaces'] },
-  { label: 'Buchungen & Verfügbarkeit', slugs: ['buchungen', 'verfuegbarkeit', 'buffer', 'urlaub', 'overnight'] },
-  { label: 'Zahlung & Umsatz', slugs: ['zahlungen', 'kaution', 'addons', 'gutscheine', 'rechnungen'] },
-  { label: 'Kunden, Team & Insights', slugs: ['kunden', 'kundenportal', 'mitarbeiter', 'email-templates', 'analytics'] },
+  { label: 'Buchung & Verwaltung', slugs: ['buchungen', 'objekte', 'services', 'mitarbeiter', 'workspaces'] },
+  { label: 'Zahlung & Plattform', slugs: ['zahlungen', 'rechnungen', 'analytics', 'integration', 'kundenportal'] },
 ];
 
 export const MEGA_PRODUCT_ITEMS = [

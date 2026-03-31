@@ -40,7 +40,11 @@ export const fetchBookingModalData = async (workspaceId) => {
 
     const [objs, svcs, adds, stf] = await Promise.all([
         supabase.from('objects').select('*').eq('workspace_id', workspaceId).eq('status', 'active'),
-        supabase.from('services').select('*').eq('workspace_id', workspaceId).eq('status', 'active'),
+        supabase
+            .from('services')
+            .select('*, service_objects(object_id)')
+            .eq('workspace_id', workspaceId)
+            .eq('status', 'active'),
         supabase
             .from('addons')
             .select('*, addon_services(service_id), addon_items(id, name, quantity, selection_mode, applicability, addon_item_variants(id, name))')

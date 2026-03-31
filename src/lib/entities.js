@@ -31,7 +31,7 @@ export const ENTITIES = {
 
     objects: {
         table: 'objects',
-        select: '*, services(id, name)',
+        select: '*, services:service_objects(service_id, services(id, name))',
         orderBy: 'name',
         orderDirection: 'asc',
         filterColumn: 'status',
@@ -43,7 +43,7 @@ export const ENTITIES = {
 
     services: {
         table: 'services',
-        select: '*, objects(id, name), addons:addon_services(addon_id, addons(id, name)), staff:staff_services(staff_id, staff(id, name, image_url))',
+        select: '*, objects:service_objects(object_id, objects(id, name)), addons:addon_services(addon_id, addons(id, name)), staff:staff_services(staff_id, staff(id, name, image_url))',
         orderBy: 'name',
         orderDirection: 'asc',
         filterColumn: 'status',

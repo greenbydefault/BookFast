@@ -55,10 +55,30 @@ const oneYearFromNowIsoDate = () => {
 };
 
 /**
+ * hreflang alternate links (removed in clearSEO).
+ */
+export const setHreflangAlternates = (pairs) => {
+  document.querySelectorAll('link[data-bf-hreflang]').forEach((el) => el.remove());
+  if (!Array.isArray(pairs) || pairs.length === 0) return;
+  pairs.forEach(({ hreflang, path }) => {
+    if (!hreflang || path == null) return;
+    const link = document.createElement('link');
+    link.rel = 'alternate';
+    link.hreflang = hreflang;
+    link.href = toAbsoluteUrl(path);
+    link.setAttribute('data-bf-hreflang', '1');
+    document.head.appendChild(link);
+  });
+};
+
+/**
  * Set page title and meta description
+ * @param {string|null} title
+ * @param {string} description
+ * @param {{ noindex?: boolean, locale?: 'de'|'en' }} [options]
  */
 export const setPageMeta = (title, description, options = {}) => {
-  const { noindex = false } = options;
+  const { noindex = false, locale = 'de' } = options;
   const fullTitle = title ? `${title} | BookFast` : DEFAULT_TITLE;
   const desc = description || '';
   const url = `${BASE_URL}${window.location.pathname === '/index.html' ? '/' : window.location.pathname}`;
@@ -68,13 +88,17 @@ export const setPageMeta = (title, description, options = {}) => {
   upsertMeta('name', 'description').content = desc;
   upsertMeta('name', 'robots').content = noindex ? 'noindex,follow' : 'index,follow';
 
+  const ogLocale = locale === 'en' ? 'en_US' : 'de_DE';
+  const ogLocaleAlt = locale === 'en' ? 'de_DE' : 'en_US';
+
   // Open Graph
   upsertMeta('property', 'og:title').content = fullTitle;
   upsertMeta('property', 'og:description').content = desc;
   upsertMeta('property', 'og:type').content = 'website';
   upsertMeta('property', 'og:url').content = url;
   upsertMeta('property', 'og:image').content = DEFAULT_IMAGE;
-  upsertMeta('property', 'og:locale').content = 'de_DE';
+  upsertMeta('property', 'og:locale').content = ogLocale;
+  upsertMeta('property', 'og:locale:alternate').content = ogLocaleAlt;
 
   // Twitter
   upsertMeta('name', 'twitter:card').content = 'summary_large_image';
@@ -239,13 +263,17 @@ export const setBreadcrumbSchema = (items) => {
 
 /**
  * Inject ContactPage schema for contact route.
+ * @param {{ locale?: 'de'|'en' }} [options]
  */
-export const setContactPageSchema = () => {
+export const setContactPageSchema = (options = {}) => {
+  const { locale = 'de' } = options;
+  const isEn = locale === 'en';
+  const path = isEn ? '/en/contact' : '/kontakt';
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
-    name: 'Kontakt | BookFast',
-    url: toAbsoluteUrl('/kontakt'),
+    name: isEn ? 'Contact | BookFast' : 'Kontakt | BookFast',
+    url: toAbsoluteUrl(path),
     mainEntity: {
       '@type': 'Organization',
       '@id': ORGANIZATION_ID,
@@ -255,9 +283,9 @@ export const setContactPageSchema = () => {
         {
           '@type': 'ContactPoint',
           contactType: 'customer support',
-          url: toAbsoluteUrl('/kontakt'),
+          url: toAbsoluteUrl(path),
           email: 'hello@book-fast.de',
-          availableLanguage: ['de'],
+          availableLanguage: isEn ? ['de', 'en'] : ['de'],
         },
       ],
     },
@@ -273,4 +301,5 @@ export const clearSEO = () => {
   Object.values(SCHEMA_SCRIPT_IDS).forEach((id) => {
     document.getElementById(id)?.remove();
   });
+  document.querySelectorAll('link[data-bf-hreflang]').forEach((el) => el.remove());
 };

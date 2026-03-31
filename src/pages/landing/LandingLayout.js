@@ -7,6 +7,7 @@ import { renderNavigation } from '../../components/landing/Navigation.js';
 import { renderFooter } from '../../components/landing/Footer.js';
 import { initLandingRouter } from '../../lib/landingRouter.js';
 import { registerAllLandingPages } from './registry.js';
+import '../../locales/en/features/index.js';
 
 const app = document.querySelector('#app');
 

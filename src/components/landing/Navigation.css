@@ -61,6 +61,35 @@
   justify-content: flex-end;
   margin-left: 0;
   min-width: 0;
+  gap: 0.75rem;
+}
+
+.landing-lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--space-13);
+  font-weight: 500;
+}
+
+.landing-lang-link {
+  color: var(--color-stone-500);
+  text-decoration: none;
+  padding: 0.25rem 0.35rem;
+  border-radius: var(--radius-md);
+}
+
+.landing-lang-link:hover {
+  color: var(--color-vulcan-900);
+}
+
+.landing-lang-link.is-active {
+  color: var(--color-vulcan-900);
+}
+
+.landing-lang-sep {
+  color: var(--color-stone-300);
+  user-select: none;
 }
 
 /* Dropdown */

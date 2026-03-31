@@ -2,6 +2,7 @@ import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { supabaseAdmin } from '../_shared/supabase.ts';
 import { stripe } from '../_shared/stripe.ts';
+import { calculateAddonQuantity } from '../_shared/pricing.ts';
 import Stripe from 'https://esm.sh/stripe@14.14.0?target=deno';
 
 // Webhook secret for verifying Stripe events
@@ -212,6 +213,11 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, request
     addonIds = JSON.parse(metadata.addon_ids || '[]');
   } catch { }
 
+  let addonSelections: any[] = [];
+  try {
+    addonSelections = JSON.parse(metadata.addon_selections || '[]');
+  } catch { }
+
   // Create booking
   // With Direct Charges, payment is already on the connected account
   // Status is pending_approval so operator can confirm or decline (with refund)
@@ -220,6 +226,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, request
   const addonsPrice = parseMoney(metadata.addons_price || '0', 'addons_price', requestId);
   const discountAmount = parseMoney(metadata.discount_amount || '0', 'discount_amount', requestId);
   const totalPrice = parseMoney(metadata.total_price, 'total_price', requestId);
+  const guestCount = metadata.guest_count ? parseInt(metadata.guest_count) : 1;
 
   const { data: booking, error: bookingError } = await supabaseAdmin
     .from('bookings')
@@ -243,8 +250,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, request
       staff_id: metadata.staff_id || null,
       payment_intent_id: session.payment_intent as string,
       checkout_session_id: session.id,
-      guest_count: metadata.guest_count ? parseInt(metadata.guest_count) : 1,
-      addon_selections: metadata.addon_selections ? JSON.parse(metadata.addon_selections) : null,
+      guest_count: guestCount,
+      addon_selections: addonSelections.length ? addonSelections : null,
       customer_address: metadata.customer_address || null,
       customer_city: metadata.customer_city || null,
       customer_zip: metadata.customer_zip || null,
@@ -265,24 +272,38 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, request
   if (addonIds.length > 0 && booking) {
     const { data: addons } = await supabaseAdmin
       .from('addons')
-      .select('id, price')
+      .select('id, price, pricing_type')
       .in('id', addonIds);
 
     if (addons) {
-      const bookingAddons = addons.map(addon => ({
-        booking_id: booking.id,
-        addon_id: addon.id,
-        price_per_unit: addon.price,
-        quantity: 1,
-        total_price: addon.price,
-      }));
-
-      const { error: addonInsertError } = await supabaseAdmin.from('booking_addons').insert(bookingAddons);
-      if (addonInsertError) {
-        console.error(`[${requestId}] Failed to insert booking_addons`, {
+      const addonSelectionsById = new Map(
+        addonSelections
+          .filter((selection) => selection?.addon_id)
+          .map((selection) => [selection.addon_id, selection]),
+      );
+      const bookingAddons = addons.map((addon) => {
+        const quantity = calculateAddonQuantity(
+          addon,
+          guestCount,
+          addonSelectionsById.get(addon.id) || null,
+        );
+        return {
           booking_id: booking.id,
-          error: addonInsertError.message,
-        });
+          addon_id: addon.id,
+          price_per_unit: addon.price,
+          quantity,
+          total_price: (Number(addon.price) || 0) * quantity,
+        };
+      }).filter((addon) => addon.quantity > 0);
+
+      if (bookingAddons.length > 0) {
+        const { error: addonInsertError } = await supabaseAdmin.from('booking_addons').insert(bookingAddons);
+        if (addonInsertError) {
+          console.error(`[${requestId}] Failed to insert booking_addons`, {
+            booking_id: booking.id,
+            error: addonInsertError.message,
+          });
+        }
       }
     }
   }

@@ -360,8 +360,9 @@ export const invalidateCache = (entityType = null) => {
  * @param {string} localId - UUID of the owning entity
  * @param {string} foreignKey - Column for the linked entity (e.g. 'addon_id')
  * @param {string[]} foreignIds - Array of linked entity UUIDs
+ * @param {Object} extraFields - Additional fields to include per inserted row
  */
-export const syncJunctionTable = async (table, localKey, localId, foreignKey, foreignIds) => {
+export const syncJunctionTable = async (table, localKey, localId, foreignKey, foreignIds, extraFields = {}) => {
     const { error: delError } = await supabase.from(table).delete().eq(localKey, localId);
     if (delError) {
         console.error(`syncJunctionTable delete(${table}):`, delError);
@@ -369,12 +370,59 @@ export const syncJunctionTable = async (table, localKey, localId, foreignKey, fo
     }
 
     if (foreignIds.length > 0) {
-        const rows = foreignIds.map(fId => ({ [localKey]: localId, [foreignKey]: fId }));
+        const rows = foreignIds.map(fId => ({
+            ...extraFields,
+            [localKey]: localId,
+            [foreignKey]: fId
+        }));
         const { error: insError } = await supabase.from(table).insert(rows);
         if (insError) {
             console.error(`syncJunctionTable insert(${table}):`, insError);
             throw insError;
         }
+    }
+};
+
+/**
+ * Keep the legacy services.object_id field aligned with the first linked object.
+ * This preserves compatibility while service_objects is the real source of truth.
+ *
+ * @param {string[]} serviceIds
+ */
+export const syncServicePrimaryObjectIds = async (serviceIds = []) => {
+    const uniqueServiceIds = [...new Set(serviceIds.filter(Boolean))];
+    if (uniqueServiceIds.length === 0) return;
+
+    const { data: links, error: linksError } = await supabase
+        .from('service_objects')
+        .select('service_id, object_id')
+        .in('service_id', uniqueServiceIds)
+        .order('object_id', { ascending: true });
+
+    if (linksError) {
+        console.error('syncServicePrimaryObjectIds fetch(service_objects):', linksError);
+        throw linksError;
+    }
+
+    const primaryByServiceId = new Map(uniqueServiceIds.map(serviceId => [serviceId, null]));
+    (links || []).forEach((link) => {
+        if (!primaryByServiceId.has(link.service_id)) return;
+        if (primaryByServiceId.get(link.service_id) !== null) return;
+        primaryByServiceId.set(link.service_id, link.object_id);
+    });
+
+    const updates = uniqueServiceIds.map((serviceId) =>
+        supabase
+            .from('services')
+            .update({ object_id: primaryByServiceId.get(serviceId) || null })
+            .eq('id', serviceId)
+    );
+
+    const results = await Promise.all(updates);
+    const failed = results.find(({ error }) => error);
+    if (failed?.error) {
+        console.error('syncServicePrimaryObjectIds update(services):', failed.error);
+        throw failed.error;
     }
 };
 

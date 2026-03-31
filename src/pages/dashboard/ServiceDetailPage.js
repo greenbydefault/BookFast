@@ -2,11 +2,11 @@
  * Service Detail Page - Orchestrator
  * 2-column layout: Center (preview card) | Side Card (edit fields + actions)
  */
-import { fetchEntity, fetchEntities, updateEntity, invalidateCache, syncJunctionTable } from '../../lib/dataLayer.js';
+import { fetchEntity, fetchEntities, updateEntity, invalidateCache, syncJunctionTable, syncServicePrimaryObjectIds } from '../../lib/dataLayer.js';
 import { createMultiSelectTags } from '../../components/MultiSelectTags/MultiSelectTags.js';
 import { navigate, getNavigationGeneration } from '../../lib/router.js';
 import { getIconString } from '../../components/Icons/Icon.js';
-import { createActionButton } from '../../components/Button/Button.js';
+import { getLinkedEntityItems } from '../../lib/uiHelpers.js';
 import {
     renderDetailLayout,
     updateCenter,
@@ -57,7 +57,7 @@ const calcFixedSlots = (windowStart, windowEnd, durationMin) => {
 // ── Center Preview ──
 
 const buildCenterPreview = (service) => {
-    const linkedObjects = service.objects ? (Array.isArray(service.objects) ? service.objects : [service.objects]) : [];
+    const linkedObjects = getLinkedEntityItems(service.objects);
     const linkedAddons = service.addons || [];
     const linkedStaff = service.staff || [];
     const isOvernight = service.service_type === 'overnight';
@@ -399,6 +399,7 @@ const renderSideCard = (service) => {
                     sideCardSection({
                         title: 'Verknüpfungen',
                         content: `
+                            <div id="link-objects-container" class="detail-nav-link-group"></div>
                             <div id="link-addons-container"></div>
                             <div id="link-staff-container" class="detail-nav-link-group"></div>
                         `
@@ -513,7 +514,41 @@ const wireUpSideCard = (serviceId, ctx, signal) => {
 
 /** Mount MultiSelectTags for Addons + Staff into side card containers */
 const mountLinkSelectors = (service, serviceId, ctx) => {
-    if (!ctx.allAddons || !ctx.allStaff) return;
+    if (!ctx.allObjects || !ctx.allAddons || !ctx.allStaff) return;
+
+    const objectsContainer = document.getElementById('link-objects-container');
+    if (objectsContainer) {
+        objectsContainer.innerHTML = '';
+        const objectSelect = createMultiSelectTags({
+            label: 'Objekte', icon: 'home',
+            placeholder: 'Objekt hinzufügen...',
+            options: ctx.allObjects.map(o => ({ value: o.id, label: o.name })),
+            selectedValues: getLinkedEntityItems(ctx.currentService.objects).map(o => o.id),
+            onChange: async (ids) => {
+                await syncJunctionTable(
+                    'service_objects',
+                    'service_id',
+                    serviceId,
+                    'object_id',
+                    ids,
+                    { workspace_id: ctx.currentService.workspace_id }
+                );
+                await syncServicePrimaryObjectIds([serviceId]);
+                invalidateCache('objects');
+                invalidateCache('services');
+                ctx.currentService.objects = ids.map(id => {
+                    const found = ctx.allObjects.find(o => o.id === id);
+                    return {
+                        object_id: id,
+                        objects: found ? { id: found.id, name: found.name } : { id, name: '—' }
+                    };
+                });
+                const values = collectFormValues(ctx.currentService.service_type);
+                updateCenter(buildCenterPreview({ ...ctx.currentService, ...values }));
+            }
+        });
+        objectsContainer.appendChild(objectSelect.element);
+    }
 
     const addonContainer = document.getElementById('link-addons-container');
     if (addonContainer) {
@@ -662,10 +697,12 @@ const loadAndRender = async (serviceId, gen, signal, ctx) => {
     }
 
     // Load options for link selectors, then mount
-    const [addonsResult, staffResult] = await Promise.all([
+    const [objectsResult, addonsResult, staffResult] = await Promise.all([
+        fetchEntities('objects', { perPage: 999 }),
         fetchEntities('addons', { perPage: 999 }),
         fetchEntities('staff', { perPage: 999 }),
     ]);
+    ctx.allObjects = objectsResult.items;
     ctx.allAddons = addonsResult.items;
     ctx.allStaff = staffResult.items;
     mountLinkSelectors(service, serviceId, ctx);

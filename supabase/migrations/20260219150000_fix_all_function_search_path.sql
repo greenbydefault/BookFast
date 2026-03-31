@@ -63,36 +63,94 @@ CREATE OR REPLACE FUNCTION public.create_booking_request(
 RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $function$
 DECLARE
     v_booking_id uuid;
+    v_base_price decimal;
     v_service_price decimal;
+    v_price_type text;
+    v_service_type text;
     v_cleaning_fee decimal;
-    v_addon_price decimal;
+    v_addons_price decimal;
+    v_discount_amount decimal;
     v_total_price decimal;
     v_addon_id uuid;
     v_workspace_id uuid;
+    v_guest_count integer;
+    v_nights integer;
+    v_subtotal decimal;
+    v_voucher_discount_type text;
+    v_voucher_discount_value decimal;
+    v_voucher_valid_from timestamptz;
+    v_voucher_valid_until timestamptz;
+    v_voucher_max_uses_total integer;
+    v_voucher_times_used integer;
 BEGIN
-    SELECT price, cleaning_fee, workspace_id INTO v_service_price, v_cleaning_fee, v_workspace_id
-    FROM public.services WHERE id = p_service_id;
+    v_guest_count := GREATEST(COALESCE(p_guest_count, 1), 1);
 
-    IF v_service_price IS NULL THEN
+    SELECT price, price_type, service_type, cleaning_fee, workspace_id
+    INTO v_base_price, v_price_type, v_service_type, v_cleaning_fee, v_workspace_id
+    FROM public.services
+    WHERE id = p_service_id;
+
+    IF v_base_price IS NULL THEN
         RETURN jsonb_build_object('success', false, 'error', 'Service not found');
     END IF;
 
-    v_addon_price := 0;
+    v_nights := CASE
+        WHEN v_service_type = 'overnight' THEN GREATEST(1, CEIL(EXTRACT(EPOCH FROM (p_end_time - p_start_time)) / 86400.0)::integer)
+        ELSE 1
+    END;
+
+    v_service_price := COALESCE(v_base_price, 0);
+    IF v_price_type IS DISTINCT FROM 'per_total' THEN
+        IF v_service_type = 'overnight' THEN
+            v_service_price := v_service_price * v_nights;
+        END IF;
+        IF v_price_type = 'per_person' THEN
+            v_service_price := v_service_price * v_guest_count;
+        END IF;
+    END IF;
+    v_service_price := v_service_price + COALESCE(v_cleaning_fee, 0);
+
+    v_addons_price := 0;
     IF p_addon_ids IS NOT NULL AND array_length(p_addon_ids, 1) > 0 THEN
-        SELECT COALESCE(SUM(price), 0) INTO v_addon_price
+        SELECT COALESCE(SUM(price), 0) INTO v_addons_price
         FROM public.addons WHERE id = ANY(p_addon_ids);
     END IF;
 
-    v_total_price := v_service_price + COALESCE(v_cleaning_fee, 0) + v_addon_price;
+    v_subtotal := v_service_price + v_addons_price;
+    v_discount_amount := 0;
+
+    IF p_voucher_code IS NOT NULL AND btrim(p_voucher_code) <> '' THEN
+        SELECT discount_type, discount_value, valid_from, valid_until, max_uses_total, times_used
+        INTO v_voucher_discount_type, v_voucher_discount_value, v_voucher_valid_from, v_voucher_valid_until, v_voucher_max_uses_total, v_voucher_times_used
+        FROM public.vouchers
+        WHERE workspace_id = v_workspace_id
+          AND upper(code) = upper(p_voucher_code)
+          AND status = 'active';
+
+        IF FOUND
+           AND (v_voucher_valid_from IS NULL OR v_voucher_valid_from <= now())
+           AND (v_voucher_valid_until IS NULL OR v_voucher_valid_until >= now())
+           AND (v_voucher_max_uses_total IS NULL OR COALESCE(v_voucher_times_used, 0) < v_voucher_max_uses_total) THEN
+            IF COALESCE(v_voucher_discount_type, '') IN ('percentage', 'percent') THEN
+                v_discount_amount := v_subtotal * (COALESCE(v_voucher_discount_value, 0) / 100);
+            ELSE
+                v_discount_amount := LEAST(COALESCE(v_voucher_discount_value, 0), v_subtotal);
+            END IF;
+        END IF;
+    END IF;
+
+    v_total_price := GREATEST(0, v_subtotal - v_discount_amount);
 
     INSERT INTO public.bookings (
         workspace_id, object_id, service_id, start_time, end_time,
-        customer_name, customer_email, customer_phone, customer_notes, status, total_price,
+        customer_name, customer_email, customer_phone, customer_notes, status,
+        service_price, addons_price, discount_amount, total_price,
         guest_count, addon_selections, customer_address, customer_city, customer_zip
     ) VALUES (
         v_workspace_id, p_object_id, p_service_id, p_start_time, p_end_time,
-        p_customer_name, p_customer_email, p_customer_phone, p_customer_notes, 'pending', v_total_price,
-        p_guest_count, p_addon_selections, p_customer_address, p_customer_city, p_customer_zip
+        p_customer_name, p_customer_email, p_customer_phone, p_customer_notes, 'pending',
+        v_service_price, v_addons_price, v_discount_amount, v_total_price,
+        v_guest_count, p_addon_selections, p_customer_address, p_customer_city, p_customer_zip
     ) RETURNING id INTO v_booking_id;
 
     IF p_addon_ids IS NOT NULL THEN
@@ -107,7 +165,7 @@ BEGIN
     END IF;
 
     PERFORM public.track_event(p_site_id, 'booking_request', NULL::uuid,
-        jsonb_build_object('booking_id', v_booking_id, 'amount', v_total_price, 'guest_count', p_guest_count));
+        jsonb_build_object('booking_id', v_booking_id, 'amount', v_total_price, 'guest_count', v_guest_count));
 
     RETURN jsonb_build_object('success', true, 'booking_id', v_booking_id);
 

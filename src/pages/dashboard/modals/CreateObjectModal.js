@@ -5,8 +5,9 @@
 import { createModal } from '../../../components/Modal/Modal.js';
 import { getIconString } from '../../../components/Icons/Icon.js';
 import { createButton, createActionButton } from '../../../components/Button/Button.js';
-import { createEntity, updateEntity } from '../../../lib/dataLayer.js';
+import { createEntity, updateEntity, syncServicePrimaryObjectIds, invalidateCache } from '../../../lib/dataLayer.js';
 import { supabase } from '../../../lib/supabaseClient.js';
+import { getLinkedEntityItems } from '../../../lib/uiHelpers.js';
 
 // Default state for the form
 const getInitialState = (existingObject = null) => {
@@ -22,7 +23,7 @@ const getInitialState = (existingObject = null) => {
             bufferBefore: existingObject.buffer_before_minutes || 0,
             bufferAfter: existingObject.buffer_after_minutes || 0,
             isDraft: existingObject.status === 'draft',
-            linkedServices: existingObject.services || [],
+            linkedServices: getLinkedEntityItems(existingObject.services),
             isEditMode: true,
             customHoursEnabled: Array.isArray(existingObject.custom_hours) && existingObject.custom_hours.length > 0,
             customHours: (existingObject.custom_hours || []).map((h, i) => ({
@@ -195,13 +196,16 @@ export const openObjectModal = (existingObject, onSuccess) => {
 
     const removeLinkedService = async (serviceId) => {
         try {
-            // Update the service to remove the object_id reference
             const { error } = await supabase
-                .from('services')
-                .update({ object_id: null })
-                .eq('id', serviceId);
+                .from('service_objects')
+                .delete()
+                .eq('service_id', serviceId)
+                .eq('object_id', state.id);
 
             if (error) throw error;
+            await syncServicePrimaryObjectIds([serviceId]);
+            invalidateCache('objects');
+            invalidateCache('services');
 
             // Update local state
             state.linkedServices = state.linkedServices.filter(s => s.id !== serviceId);

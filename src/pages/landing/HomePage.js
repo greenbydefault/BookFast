@@ -10,9 +10,11 @@ import {
 import { createObjectPreviewCard, initObjectPreviewCard } from '../../components/landing/featureDemos/ObjectPreviewCard.js';
 import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
-import { setPageMeta, setFAQSchema } from '../../lib/seoHelper.js';
+import { setPageMeta, setFAQSchema, setHreflangAlternates } from '../../lib/seoHelper.js';
 import { SHARED_FAQ } from '../../data/faq.js';
 import { HOME_FEATURES_STEPS } from '../../data/homeFeatures.js';
+import { getLocaleFromPath, normalizeLandingPath } from '../../lib/landingLocale.js';
+import * as homeEn from '../../locales/en/homePage.js';
 
 const createObjectPreviewHTML = () =>
   `<div class="landing-frosted-frame feature-hero__card-frame">${createObjectPreviewCard()}</div>`;
@@ -20,11 +22,17 @@ const createObjectPreviewHTML = () =>
 const createIntegrationPreviewHTML = () =>
   `<div class="landing-frosted-frame feature-hero__card-frame">${createIntegrationStatusPreviewCard()}</div>`;
 
-export const renderHomePage = () => {
+const renderHomePageDe = () => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  setPageMeta(null, 'Das Webflow Buchungssystem für Terminbuchung & Online-Zahlungen. 0 % Provision, Zahlung vor Termin. In 5 Min. live.');
+  setPageMeta(null, 'Das Webflow Buchungssystem für Terminbuchung & Online-Zahlungen. 0 % Provision, Zahlung vor Termin. In 5 Min. live.', {
+    locale: 'de',
+  });
+  setHreflangAlternates([
+    { hreflang: 'de', path: '/' },
+    { hreflang: 'en', path: '/en' },
+  ]);
   setFAQSchema(SHARED_FAQ);
 
   const featuresSectionHTML = createHowItWorksInteractive({
@@ -65,4 +73,69 @@ export const renderHomePage = () => {
     },
   });
   initFAQAccordion(content);
+};
+
+const renderHomePageEn = () => {
+  const content = document.getElementById('landing-content');
+  if (!content) return;
+
+  const { HOME_META, HERO, HOW_IT_WORKS, CTA, HOME_FEATURES_STEPS_EN, FAQ_EN } = homeEn;
+
+  setPageMeta(HOME_META.title, HOME_META.description, { locale: 'en' });
+  setHreflangAlternates([
+    { hreflang: 'de', path: '/' },
+    { hreflang: 'en', path: '/en' },
+  ]);
+  setFAQSchema(FAQ_EN);
+
+  const featuresSectionHTML = createHowItWorksInteractive({
+    label: HOW_IT_WORKS.label,
+    headline: HOW_IT_WORKS.headline,
+    steps: HOME_FEATURES_STEPS_EN,
+    previewHTML: createIntegrationPreviewHTML(),
+  });
+
+  content.innerHTML = `
+    ${createHeroNew({
+      tagline: HERO.tagline,
+      subheadline: HERO.subheadline,
+      illustrationAlt: HERO.illustrationAlt,
+      formLabel: HERO.formLabel,
+      formPlaceholder: HERO.formPlaceholder,
+      formButtonText: HERO.formButtonText,
+      formHint: HERO.formHint,
+      trustClaims: HERO.trustClaims,
+    })}
+
+    ${featuresSectionHTML}
+
+    ${createCTASection({
+      headline: CTA.headline,
+      subheadline: CTA.subheadline,
+    })}
+
+    ${createFAQSection({ sharedFaq: FAQ_EN, pageFaq: [] })}
+  `;
+
+  initHeroNew();
+  initHowItWorksInteractive(content, {
+    renderPreview: (nextIndex) => (nextIndex === 0 ? createIntegrationPreviewHTML() : createObjectPreviewHTML()),
+    onPreviewRendered: (previewNode, nextIndex) => {
+      if (nextIndex === 0) initIntegrationStatusPreviewCard(previewNode);
+      else initObjectPreviewCard(previewNode);
+    },
+  });
+  initFAQAccordion(content);
+};
+
+export const renderHomePage = () => {
+  const content = document.getElementById('landing-content');
+  if (!content) return;
+
+  const locale = getLocaleFromPath(normalizeLandingPath(window.location.pathname));
+  if (locale === 'en') {
+    renderHomePageEn();
+    return;
+  }
+  renderHomePageDe();
 };

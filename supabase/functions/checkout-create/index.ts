@@ -3,7 +3,7 @@ import { handleCors, getCorsHeaders } from '../_shared/cors.ts';
 import { supabaseAdmin } from '../_shared/supabase.ts';
 import { stripe, calculatePlatformFee } from '../_shared/stripe.ts';
 import { checkRateLimit } from '../_shared/rateLimit.ts';
-import { calculatePricing, type PricingVoucher } from '../_shared/pricing.ts';
+import { calculateAddonQuantity, calculatePricing, type PricingVoucher } from '../_shared/pricing.ts';
 
 interface CheckoutCreateRequest {
   site_id: string;
@@ -219,6 +219,24 @@ serve(async (req: Request) => {
       .eq('id', object_id)
       .single();
 
+    const { data: serviceObjectLink, error: serviceObjectError } = await supabaseAdmin
+      .from('service_objects')
+      .select('service_id')
+      .eq('service_id', service_id)
+      .eq('object_id', object_id)
+      .maybeSingle();
+
+    if (serviceObjectError) {
+      throw serviceObjectError;
+    }
+
+    if (!serviceObjectLink) {
+      return new Response(
+        JSON.stringify({ error: 'Selected service is not linked to the selected object' }),
+        { status: 400, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
     // Clean up old reservations from this session before checking
     if (session_id) {
       await supabaseAdmin
@@ -246,16 +264,21 @@ serve(async (req: Request) => {
     }
 
     // Get addon prices
-    let addonItems: { id: string; name: string; price: number }[] = [];
+    let addonItems: { id: string; name: string; price: number; pricing_type?: string | null }[] = [];
 
     if (addon_ids && addon_ids.length > 0) {
       const { data: addons } = await supabaseAdmin
         .from('addons')
-        .select('id, name, price')
+        .select('id, name, price, pricing_type')
         .in('id', addon_ids);
 
       if (addons) {
-        addonItems = addons.map(a => ({ id: a.id, name: a.name, price: Number(a.price) }));
+        addonItems = addons.map(a => ({
+          id: a.id,
+          name: a.name,
+          price: Number(a.price),
+          pricing_type: a.pricing_type,
+        }));
       }
     }
 
@@ -286,6 +309,7 @@ serve(async (req: Request) => {
       end_time,
       guest_count,
       addons: addonItems,
+      addon_selections,
       voucher,
     });
 
@@ -341,7 +365,20 @@ serve(async (req: Request) => {
         });
       }
 
+      const addonSelectionsById = new Map(
+        (Array.isArray(addon_selections) ? addon_selections : [])
+          .filter((selection) => selection?.addon_id)
+          .map((selection) => [selection.addon_id, selection]),
+      );
+
       addonItems.forEach(addon => {
+        const quantity = calculateAddonQuantity(
+          addon,
+          pricing.guests,
+          addonSelectionsById.get(addon.id) || null,
+        );
+        if (quantity < 1) return;
+
         lineItems.push({
           price_data: {
             currency: 'eur',
@@ -350,7 +387,7 @@ serve(async (req: Request) => {
             },
             unit_amount: Math.round(addon.price * 100),
           },
-          quantity: 1,
+          quantity,
         });
       });
 

@@ -6,7 +6,8 @@
 import { createModal } from '../../../components/Modal/Modal.js';
 import { getIconString } from '../../../components/Icons/Icon.js';
 import { createButton, createActionButton } from '../../../components/Button/Button.js';
-import { createEntity, fetchEntities } from '../../../lib/dataLayer.js';
+import { createEntity, fetchEntities, syncJunctionTable, invalidateCache } from '../../../lib/dataLayer.js';
+import { getState } from '../../../lib/store.js';
 import { supabase } from '../../../lib/supabaseClient.js';
 import { createMultiSelectTags } from '../../../components/MultiSelectTags/MultiSelectTags.js';
 
@@ -159,11 +160,21 @@ export const openCreateServiceModal = async (onSuccess) => {
             data.custom_hours = null;
         }
 
-        // Create one service per selected object
-        const createdServices = [];
-        for (const objectId of state.objectIds) {
-            const newService = await createEntity('services', { ...data, object_id: objectId });
-            createdServices.push(newService);
+        const workspaceId = getState().currentWorkspace?.id;
+        const primaryObjectId = state.objectIds[0] || null;
+        const newService = await createEntity('services', { ...data, object_id: primaryObjectId });
+        const createdServices = [newService];
+
+        if (workspaceId) {
+            await syncJunctionTable(
+                'service_objects',
+                'service_id',
+                newService.id,
+                'object_id',
+                state.objectIds,
+                { workspace_id: workspaceId }
+            );
+            invalidateCache('objects');
         }
 
         if (state.staffIds.length > 0) {

@@ -47,6 +47,27 @@ const getStepConfig = (ws) => {
   ];
 };
 
+const paymentMethodConfig = [
+  {
+    key: 'paypal',
+    title: 'PayPal',
+    subtitle: 'Digitale Wallet-Zahlung für einen schnellen Checkout.',
+    icon: 'money-hand',
+  },
+  {
+    key: 'card',
+    title: 'Kreditkarte (Visa, Mastercard, Amex)',
+    subtitle: 'Akzeptieren Sie Kartenzahlungen direkt über Stripe.',
+    icon: 'bank-card',
+  },
+  {
+    key: 'klarna',
+    title: 'Klarna (Pay Later)',
+    subtitle: 'Später bezahlen mit Klarna, sofern in Stripe verfügbar.',
+    icon: 'clock',
+  },
+];
+
 const getProgressSegments = (completed, total) => {
   const totalSegments = 48;
   const filledSegments = Math.round((completed / total) * totalSegments);
@@ -132,14 +153,19 @@ export const renderIntegrationContent = async () => {
   const isConnected = stripe.connected;
   const isReady = stripe.ready;
   const canShowPaymentMethods = isReady;
+  const primaryButtonText = isReady
+    ? 'Stripe-Angaben bearbeiten'
+    : isConnected
+      ? 'Einrichtung fortsetzen'
+      : 'Einrichtung starten';
 
   container.innerHTML = `
     <div class="integration-setup">
-      <section class="settings-card">
+      <section class="workspace-visual-card">
         <div class="integration-setup__header">
           <div>
-            <h2 class="integration-setup__title">Stripe Einrichtung</h2>
-            <p class="integration-setup__subtitle">${completedSteps} von ${totalSteps} erforderlichen Schritten abgeschlossen</p>
+            <h2 class="workspace-visual-card__title">Stripe Einrichtung</h2>
+            <p class="workspace-visual-card__subtitle">${completedSteps} von ${totalSteps} erforderlichen Schritten abgeschlossen</p>
           </div>
           <span class="integration-setup__percent">${progressPercent} / 100%</span>
         </div>
@@ -188,38 +214,26 @@ export const renderIntegrationContent = async () => {
         <div class="integration-setup__actions" id="integration-actions"></div>
       </section>
 
-      <section class="settings-card integration-payment-methods ${canShowPaymentMethods ? '' : 'is-locked'}">
-        <h3 class="integration-payment-methods__title">Akzeptierte Zahlungsarten</h3>
-        <p class="integration-payment-methods__subtitle">${completedSteps} von ${totalSteps} erforderlichen Schritten abgeschlossen</p>
+      <section class="workspace-visual-card integration-payment-methods ${canShowPaymentMethods ? '' : 'is-locked'}">
+        <h2 class="workspace-visual-card__title">Akzeptierte Zahlungsarten</h2>
+        <p class="workspace-visual-card__subtitle">Legen Sie fest, welche Zahlungsarten Ihre Kunden beim Checkout sehen.</p>
 
-        <div class="integration-payment-methods__list">
-          <article class="workspace-settings-item integration-payment-methods__item">
-            <div class="workspace-settings-item__left">
-              <strong>PayPal</strong>
-            </div>
-            <label class="workspace-toggle" aria-label="PayPal aktivieren">
-              <input type="checkbox" data-payment-toggle="paypal" ${integrationUiState.paymentMethods.paypal ? 'checked' : ''} ${canShowPaymentMethods ? '' : 'disabled'} />
-              <span class="workspace-toggle__slider"></span>
-            </label>
-          </article>
-          <article class="workspace-settings-item integration-payment-methods__item">
-            <div class="workspace-settings-item__left">
-              <strong>Kreditkarte (Visa, Mastercard, Amex)</strong>
-            </div>
-            <label class="workspace-toggle" aria-label="Kreditkarte aktivieren">
-              <input type="checkbox" data-payment-toggle="card" ${integrationUiState.paymentMethods.card ? 'checked' : ''} ${canShowPaymentMethods ? '' : 'disabled'} />
-              <span class="workspace-toggle__slider"></span>
-            </label>
-          </article>
-          <article class="workspace-settings-item integration-payment-methods__item">
-            <div class="workspace-settings-item__left">
-              <strong>Klarna (Pay Later)</strong>
-            </div>
-            <label class="workspace-toggle" aria-label="Klarna aktivieren">
-              <input type="checkbox" data-payment-toggle="klarna" ${integrationUiState.paymentMethods.klarna ? 'checked' : ''} ${canShowPaymentMethods ? '' : 'disabled'} />
-              <span class="workspace-toggle__slider"></span>
-            </label>
-          </article>
+        <div class="workspace-settings-list integration-payment-methods__list">
+          ${paymentMethodConfig.map((method) => `
+            <article class="workspace-settings-item integration-payment-methods__item">
+              <div class="workspace-settings-item__left">
+                <span class="workspace-settings-item__icon">${getIconString(method.icon)}</span>
+                <div>
+                  <h3 class="workspace-settings-item__title">${method.title}</h3>
+                  <p class="workspace-settings-item__subtitle">${method.subtitle}</p>
+                </div>
+              </div>
+              <label class="workspace-toggle" aria-label="${method.title} aktivieren">
+                <input type="checkbox" data-payment-toggle="${method.key}" ${integrationUiState.paymentMethods[method.key] ? 'checked' : ''} ${canShowPaymentMethods ? '' : 'disabled'} />
+                <span class="workspace-toggle__slider"></span>
+              </label>
+            </article>
+          `).join('')}
         </div>
 
         ${canShowPaymentMethods ? '' : `
@@ -242,7 +256,7 @@ export const renderIntegrationContent = async () => {
   const actionsContainer = document.getElementById('integration-actions');
   if (actionsContainer) {
     const { element: connectBtn } = createActionButton({
-      text: isConnected ? 'Einrichtung fortsetzen' : 'Einrichtung starten',
+      text: primaryButtonText,
       loadingText: 'Verbinde...',
       className: 'btn-primary',
       onClick: handleConnectStripe,

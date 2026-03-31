@@ -17,6 +17,7 @@ const BG_IMAGE = new URL('../../svg/illustrations/gradient_noise_bg.avif', impor
  * @param {string}  [config.illustrationSrc]
  * @param {string}  [config.illustrationAlt]
  * @param {string[]}[config.breadcrumb]       - ['Home', 'Features', 'Mitarbeiterverwaltung']
+ * @param {string[]} [config.breadcrumbHrefs] - optional href per crumb index for linked items (non-last); overrides default paths
  * @param {string}  [config.demoModuleHTML]    - HTML string to inject as demo card
  * @param {string}  [config.demoHint]          - Hint text below card (e.g. "Tippe, klicke & probier's aus — ganz ohne Account.")
  */
@@ -27,6 +28,7 @@ export const createFeatureHero = (config) => {
     illustrationSrc = '',
     illustrationAlt = '',
     breadcrumb = ['Home', 'Features'],
+    breadcrumbHrefs = null,
     demoModuleHTML = '',
     demoHint = '',
   } = config;
@@ -34,7 +36,10 @@ export const createFeatureHero = (config) => {
   const breadcrumbHTML = breadcrumb.map((item, i) => {
     const isLast = i === breadcrumb.length - 1;
     if (isLast) return `<span>${escapeHtml(item)}</span>`;
-    const href = i === 0 ? '/' : `/${item.toLowerCase()}`;
+    const href =
+      breadcrumbHrefs && breadcrumbHrefs[i] != null && breadcrumbHrefs[i] !== ''
+        ? breadcrumbHrefs[i]
+        : (i === 0 ? '/' : `/${item.toLowerCase()}`);
     return `<a href="${escapeAttr(href)}" data-landing-link title="${escapeAttr(item)}">${escapeHtml(item)}</a><span class="feature-hero__breadcrumb-sep">${getIconString('arrow-down', 'feature-hero__breadcrumb-icon')}</span>`;
   }).join(' ');
 

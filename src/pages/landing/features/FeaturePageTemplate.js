@@ -10,21 +10,25 @@ import { createHowItWorksInteractive, initHowItWorksInteractive } from '../../..
 import { createFAQSection, initFAQAccordion } from '../../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../../components/landing/CTASection.js';
 import { createFeatureRelatedSlider, initFeatureRelatedSlider } from '../../../components/landing/FeatureRelatedSlider.js';
-import { setPageMeta, setFAQSchema, setBreadcrumbSchema } from '../../../lib/seoHelper.js';
+import { setPageMeta, setFAQSchema, setBreadcrumbSchema, setHreflangAlternates } from '../../../lib/seoHelper.js';
 import { escapeHtml } from '../../../lib/sanitize.js';
 import { svgAssetUrl, resolveSvgAssetUrl } from '../../../lib/landingAssets.js';
 import { featurePages } from '../../../data/features/index.js';
 import { getRelatedFeaturesFor } from '../../../data/features/relatedFeatures.js';
+import { getHowItWorksPreviewHtml } from '../../../lib/howItWorksPreviewSlice.js';
+import { getFeaturePage } from '../../../lib/getLocaleContent.js';
+import { deFeatureSlugToEn } from '../../../lib/featureSlugLocale.js';
 
 /**
  * Render a feature page by slug
- * @param {string} slug - Feature slug (e.g. 'buchungen')
+ * @param {string} slug - DE feature slug (e.g. 'buchungen')
+ * @param {'de'|'en'} [locale='de']
  */
-export const renderFeaturePage = (slug) => {
+export const renderFeaturePage = (slug, locale = 'de') => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  const page = featurePages[slug];
+  const page = getFeaturePage(slug, locale);
   if (!page) {
     content.innerHTML = `
       <section class="landing-hero">
@@ -39,13 +43,25 @@ export const renderFeaturePage = (slug) => {
     return;
   }
 
-  setPageMeta(page.meta.title, page.meta.description);
-  setFAQSchema(page.faq || []);
+  const enSlug = deFeatureSlugToEn(slug);
+  const featurePath = locale === 'en' && enSlug ? `/en/features/${enSlug}` : `/features/${slug}`;
+  const homePath = locale === 'en' ? '/en' : '/';
+  const featuresPath = locale === 'en' ? '/en/features' : '/features';
+
+  setPageMeta(page.meta.title, page.meta.description, { locale });
   setBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'Features', url: '/features' },
-    { name: page.meta.title, url: `/features/${slug}` },
+    { name: 'Home', url: homePath },
+    { name: 'Features', url: featuresPath },
+    { name: page.meta.title, url: featurePath },
   ]);
+  const dePath = `/features/${slug}`;
+  const enPath = enSlug ? `/en/features/${enSlug}` : null;
+  if (enPath) {
+    setHreflangAlternates([
+      { hreflang: 'de', path: dePath },
+      { hreflang: 'en', path: enPath },
+    ]);
+  }
 
   // Build journey sections (alternating left/right like Integrations page)
   const journeyHTML = page.journey?.length ? page.journey.map((step, i) => `
@@ -113,6 +129,43 @@ export const renderFeaturePage = (slug) => {
     features: relatedFeatures,
   });
 
+  const sectionsHTML = (page.sections || []).map((section, sIdx) => {
+    const stepsHTML = (section.steps || []).map((step, i) => `
+      <section class="landing-section ${i % 2 === 1 ? 'landing-section-alt' : ''}">
+        <div class="landing-container">
+          ${createFeatureSection({
+            title: step.title,
+            description: step.description,
+            bullets: step.bullets || [],
+            reverse: step.reverse !== undefined ? step.reverse : (i % 2 === 1),
+          })}
+        </div>
+      </section>`).join('');
+
+    const sectionFaqHTML = section.faq?.length
+      ? `<div class="landing-section"><div class="landing-container">
+          ${createFAQSection({ pageFaq: section.faq, pageTitle: section.title, featureOnly: true })}
+         </div></div>`
+      : '';
+
+    return `
+      <div id="${section.id}" class="feature-section-anchor" style="scroll-margin-top: 80px;">
+        <section class="landing-section ${sIdx % 2 === 0 ? 'landing-section-alt' : ''}">
+          <div class="landing-container text-center">
+            <p class="landing-label">${section.title}</p>
+            <h2 class="landing-h2">${section.subtitle}</h2>
+          </div>
+        </section>
+        ${stepsHTML}
+        ${sectionFaqHTML}
+      </div>`;
+  }).join('');
+
+  const allSectionFaqs = (page.sections || []).flatMap(s => s.faq || []);
+  const combinedFaq = [...(page.faq || []), ...allSectionFaqs];
+
+  setFAQSchema(combinedFaq);
+
   content.innerHTML = `
     <!-- 1. Hero -->
     ${heroHTML}
@@ -127,10 +180,22 @@ export const renderFeaturePage = (slug) => {
     ${journeyHTML}
     ` : fallbackHTML}
 
+    ${sectionsHTML}
+
     <!-- 5. CTA -->
     ${createCTASection({
-      headline: page.cta?.headline ?? `${page.meta.title} kostenlos testen.`,
-      subheadline: page.cta && 'subheadline' in page.cta ? page.cta.subheadline : '3 Tage kostenlos testen. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
+      headline: page.cta?.headline ?? (locale === 'en'
+        ? `Try ${page.meta.title} for free.`
+        : `${page.meta.title} kostenlos testen.`),
+      subheadline: page.cta && 'subheadline' in page.cta
+        ? page.cta.subheadline
+        : (locale === 'en'
+          ? '3-day free trial. No credit card required. Ready in under 5 minutes.'
+          : '3 Tage kostenlos testen. Keine Kreditkarte nötig. In unter 5 Minuten startklar.'),
+      ...(locale === 'en' ? {
+        primaryCTA: 'Start live demo',
+        secondaryCTA: 'Try for free',
+      } : {}),
     })}
 
     <!-- 6. Related Features Slider -->
@@ -150,13 +215,9 @@ export const renderFeaturePage = (slug) => {
   // Init interactive "How it works" section (currently enabled for objekte)
   if (hasInteractiveHowItWorks) {
     initHowItWorksInteractive(content, {
-      renderPreview: () => {
-        const heroPreview = content.querySelector('#feature-hero-demo .feature-hero__card-frame');
-        if (!heroPreview) return '';
-        const clone = heroPreview.cloneNode(true);
-        clone.querySelectorAll('[id]').forEach((node) => node.removeAttribute('id'));
-        return clone.outerHTML;
-      },
+      renderPreview: (stepIndex) => getHowItWorksPreviewHtml(content, stepIndex, {
+        sliceSelectors: page.howItWorksPreviewSlices,
+      }),
     });
   }
 

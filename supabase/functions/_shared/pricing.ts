@@ -12,6 +12,7 @@ export interface PricingAddon {
   name?: string;
   price: number | string | null;
   scope?: 'per_booking' | 'per_guest';
+  pricing_type?: string | null;
 }
 
 export interface PricingVoucher {
@@ -26,6 +27,7 @@ export interface PricingContext {
   end_time: string;
   guest_count?: number;
   addons?: PricingAddon[];
+  addon_selections?: PricingAddonSelection[] | null;
   voucher?: PricingVoucher;
 }
 
@@ -44,6 +46,20 @@ export interface PricingResult {
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+export interface PricingSelectionItem {
+  qty?: number | string | null;
+}
+
+export interface PricingSelectionGuest {
+  items?: PricingSelectionItem[] | null;
+}
+
+export interface PricingAddonSelection {
+  addon_id?: string | null;
+  items?: PricingSelectionItem[] | null;
+  guests?: PricingSelectionGuest[] | null;
+}
+
 function toNumber(value: unknown): number {
   const parsed = Number(value ?? 0);
   return Number.isFinite(parsed) ? parsed : 0;
@@ -51,6 +67,26 @@ function toNumber(value: unknown): number {
 
 function normalizeGuests(guestCount?: number): number {
   return Number.isInteger(guestCount) && Number(guestCount) > 0 ? Number(guestCount) : 1;
+}
+
+function normalizeServicePriceType(priceType: unknown): 'per_total' | 'per_person' | 'per_unit' {
+  if (priceType === 'per_total' || priceType === 'per_person') return priceType;
+  return 'per_unit';
+}
+
+function normalizeAddonScope(addon: PricingAddon): 'per_booking' | 'per_guest' {
+  if (addon.scope === 'per_guest' || addon.scope === 'per_booking') {
+    return addon.scope;
+  }
+
+  switch (addon.pricing_type) {
+    case 'per_person':
+    case 'per_guest':
+    case 'per_ticket':
+      return 'per_guest';
+    default:
+      return 'per_booking';
+  }
 }
 
 function calculateNights(startTime: string, endTime: string): number {
@@ -67,12 +103,13 @@ function calculateServicePrice(
   guests: number,
 ): number {
   let servicePrice = toNumber(service.price);
+  const priceType = normalizeServicePriceType(service.price_type);
 
-  if (service.price_type !== 'per_total') {
+  if (priceType !== 'per_total') {
     if (service.service_type === 'overnight' && nights !== null) {
       servicePrice *= nights;
     }
-    if (service.price_type === 'per_person') {
+    if (priceType === 'per_person') {
       servicePrice *= guests;
     }
   }
@@ -80,12 +117,48 @@ function calculateServicePrice(
   return servicePrice;
 }
 
-function calculateAddonsPrice(addons: PricingAddon[] | undefined, guests: number): number {
+export function countAddonUnits(selection?: PricingAddonSelection | null): number {
+  if (!selection) return 0;
+
+  const bookingUnits = (selection.items || []).reduce((sum, item) => {
+    const qty = toNumber(item?.qty);
+    return sum + (qty > 0 ? qty : 1);
+  }, 0);
+
+  const guestUnits = (selection.guests || []).reduce((sum, guest) => {
+    return sum + (guest?.items || []).reduce((guestSum, item) => {
+      const qty = toNumber(item?.qty);
+      return guestSum + (qty > 0 ? qty : 1);
+    }, 0);
+  }, 0);
+
+  return bookingUnits + guestUnits;
+}
+
+export function calculateAddonQuantity(
+  addon: PricingAddon,
+  guests: number,
+  selection?: PricingAddonSelection | null,
+): number {
+  const selectedUnits = countAddonUnits(selection);
+  if (selectedUnits > 0) return selectedUnits;
+  return normalizeAddonScope(addon) === 'per_guest' ? guests : 1;
+}
+
+function calculateAddonsPrice(
+  addons: PricingAddon[] | undefined,
+  guests: number,
+  addonSelections?: PricingAddonSelection[] | null,
+): number {
   if (!addons?.length) return 0;
+  const selectionMap = new Map((addonSelections || [])
+    .filter((selection): selection is PricingAddonSelection & { addon_id: string } => Boolean(selection?.addon_id))
+    .map((selection) => [selection.addon_id as string, selection]));
+
   return addons.reduce((sum, addon) => {
     const unit = toNumber(addon.price);
-    const multiplier = addon.scope === 'per_guest' ? guests : 1;
-    return sum + (unit * multiplier);
+    const quantity = calculateAddonQuantity(addon, guests, selectionMap.get(addon.id));
+    return sum + (unit * quantity);
   }, 0);
 }
 
@@ -108,7 +181,7 @@ export function calculatePricing(ctx: PricingContext): PricingResult {
 
   const servicePrice = calculateServicePrice(ctx.service, nights, guests);
   const cleaningFee = toNumber(ctx.service.cleaning_fee);
-  const addonsPrice = calculateAddonsPrice(ctx.addons, guests);
+  const addonsPrice = calculateAddonsPrice(ctx.addons, guests, ctx.addon_selections);
   const subtotal = servicePrice + cleaningFee + addonsPrice;
   const discountAmount = calculateDiscountAmount(ctx.voucher, subtotal);
   const totalPrice = Math.max(0, subtotal - discountAmount);

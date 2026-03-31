@@ -15,6 +15,7 @@ import { supabase } from './lib/supabaseClient.js';
 import { loadSprite } from './components/Icons/sprite.js';
 import { resetState } from './lib/store.js';
 import { removeStorageItem } from './lib/storageService.js';
+import { isKnownLandingPath } from './lib/landingRoutesConfig.js';
 
 // Track current user to detect user changes
 let currentUserId = null;
@@ -45,21 +46,6 @@ const isPortalRoute = () => {
  */
 const isDashboardRoute = () => {
   return window.location.pathname.startsWith('/dashboard');
-};
-
-/**
- * Static check for known landing routes — no render imports needed.
- * Keeps code-splitting intact (landing chunk stays lazy).
- */
-const LANDING_PATHS = ['/', '/produkt', '/preise', '/integrationen',
-  '/ressourcen', '/ueber-uns', '/kontakt', '/features',
-  '/impressum', '/datenschutz', '/agb', '/waitlist/confirm'];
-const LANDING_PREFIXES = ['/features/'];
-
-const isKnownLandingRoute = (path) => {
-  if (path === '/' || path === '/index.html') return true;
-  if (LANDING_PATHS.includes(path)) return true;
-  return LANDING_PREFIXES.some(prefix => path.startsWith(prefix));
 };
 
 /**
@@ -121,7 +107,7 @@ const init = async () => {
       await loadDashboard(session);
     } else if (isDashboardRoute()) {
       await loadDashboard(session);
-    } else if (isKnownLandingRoute(path)) {
+    } else if (isKnownLandingPath(path)) {
       await loadLanding({ isLoggedIn: true });
     } else {
       history.replaceState(null, '', '/dashboard/bookings');
@@ -132,7 +118,7 @@ const init = async () => {
       window.location.href = 'https://book-fast.de/';
       return;
     }
-    if (!isKnownLandingRoute(path)) {
+    if (!isKnownLandingPath(path)) {
       history.replaceState(null, '', '/');
     }
     await loadLanding();
@@ -153,7 +139,7 @@ const init = async () => {
         await loadDashboard(session);
       } else if (isDashboardRoute()) {
         await loadDashboard(session);
-      } else if (isKnownLandingRoute(currentPath)) {
+      } else if (isKnownLandingPath(currentPath)) {
         await loadLanding({ isLoggedIn: true });
       } else {
         history.replaceState(null, '', '/dashboard/bookings');
@@ -168,7 +154,7 @@ const init = async () => {
         return;
       }
       await unloadLanding();
-      if (!isKnownLandingRoute(currentPath)) {
+      if (!isKnownLandingPath(currentPath)) {
         history.replaceState(null, '', '/');
       }
       await loadLanding();
