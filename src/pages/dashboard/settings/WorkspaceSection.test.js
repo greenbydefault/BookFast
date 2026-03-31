@@ -40,6 +40,17 @@ describe('copyWebflowTemplate', () => {
       const hasSummaryAddon = nodes.some((n) => n?.data?.attr?.['data-bf-display'] === 'summary-addon');
       const hasSummarySubtotal = nodes.some((n) => n?.data?.attr?.['data-bf-display'] === 'summary-subtotal');
       const hasSummaryTax = nodes.some((n) => n?.data?.attr?.['data-bf-display'] === 'summary-tax');
+      const hasNextButton = nodes.some((n) => n?.data?.attr?.['data-bf-action'] === 'next' && n?.data?.tag === 'button');
+      const hasBackButton = nodes.some((n) => n?.data?.attr?.['data-bf-action'] === 'back' && n?.data?.tag === 'button');
+      const hasVoucherButton = nodes.some((n) => n?.data?.attr?.['data-bf-action'] === 'apply-voucher' && n?.data?.tag === 'button');
+      const hasGuestMinusButton = nodes.some((n) => n?.data?.attr?.['data-bf-action'] === 'gc-minus' && n?.data?.tag === 'button');
+      const hasGuestPlusButton = nodes.some((n) => n?.data?.attr?.['data-bf-action'] === 'gc-plus' && n?.data?.tag === 'button');
+      const hasCardHeaderPart = nodes.some((n) => n?.data?.attr?.['data-bf-part'] === 'card-header');
+      const hasCardPanelPart = nodes.some((n) => n?.data?.attr?.['data-bf-part'] === 'card-panel');
+      const hasSplitRightPart = nodes.some((n) => n?.data?.attr?.['data-bf-part'] === 'split-right');
+      const hasObjectNamePart = nodes.some((n) => n?.data?.attr?.['data-bf-part'] === 'object-name');
+      const hasServiceTimePart = nodes.some((n) => n?.data?.attr?.['data-bf-part'] === 'service-time');
+      const hasPriceRowsPart = nodes.some((n) => n?.data?.attr?.['data-bf-part'] === 'price-rows');
 
       expect(hasObjectPlaceholder).toBe(true);
       expect(hasServicePlaceholder).toBe(true);
@@ -53,6 +64,17 @@ describe('copyWebflowTemplate', () => {
       expect(hasSummaryAddon).toBe(true);
       expect(hasSummarySubtotal).toBe(true);
       expect(hasSummaryTax).toBe(true);
+      expect(hasNextButton).toBe(true);
+      expect(hasBackButton).toBe(true);
+      expect(hasVoucherButton).toBe(true);
+      expect(hasGuestMinusButton).toBe(true);
+      expect(hasGuestPlusButton).toBe(true);
+      expect(hasCardHeaderPart).toBe(true);
+      expect(hasCardPanelPart).toBe(true);
+      expect(hasSplitRightPart).toBe(true);
+      expect(hasObjectNamePart).toBe(true);
+      expect(hasServiceTimePart).toBe(true);
+      expect(hasPriceRowsPart).toBe(true);
     } finally {
       document.execCommand = originalExec;
     }

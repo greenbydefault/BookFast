@@ -197,8 +197,8 @@
             '.bf-obj-item:hover{background:rgba(0,0,0,.03)}',
             '.bf-obj-item.is-selected{background:#f8f7fe;box-shadow:inset 0 0 0 1px #624cd8}',
             '.bf-obj-info{flex:1;min-width:0}',
-            '.bf-obj-name{font-size:16px;font-weight:600;color:#12111f;line-height:1.3}',
-            '.bf-obj-desc{font-size:14px;font-weight:400;color:#78716c;line-height:1.4;margin-top:2px}',
+            '.bf-obj-name{display:block;font-size:16px;font-weight:600;color:#12111f;line-height:1.3}',
+            '.bf-obj-desc{display:block;font-size:14px;font-weight:400;color:#78716c;line-height:1.4;margin-top:2px}',
             '.bf-obj-meta{display:flex;align-items:center;gap:6px;flex-shrink:0}',
             '.bf-obj-cap{display:flex;align-items:center;gap:4px;font-size:14px;color:#717079;border:1px solid #e7e5e4;border-radius:6px;padding:4px 8px}',
             '.bf-obj-check{display:none;color:#624cd8;flex-shrink:0}',
@@ -208,8 +208,8 @@
             '.bf-svc-item:hover{background:rgba(0,0,0,.03)}',
             '.bf-svc-item.is-selected{background:#f8f7fe;box-shadow:inset 0 0 0 1px #624cd8}',
             '.bf-svc-info{flex:1;min-width:0}',
-            '.bf-svc-name{font-size:16px;font-weight:600;color:#12111f;line-height:1.3}',
-            '.bf-svc-time{font-size:14px;font-weight:400;color:#78716c;line-height:1.4;margin-top:2px}',
+            '.bf-svc-name{display:block;font-size:16px;font-weight:600;color:#12111f;line-height:1.3}',
+            '.bf-svc-time{display:block;font-size:14px;font-weight:400;color:#78716c;line-height:1.4;margin-top:2px}',
             '.bf-svc-badges{display:flex;align-items:center;gap:8px;flex-shrink:0}',
             '.bf-svc-badge{display:flex;align-items:center;gap:4px;font-size:14px;color:#717079;border:1px solid #e7e5e4;border-radius:6px;padding:4px 8px;white-space:nowrap}',
             // Staff chips
@@ -278,12 +278,26 @@
     const SVG_CHEVRON_LEFT = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
     const SVG_CHEVRON_RIGHT = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>';
 
+    const part = (container, name) => container?.querySelector(`[data-bf-part="${name}"]`);
+    const createEl = (tag, { className, text, html, attrs } = {}) => {
+        const el = document.createElement(tag);
+        if (className) el.className = className;
+        if (text !== undefined) el.textContent = text;
+        if (html !== undefined) el.innerHTML = html;
+        if (attrs) {
+            Object.entries(attrs).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) el.setAttribute(key, value);
+            });
+        }
+        return el;
+    };
+
     // --- Accordion Card Logic ---
     const setCardOpenState = (card, isOpen) => {
         if (!card) return;
         card.classList.toggle('is-open', !!isOpen);
-        const header = card.querySelector('.bf-split-card-header');
-        const panel = card.querySelector('.bf-split-card-body');
+        const header = part(card, 'card-header');
+        const panel = part(card, 'card-panel');
         if (header) header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         if (panel) panel.hidden = !isOpen;
     };
@@ -302,19 +316,19 @@
     const updateCardSummary = (cardName, titleText, descText) => {
         const card = root?.querySelector(`[data-bf-card="${cardName}"]`);
         if (!card) return;
-        const titleEl = card.querySelector('.bf-split-card-title');
-        const descEl = card.querySelector('.bf-split-card-desc');
+        const titleEl = part(card, 'card-title');
+        const descEl = part(card, 'card-desc');
         if (titleEl && titleText) titleEl.textContent = titleText;
         if (descEl) descEl.textContent = descText || '';
     };
 
     const activateRightSide = () => {
-        const right = root?.querySelector('.bf-split-right');
+        const right = root?.querySelector('[data-bf-part="split-right"]');
         if (right) right.classList.add('is-active');
     };
 
     const deactivateRightSide = () => {
-        const right = root?.querySelector('.bf-split-right');
+        const right = root?.querySelector('[data-bf-part="split-right"]');
         if (right) right.classList.remove('is-active');
     };
 
@@ -510,7 +524,7 @@
         if (!isSplitMode()) return;
         const visibleCards = Array.from($$('[data-bf-card]')).filter(isVisibleCard);
         visibleCards.forEach((card, idx) => {
-            const numEl = card.querySelector('.bf-split-card-num');
+            const numEl = part(card, 'card-num');
             if (numEl) numEl.textContent = String(idx + 1);
         });
     };
@@ -547,21 +561,29 @@
             showTemplate(dynEl, 'object-item', !objs.length);
             showEmpty(dynEl, 'objects', !objs.length);
             objs.forEach(o => {
-                const row = document.createElement('button');
+                const row = createEl('button', {
+                    attrs: { type: 'button', 'data-obj-id': o.id, 'data-bf-part': 'object-item' }
+                });
                 const isSel = state.sel.object?.id === o.id;
-                row.type = 'button';
                 row.className = `bf-obj-item${isSel ? ' is-selected' : ''}`;
-                row.setAttribute('data-obj-id', o.id);
-                row.innerHTML = `<div class="bf-obj-info"><div class="bf-obj-name"></div><div class="bf-obj-desc"></div></div><div class="bf-obj-meta"><span class="bf-obj-check">${SVG_CHECK}</span><span class="bf-obj-cap"></span></div>`;
-                row.querySelector('.bf-obj-name').textContent = o.name || '';
-                const desc = row.querySelector('.bf-obj-desc');
+
+                const info = createEl('span', { className: 'bf-obj-info', attrs: { 'data-bf-part': 'object-info' } });
+                const name = createEl('span', { className: 'bf-obj-name', text: o.name || '', attrs: { 'data-bf-part': 'object-name' } });
+                const desc = createEl('span', { className: 'bf-obj-desc', attrs: { 'data-bf-part': 'object-desc' } });
+                info.append(name, desc);
+
+                const meta = createEl('span', { className: 'bf-obj-meta', attrs: { 'data-bf-part': 'object-meta' } });
+                const check = createEl('span', { className: 'bf-obj-check', html: SVG_CHECK, attrs: { 'data-bf-part': 'object-check', 'aria-hidden': 'true' } });
+                const cap = createEl('span', { className: 'bf-obj-cap', attrs: { 'data-bf-part': 'object-capacity' } });
+                meta.append(check, cap);
+                row.append(info, meta);
+
                 if (o.description) {
                     desc.textContent = o.description;
                     desc.style.display = '';
                 } else {
                     desc.style.display = 'none';
                 }
-                const cap = row.querySelector('.bf-obj-cap');
                 if (o.capacity) {
                     cap.innerHTML = `${SVG_PEOPLE} ${o.capacity}`;
                     cap.style.display = '';
@@ -617,30 +639,33 @@
             showTemplate(c, 'service-item', !svcs.length);
             showEmpty(c, 'services', !svcs.length);
             svcs.forEach(s => {
-                const row = document.createElement('button');
+                const row = createEl('button', {
+                    attrs: { type: 'button', 'data-svc-id': s.id, 'data-bf-part': 'service-item' }
+                });
                 const isSel = state.sel.service?.id === s.id;
                 const timeStr = s.booking_window_start && s.booking_window_end ? `${s.booking_window_start}-${s.booking_window_end} Uhr` : (s.service_type === 'overnight' ? 'Uebernachtung' : '');
-                row.type = 'button';
                 row.className = `bf-svc-item${isSel ? ' is-selected' : ''}`;
-                row.setAttribute('data-svc-id', s.id);
-                row.innerHTML = '<div class="bf-svc-info"><div class="bf-svc-name"></div><div class="bf-svc-time"></div></div><div class="bf-svc-badges"></div>';
-                row.querySelector('.bf-svc-name').textContent = s.name || '';
-                const timeEl = row.querySelector('.bf-svc-time');
+
+                const info = createEl('span', { className: 'bf-svc-info', attrs: { 'data-bf-part': 'service-info' } });
+                const name = createEl('span', { className: 'bf-svc-name', text: s.name || '', attrs: { 'data-bf-part': 'service-name' } });
+                const timeEl = createEl('span', { className: 'bf-svc-time', attrs: { 'data-bf-part': 'service-time' } });
+                info.append(name, timeEl);
+
+                const badges = createEl('span', { className: 'bf-svc-badges', attrs: { 'data-bf-part': 'service-badges' } });
+                row.append(info, badges);
+
                 if (timeStr) {
                     timeEl.textContent = timeStr;
                     timeEl.style.display = '';
                 } else {
                     timeEl.style.display = 'none';
                 }
-                const badges = row.querySelector('.bf-svc-badges');
                 if (s.duration_minutes) {
-                    const dur = document.createElement('span');
-                    dur.className = 'bf-svc-badge';
+                    const dur = createEl('span', { className: 'bf-svc-badge', attrs: { 'data-bf-part': 'service-badge' } });
                     dur.innerHTML = `${SVG_CLOCK} ${s.duration_minutes >= 60 ? (s.duration_minutes / 60) : s.duration_minutes}${s.duration_minutes >= 60 ? '' : ' min'}`;
                     badges.appendChild(dur);
                 }
-                const price = document.createElement('span');
-                price.className = 'bf-svc-badge';
+                const price = createEl('span', { className: 'bf-svc-badge', attrs: { 'data-bf-part': 'service-badge' } });
                 price.textContent = `EUR${s.price}${s.service_type === 'overnight' ? '/N' : ' p.p'}`;
                 badges.appendChild(price);
                 row.onclick = () => selService(s.id);
@@ -733,15 +758,15 @@
                 });
                 const wrap = document.createElement('div');
                 wrap.setAttribute('data-bf-generated', 'true');
-                wrap.innerHTML = `<div class="bf-split-cal-header">
-                <div class="bf-split-cal-title"><span class="bf-split-cal-title-month">${MONTHS[m]}</span><span class="bf-split-cal-title-year">${y}</span></div>
-                <button type="button" class="bf-split-cal-nav" disabled>${SVG_CHEVRON_LEFT}</button>
-                <button type="button" class="bf-split-cal-nav" disabled>${SVG_CHEVRON_RIGHT}</button>
+                wrap.innerHTML = `<div class="bf-split-cal-header" data-bf-part="calendar-header">
+                <div class="bf-split-cal-title"><span class="bf-split-cal-title-month" data-bf-part="calendar-month">${MONTHS[m]}</span><span class="bf-split-cal-title-year" data-bf-part="calendar-year">${y}</span></div>
+                <button type="button" class="bf-split-cal-nav" data-bf-action="nav-month" disabled>${SVG_CHEVRON_LEFT}</button>
+                <button type="button" class="bf-split-cal-nav" data-bf-action="nav-month" disabled>${SVG_CHEVRON_RIGHT}</button>
             </div><div class="bf-split-cal-grid">${DAYS.map(d => `<span class="bf-split-cal-weekday">${d}</span>`).join('')}${days.map(d => {
                     const other = d.getMonth() !== m;
                     let cls = 'bf-split-cal-day';
                     if (other) cls += ' is-other';
-                    return `<button type="button" class="${cls}" disabled>${d.getDate()}</button>`;
+                    return `<button type="button" class="${cls}" data-bf-action="select-date" disabled>${d.getDate()}</button>`;
                 }).join('')}</div>`;
                 c.appendChild(wrap);
             }
@@ -764,10 +789,10 @@
             showEmpty(c, 'calendar', false);
             const wrap = document.createElement('div');
             wrap.setAttribute('data-bf-generated', 'true');
-            wrap.innerHTML = `<div class="bf-split-cal-header">
-                <div class="bf-split-cal-title"><span class="bf-split-cal-title-month">${MONTHS[m]}</span><span class="bf-split-cal-title-year">${y}</span></div>
-                <button type="button" class="bf-split-cal-nav" data-nav="-1">${SVG_CHEVRON_LEFT}</button>
-                <button type="button" class="bf-split-cal-nav" data-nav="1">${SVG_CHEVRON_RIGHT}</button>
+            wrap.innerHTML = `<div class="bf-split-cal-header" data-bf-part="calendar-header">
+                <div class="bf-split-cal-title"><span class="bf-split-cal-title-month" data-bf-part="calendar-month">${MONTHS[m]}</span><span class="bf-split-cal-title-year" data-bf-part="calendar-year">${y}</span></div>
+                <button type="button" class="bf-split-cal-nav" data-bf-action="nav-month" data-nav="-1">${SVG_CHEVRON_LEFT}</button>
+                <button type="button" class="bf-split-cal-nav" data-bf-action="nav-month" data-nav="1">${SVG_CHEVRON_RIGHT}</button>
             </div><div class="bf-split-cal-grid">${DAYS.map(d => `<span class="bf-split-cal-weekday">${d}</span>`).join('')}${days.map(d => {
                 const ds = fmtDate(d), other = d.getMonth() !== m, ok = bookable(d, state.sel.service, state.sel.object), bk = blocked.includes(ds);
                 const isSel = sameDay(d, state.sel.startDate) || sameDay(d, state.sel.endDate);
@@ -779,7 +804,7 @@
                 if (isSel) cls += ' is-selected';
                 if (inR) cls += ' is-range';
                 if (ds === today && !other) cls += ' is-today';
-                return `<button type="button" class="${cls}"${canClick ? ` data-d="${ds}"` : ''}${!canClick && !other ? ' disabled' : ''}>${d.getDate()}</button>`;
+                return `<button type="button" class="${cls}" data-bf-action="select-date"${canClick ? ` data-d="${ds}"` : ''}${!canClick && !other ? ' disabled' : ''}>${d.getDate()}</button>`;
             }).join('')}</div>`;
             c.appendChild(wrap);
         } else {
@@ -813,26 +838,26 @@
             clearGenerated(c);
             showTemplate(c, 'timeslot-item', false);
             showEmpty(c, 'timeslots', false);
-            let html = `<div class="bf-split-time" data-bf-generated="true"><div class="bf-split-time-title">Uhrzeit</div>`;
+            let html = `<section class="bf-split-time" data-bf-generated="true" data-bf-part="timeslots-section"><h3 class="bf-split-time-title" data-bf-part="timeslots-title">Uhrzeit</h3>`;
             if (!svc) {
-                html += `<div class="bf-split-time-hint">Ich waehle zuerst Studio und Service aus, um passende Zeitslots zu sehen.</div>`;
+                html += `<p class="bf-split-time-hint" data-bf-part="timeslots-hint">Ich waehle zuerst Studio und Service aus, um passende Zeitslots zu sehen.</p>`;
             } else if (svc.service_type !== 'hourly') {
-                html += `<div class="bf-split-time-hint">Fuer diesen Service ist keine Uhrzeit-Auswahl erforderlich.</div>`;
+                html += `<p class="bf-split-time-hint" data-bf-part="timeslots-hint">Fuer diesen Service ist keine Uhrzeit-Auswahl erforderlich.</p>`;
             } else if (!state.sel.startDate) {
-                html += `<div class="bf-split-time-hint">Ich wähle zuerst das Datum aus, um einen passenden Zeitslot angezeigt zu bekommen.</div>`;
+                html += `<p class="bf-split-time-hint" data-bf-part="timeslots-hint">Ich wähle zuerst das Datum aus, um einen passenden Zeitslot angezeigt zu bekommen.</p>`;
             } else if (!state.slots.length) {
-                html += `<div class="bf-split-time-desc">Keine freien Termine an diesem Tag.</div>`;
+                html += `<p class="bf-split-time-desc" data-bf-part="timeslots-desc">Keine freien Termine an diesem Tag.</p>`;
             } else {
-                html += `<div class="bf-split-time-desc">Wähle deine passende Uhrzeit aus.</div>`;
-                html += `<div class="bf-split-slots">`;
+                html += `<p class="bf-split-time-desc" data-bf-part="timeslots-desc">Wähle deine passende Uhrzeit aus.</p>`;
+                html += `<div class="bf-split-slots" data-bf-part="timeslots-list">`;
                 html += state.slots.map(s => {
                     const sel = state.sel.time === s.start;
                     const dotCls = s.available ? 'is-available' : 'is-unavailable';
-                    return `<button type="button" class="bf-split-slot${sel ? ' is-selected' : ''}" data-time="${s.start}"${!s.available ? ' disabled' : ''}><span class="bf-split-slot-dot ${dotCls}"></span>${s.start}</button>`;
+                    return `<button type="button" class="bf-split-slot${sel ? ' is-selected' : ''}" data-bf-action="select-time" data-time="${s.start}"${!s.available ? ' disabled' : ''}><span class="bf-split-slot-dot ${dotCls}"></span>${s.start}</button>`;
                 }).join('');
                 html += `</div>`;
             }
-            html += `</div>`;
+            html += `</section>`;
             const wrap = document.createElement('div');
             wrap.setAttribute('data-bf-generated', 'true');
             wrap.innerHTML = html;
@@ -867,10 +892,10 @@
         html += state.slots.map(s => {
             const sel = state.sel.time === s.start;
             const cls = `bf-slot${s.available ? '' : ' bf-slot-disabled'}${sel ? ' bf-slot-selected' : ''}`;
-            return `<button type="button" class="${cls}" data-time="${s.start}"${!s.available ? ' disabled' : ''}>${s.start}</button>`;
+            return `<button type="button" class="${cls}" data-bf-action="select-time" data-time="${s.start}"${!s.available ? ' disabled' : ''}>${s.start}</button>`;
         }).join('');
         slotsWrap.innerHTML = html;
-        slotsWrap.querySelectorAll('.bf-slot:not(:disabled)').forEach(b => b.onclick = () => selTime(b.dataset.time));
+        slotsWrap.querySelectorAll('[data-bf-action="select-time"]:not(:disabled)').forEach(b => b.onclick = () => selTime(b.dataset.time));
     };
 
     const popDateInfo = () => {
@@ -1002,7 +1027,7 @@
                         html += `<div class="bf-addon-item-label">${item.name || 'Artikel'}</div>`;
 
                         if (item.selection_mode === 'single_choice' && item.addon_item_variants?.length) {
-                            html += `<select class="bf-variant-select" data-addon="${a.id}" data-guest="${guestIdx}" data-item="${ii}" style="width:100%;margin-top:.25rem">`;
+                            html += `<select class="bf-variant-select" data-bf-part="variant-select" data-addon="${a.id}" data-guest="${guestIdx}" data-item="${ii}" style="width:100%;margin-top:.25rem">`;
                             item.addon_item_variants.forEach((v, vi) => {
                                 const selected = itemSel.variant === v.name ? ' selected' : (vi === 0 && !itemSel.variant ? ' selected' : '');
                                 html += `<option value="${v.name}"${selected}>${v.name}</option>`;
@@ -1011,11 +1036,11 @@
                         } else if (item.selection_mode === 'quantity') {
                             const qty = itemSel.qty ?? 1;
                             html += `<div class="bf-qty-row">`;
-                            html += `<button class="bf-qty-btn" data-addon="${a.id}" data-guest="${guestIdx}" data-item="${ii}" data-dir="-1" type="button">−</button>`;
+                            html += `<button class="bf-qty-btn" data-bf-action="addon-qty" data-addon="${a.id}" data-guest="${guestIdx}" data-item="${ii}" data-dir="-1" type="button">−</button>`;
                             html += `<span class="bf-qty-val" id="bf-qty-${a.id}-${guestIdx}-${ii}">${qty}</span>`;
-                            html += `<button class="bf-qty-btn" data-addon="${a.id}" data-guest="${guestIdx}" data-item="${ii}" data-dir="1" type="button">+</button>`;
+                            html += `<button class="bf-qty-btn" data-bf-action="addon-qty" data-addon="${a.id}" data-guest="${guestIdx}" data-item="${ii}" data-dir="1" type="button">+</button>`;
                             if (item.addon_item_variants?.length) {
-                                html += `<select class="bf-variant-select" data-addon="${a.id}" data-guest="${guestIdx}" data-item="${ii}">`;
+                                html += `<select class="bf-variant-select" data-bf-part="variant-select" data-addon="${a.id}" data-guest="${guestIdx}" data-item="${ii}">`;
                                 item.addon_item_variants.forEach(v => {
                                     html += `<option value="${v.name}"${itemSel.variant === v.name ? ' selected' : ''}>${v.name}</option>`;
                                 });
@@ -1070,7 +1095,7 @@
 
 
         // Bind quantity buttons (per-guest)
-        c.querySelectorAll('.bf-qty-btn:not(#bf-gc-minus):not(#bf-gc-plus)').forEach(btn => {
+        c.querySelectorAll('[data-bf-action="addon-qty"]').forEach(btn => {
             btn.onclick = () => {
                 const sel = state.sel.addons.find(x => x.id === btn.dataset.addon);
                 const gi = parseInt(btn.dataset.guest);
@@ -1094,7 +1119,7 @@
         });
 
         // Bind variant selects (per-guest)
-        c.querySelectorAll('.bf-variant-select').forEach(sel => {
+        c.querySelectorAll('[data-bf-part="variant-select"]').forEach(sel => {
             sel.onchange = () => {
                 const addonSel = state.sel.addons.find(x => x.id === sel.dataset.addon);
                 const gi = parseInt(sel.dataset.guest);
@@ -1123,8 +1148,6 @@
                 setGuestCount(state.sel.guestCount + delta);
             };
         };
-        bindBtn(c?.querySelector('#bf-gc-minus'), -1);
-        bindBtn(c?.querySelector('#bf-gc-plus'), 1);
         bindBtn($('[data-bf-action="gc-minus"]'), -1);
         bindBtn($('[data-bf-action="gc-plus"]'), 1);
         updateGuestCountUI();
@@ -1144,6 +1167,14 @@
         return [s, h].filter(Boolean).join(' ').trim();
     };
 
+    const buildPriceRow = (label, value) => {
+        const row = createEl('div', { className: 'bf-summary-row', attrs: { 'data-bf-generated': 'true', 'data-bf-part': 'price-row' } });
+        const labelEl = createEl('dt', { text: label, attrs: { 'data-bf-part': 'price-label' } });
+        const valueEl = createEl('dd', { text: value, attrs: { 'data-bf-part': 'price-value' } });
+        row.append(labelEl, valueEl);
+        return row;
+    };
+
     const popSummary = () => {
         const c = dyn('summary');
         const step2Scope = root?.querySelector('[data-bf-step="2"]') || root;
@@ -1155,8 +1186,7 @@
         const stf = staff ? state.data.staff.find(s => s.id === staff) : null;
         let dt = fmtDisplay(sd); if (isON && ed) dt = `${fmtDisplay(sd)} → ${fmtDisplay(ed)} (${n} ${n === 1 ? 'Nacht' : 'Nächte'})`;
 
-        // Build price rows HTML (always needed)
-        let priceRowsHtml = `<div class="bf-summary-row"><span>${svc?.name || '-'}</span><span>€${base.toFixed(2)}</span></div>`;
+        const priceRows = [buildPriceRow(svc?.name || '-', `€${base.toFixed(2)}`)];
         state.sel.addons.forEach(sel => {
             const a = state.data.addons.find(x => x.id === sel.id);
             if (!a) return;
@@ -1167,7 +1197,7 @@
                     const def = items[ii]; if (!def) return;
                     const detail = it.variant ? ` ${it.variant}` : '';
                     const qty = it.qty || 1;
-                    priceRowsHtml += `<div class="bf-summary-row"><span>+ ${def.name}${detail}</span><span>€${(+a.price * qty).toFixed(2)}</span></div>`;
+                    priceRows.push(buildPriceRow(`+ ${def.name}${detail}`, `€${(+a.price * qty).toFixed(2)}`));
                 });
                 (sel.guests || []).forEach((guest, gi) => {
                     let guestLabel = guestCount > 1 ? ` (G ${gi + 1})` : '';
@@ -1176,16 +1206,16 @@
                         const def = items[ii]; if (!def) return;
                         const detail = it.variant ? ` ${it.variant}` : '';
                         const qty = it.qty || 1;
-                        priceRowsHtml += `<div class="bf-summary-row"><span>+ ${def.name}${detail}${guestLabel}</span><span>€${(+a.price * qty).toFixed(2)}</span></div>`;
+                        priceRows.push(buildPriceRow(`+ ${def.name}${detail}${guestLabel}`, `€${(+a.price * qty).toFixed(2)}`));
                     });
                 });
             } else {
                 const total = +a.price * guestCount;
-                priceRowsHtml += `<div class="bf-summary-row"><span>+ ${a.name}${guestCount > 1 ? ` ×${guestCount}` : ''}</span><span>€${total.toFixed(2)}</span></div>`;
+                priceRows.push(buildPriceRow(`+ ${a.name}${guestCount > 1 ? ` ×${guestCount}` : ''}`, `€${total.toFixed(2)}`));
             }
         });
-        if (+svc?.cleaning_fee) priceRowsHtml += `<div class="bf-summary-row"><span>Reinigung</span><span>€${(+svc.cleaning_fee).toFixed(2)}</span></div>`;
-        if (state.voucher.data) priceRowsHtml += `<div class="bf-summary-row"><span>🎫 ${state.voucher.data.name}</span><span>-€${calcDisc().toFixed(2)}</span></div>`;
+        if (+svc?.cleaning_fee) priceRows.push(buildPriceRow('Reinigung', `€${(+svc.cleaning_fee).toFixed(2)}`));
+        if (state.voucher.data) priceRows.push(buildPriceRow(`🎫 ${state.voucher.data.name}`, `-€${calcDisc().toFixed(2)}`));
 
         const totalStr = `€${calcTotal().toFixed(2)}`;
 
@@ -1243,7 +1273,8 @@
             showRow('staff', !!stf);
             showRow('time', isH && !!time);
 
-            priceRowsEl.innerHTML = priceRowsHtml;
+            priceRowsEl.replaceChildren(...priceRows);
+            priceRowsEl.style.display = priceRows.length ? '' : 'none';
             setVal('total', totalStr);
         }
 
@@ -1578,6 +1609,7 @@
                 p_customer_zip: zip,
                 p_customer_notes: '',
                 p_addon_ids: state.sel.addons.map(a => a.id),
+                p_voucher_code: state.voucher.data ? state.voucher.code : null,
                 p_staff_id: staff,
                 p_guest_count: state.sel.guestCount,
                 p_addon_selections: addonSelections.length ? addonSelections : null
@@ -1605,10 +1637,10 @@
     // --- Event-Binding ---
     const bind = () => {
         // Split-Screen: free accordion toggle
-        $$('.bf-split-card-header').forEach(h => {
+        $$('[data-bf-part="card-header"]').forEach(h => {
             const card = h.closest('[data-bf-card]');
             const name = card?.dataset?.bfCard;
-            const panel = card?.querySelector('.bf-split-card-body');
+            const panel = part(card, 'card-panel');
             if (h.tagName !== 'BUTTON') {
                 h.setAttribute('role', 'button');
                 h.setAttribute('tabindex', '0');
