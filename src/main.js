@@ -9,7 +9,6 @@
  * Uses dynamic imports so Vite code-splits each chunk separately.
  */
 
-import './styles/base.css';
 import { injectSpeedInsights } from '@vercel/speed-insights';
 import { supabase } from './lib/supabaseClient.js';
 import { loadSprite } from './components/Icons/sprite.js';
@@ -21,6 +20,19 @@ import { isKnownLandingPath } from './lib/landingRoutesConfig.js';
 let currentUserId = null;
 
 const isAppSubdomain = () => window.location.hostname === 'app.book-fast.de';
+const hasLandingShell = () => Boolean(document.getElementById('landing-content'));
+const clearLandingShellActive = () => {
+  document.documentElement.classList.remove('landing-active');
+  document.body?.classList.remove('landing-active');
+};
+
+const setLandingShellActive = () => {
+  document.documentElement.classList.add('landing-active');
+  document.body?.classList.add('landing-active');
+};
+
+const shouldBootstrapLandingImmediately = (path) =>
+  !isAppSubdomain() && !isPortalRoute() && !isDashboardRoute() && isKnownLandingPath(path);
 
 /**
  * Handle user change: clear stale workspace selection and reset state
@@ -52,6 +64,7 @@ const isDashboardRoute = () => {
  * Dynamically load and render the Customer Portal
  */
 const loadPortal = async () => {
+  clearLandingShellActive();
   const { renderPortalPage } = await import('./pages/portal/PortalPage.js');
   renderPortalPage();
 };
@@ -60,6 +73,7 @@ const loadPortal = async () => {
  * Dynamically load and start the Dashboard
  */
 const loadDashboard = async (session) => {
+  clearLandingShellActive();
   const { renderDashboard } = await import('./pages/Dashboard.js');
   renderDashboard(session);
 };
@@ -72,10 +86,16 @@ const loadLanding = async ({ isLoggedIn = false } = {}) => {
   initLandingPages({ isLoggedIn });
 };
 
+const syncLandingAuthState = async ({ isLoggedIn = false } = {}) => {
+  const { updateLandingAuthState } = await import('./pages/landing/LandingLayout.js');
+  updateLandingAuthState({ isLoggedIn });
+};
+
 /**
  * Dynamically cleanup landing (if module was loaded)
  */
 const unloadLanding = async () => {
+  clearLandingShellActive();
   const { cleanupLandingPages } = await import('./pages/landing/LandingLayout.js');
   cleanupLandingPages();
 };
@@ -87,15 +107,24 @@ const init = async () => {
   // Load SVG sprite
   loadSprite();
 
+  const path = window.location.pathname;
+  const bootstrapLandingNow = shouldBootstrapLandingImmediately(path);
+  const sessionPromise = supabase.auth.getSession();
+  let landingBootstrapPromise = null;
+
   // 1. Portal route — public, no auth required, own rendering path
   if (isPortalRoute()) {
     await loadPortal();
     return; // No auth listener needed for portal
   }
 
+  if (bootstrapLandingNow) {
+    setLandingShellActive();
+    landingBootstrapPromise = loadLanding();
+  }
+
   // 2. Check for existing session (Dashboard vs Landing)
-  const { data: { session } } = await supabase.auth.getSession();
-  const path = window.location.pathname;
+  const { data: { session } } = await sessionPromise;
 
   if (session) {
     handleUserChange(session.user.id);
@@ -108,7 +137,14 @@ const init = async () => {
     } else if (isDashboardRoute()) {
       await loadDashboard(session);
     } else if (isKnownLandingPath(path)) {
-      await loadLanding({ isLoggedIn: true });
+      if (bootstrapLandingNow && landingBootstrapPromise) {
+        await landingBootstrapPromise;
+      }
+      if (bootstrapLandingNow && hasLandingShell()) {
+        await syncLandingAuthState({ isLoggedIn: true });
+      } else {
+        await loadLanding({ isLoggedIn: true });
+      }
     } else {
       history.replaceState(null, '', '/dashboard/bookings');
       await loadDashboard(session);
@@ -121,7 +157,11 @@ const init = async () => {
     if (!isKnownLandingPath(path)) {
       history.replaceState(null, '', '/');
     }
-    await loadLanding();
+    if (!bootstrapLandingNow) {
+      await loadLanding();
+    } else if (landingBootstrapPromise) {
+      await landingBootstrapPromise;
+    }
   }
 
   // Listen for auth state changes
@@ -130,18 +170,24 @@ const init = async () => {
 
     if (session) {
       handleUserChange(session.user.id);
-      await unloadLanding();
 
       if (isAppSubdomain()) {
+        await unloadLanding();
         if (!isDashboardRoute() && !isPortalRoute()) {
           history.replaceState(null, '', '/dashboard/bookings');
         }
         await loadDashboard(session);
       } else if (isDashboardRoute()) {
+        await unloadLanding();
         await loadDashboard(session);
       } else if (isKnownLandingPath(currentPath)) {
-        await loadLanding({ isLoggedIn: true });
+        if (hasLandingShell()) {
+          await syncLandingAuthState({ isLoggedIn: true });
+        } else {
+          await loadLanding({ isLoggedIn: true });
+        }
       } else {
+        await unloadLanding();
         history.replaceState(null, '', '/dashboard/bookings');
         await loadDashboard(session);
       }
@@ -153,11 +199,17 @@ const init = async () => {
         window.location.href = 'https://book-fast.de/';
         return;
       }
-      await unloadLanding();
-      if (!isKnownLandingPath(currentPath)) {
+      if (isKnownLandingPath(currentPath)) {
+        if (hasLandingShell()) {
+          await syncLandingAuthState({ isLoggedIn: false });
+        } else {
+          await loadLanding();
+        }
+      } else {
+        await unloadLanding();
         history.replaceState(null, '', '/');
+        await loadLanding();
       }
-      await loadLanding();
     }
   });
 };

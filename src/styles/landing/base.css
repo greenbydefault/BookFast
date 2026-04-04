@@ -1,10 +1,12 @@
 /* --- Reset for landing pages --- */
+html.landing-active body,
 body.landing-active {
   overflow: auto;
   overflow-x: hidden;
   display: block;
 }
 
+html.landing-active body #app,
 body.landing-active #app {
   height: auto;
   min-height: 100vh;

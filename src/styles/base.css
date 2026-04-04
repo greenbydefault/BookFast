@@ -10,14 +10,14 @@ html, body {
     height: 100%;
 }
 
-/* Dashboard uses overflow hidden; landing pages override via .landing-active */
-body:not(.landing-active) {
-    overflow: hidden;
-}
-
 body {
     font-family: var(--font-main);
     color: var(--color-vulcan-900);
+}
+
+/* Dashboard shell only applies when the document is not in landing mode yet */
+html:not(.landing-active) body {
+    overflow: hidden;
     display: flex;
 }
 

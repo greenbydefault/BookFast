@@ -17,6 +17,33 @@ const landingPages = new Map();
 const wildcardPages = new Map();
 
 let currentCleanup = null;
+let routerInitialized = false;
+
+const handleLandingPopstate = (event) => {
+  const path = event.state?.landingPath || window.location.pathname;
+  if (isLandingRoute(path)) {
+    renderLandingRoute(path);
+  }
+};
+
+const handleLandingDocumentClick = (e) => {
+  const link = e.target.closest('[data-landing-link]');
+  if (link) {
+    e.preventDefault();
+    const href = link.getAttribute('href');
+    if (href && href.startsWith('/')) {
+      const current = normalizeLandingPath(
+        window.location.pathname === '/index.html' ? '/' : window.location.pathname,
+      );
+      const target = normalizeLandingPath(href);
+      if (target === current) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        navigateLanding(href);
+      }
+    }
+  }
+};
 
 /**
  * Register a landing page
@@ -150,33 +177,11 @@ const render404 = (locale) => {
  * Initialize the landing router
  */
 export const initLandingRouter = () => {
-  // Handle browser back/forward
-  window.addEventListener('popstate', (event) => {
-    const path = event.state?.landingPath || window.location.pathname;
-    if (isLandingRoute(path)) {
-      renderLandingRoute(path);
-    }
-  });
-
-  // Handle link clicks (event delegation)
-  document.addEventListener('click', (e) => {
-    const link = e.target.closest('[data-landing-link]');
-    if (link) {
-      e.preventDefault();
-      const href = link.getAttribute('href');
-      if (href && href.startsWith('/')) {
-        const current = normalizeLandingPath(
-          window.location.pathname === '/index.html' ? '/' : window.location.pathname,
-        );
-        const target = normalizeLandingPath(href);
-        if (target === current) {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          navigateLanding(href);
-        }
-      }
-    }
-  });
+  if (!routerInitialized) {
+    window.addEventListener('popstate', handleLandingPopstate);
+    document.addEventListener('click', handleLandingDocumentClick);
+    routerInitialized = true;
+  }
 
   // Initial render
   renderLandingRoute(window.location.pathname);

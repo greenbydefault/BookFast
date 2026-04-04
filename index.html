@@ -3,9 +3,23 @@
 
 <head>
   <meta charset="UTF-8" />
+  <script>
+    (() => {
+      const path = window.location.pathname;
+      const isMarketingShell =
+        window.location.hostname !== 'app.book-fast.de' &&
+        !path.startsWith('/dashboard') &&
+        !path.startsWith('/b/');
+      if (isMarketingShell) {
+        document.documentElement.classList.add('landing-active');
+      }
+    })();
+  </script>
   <link rel="icon" type="image/png" href="/Logo/favicon.png" sizes="32x32" />
   <link rel="apple-touch-icon" href="/Logo/logo.png" />
   <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="stylesheet" href="/src/styles/base.css" />
+  <link rel="stylesheet" href="/src/styles/landing.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0f172a" />
   <meta name="robots" content="index,follow" />
