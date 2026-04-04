@@ -14,7 +14,6 @@ export const createBufferPreviewCard = () => `
         <h3 class="feature-demo-card__title">Reinigungspuffer</h3>
         <p class="feature-demo-card__subtitle">Pro Service – wie in den Service-Einstellungen.</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="Schließen">×</button>
     </div>
     <div class="feature-demo-card__body" id="buffer-preview-body"></div>
     <div class="feature-demo-card__footer">

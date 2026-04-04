@@ -53,7 +53,6 @@ export const createZeitfensterPreviewCard = () => `
         <h3 class="feature-demo-card__title">Buchbare Zeiten</h3>
         <p class="feature-demo-card__subtitle">Pro Objekt – wie in der Objekt-Ansicht unter „Zeiten“.</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="Schließen">×</button>
     </div>
     <div class="feature-demo-card__body" id="zf-preview-body"></div>
     <div class="feature-demo-card__footer">

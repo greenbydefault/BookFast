@@ -9,7 +9,6 @@ const DEFAULT_CONTENT = {
   card: {
     title: 'Buchungen',
     subtitle: 'Wie im Dashboard: Eingang, Freigabe und Portal-Handoff in einem Flow.',
-    closeLabel: 'Schließen',
     footerSecondary: 'Später prüfen',
     footerPrimary: 'Neue Buchung',
   },
@@ -102,7 +101,6 @@ export const createBookingPreviewCard = ({ content = DEFAULT_CONTENT } = {}) => 
         <h3 class="feature-demo-card__title">${content.card.title}</h3>
         <p class="feature-demo-card__subtitle">${content.card.subtitle}</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="${content.card.closeLabel}">×</button>
     </div>
     <div class="feature-demo-card__body" id="booking-preview-body"></div>
     <div class="feature-demo-card__footer">

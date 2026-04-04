@@ -7,7 +7,6 @@ export const featureDemoModules = {
     card: {
       title: 'Buchungen',
       subtitle: 'Wie im Dashboard: Eingang, Freigabe und Portal-Handoff in einem Flow.',
-      closeLabel: 'Schließen',
       footerSecondary: 'Später prüfen',
       footerPrimary: 'Neue Buchung',
     },
@@ -104,7 +103,6 @@ export const featureDemoModules = {
     card: {
       title: 'Zahlungen',
       subtitle: 'Stripe Connect, Anzahlung und Auszahlung wie im Zahlungs-Setup verdichtet.',
-      closeLabel: 'Schließen',
       footerSecondary: 'Später',
       footerPrimary: 'Stripe starten',
     },
@@ -145,7 +143,6 @@ export const featureDemoModules = {
     card: {
       title: 'Rechnung',
       subtitle: 'Automatisch aus Buchung, Add-ons und Firmendaten gebaut.',
-      closeLabel: 'Schließen',
       footerSecondary: 'Entwurf',
       footerPrimary: 'PDF öffnen',
     },
@@ -197,7 +194,6 @@ export const featureDemoModules = {
     card: {
       title: 'Kundenportal',
       subtitle: 'Magic Link, PIN und Self-Service wie im echten Portal verdichtet.',
-      closeLabel: 'Schließen',
       footerSecondary: 'Mail ansehen',
       footerPrimary: 'Portal öffnen',
     },
@@ -240,7 +236,6 @@ export const featureDemoModules = {
     card: {
       title: 'Insights',
       subtitle: 'Wie im Dashboard unter Analytics – Demo-Daten.',
-      closeLabel: 'Schließen',
     },
     tabs: [
       { id: 'overview', label: 'Überblick' },
@@ -296,7 +291,6 @@ export const featureDemoModules = {
     card: {
       title: 'Objekt anlegen',
       subtitle: 'Lege ein Objekt an.',
-      closeLabel: 'Schließen',
       footerSecondary: 'Abbrechen',
       footerPrimary: 'Objekt speichern',
     },
@@ -333,7 +327,6 @@ export const featureDemoModules = {
     card: {
       title: 'Service anlegen',
       subtitle: 'Lege einen Service an und ordne ihn einem Objekt zu.',
-      closeLabel: 'Schließen',
       footerSecondary: 'Abbrechen',
       footerPrimary: 'Service speichern',
     },
@@ -444,7 +437,6 @@ export const featureDemoModules = {
     card: {
       title: 'Neuer Workspace',
       subtitle: 'Wie im Dashboard bei „Neuen Workspace anlegen“.',
-      closeLabel: 'Schließen',
       footerSecondary: 'Abbrechen',
       footerPrimary: 'Workspace erstellen',
     },

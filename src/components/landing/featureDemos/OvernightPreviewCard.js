@@ -43,7 +43,6 @@ export const createOvernightPreviewCard = () => `
         <h3 class="feature-demo-card__title">Service Anlegen</h3>
         <p class="feature-demo-card__subtitle">Lege einen Service an und ordne ihn einem Objekt zu.</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="Schließen">×</button>
     </div>
     <div class="feature-demo-card__body" id="overnight-preview-body"></div>
     <div class="feature-demo-card__footer">

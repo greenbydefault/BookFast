@@ -9,7 +9,6 @@ const DEFAULT_CONTENT = {
   card: {
     title: 'Zahlungen',
     subtitle: 'Stripe Connect, Anzahlung und Auszahlung wie im Zahlungs-Setup verdichtet.',
-    closeLabel: 'Schließen',
     footerSecondary: 'Später',
     footerPrimary: 'Stripe starten',
   },
@@ -56,7 +55,6 @@ export const createPaymentsPreviewCard = ({ content = DEFAULT_CONTENT } = {}) =>
         <h3 class="feature-demo-card__title">${content.card.title}</h3>
         <p class="feature-demo-card__subtitle">${content.card.subtitle}</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="${content.card.closeLabel}">×</button>
     </div>
     <div class="feature-demo-card__body" id="payments-preview-body"></div>
     <div class="feature-demo-card__footer">

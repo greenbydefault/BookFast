@@ -45,7 +45,6 @@ export const createUrlaubPreviewCard = () => `
         <h3 class="feature-demo-card__title">Urlaub anlegen</h3>
         <p class="feature-demo-card__subtitle">Definiere einen Zeitraum – für das ganze Workspace, ein Objekt, einen Mitarbeiter oder einen Service.</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="Schließen">×</button>
     </div>
     <div class="feature-demo-card__body" id="urlaub-preview-body"></div>
     <div class="feature-demo-card__footer">

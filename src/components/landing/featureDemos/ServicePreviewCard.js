@@ -10,7 +10,6 @@ const DEFAULT_CONTENT = {
   card: {
     title: 'Service anlegen',
     subtitle: 'Lege einen Service an und ordne ihn einem Objekt zu.',
-    closeLabel: 'Schließen',
     footerSecondary: 'Abbrechen',
     footerPrimary: 'Service speichern',
   },
@@ -93,7 +92,6 @@ export const createServicePreviewCard = ({ content = DEFAULT_CONTENT } = {}) => 
         <h3 class="feature-demo-card__title">${content.card.title}</h3>
         <p class="feature-demo-card__subtitle">${content.card.subtitle}</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="${content.card.closeLabel}">\u00d7</button>
     </div>
     <div class="feature-demo-card__body" id="service-preview-body"></div>
     <div class="feature-demo-card__footer">

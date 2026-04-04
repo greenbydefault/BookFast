@@ -10,7 +10,6 @@ const DEFAULT_CONTENT = {
   card: {
     title: 'Neuer Workspace',
     subtitle: 'Wie im Dashboard bei „Neuen Workspace anlegen“.',
-    closeLabel: 'Schließen',
     footerSecondary: 'Abbrechen',
     footerPrimary: 'Workspace erstellen',
   },
@@ -43,7 +42,6 @@ export const createWorkspacesPreviewCard = ({ content = DEFAULT_CONTENT } = {}) 
         <h3 class="feature-demo-card__title">${content.card.title}</h3>
         <p class="feature-demo-card__subtitle">${content.card.subtitle}</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="${content.card.closeLabel}">×</button>
     </div>
     <div class="feature-demo-card__body" id="ws-preview-body"></div>
     <div class="feature-demo-card__footer">

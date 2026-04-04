@@ -9,7 +9,6 @@ const DEFAULT_CONTENT = {
   card: {
     title: 'Rechnung',
     subtitle: 'Automatisch aus Buchung, Add-ons und Firmendaten gebaut.',
-    closeLabel: 'Schließen',
     footerSecondary: 'Entwurf',
     footerPrimary: 'PDF öffnen',
   },
@@ -61,7 +60,6 @@ export const createInvoicesPreviewCard = ({ content = DEFAULT_CONTENT } = {}) =>
         <h3 class="feature-demo-card__title">${content.card.title}</h3>
         <p class="feature-demo-card__subtitle">${content.card.subtitle}</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="${content.card.closeLabel}">×</button>
     </div>
     <div class="feature-demo-card__body" id="invoices-preview-body"></div>
     <div class="feature-demo-card__footer">

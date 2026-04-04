@@ -8,7 +8,6 @@ export const featureDemoModulesEn = {
     card: {
       title: 'Bookings',
       subtitle: 'Like the dashboard: inbox, approval, and portal handoff in one flow.',
-      closeLabel: 'Close',
       footerSecondary: 'Review later',
       footerPrimary: 'New booking',
     },
@@ -105,7 +104,6 @@ export const featureDemoModulesEn = {
     card: {
       title: 'Payments',
       subtitle: 'Stripe Connect, deposits, and payouts condensed like the real payment setup.',
-      closeLabel: 'Close',
       footerSecondary: 'Later',
       footerPrimary: 'Start Stripe',
     },
@@ -146,7 +144,6 @@ export const featureDemoModulesEn = {
     card: {
       title: 'Invoice',
       subtitle: 'Built automatically from booking, add-ons, and company details.',
-      closeLabel: 'Close',
       footerSecondary: 'Draft',
       footerPrimary: 'Open PDF',
     },
@@ -192,7 +189,6 @@ export const featureDemoModulesEn = {
     card: {
       title: 'Customer portal',
       subtitle: 'Magic link, PIN, and self-service condensed like the real portal.',
-      closeLabel: 'Close',
       footerSecondary: 'View email',
       footerPrimary: 'Open portal',
     },
@@ -234,7 +230,6 @@ export const featureDemoModulesEn = {
     card: {
       title: 'Insights',
       subtitle: 'Like the analytics dashboard with demo data.',
-      closeLabel: 'Close',
     },
     tabs: [
       { id: 'overview', label: 'Overview' },
@@ -289,7 +284,6 @@ export const featureDemoModulesEn = {
     card: {
       title: 'Create resource',
       subtitle: 'Create a resource.',
-      closeLabel: 'Close',
       footerSecondary: 'Cancel',
       footerPrimary: 'Save resource',
     },
@@ -326,7 +320,6 @@ export const featureDemoModulesEn = {
     card: {
       title: 'Create service',
       subtitle: 'Create a service and assign it to a resource.',
-      closeLabel: 'Close',
       footerSecondary: 'Cancel',
       footerPrimary: 'Save service',
     },
@@ -431,7 +424,6 @@ export const featureDemoModulesEn = {
     card: {
       title: 'New workspace',
       subtitle: 'Like the dashboard flow for creating a new workspace.',
-      closeLabel: 'Close',
       footerSecondary: 'Cancel',
       footerPrimary: 'Create workspace',
     },

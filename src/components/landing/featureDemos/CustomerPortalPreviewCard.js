@@ -9,7 +9,6 @@ const DEFAULT_CONTENT = {
   card: {
     title: 'Kundenportal',
     subtitle: 'Magic Link, PIN und Self-Service wie im echten Portal verdichtet.',
-    closeLabel: 'Schließen',
     footerSecondary: 'Mail ansehen',
     footerPrimary: 'Portal öffnen',
   },
@@ -56,7 +55,6 @@ export const createCustomerPortalPreviewCard = ({ content = DEFAULT_CONTENT } = 
         <h3 class="feature-demo-card__title">${content.card.title}</h3>
         <p class="feature-demo-card__subtitle">${content.card.subtitle}</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="${content.card.closeLabel}">×</button>
     </div>
     <div class="feature-demo-card__body" id="customer-portal-preview-body"></div>
     <div class="feature-demo-card__footer">
