@@ -19,11 +19,11 @@ import { renderAboutPage } from './AboutPage.js';
 import { renderContactPage } from './ContactPage.js';
 import { renderWaitlistConfirmPage } from './WaitlistConfirmPage.js';
 import { setPageMeta } from '../../lib/seoHelper.js';
-import { registerEnFeaturePages } from '../../lib/getLocaleContent.js';
-import { managementEn } from '../../locales/en/features/management.js';
-import { platformEn } from '../../locales/en/features/platform.js';
-
-registerEnFeaturePages({ ...managementEn, ...platformEn });
+import {
+  CANONICAL_ROUTE_BY_KEY,
+  PLACEHOLDER_ROUTE_BY_KEY,
+  REDIRECT_ROUTE_BY_KEY,
+} from '../../lib/routeConfig.js';
 
 const FEATURE_REDIRECTS_DE = {
   approval: '/features/buchungen',
@@ -90,19 +90,29 @@ const createLandingRedirect = (targetPath) => () => {
   navigateLanding(targetPath, true);
 };
 
-const createPlaceholder = (title, description) => () => {
-  setPageMeta(title, description || 'Diese Seite wird bald verfügbar sein.');
+const createPlaceholder = (title, description) => (locale = 'de') => {
+  const isEn = locale === 'en';
+  setPageMeta(title, description || 'Diese Seite wird bald verfügbar sein.', {
+    locale,
+    noindex: true,
+  });
 
   const content = document.getElementById('landing-content');
   if (content) {
+    const bodyText = isEn
+      ? 'This page will be available soon.'
+      : 'Diese Seite wird bald verfügbar sein.';
+    const homeHref = isEn ? '/en' : '/';
+    const linkTitle = isEn ? 'Go to homepage' : 'Zur Startseite wechseln';
+    const linkText = isEn ? 'Go to homepage' : 'Zur Startseite';
     content.innerHTML = `
       <section class="landing-hero">
         <div class="landing-container">
           <div class="landing-hero-centered">
             <h1 class="landing-h1">${title}</h1>
-            <p class="landing-text-lg">Diese Seite wird bald verfügbar sein.</p>
+            <p class="landing-text-lg">${bodyText}</p>
             <div class="landing-hero-ctas" style="justify-content: center;">
-              <a href="/" class="landing-btn landing-btn-primary" data-landing-link title="Zur Startseite wechseln">Zur Startseite</a>
+              <a href="${homeHref}" class="landing-btn landing-btn-primary" data-landing-link title="${linkTitle}">${linkText}</a>
             </div>
           </div>
         </div>
@@ -114,31 +124,51 @@ const createPlaceholder = (title, description) => () => {
  * Register all landing page routes
  */
 export const registerAllLandingPages = () => {
-  registerLandingPage('/', renderHomePage);
-  registerLandingPage('/en', renderHomePage);
-  registerLandingPage('/produkt', renderProductPage);
-  registerLandingPage('/preise', renderPricingPage);
-  registerLandingPage('/integrationen', createLandingRedirect('/produkt'));
-  registerLandingPage('/ressourcen', createPlaceholder('Ressourcen', 'Ressourcen und Hilfestellungen fuer BookFast folgen in Kuerze.'));
-  registerLandingPage('/ueber-uns', renderAboutPage);
-  registerLandingPage('/kontakt', renderContactPage);
-  registerLandingPage('/features', renderFeaturesHubPage);
-  registerLandingPage('/impressum', renderImpressumPage);
-  registerLandingPage('/datenschutz', renderDatenschutzPage);
-  registerLandingPage('/agb', renderAGBPage);
-  registerLandingPage('/waitlist/confirm', renderWaitlistConfirmPage);
+  const canonicalRenderers = {
+    [CANONICAL_ROUTE_BY_KEY.home.de]: renderHomePage,
+    [CANONICAL_ROUTE_BY_KEY.home.en]: renderHomePage,
+    [CANONICAL_ROUTE_BY_KEY.product.de]: renderProductPage,
+    [CANONICAL_ROUTE_BY_KEY.product.en]: renderProductPage,
+    [CANONICAL_ROUTE_BY_KEY.pricing.de]: renderPricingPage,
+    [CANONICAL_ROUTE_BY_KEY.pricing.en]: renderPricingPage,
+    [CANONICAL_ROUTE_BY_KEY.about.de]: renderAboutPage,
+    [CANONICAL_ROUTE_BY_KEY.about.en]: renderAboutPage,
+    [CANONICAL_ROUTE_BY_KEY.contact.de]: renderContactPage,
+    [CANONICAL_ROUTE_BY_KEY.contact.en]: renderContactPage,
+    [CANONICAL_ROUTE_BY_KEY.features.de]: renderFeaturesHubPage,
+    [CANONICAL_ROUTE_BY_KEY.features.en]: renderFeaturesHubPage,
+    [CANONICAL_ROUTE_BY_KEY.imprint.de]: renderImpressumPage,
+    [CANONICAL_ROUTE_BY_KEY.imprint.en]: renderImpressumPage,
+    [CANONICAL_ROUTE_BY_KEY.privacy.de]: renderDatenschutzPage,
+    [CANONICAL_ROUTE_BY_KEY.privacy.en]: renderDatenschutzPage,
+    [CANONICAL_ROUTE_BY_KEY.terms.de]: renderAGBPage,
+    [CANONICAL_ROUTE_BY_KEY.terms.en]: renderAGBPage,
+    [CANONICAL_ROUTE_BY_KEY['waitlist-confirm'].de]: renderWaitlistConfirmPage,
+    [CANONICAL_ROUTE_BY_KEY['waitlist-confirm'].en]: renderWaitlistConfirmPage,
+  };
+
+  Object.entries(canonicalRenderers).forEach(([path, renderer]) => {
+    registerLandingPage(path, renderer);
+  });
+
   registerLandingWildcard('/features/', renderDeFeaturePageWithRedirect);
   registerLandingWildcard('/en/features/', renderEnFeaturePage);
 
-  registerLandingPage('/en/product', renderProductPage);
-  registerLandingPage('/en/pricing', renderPricingPage);
-  registerLandingPage('/en/integrations', createLandingRedirect('/en/product'));
-  registerLandingPage('/en/resources', createPlaceholder('Resources', 'Resources and guides for BookFast will be available soon.'));
-  registerLandingPage('/en/about', renderAboutPage);
-  registerLandingPage('/en/contact', renderContactPage);
-  registerLandingPage('/en/features', renderFeaturesHubPage);
-  registerLandingPage('/en/imprint', renderImpressumPage);
-  registerLandingPage('/en/privacy', renderDatenschutzPage);
-  registerLandingPage('/en/terms', renderAGBPage);
-  registerLandingPage('/en/waitlist/confirm', renderWaitlistConfirmPage);
+  registerLandingPage(
+    REDIRECT_ROUTE_BY_KEY.integrations.de,
+    createLandingRedirect(REDIRECT_ROUTE_BY_KEY.integrations.redirectTarget.de),
+  );
+  registerLandingPage(
+    REDIRECT_ROUTE_BY_KEY.integrations.en,
+    createLandingRedirect(REDIRECT_ROUTE_BY_KEY.integrations.redirectTarget.en),
+  );
+
+  registerLandingPage(
+    PLACEHOLDER_ROUTE_BY_KEY.resources.de,
+    createPlaceholder('Ressourcen', 'Ressourcen und Hilfestellungen fuer BookFast folgen in Kuerze.'),
+  );
+  registerLandingPage(
+    PLACEHOLDER_ROUTE_BY_KEY.resources.en,
+    createPlaceholder('Resources', 'Resources and guides for BookFast will be available soon.'),
+  );
 };

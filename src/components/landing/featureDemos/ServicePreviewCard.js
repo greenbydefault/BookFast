@@ -6,23 +6,64 @@ import { getIconString } from '../../Icons/Icon.js';
 import { escapeAttr } from '../../../lib/sanitize.js';
 import './featureDemos.css';
 
-const DAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
-
-const SERVICE_TABS = [
-  { id: 'hourly', label: 'Stunden' },
-  { id: 'daily', label: 'Tagesmiete' },
-  { id: 'overnight', label: 'Übernachtung' },
-];
-
-const PRICE_UNITS = { hourly: 'Stunde', daily: 'Tag', overnight: 'Nacht' };
-const ADVANCE_UNITS = { hourly: 'Stunden', daily: 'Tage', overnight: 'Tage' };
-const DEFAULT_PRICES = { hourly: 120, daily: 560, overnight: 140 };
-
-const DEMO_OBJECTS = [
-  { value: 'demo-obj-1', label: 'Villa Nord' },
-  { value: 'demo-obj-2', label: 'Studio Süd' },
-  { value: 'demo-obj-3', label: 'Loft Mitte' },
-];
+const DEFAULT_CONTENT = {
+  card: {
+    title: 'Service anlegen',
+    subtitle: 'Lege einen Service an und ordne ihn einem Objekt zu.',
+    closeLabel: 'Schließen',
+    footerSecondary: 'Abbrechen',
+    footerPrimary: 'Service speichern',
+  },
+  days: [
+    { id: 'Mo', label: 'Mo' },
+    { id: 'Di', label: 'Di' },
+    { id: 'Mi', label: 'Mi' },
+    { id: 'Do', label: 'Do' },
+    { id: 'Fr', label: 'Fr' },
+    { id: 'Sa', label: 'Sa' },
+    { id: 'So', label: 'So' },
+  ],
+  tabs: [
+    { id: 'hourly', label: 'Stunden' },
+    { id: 'daily', label: 'Tagesmiete' },
+    { id: 'overnight', label: 'Übernachtung' },
+  ],
+  priceUnits: { hourly: 'Stunde', daily: 'Tag', overnight: 'Nacht' },
+  advanceUnits: { hourly: 'Stunden', daily: 'Tage', overnight: 'Tage' },
+  defaultPrices: { hourly: 120, daily: 560, overnight: 140 },
+  objects: [
+    { value: 'demo-obj-1', label: 'Villa Nord' },
+    { value: 'demo-obj-2', label: 'Studio Süd' },
+    { value: 'demo-obj-3', label: 'Loft Mitte' },
+  ],
+  placeholders: {
+    name: 'z. B. Massage (60 Min.) oder Hausboot (4 Std.)',
+    description: 'Optional: Was ist enthalten, wichtige Hinweise ...',
+  },
+  labels: {
+    description: 'Beschreibung',
+    optional: '(Optional)',
+    object: 'Objekt',
+    price: 'Preis',
+    duration: 'Dauer',
+    bookingWindow: 'Buchungszeitfenster',
+    checkinCheckout: 'Check-in/Out',
+    from: 'Von',
+    to: 'Bis',
+    bookableDays: 'Buchbare Tage',
+    minAdvance: 'Mindestvorlauf',
+    fixedStartTimes: 'Feste Startzeiten',
+    minNights: 'Min. Übernachtungen',
+    nights: 'Nächte',
+    cleaningFee: 'Reinigungsgebühr',
+    cleaningBuffer: 'Reinigungspuffer',
+    before: 'Davor',
+    after: 'Danach',
+    minutesShort: 'Min.',
+    euro: '€',
+    hours: 'Stunden',
+  },
+};
 
 const getInitialState = () => ({
   serviceType: 'hourly',
@@ -30,7 +71,7 @@ const getInitialState = () => ({
   description: '',
   price: 120,
   selectedObjects: ['demo-obj-1'],
-  bookableDays: [...DAYS],
+  bookableDays: DEFAULT_CONTENT.days.map((day) => day.id),
   durationHours: 4,
   bookingWindowStart: '10:00',
   bookingWindowEnd: '16:30',
@@ -45,24 +86,24 @@ const getInitialState = () => ({
   bufferAfter: 60,
 });
 
-export const createServicePreviewCard = () => `
+export const createServicePreviewCard = ({ content = DEFAULT_CONTENT } = {}) => `
   <div class="feature-demo-card" id="service-preview-card">
     <div class="feature-demo-card__header">
       <div class="feature-demo-card__title-group">
-        <h3 class="feature-demo-card__title">Service Anlegen</h3>
-        <p class="feature-demo-card__subtitle">Lege einen Service an und ordne ihn einem Objekt zu.</p>
+        <h3 class="feature-demo-card__title">${content.card.title}</h3>
+        <p class="feature-demo-card__subtitle">${content.card.subtitle}</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="Schließen">\u00d7</button>
+      <button type="button" class="feature-demo-card__close" aria-label="${content.card.closeLabel}">\u00d7</button>
     </div>
     <div class="feature-demo-card__body" id="service-preview-body"></div>
     <div class="feature-demo-card__footer">
-      <button type="button" class="feature-demo-card__footer-btn">Abbrechen</button>
-      <button type="button" class="feature-demo-card__footer-btn feature-demo-card__footer-btn--primary">Service speichern</button>
+      <button type="button" class="feature-demo-card__footer-btn">${content.card.footerSecondary}</button>
+      <button type="button" class="feature-demo-card__footer-btn feature-demo-card__footer-btn--primary">${content.card.footerPrimary}</button>
     </div>
   </div>
 `;
 
-export const initServicePreviewCard = (heroContainer) => {
+export const initServicePreviewCard = (heroContainer, { content = DEFAULT_CONTENT } = {}) => {
   const body = heroContainer.querySelector('#service-preview-body');
   if (!body) return;
 
@@ -110,8 +151,8 @@ export const initServicePreviewCard = (heroContainer) => {
   const switchTab = (tabId) => {
     captureValues();
     const old = state.serviceType;
-    state.serviceType = tabId;
-    if (state.price === DEFAULT_PRICES[old]) state.price = DEFAULT_PRICES[tabId];
+      state.serviceType = tabId;
+      if (state.price === content.defaultPrices[old]) state.price = content.defaultPrices[tabId];
     render();
   };
 
@@ -136,12 +177,12 @@ export const initServicePreviewCard = (heroContainer) => {
 
   const render = () => {
     const type = state.serviceType;
-    const priceUnit = PRICE_UNITS[type];
-    const advanceUnit = ADVANCE_UNITS[type];
+    const priceUnit = content.priceUnits[type];
+    const advanceUnit = content.advanceUnits[type];
 
     body.innerHTML = `
       <div class="svc-demo-tabs">
-        ${SERVICE_TABS.map((tab) => `
+        ${(content.tabs || []).map((tab) => `
           <button class="svc-demo-tab ${state.serviceType === tab.id ? 'active' : ''}"
                   data-tab="${tab.id}" type="button">${tab.label}</button>
         `).join('')}
@@ -150,20 +191,20 @@ export const initServicePreviewCard = (heroContainer) => {
       <div class="modal-content-section">
         <div class="modal-form-field">
           <input type="text" class="modal-form-input modal-input-large"
-                 placeholder="z. B. Massage (60 Min.) oder Hausboot (4 Std.)"
+                 placeholder="${escapeAttr(content.placeholders.name)}"
                  value="${escapeAttr(state.name)}" id="svc-input-name">
         </div>
         <div class="modal-form-field">
-          <label class="modal-label modal-form-label">Beschreibung <span class="modal-label-optional">(Optional)</span></label>
-          <textarea class="modal-form-input" placeholder="Optional: Was ist enthalten, wichtige Hinweise ..."
+          <label class="modal-label modal-form-label">${content.labels.description} <span class="modal-label-optional">${content.labels.optional}</span></label>
+          <textarea class="modal-form-input" placeholder="${escapeAttr(content.placeholders.description)}"
                     rows="2" id="svc-input-desc">${escapeAttr(state.description)}</textarea>
         </div>
         <div class="modal-form-field">
           <div class="modal-row">
-            <div class="modal-label">${getIconString('home')} Objekt</div>
+            <div class="modal-label">${getIconString('home')} ${content.labels.object}</div>
             <div class="modal-controls">
               <div class="svc-demo-tags">
-                ${DEMO_OBJECTS.map((obj) => `
+                ${(content.objects || []).map((obj) => `
                   <button class="svc-demo-tag ${state.selectedObjects.includes(obj.value) ? 'active' : ''}"
                           data-obj="${escapeAttr(obj.value)}" type="button">${obj.label}</button>
                 `).join('')}
@@ -175,30 +216,30 @@ export const initServicePreviewCard = (heroContainer) => {
 
       <div class="modal-content-section">
         <div class="modal-row">
-          <div class="modal-label">${getIconString('coins')} Preis</div>
+          <div class="modal-label">${getIconString('coins')} ${content.labels.price}</div>
           <div class="modal-controls svc-demo-price-controls">
             <input type="number" class="svc-demo-price-input" value="${state.price}" id="svc-input-price" step="1">
-            <span class="svc-demo-price-currency">\u20ac</span>
+            <span class="svc-demo-price-currency">${content.labels.euro}</span>
             <span class="svc-demo-price-unit">${priceUnit}</span>
           </div>
         </div>
 
         ${type === 'hourly' ? `
           <div class="modal-row">
-            <div class="modal-label">${getIconString('clock')} Dauer</div>
+            <div class="modal-label">${getIconString('clock')} ${content.labels.duration}</div>
             <div class="modal-controls svc-demo-price-controls">
               <input type="number" class="svc-demo-price-input" value="${state.durationHours}" id="svc-input-duration" min="1">
-              <span class="svc-demo-price-unit">Stunden</span>
+              <span class="svc-demo-price-unit">${content.labels.hours}</span>
             </div>
           </div>
         ` : ''}
 
         <div class="modal-row">
-          <div class="modal-label">${getIconString('clock')} ${type === 'overnight' ? 'CheckIn/Out' : 'Buchungszeitfenster'}</div>
+          <div class="modal-label">${getIconString('clock')} ${type === 'overnight' ? content.labels.checkinCheckout : content.labels.bookingWindow}</div>
           <div class="modal-controls">
-            <span class="svc-demo-label-inline">Von</span>
+            <span class="svc-demo-label-inline">${content.labels.from}</span>
             <input type="time" class="svc-demo-time-input" value="${type === 'overnight' ? state.checkinStart : state.bookingWindowStart}" id="svc-input-time-start">
-            <span class="svc-demo-label-inline">Bis</span>
+            <span class="svc-demo-label-inline">${content.labels.to}</span>
             <input type="time" class="svc-demo-time-input" value="${type === 'overnight' ? state.checkoutEnd : state.bookingWindowEnd}" id="svc-input-time-end">
           </div>
         </div>
@@ -206,19 +247,19 @@ export const initServicePreviewCard = (heroContainer) => {
 
       <div class="modal-content-section">
         <div class="modal-row">
-          <div class="modal-label">${getIconString('calender-days-date')} Buchbare Tage</div>
+          <div class="modal-label">${getIconString('calender-days-date')} ${content.labels.bookableDays}</div>
           <div class="modal-controls">
             <div class="day-toggles" id="svc-day-toggles">
-              ${DAYS.map((day) => `
-                <button class="day-toggle ${state.bookableDays.includes(day) ? 'active' : ''}"
-                        data-day="${day}" type="button">${day}</button>
+              ${content.days.map((day) => `
+                <button class="day-toggle ${state.bookableDays.includes(day.id) ? 'active' : ''}"
+                        data-day="${day.id}" type="button">${day.label}</button>
               `).join('')}
             </div>
           </div>
         </div>
 
         <div class="modal-row">
-          <div class="modal-label">${getIconString('clock')} Mindestvorlauf</div>
+          <div class="modal-label">${getIconString('clock')} ${content.labels.minAdvance}</div>
           <div class="modal-controls svc-demo-price-controls">
             <input type="number" class="svc-demo-price-input" value="${state.minAdvance}" id="svc-input-advance" min="0">
             <span class="svc-demo-price-unit">${advanceUnit}</span>
@@ -227,7 +268,7 @@ export const initServicePreviewCard = (heroContainer) => {
 
         ${type === 'hourly' ? `
           <div class="modal-row">
-            <div class="modal-label">${getIconString('clock')} Feste Startzeiten</div>
+            <div class="modal-label">${getIconString('clock')} ${content.labels.fixedStartTimes}</div>
             <div class="modal-controls">
               <label class="toggle-switch">
                 <input type="checkbox" id="svc-toggle-fixed" ${state.fixedStartTimesEnabled ? 'checked' : ''}>
@@ -239,7 +280,7 @@ export const initServicePreviewCard = (heroContainer) => {
 
         ${type === 'overnight' ? `
           <div class="modal-row">
-            <div class="modal-label">${getIconString('bed')} Min. Übernachtungen</div>
+            <div class="modal-label">${getIconString('bed')} ${content.labels.minNights}</div>
             <div class="modal-controls">
               <label class="toggle-switch">
                 <input type="checkbox" id="svc-toggle-min-nights" ${state.minNightsEnabled ? 'checked' : ''}>
@@ -252,7 +293,7 @@ export const initServicePreviewCard = (heroContainer) => {
               <div class="modal-label"></div>
               <div class="modal-controls svc-demo-price-controls">
                 <input type="number" class="svc-demo-price-input" value="${state.minNights}" id="svc-input-min-nights" min="1">
-                <span class="svc-demo-price-unit">N\u00e4chte</span>
+                <span class="svc-demo-price-unit">${content.labels.nights}</span>
               </div>
             </div>
           ` : ''}
@@ -261,29 +302,29 @@ export const initServicePreviewCard = (heroContainer) => {
 
       <div class="modal-content-section">
         <div class="modal-row">
-          <div class="modal-label">${getIconString('sparkles')} Reinigungsgeb\u00fchr</div>
+          <div class="modal-label">${getIconString('sparkles')} ${content.labels.cleaningFee}</div>
           <div class="modal-controls svc-demo-price-controls">
             <input type="number" class="svc-demo-price-input" value="${state.cleaningFee}" id="svc-input-cleaning-fee" step="1">
-            <span class="svc-demo-price-currency">\u20ac</span>
+            <span class="svc-demo-price-currency">${content.labels.euro}</span>
           </div>
         </div>
 
         <div class="modal-row">
-          <div class="modal-label">${getIconString('clock')} Reinigungspuffer</div>
+          <div class="modal-label">${getIconString('clock')} ${content.labels.cleaningBuffer}</div>
           <div class="modal-controls modal-controls-column">
             <div class="control-group-row">
-              <span class="text-small-muted">Davor</span>
+              <span class="text-small-muted">${content.labels.before}</span>
               <div class="number-control">
                 <input type="number" class="number-input" value="${state.bufferBefore}" min="0" id="svc-input-buffer-before">
               </div>
-              <span class="text-small">Min.</span>
+              <span class="text-small">${content.labels.minutesShort}</span>
             </div>
             <div class="control-group-row">
-              <span class="text-small-muted">Danach</span>
+              <span class="text-small-muted">${content.labels.after}</span>
               <div class="number-control">
                 <input type="number" class="number-input" value="${state.bufferAfter}" min="0" id="svc-input-buffer-after">
               </div>
-              <span class="text-small">Min.</span>
+              <span class="text-small">${content.labels.minutesShort}</span>
             </div>
           </div>
         </div>

@@ -6,30 +6,54 @@ import { getIconString } from '../../Icons/Icon.js';
 import { escapeAttr, escapeHtml } from '../../../lib/sanitize.js';
 import './featureDemos.css';
 
-const DEMO_WS = [
-  { id: 'ws-demo-1', label: 'Studio Mitte' },
-  { id: 'ws-demo-2', label: 'Villa Nord' },
-  { id: 'ws-demo-3', label: 'Pop-up Sommer' },
-];
+const DEFAULT_CONTENT = {
+  card: {
+    title: 'Neuer Workspace',
+    subtitle: 'Wie im Dashboard bei „Neuen Workspace anlegen“.',
+    closeLabel: 'Schließen',
+    footerSecondary: 'Abbrechen',
+    footerPrimary: 'Workspace erstellen',
+  },
+  workspaces: [],
+  labels: {
+    active: 'Aktiv',
+    workspaceName: 'Workspace-Name *',
+    placeholder: 'z. B. Salon München',
+    hintTitle: 'Hinweis:',
+    hintBody: 'Jeder Workspace ist isoliert – eigene Objekte, Services und Einstellungen. Demo: noch',
+    hintRemaining: '22',
+    hintSuffix: 'weitere möglich.',
+    perWorkspace: 'Pro Workspace',
+    objectsServices: 'Objekte & Services',
+    objectsServicesDescription: 'eigenständig konfigurierbar',
+    teamAddons: 'Team & Add-ons',
+    teamAddonsDescription: 'getrennt pro Workspace',
+    bookingsCustomers: 'Buchungen & Kunden',
+    bookingsCustomersDescription: 'nur in diesem Kontext',
+    switchTitle: 'Workspace wechseln',
+    switchHint: 'Oben in der Sidebar oder im Dropdown – ein Klick, neuer Kontext.',
+    switchAria: 'Demo Workspaces',
+  },
+};
 
-export const createWorkspacesPreviewCard = () => `
+export const createWorkspacesPreviewCard = ({ content = DEFAULT_CONTENT } = {}) => `
   <div class="feature-demo-card" id="workspaces-preview-card">
     <div class="feature-demo-card__header">
       <div class="feature-demo-card__title-group">
-        <h3 class="feature-demo-card__title">Neuer Workspace</h3>
-        <p class="feature-demo-card__subtitle">Wie im Dashboard bei „Neuen Workspace anlegen“.</p>
+        <h3 class="feature-demo-card__title">${content.card.title}</h3>
+        <p class="feature-demo-card__subtitle">${content.card.subtitle}</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="Schließen">×</button>
+      <button type="button" class="feature-demo-card__close" aria-label="${content.card.closeLabel}">×</button>
     </div>
     <div class="feature-demo-card__body" id="ws-preview-body"></div>
     <div class="feature-demo-card__footer">
-      <button type="button" class="feature-demo-card__footer-btn">Abbrechen</button>
-      <button type="button" class="feature-demo-card__footer-btn feature-demo-card__footer-btn--primary">Workspace erstellen</button>
+      <button type="button" class="feature-demo-card__footer-btn">${content.card.footerSecondary}</button>
+      <button type="button" class="feature-demo-card__footer-btn feature-demo-card__footer-btn--primary">${content.card.footerPrimary}</button>
     </div>
   </div>
 `;
 
-export const initWorkspacesPreviewCard = (heroContainer) => {
+export const initWorkspacesPreviewCard = (heroContainer, { content = DEFAULT_CONTENT } = {}) => {
   const body = heroContainer.querySelector('#ws-preview-body');
   if (!body) return;
 
@@ -41,7 +65,7 @@ export const initWorkspacesPreviewCard = (heroContainer) => {
   const renderSwitch = () => {
     const list = body.querySelector('#ws-demo-switch-list');
     if (!list) return;
-    list.innerHTML = DEMO_WS.map((w) => `
+    list.innerHTML = (content.workspaces || []).map((w) => `
       <button
         type="button"
         class="ws-demo-switch-item ${state.activeId === w.id ? 'is-active' : ''}"
@@ -49,7 +73,7 @@ export const initWorkspacesPreviewCard = (heroContainer) => {
       >
         ${getIconString('building-comapny', 'ws-demo-switch-item__icon')}
         <span class="ws-demo-switch-item__label">${escapeHtml(w.label)}</span>
-        ${state.activeId === w.id ? `<span class="ws-demo-switch-item__badge">Aktiv</span>` : ''}
+        ${state.activeId === w.id ? `<span class="ws-demo-switch-item__badge">${content.labels.active}</span>` : ''}
       </button>
     `).join('');
 
@@ -64,45 +88,45 @@ export const initWorkspacesPreviewCard = (heroContainer) => {
   body.innerHTML = `
     <div class="modal-content-section" data-demo-section="ws-create">
       <div class="modal-form-field">
-        <label class="modal-form-label" for="ws-demo-name-input">Workspace-Name *</label>
+        <label class="modal-form-label" for="ws-demo-name-input">${content.labels.workspaceName}</label>
         <input
           type="text"
           id="ws-demo-name-input"
           class="modal-form-input modal-input-large"
-          placeholder="z. B. Salon München"
+          placeholder="${escapeAttr(content.labels.placeholder)}"
           value="${escapeAttr(state.name)}"
           autocomplete="off"
         />
       </div>
       <div class="modal-info-box">
         <small class="modal-info-text">
-          <strong>Hinweis:</strong> Jeder Workspace ist isoliert – eigene Objekte, Services und Einstellungen. Demo: noch <strong>22</strong> weitere möglich.
+          <strong>${content.labels.hintTitle}</strong> ${content.labels.hintBody} <strong>${content.labels.hintRemaining}</strong> ${content.labels.hintSuffix}
         </small>
       </div>
     </div>
 
     <div class="modal-content-section" data-demo-section="ws-setup">
-      <p class="ws-preview-section-label">${getIconString('gear')} Pro Workspace</p>
+      <p class="ws-preview-section-label">${getIconString('gear')} ${content.labels.perWorkspace}</p>
       <ul class="ws-setup-list">
         <li class="ws-setup-item">
           ${getIconString('package', 'ws-setup-item__icon')}
-          <span><strong>Objekte &amp; Services</strong> – eigenständig konfigurierbar</span>
+          <span><strong>${content.labels.objectsServices}</strong> – ${content.labels.objectsServicesDescription}</span>
         </li>
         <li class="ws-setup-item">
           ${getIconString('users-2', 'ws-setup-item__icon')}
-          <span><strong>Team &amp; Add-ons</strong> – getrennt pro Workspace</span>
+          <span><strong>${content.labels.teamAddons}</strong> – ${content.labels.teamAddonsDescription}</span>
         </li>
         <li class="ws-setup-item">
           ${getIconString('list', 'ws-setup-item__icon')}
-          <span><strong>Buchungen &amp; Kunden</strong> – nur in diesem Kontext</span>
+          <span><strong>${content.labels.bookingsCustomers}</strong> – ${content.labels.bookingsCustomersDescription}</span>
         </li>
       </ul>
     </div>
 
     <div class="modal-content-section" data-demo-section="ws-switch">
-      <p class="ws-preview-section-label">${getIconString('arrow-up-down')} Workspace wechseln</p>
-      <p class="ws-switch-hint text-small-muted">Oben in der Sidebar oder im Dropdown – ein Klick, neuer Kontext.</p>
-      <div class="ws-demo-switch-list" id="ws-demo-switch-list" role="group" aria-label="Demo Workspaces"></div>
+      <p class="ws-preview-section-label">${getIconString('arrow-up-down')} ${content.labels.switchTitle}</p>
+      <p class="ws-switch-hint text-small-muted">${content.labels.switchHint}</p>
+      <div class="ws-demo-switch-list" id="ws-demo-switch-list" role="group" aria-label="${content.labels.switchAria}"></div>
     </div>
   `;
 

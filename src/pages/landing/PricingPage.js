@@ -182,7 +182,7 @@ export const renderPricingPage = (locale = 'de') => {
     { locale },
   );
   setFAQSchema(pageFaq);
-  setProductSchema(plans);
+  setProductSchema(plans, { locale });
   setBreadcrumbSchema([
     { name: 'Home', url: isEn ? '/en' : '/' },
     { name: isEn ? 'Pricing' : 'Preise', url: isEn ? '/en/pricing' : '/preise' },

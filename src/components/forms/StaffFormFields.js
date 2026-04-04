@@ -18,13 +18,27 @@ import { createMultiSelectTags } from '../MultiSelectTags/MultiSelectTags.js';
 import { escapeAttr } from '../../lib/sanitize.js';
 import { DAY_IDS } from '../../lib/staffDays.js';
 
-const PLACEHOLDER_NAME = 'Jennifer Paul';
+const DEFAULT_COPY = {
+    placeholderName: 'Jennifer Paul',
+    vacationBadge: 'Urlaub',
+    descriptionLabel: 'Beschreibung',
+    optionalLabel: '(Optional)',
+    descriptionPlaceholder: 'Sympathische Mitarbeiterin aus Halle-Saale.',
+    bookableDays: 'Buchbare Tage',
+    bookingWindow: 'Buchungszeitfenster',
+    from: 'Von',
+    to: 'Bis',
+    services: 'Services',
+    servicesPlaceholder: 'Weiteren Service verknüpfen',
+    dayLabels: DAY_IDS.map((id) => ({ id, label: id })),
+};
 
 export const createStaffFormFields = (config = {}) => {
     const {
         state: initialState = {},
         options = {},
         onChange = () => {},
+        copy = {},
     } = config;
 
     const {
@@ -46,6 +60,8 @@ export const createStaffFormFields = (config = {}) => {
 
     const container = document.createElement('div');
     container.className = 'staff-form-fields';
+    const ui = { ...DEFAULT_COPY, ...copy };
+    const dayLabels = ui.dayLabels || DEFAULT_COPY.dayLabels;
 
     let multiSelect = null;
 
@@ -55,40 +71,40 @@ export const createStaffFormFields = (config = {}) => {
         container.innerHTML = `
             <div class="modal-content-section">
                 <div class="staff-form-fields__header">
-                    <input type="text" class="modal-form-input modal-input-large" placeholder="${PLACEHOLDER_NAME}" value="${escapeAttr(state.name)}" data-field="name">
+                    <input type="text" class="modal-form-input modal-input-large" placeholder="${escapeAttr(ui.placeholderName)}" value="${escapeAttr(state.name)}" data-field="name">
                     <div class="staff-form-fields__status-badge">
-                        ${getIconString('calender-days-date')} Urlaub <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        ${getIconString('calender-days-date')} ${ui.vacationBadge} <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </div>
                 </div>
                 ${showDescription ? `
                 <div class="modal-form-field">
-                    <label class="modal-label modal-form-label">Beschreibung <span class="modal-label-optional">(Optional)</span></label>
-                    <input type="text" class="modal-form-input" placeholder="Sympathische Mitarbeiterin aus Halle-Saale." value="${escapeAttr(state.description)}" data-field="description">
+                    <label class="modal-label modal-form-label">${ui.descriptionLabel} <span class="modal-label-optional">${ui.optionalLabel}</span></label>
+                    <input type="text" class="modal-form-input" placeholder="${escapeAttr(ui.descriptionPlaceholder)}" value="${escapeAttr(state.description)}" data-field="description">
                 </div>
                 ` : ''}
             </div>
 
             <div class="modal-content-section">
                 <div class="modal-row">
-                    <div class="modal-label">${getIconString('calender-days-date')} Buchbare Tage</div>
+                    <div class="modal-label">${getIconString('calender-days-date')} ${ui.bookableDays}</div>
                     <div class="modal-controls">
                         <div class="day-toggles">
-                            ${DAY_IDS.map(day => `
-                                <button class="day-toggle ${state.bookableDays.includes(day) ? 'active' : ''}" data-day="${day}" type="button">${day}</button>
+                            ${dayLabels.map(day => `
+                                <button class="day-toggle ${state.bookableDays.includes(day.id) ? 'active' : ''}" data-day="${day.id}" type="button">${day.label}</button>
                             `).join('')}
                         </div>
                     </div>
                 </div>
                 ${showTimeWindows ? `
                 <div class="modal-row">
-                    <div class="modal-label">${getIconString('clock')} Buchungszeitfenster</div>
+                    <div class="modal-label">${getIconString('clock')} ${ui.bookingWindow}</div>
                     <div class="modal-controls">
                         <div class="time-group">
-                            <span>Von</span>
+                            <span>${ui.from}</span>
                             <input type="time" value="${state.timeFrom}" data-field="timeFrom">
                         </div>
                         <div class="time-group">
-                            <span>Bis</span>
+                            <span>${ui.to}</span>
                             <input type="time" value="${state.timeTo}" data-field="timeTo">
                         </div>
                     </div>
@@ -98,7 +114,7 @@ export const createStaffFormFields = (config = {}) => {
 
             <div class="modal-content-section">
                 <div class="modal-row">
-                    <div class="modal-label">${getIconString('gear')} Services</div>
+                    <div class="modal-label">${getIconString('gear')} ${ui.services}</div>
                     <div class="modal-controls modal-controls-stretch">
                         <div id="staff-form-services"></div>
                     </div>
@@ -108,7 +124,7 @@ export const createStaffFormFields = (config = {}) => {
 
         multiSelect = createMultiSelectTags({
             label: '',
-            placeholder: 'Weiteren Service verknüpfen',
+            placeholder: ui.servicesPlaceholder,
             options: services,
             selectedValues: state.serviceIds,
             onChange: (vals) => { state.serviceIds = vals; notify(); },

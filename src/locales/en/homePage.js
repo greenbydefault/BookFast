@@ -2,7 +2,7 @@
  * English marketing copy for the landing homepage only (Slice 1).
  */
 export const HOME_META = {
-  title: null,
+  title: 'Webflow booking system',
   description:
     'The Webflow booking system for appointments and online payments. 0% commission, pay before the appointment. Live in 5 minutes.',
 };

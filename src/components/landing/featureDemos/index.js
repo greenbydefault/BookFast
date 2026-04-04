@@ -15,7 +15,7 @@ import { createPaymentsPreviewCard, initPaymentsPreviewCard } from './PaymentsPr
 import { createInvoicesPreviewCard, initInvoicesPreviewCard } from './InvoicesPreviewCard.js';
 import { createCustomerPortalPreviewCard, initCustomerPortalPreviewCard } from './CustomerPortalPreviewCard.js';
 
-export const featureDemoModules = {
+export const featureDemoRenderers = {
   buchungen: { create: createBookingPreviewCard, init: initBookingPreviewCard },
   zahlungen: { create: createPaymentsPreviewCard, init: initPaymentsPreviewCard },
   rechnungen: { create: createInvoicesPreviewCard, init: initInvoicesPreviewCard },
@@ -29,4 +29,5 @@ export const featureDemoModules = {
 };
 
 /** @param {string} slug @returns {{ create: Function, init: Function } | undefined} */
-export const getDemoModule = (slug) => featureDemoModules[slug];
+export const getDemoModuleRenderer = (slug) => featureDemoRenderers[slug];
+export const getDemoModule = getDemoModuleRenderer;

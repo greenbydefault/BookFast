@@ -5,65 +5,75 @@
 import { getIconString } from '../../Icons/Icon.js';
 import './featureDemos.css';
 
-const FILTERS = [
-  { id: 'pending_approval', label: 'Wartend' },
-  { id: 'confirmed', label: 'Bestätigt' },
-  { id: 'completed', label: 'Abgeschlossen' },
-];
-
-const INITIAL_BOOKINGS = [
-  {
-    id: 'bk-1',
-    customer: 'Lena M.',
-    object: 'Studio Nordlicht',
-    service: 'Portrait Shooting',
-    slot: 'Heute, 14:00-15:30',
-    amount: '198 EUR',
-    status: 'pending_approval',
-    paymentStatus: 'paid',
-    source: 'Widget',
+const DEFAULT_CONTENT = {
+  card: {
+    title: 'Buchungen',
+    subtitle: 'Wie im Dashboard: Eingang, Freigabe und Portal-Handoff in einem Flow.',
+    closeLabel: 'Schließen',
+    footerSecondary: 'Später prüfen',
+    footerPrimary: 'Neue Buchung',
   },
-  {
-    id: 'bk-2',
-    customer: 'Tom B.',
-    object: 'Meetingraum A',
-    service: 'Strategieberatung',
-    slot: 'Morgen, 09:30-11:00',
-    amount: '199 EUR',
-    status: 'pending_approval',
-    paymentStatus: 'unpaid',
-    source: 'Manuell',
+  filters: [
+    { id: 'pending_approval', label: 'Wartend' },
+    { id: 'confirmed', label: 'Bestätigt' },
+    { id: 'completed', label: 'Abgeschlossen' },
+  ],
+  bookings: [],
+  statuses: {
+    pending_approval: { label: 'Wartend', tone: 'pending' },
+    confirmed: { label: 'Bestätigt', tone: 'confirmed' },
+    completed: { label: 'Abgeschlossen', tone: 'completed' },
+    cancelled: { label: 'Abgelehnt', tone: 'cancelled' },
   },
-  {
-    id: 'bk-3',
-    customer: 'Sara K.',
-    object: 'Podcast Studio',
-    service: 'Podcast Aufnahme',
-    slot: 'Freitag, 16:00-17:00',
-    amount: '89 EUR',
-    status: 'confirmed',
-    paymentStatus: 'paid',
-    source: 'Widget',
+  paymentStatuses: {
+    paid: { label: 'Bezahlt', tone: 'confirmed' },
+    unpaid: { label: 'Offen', tone: 'pending' },
+    refunded: { label: 'Erstattet', tone: 'cancelled' },
   },
-];
-
-const STATUS_META = {
-  pending_approval: { label: 'Wartend', tone: 'pending' },
-  confirmed: { label: 'Bestätigt', tone: 'confirmed' },
-  completed: { label: 'Abgeschlossen', tone: 'completed' },
-  cancelled: { label: 'Abgelehnt', tone: 'cancelled' },
+  sections: {
+    inbox: 'Eingang & Status',
+    magicLink: 'Manuell anlegen & Magic Link',
+    review: 'Prüfen & Entscheiden',
+  },
+  emptyState: 'Keine Buchungen in diesem Status.',
+  labels: {
+    trigger: 'Auslöser',
+    portal: 'Kundenportal',
+    object: 'Objekt',
+    service: 'Service',
+    amount: 'Betrag',
+    source: 'Quelle',
+    noSelection: 'Keine Buchung ausgewählt',
+  },
+  sourceLabels: {
+    manual: 'Manuelle Buchung',
+    widget: 'Widget-Buchung',
+  },
+  magicLinkState: {
+    ready: 'Magic Link bereit',
+    sent: 'Magic Link versendet',
+    actionReady: 'Magic Link senden',
+    actionSent: 'Erneut senden',
+    manualDescription: 'Nach dem Anlegen geht die Mail direkt raus.',
+    widgetDescription: 'Auch Widget-Buchungen landen im selben Flow.',
+    portalReady: 'Ein Klick reicht, damit der Kunde selbst weiterkommt.',
+    portalSent: 'Kunde sieht Rechnung, Zahlung und Status sofort im Portal.',
+  },
+  actions: {
+    decline: 'Ablehnen',
+    approve: 'Bestätigen',
+  },
+  notes: {
+    default: 'Nach Bestätigung läuft Mail + Portal-Handoff automatisch weiter.',
+    refunded: 'Refund wurde automatisch angestoßen.',
+  },
 };
 
-const PAYMENT_META = {
-  paid: { label: 'Bezahlt', tone: 'confirmed' },
-  unpaid: { label: 'Offen', tone: 'pending' },
-  refunded: { label: 'Erstattet', tone: 'cancelled' },
-};
+const cloneBookings = (content) => (content.bookings || []).map((booking) => ({ ...booking }));
 
-const cloneBookings = () => INITIAL_BOOKINGS.map((booking) => ({ ...booking }));
-
-const renderBookingRow = (booking, selectedId) => {
-  const status = STATUS_META[booking.status] || STATUS_META.pending_approval;
+const renderBookingRow = (booking, selectedId, content) => {
+  const statusMeta = content.statuses || DEFAULT_CONTENT.statuses;
+  const status = statusMeta[booking.status] || statusMeta.pending_approval;
   return `
     <button
       type="button"
@@ -85,32 +95,34 @@ const renderBookingRow = (booking, selectedId) => {
   `;
 };
 
-export const createBookingPreviewCard = () => `
+export const createBookingPreviewCard = ({ content = DEFAULT_CONTENT } = {}) => `
   <div class="feature-demo-card" id="booking-preview-card">
     <div class="feature-demo-card__header">
       <div class="feature-demo-card__title-group">
-        <h3 class="feature-demo-card__title">Buchungen</h3>
-        <p class="feature-demo-card__subtitle">Wie im Dashboard: Eingang, Freigabe und Portal-Handoff in einem Flow.</p>
+        <h3 class="feature-demo-card__title">${content.card.title}</h3>
+        <p class="feature-demo-card__subtitle">${content.card.subtitle}</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="Schließen">×</button>
+      <button type="button" class="feature-demo-card__close" aria-label="${content.card.closeLabel}">×</button>
     </div>
     <div class="feature-demo-card__body" id="booking-preview-body"></div>
     <div class="feature-demo-card__footer">
-      <button type="button" class="feature-demo-card__footer-btn">Später prüfen</button>
-      <button type="button" class="feature-demo-card__footer-btn feature-demo-card__footer-btn--primary">Neue Buchung</button>
+      <button type="button" class="feature-demo-card__footer-btn">${content.card.footerSecondary}</button>
+      <button type="button" class="feature-demo-card__footer-btn feature-demo-card__footer-btn--primary">${content.card.footerPrimary}</button>
     </div>
   </div>
 `;
 
-export const initBookingPreviewCard = (heroContainer) => {
+export const initBookingPreviewCard = (heroContainer, { content = DEFAULT_CONTENT } = {}) => {
   const body = heroContainer.querySelector('#booking-preview-body');
   if (!body) return;
+  const statusMeta = content.statuses || DEFAULT_CONTENT.statuses;
+  const paymentMeta = content.paymentStatuses || DEFAULT_CONTENT.paymentStatuses;
 
   const state = {
     activeFilter: 'pending_approval',
-    selectedId: INITIAL_BOOKINGS[0].id,
+    selectedId: content.bookings?.[0]?.id || '',
     sentMagicLink: false,
-    bookings: cloneBookings(),
+    bookings: cloneBookings(content),
   };
 
   const getVisibleBookings = () => state.bookings.filter((booking) => booking.status === state.activeFilter);
@@ -127,14 +139,15 @@ export const initBookingPreviewCard = (heroContainer) => {
   const render = () => {
     const visible = getVisibleBookings();
     const selected = getSelectedBooking();
-    const status = STATUS_META[selected?.status] || STATUS_META.pending_approval;
-    const payment = PAYMENT_META[selected?.paymentStatus] || PAYMENT_META.unpaid;
+    const status = statusMeta[selected?.status] || statusMeta.pending_approval;
+    const payment = paymentMeta[selected?.paymentStatus] || paymentMeta.unpaid;
+    const sourceKey = selected?.source || 'widget';
 
     body.innerHTML = `
       <div class="modal-content-section" data-demo-section="bk-inbox">
-        <p class="bk-preview-section-label">${getIconString('list')} Eingang & Status</p>
+        <p class="bk-preview-section-label">${getIconString('list')} ${content.sections.inbox}</p>
         <div class="booking-demo__filter-row">
-          ${FILTERS.map((filter) => `
+          ${(content.filters || []).map((filter) => `
             <button
               type="button"
               class="booking-demo__filter ${state.activeFilter === filter.id ? 'is-active' : ''}"
@@ -144,41 +157,41 @@ export const initBookingPreviewCard = (heroContainer) => {
         </div>
         <div class="booking-demo__rows">
           ${visible.length
-            ? visible.map((booking) => renderBookingRow(booking, state.selectedId)).join('')
-            : `<div class="booking-demo__empty">Keine Buchungen in diesem Status.</div>`}
+            ? visible.map((booking) => renderBookingRow(booking, state.selectedId, content)).join('')
+            : `<div class="booking-demo__empty">${content.emptyState}</div>`}
         </div>
       </div>
 
       <div class="modal-content-section" data-demo-section="bk-magic-link">
-        <p class="bk-preview-section-label">${getIconString('key')} Manuell anlegen & Magic Link</p>
+        <p class="bk-preview-section-label">${getIconString('key')} ${content.sections.magicLink}</p>
         <div class="booking-demo__handoff">
           <div class="booking-demo__handoff-card">
-            <span class="booking-demo__mini-label">Auslöser</span>
-            <strong>${selected?.source === 'Manuell' ? 'Manuelle Buchung' : 'Widget-Buchung'}</strong>
-            <p>${selected?.source === 'Manuell'
-              ? 'Nach dem Anlegen geht die Mail direkt raus.'
-              : 'Auch Widget-Buchungen landen im selben Flow.'}</p>
+            <span class="booking-demo__mini-label">${content.labels.trigger}</span>
+            <strong>${content.sourceLabels[sourceKey] || sourceKey}</strong>
+            <p>${sourceKey === 'manual'
+              ? content.magicLinkState.manualDescription
+              : content.magicLinkState.widgetDescription}</p>
           </div>
           <div class="booking-demo__handoff-arrow" aria-hidden="true">${getIconString('arrow-down')}</div>
           <div class="booking-demo__handoff-card booking-demo__handoff-card--accent">
-            <span class="booking-demo__mini-label">Kundenportal</span>
-            <strong>${state.sentMagicLink ? 'Magic Link versendet' : 'Magic Link bereit'}</strong>
+            <span class="booking-demo__mini-label">${content.labels.portal}</span>
+            <strong>${state.sentMagicLink ? content.magicLinkState.sent : content.magicLinkState.ready}</strong>
             <p>${state.sentMagicLink
-              ? 'Kunde sieht Rechnung, Zahlung und Status sofort im Portal.'
-              : 'Ein Klick reicht, damit der Kunde selbst weiterkommt.'}</p>
+              ? content.magicLinkState.portalSent
+              : content.magicLinkState.portalReady}</p>
           </div>
         </div>
         <button type="button" class="booking-demo__link-btn" id="booking-demo-send-link">
-          ${state.sentMagicLink ? 'Erneut senden' : 'Magic Link senden'}
+          ${state.sentMagicLink ? content.magicLinkState.actionSent : content.magicLinkState.actionReady}
         </button>
       </div>
 
       <div class="modal-content-section" data-demo-section="bk-review">
-        <p class="bk-preview-section-label">${getIconString('check')} Prüfen & Entscheiden</p>
+        <p class="bk-preview-section-label">${getIconString('check')} ${content.sections.review}</p>
         <div class="booking-demo__detail-card">
           <div class="booking-demo__detail-top">
             <div>
-              <p class="booking-demo__detail-title">${selected?.customer || 'Keine Buchung ausgewählt'}</p>
+              <p class="booking-demo__detail-title">${selected?.customer || content.labels.noSelection}</p>
               <p class="booking-demo__detail-subtitle">${selected?.slot || ''}</p>
             </div>
             <div class="booking-demo__detail-badges">
@@ -187,19 +200,19 @@ export const initBookingPreviewCard = (heroContainer) => {
             </div>
           </div>
           <div class="booking-demo__detail-grid">
-            <div><span>Objekt</span><strong>${selected?.object || '-'}</strong></div>
-            <div><span>Service</span><strong>${selected?.service || '-'}</strong></div>
-            <div><span>Betrag</span><strong>${selected?.amount || '-'}</strong></div>
-            <div><span>Quelle</span><strong>${selected?.source || '-'}</strong></div>
+            <div><span>${content.labels.object}</span><strong>${selected?.object || '-'}</strong></div>
+            <div><span>${content.labels.service}</span><strong>${selected?.service || '-'}</strong></div>
+            <div><span>${content.labels.amount}</span><strong>${selected?.amount || '-'}</strong></div>
+            <div><span>${content.labels.source}</span><strong>${content.sourceLabels[sourceKey] || '-'}</strong></div>
           </div>
           <div class="booking-demo__detail-actions">
-            <button type="button" class="booking-demo__action" id="booking-demo-decline">Ablehnen</button>
-            <button type="button" class="booking-demo__action booking-demo__action--primary" id="booking-demo-approve">Bestätigen</button>
+            <button type="button" class="booking-demo__action" id="booking-demo-decline">${content.actions.decline}</button>
+            <button type="button" class="booking-demo__action booking-demo__action--primary" id="booking-demo-approve">${content.actions.approve}</button>
           </div>
           <p class="booking-demo__detail-note">
             ${selected?.paymentStatus === 'refunded'
-              ? 'Refund wurde automatisch angestoßen.'
-              : 'Nach Bestätigung läuft Mail + Portal-Handoff automatisch weiter.'}
+              ? content.notes.refunded
+              : content.notes.default}
           </p>
         </div>
       </div>

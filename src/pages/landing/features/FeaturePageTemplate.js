@@ -15,6 +15,7 @@ import { svgAssetUrl, resolveSvgAssetUrl } from '../../../lib/landingAssets.js';
 import { getRelatedFeaturesFor } from '../../../data/features/relatedFeatures.js';
 import { getHowItWorksPreviewHtml } from '../../../lib/howItWorksPreviewSlice.js';
 import { getFeaturePage } from '../../../lib/getLocaleContent.js';
+import { getFeatureDemoModuleContent } from '../../../lib/getLocaleDemoModule.js';
 import { deFeatureSlugToEn } from '../../../lib/featureSlugLocale.js';
 
 /**
@@ -72,7 +73,9 @@ export const renderFeaturePage = (slug, locale = 'de') => {
     : '';
 
   // Build hero: FeatureHero for all feature pages (demo module or illustration)
-  const demoMod = page.hero.demoModule ? getDemoModule(page.hero.demoModule) : null;
+  const demoModuleKey = page.hero.demoModule || null;
+  const demoMod = demoModuleKey ? getDemoModule(demoModuleKey) : null;
+  const demoModuleContent = demoModuleKey ? getFeatureDemoModuleContent(demoModuleKey, locale) : null;
   const defaultIllustration = svgAssetUrl('illustrations/landingpage/features/ft_objektverwaltung.svg');
   const heroHTML = createFeatureHero({
     headline: page.hero.headline,
@@ -80,7 +83,7 @@ export const renderFeaturePage = (slug, locale = 'de') => {
     illustrationSrc: resolveSvgAssetUrl(page.hero.illustration) || defaultIllustration,
     illustrationAlt: `Illustration zum Feature ${page.meta.title} in BookFast`,
     breadcrumb: ['Home', 'Features', page.meta.title],
-    demoModuleHTML: demoMod ? demoMod.create() : '',
+    demoModuleHTML: demoMod && demoModuleContent ? demoMod.create({ content: demoModuleContent, locale }) : '',
     demoHint: demoMod ? "Tippe, klicke & probier's aus — ganz ohne Account." : '',
   });
   const relatedFeatures = getRelatedFeaturesFor(slug, { limit: 5, locale });
@@ -129,7 +132,7 @@ export const renderFeaturePage = (slug, locale = 'de') => {
   `;
 
   // Init interactive demo module (if present)
-  if (demoMod) demoMod.init(content);
+  if (demoMod && demoModuleContent) demoMod.init(content, { content: demoModuleContent, locale });
 
   // Init interactive "How it works" section (currently enabled for objekte)
   if (hasInteractiveHowItWorks) {

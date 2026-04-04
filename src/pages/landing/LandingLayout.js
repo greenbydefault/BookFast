@@ -8,14 +8,15 @@ import { renderFooter } from '../../components/landing/Footer.js';
 import { initLandingRouter } from '../../lib/landingRouter.js';
 import { registerAllLandingPages } from './registry.js';
 import '../../locales/en/features/index.js';
-
-const app = document.querySelector('#app');
+import '../../locales/en/featureDemoModules/index.js';
 
 /**
  * Initialize the landing page system.
  * Called from main.js when user is not logged in (or on public routes).
  */
 export const initLandingPages = ({ isLoggedIn = false } = {}) => {
+  const app = document.querySelector('#app');
+  if (!app) return;
   document.body.classList.add('landing-active');
 
   app.innerHTML = '';

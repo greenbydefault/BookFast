@@ -9,6 +9,9 @@ const PRODUCT_IMAGE = `${BASE_URL}/Logo/logo-bookfast.svg`;
 const ORGANIZATION_ID = `${BASE_URL}/#organization`;
 
 const SCHEMA_SCRIPT_IDS = Object.freeze({
+  organization: 'organization-schema',
+  website: 'website-schema',
+  software: 'software-schema',
   faq: 'faq-schema',
   product: 'product-schema',
   breadcrumb: 'breadcrumb-schema',
@@ -60,7 +63,15 @@ const oneYearFromNowIsoDate = () => {
 export const setHreflangAlternates = (pairs) => {
   document.querySelectorAll('link[data-bf-hreflang]').forEach((el) => el.remove());
   if (!Array.isArray(pairs) || pairs.length === 0) return;
-  pairs.forEach(({ hreflang, path }) => {
+
+  const normalizedPairs = [...pairs];
+  const hasXDefault = normalizedPairs.some(({ hreflang }) => hreflang === 'x-default');
+  const dePair = normalizedPairs.find(({ hreflang }) => hreflang === 'de');
+  if (!hasXDefault && dePair?.path) {
+    normalizedPairs.push({ hreflang: 'x-default', path: dePair.path });
+  }
+
+  normalizedPairs.forEach(({ hreflang, path }) => {
     if (!hreflang || path == null) return;
     const link = document.createElement('link');
     link.rel = 'alternate';
@@ -105,6 +116,8 @@ export const setPageMeta = (title, description, options = {}) => {
   upsertMeta('name', 'twitter:title').content = fullTitle;
   upsertMeta('name', 'twitter:description').content = desc;
   upsertMeta('name', 'twitter:image').content = DEFAULT_IMAGE;
+
+  setCoreSchemas({ locale });
 };
 
 /**
@@ -147,7 +160,9 @@ export const setFAQSchema = (items) => {
 /**
  * Inject Product + Offer JSON-LD for pricing page.
  */
-export const setProductSchema = (plans) => {
+export const setProductSchema = (plans, options = {}) => {
+  const { locale = 'de' } = options;
+  const isEn = locale === 'en';
   upsertJsonLdScript(SCHEMA_SCRIPT_IDS.product, null);
   if (!Array.isArray(plans) || plans.length === 0) return;
 
@@ -178,13 +193,13 @@ export const setProductSchema = (plans) => {
     if (monthlyPrice) {
       offers.push({
         '@type': 'Offer',
-        name: `${plan.name} monatlich`,
+        name: `${plan.name} ${isEn ? 'monthly' : 'monatlich'}`,
         price: monthlyPrice,
         priceCurrency: 'EUR',
         availability: 'https://schema.org/InStock',
         priceValidUntil,
         category: 'monthly',
-        url: toAbsoluteUrl('/preise'),
+        url: toAbsoluteUrl(isEn ? '/en/pricing' : '/preise'),
         shippingDetails,
         hasMerchantReturnPolicy,
       });
@@ -193,13 +208,13 @@ export const setProductSchema = (plans) => {
     if (yearlyPrice) {
       offers.push({
         '@type': 'Offer',
-        name: `${plan.name} jährlich`,
+        name: `${plan.name} ${isEn ? 'yearly' : 'jährlich'}`,
         price: yearlyPrice,
         priceCurrency: 'EUR',
         availability: 'https://schema.org/InStock',
         priceValidUntil,
         category: 'yearly',
-        url: toAbsoluteUrl('/preise'),
+        url: toAbsoluteUrl(isEn ? '/en/pricing' : '/preise'),
         shippingDetails,
         hasMerchantReturnPolicy,
       });
@@ -292,6 +307,80 @@ export const setContactPageSchema = (options = {}) => {
   };
 
   upsertJsonLdScript(SCHEMA_SCRIPT_IDS.contact, schema);
+};
+
+const buildCoreSchemas = (locale = 'de') => {
+  const isEn = locale === 'en';
+  const homePath = isEn ? '/en' : '/';
+  const contactPath = isEn ? '/en/contact' : '/kontakt';
+
+  return {
+    organization: {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      '@id': ORGANIZATION_ID,
+      name: 'BookFast',
+      url: BASE_URL,
+      logo: `${BASE_URL}/Logo/logo.png`,
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          contactType: 'customer support',
+          url: toAbsoluteUrl(contactPath),
+          email: 'hello@book-fast.de',
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Veitstraße 28',
+            addressLocality: 'Berlin',
+            postalCode: '13507',
+            addressCountry: 'DE',
+          },
+          availableLanguage: isEn ? ['de', 'en'] : ['de'],
+        },
+      ],
+    },
+    website: {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'BookFast',
+      url: toAbsoluteUrl(homePath),
+      description: isEn
+        ? 'Webflow booking system with payments, 0% commission, live in minutes.'
+        : 'Webflow Buchungssystem mit Zahlungen, 0 % Provision, in Minuten live.',
+      publisher: {
+        '@id': ORGANIZATION_ID,
+      },
+      inLanguage: locale,
+    },
+    software: {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'BookFast',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      offers: {
+        '@type': 'AggregateOffer',
+        lowPrice: '9.49',
+        highPrice: '29.49',
+        priceCurrency: 'EUR',
+        offerCount: 3,
+      },
+      description: isEn
+        ? 'Webflow booking system for online bookings, payments, and operations.'
+        : 'Webflow Buchungssystem für Online-Buchungen, Zahlungen und Betrieb.',
+      author: {
+        '@id': ORGANIZATION_ID,
+      },
+      inLanguage: locale,
+    },
+  };
+};
+
+export const setCoreSchemas = ({ locale = 'de' } = {}) => {
+  const schemas = buildCoreSchemas(locale);
+  upsertJsonLdScript(SCHEMA_SCRIPT_IDS.organization, schemas.organization);
+  upsertJsonLdScript(SCHEMA_SCRIPT_IDS.website, schemas.website);
+  upsertJsonLdScript(SCHEMA_SCRIPT_IDS.software, schemas.software);
 };
 
 /**

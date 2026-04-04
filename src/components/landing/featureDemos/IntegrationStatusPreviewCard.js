@@ -8,9 +8,42 @@ const INITIAL_STATE = {
   language: 'de',
   embedOpen: false,
 };
-const TEST_LINKED_DOMAIN = 'bookfast.de';
+const DEFAULT_CONTENT = {
+  card: {
+    loading: 'Lade Integrationsmodul...',
+    websiteTitle: 'Website Integration',
+    websiteSubtitle: '1 von 2 Schritten abgeschlossen',
+    settingsTitle: 'Einstellungen',
+    settingsSubtitle: '0 von 3 Schritten abgeschlossen',
+  },
+  embed: {
+    title: 'Embed Script',
+    subtitle: 'Fügen Sie dieses Skript in den <body> Ihrer Website ein.',
+    copyCode: 'Code kopieren',
+    toggleLabel: 'Embed-Bereich umschalten',
+    linkedDomain: 'Verknüpfte Webseite',
+    linkedDomainValue: 'bookfast.de',
+  },
+  template: {
+    title: 'Booking Flow Template (Webflow)',
+    subtitle: 'Kopieren Sie das Buchungs-Widget und fügen Sie es in Webflow ein.',
+    action: 'Template kopieren',
+  },
+  settings: {
+    trackingTitle: 'Tracking aktivieren',
+    trackingSubtitle: 'Cookie-loses Tracking für Analysen aktivieren.',
+    trackingAria: 'Tracking aktivieren',
+    trackingInfo: 'Mehr zum Tracking erfahren',
+    timezoneTitle: 'Zeitzone',
+    timezoneSubtitle: 'Zeiten und Buchungen werden in dieser Zeitzone angezeigt.',
+    languageTitle: 'Sprache',
+    languageSubtitle: 'Sprache für E-Mails und Buchungswidget.',
+    timezones: [],
+    languages: [],
+  },
+};
 
-const renderDemo = (container, state) => {
+const renderDemo = (container, state, content) => {
   const embedExpandedClass = state.embedOpen ? ' is-open' : '';
   const embedExpandedAria = state.embedOpen ? 'true' : 'false';
   const checkedAttr = state.trackingEnabled ? 'checked' : '';
@@ -18,28 +51,28 @@ const renderDemo = (container, state) => {
   container.innerHTML = `
     <div class="integration-settings-demo">
       <div class="integration-settings-demo__section">
-        <h3 class="feature-demo-card__title integration-settings-demo__title">Website Integration</h3>
-        <p class="feature-demo-card__subtitle integration-settings-demo__subtitle">1 von 2 Schritten abgeschlossen</p>
+        <h3 class="feature-demo-card__title integration-settings-demo__title">${content.card.websiteTitle}</h3>
+        <p class="feature-demo-card__subtitle integration-settings-demo__subtitle">${content.card.websiteSubtitle}</p>
 
         <div class="integration-settings-demo__list">
           <article class="integration-settings-demo__item">
             <div class="integration-settings-demo__item-left">
               <span class="integration-settings-demo__check" aria-hidden="true">✓</span>
               <div>
-                <h4 class="modal-label integration-settings-demo__item-title">Embed Script</h4>
-                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">Fuegen Sie dieses Skript in den &lt;body&gt; Ihrer Website ein.</p>
+                <h4 class="modal-label integration-settings-demo__item-title">${content.embed.title}</h4>
+                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">${content.embed.subtitle}</p>
               </div>
             </div>
             <div class="integration-settings-demo__item-actions">
               <button type="button" class="integration-settings-demo__btn integration-settings-demo__btn--primary" data-integration-open-waitlist>
-                Code kopieren
+                ${content.embed.copyCode}
               </button>
               <button
                 type="button"
                 class="integration-settings-demo__chevron-btn${embedExpandedClass}"
                 aria-expanded="${embedExpandedAria}"
                 data-integration-toggle-embed
-                aria-label="Embed-Bereich umschalten"
+                aria-label="${content.embed.toggleLabel}"
               >
                 ${getIconString('arrow-down')}
               </button>
@@ -48,10 +81,10 @@ const renderDemo = (container, state) => {
           ${state.embedOpen ? `
           <article class="integration-settings-demo__item integration-settings-demo__item--domain">
             <div class="integration-settings-demo__item-left integration-settings-demo__item-left--domain">
-              <span class="modal-label integration-settings-demo__item-title">Verknüpfte Webseite</span>
+              <span class="modal-label integration-settings-demo__item-title">${content.embed.linkedDomain}</span>
             </div>
             <div class="integration-settings-demo__domain-value">
-              <span>${TEST_LINKED_DOMAIN}</span>
+              <span>${content.embed.linkedDomainValue}</span>
               <span class="integration-settings-demo__domain-check" aria-hidden="true">✓</span>
             </div>
           </article>
@@ -61,13 +94,13 @@ const renderDemo = (container, state) => {
             <div class="integration-settings-demo__item-left">
               <span class="integration-settings-demo__check" aria-hidden="true">✓</span>
               <div>
-                <h4 class="modal-label integration-settings-demo__item-title">Booking Flow Template (Webflow)</h4>
-                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">Kopieren Sie das Buchungs-Widget und fuegen Sie es in Webflow ein.</p>
+                <h4 class="modal-label integration-settings-demo__item-title">${content.template.title}</h4>
+                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">${content.template.subtitle}</p>
               </div>
             </div>
             <div class="integration-settings-demo__item-actions">
               <button type="button" class="integration-settings-demo__btn integration-settings-demo__btn--primary" data-integration-open-waitlist>
-                Template kopieren
+                ${content.template.action}
               </button>
             </div>
           </article>
@@ -75,18 +108,18 @@ const renderDemo = (container, state) => {
       </div>
 
       <div class="integration-settings-demo__section integration-settings-demo__section--top-border">
-        <h3 class="feature-demo-card__title integration-settings-demo__title">Einstellungen</h3>
-        <p class="feature-demo-card__subtitle integration-settings-demo__subtitle">0 von 3 Schritten abgeschlossen</p>
+        <h3 class="feature-demo-card__title integration-settings-demo__title">${content.card.settingsTitle}</h3>
+        <p class="feature-demo-card__subtitle integration-settings-demo__subtitle">${content.card.settingsSubtitle}</p>
 
         <div class="integration-settings-demo__settings-list">
           <article class="integration-settings-demo__settings-item">
             <div class="integration-settings-demo__settings-left">
               <div>
-                <h4 class="modal-label integration-settings-demo__item-title">Tracking aktivieren</h4>
-                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">Cookie-loses Tracking fuer Analysen aktivieren.</p>
+                <h4 class="modal-label integration-settings-demo__item-title">${content.settings.trackingTitle}</h4>
+                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">${content.settings.trackingSubtitle}</p>
               </div>
             </div>
-            <label class="integration-settings-demo__toggle" aria-label="Tracking aktivieren">
+            <label class="integration-settings-demo__toggle" aria-label="${content.settings.trackingAria}">
               <input type="checkbox" data-integration-tracking-toggle ${checkedAttr} />
               <span class="integration-settings-demo__toggle-slider"></span>
             </label>
@@ -94,34 +127,35 @@ const renderDemo = (container, state) => {
 
           <div class="integration-settings-demo__settings-item integration-settings-demo__settings-item--link">
             <button type="button" class="integration-settings-demo__link-btn" data-integration-open-waitlist>
-              Mehr zum Tracking erfahren
+              ${content.settings.trackingInfo}
             </button>
           </div>
 
           <article class="integration-settings-demo__settings-item">
             <div class="integration-settings-demo__settings-left">
               <div>
-                <h4 class="modal-label integration-settings-demo__item-title">Zeitzone</h4>
-                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">Zeiten und Buchungen werden in dieser Zeitzone angezeigt.</p>
+                <h4 class="modal-label integration-settings-demo__item-title">${content.settings.timezoneTitle}</h4>
+                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">${content.settings.timezoneSubtitle}</p>
               </div>
             </div>
             <select class="integration-settings-demo__select" data-integration-timezone-select>
-              <option value="Europe/Berlin" ${state.timezone === 'Europe/Berlin' ? 'selected' : ''}>Deutschland (GMT+1)</option>
-              <option value="Europe/Vienna" ${state.timezone === 'Europe/Vienna' ? 'selected' : ''}>Oesterreich (GMT+1)</option>
-              <option value="Europe/Zurich" ${state.timezone === 'Europe/Zurich' ? 'selected' : ''}>Schweiz (GMT+1)</option>
+              ${content.settings.timezones.map((item) => `
+                <option value="${item.value}" ${state.timezone === item.value ? 'selected' : ''}>${item.label}</option>
+              `).join('')}
             </select>
           </article>
 
           <article class="integration-settings-demo__settings-item">
             <div class="integration-settings-demo__settings-left">
               <div>
-                <h4 class="modal-label integration-settings-demo__item-title">Sprache</h4>
-                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">Sprache fuer E-Mails und Buchungswidget.</p>
+                <h4 class="modal-label integration-settings-demo__item-title">${content.settings.languageTitle}</h4>
+                <p class="feature-demo-card__subtitle integration-settings-demo__item-subtitle">${content.settings.languageSubtitle}</p>
               </div>
             </div>
             <select class="integration-settings-demo__select" data-integration-language-select>
-              <option value="de" ${state.language === 'de' ? 'selected' : ''}>Deutsch</option>
-              <option value="en" ${state.language === 'en' ? 'selected' : ''}>Englisch</option>
+              ${content.settings.languages.map((item) => `
+                <option value="${item.value}" ${state.language === item.value ? 'selected' : ''}>${item.label}</option>
+              `).join('')}
             </select>
           </article>
         </div>
@@ -130,13 +164,13 @@ const renderDemo = (container, state) => {
   `;
 };
 
-export const createIntegrationStatusPreviewCard = () => `
+export const createIntegrationStatusPreviewCard = ({ content = DEFAULT_CONTENT } = {}) => `
   <div class="feature-demo-card" id="integration-status-preview-card">
-    <div class="integration-preview-loading">Lade Integrationsmodul...</div>
+    <div class="integration-preview-loading">${content.card.loading}</div>
   </div>
 `;
 
-export const initIntegrationStatusPreviewCard = (heroContainer) => {
+export const initIntegrationStatusPreviewCard = (heroContainer, { content = DEFAULT_CONTENT } = {}) => {
   const root = heroContainer.querySelector('#integration-status-preview-card');
   if (!root) return;
 
@@ -144,7 +178,7 @@ export const initIntegrationStatusPreviewCard = (heroContainer) => {
     root.__integrationCleanup();
   }
   const state = { ...INITIAL_STATE };
-  renderDemo(root, state);
+  renderDemo(root, state, content);
 
   const onClick = (event) => {
     const waitlistTarget = event.target.closest('[data-integration-open-waitlist]');
@@ -157,7 +191,7 @@ export const initIntegrationStatusPreviewCard = (heroContainer) => {
     const toggleTarget = event.target.closest('[data-integration-toggle-embed]');
     if (toggleTarget) {
       state.embedOpen = !state.embedOpen;
-      renderDemo(root, state);
+      renderDemo(root, state, content);
     }
   };
 

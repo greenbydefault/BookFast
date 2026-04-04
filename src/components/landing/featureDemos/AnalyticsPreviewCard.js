@@ -9,25 +9,68 @@ import { escapeAttr } from '../../../lib/sanitize.js';
 import '../../../styles/insights-panels.css';
 import './featureDemos.css';
 
-const INSIGHT_TABS = [
-  { id: 'overview', label: 'Überblick' },
-  { id: 'funnel', label: 'Funnel' },
-  { id: 'traffic', label: 'Traffic & Zielgruppen' },
-  { id: 'payments', label: 'Zahlungen' },
-];
+const DEFAULT_CONTENT = {
+  card: {
+    title: 'Insights',
+    subtitle: 'Wie im Dashboard unter Analytics – Demo-Daten.',
+    closeLabel: 'Schließen',
+  },
+  tabs: [
+    { id: 'overview', label: 'Überblick' },
+    { id: 'funnel', label: 'Funnel' },
+    { id: 'traffic', label: 'Traffic & Zielgruppen' },
+    { id: 'payments', label: 'Zahlungen' },
+  ],
+  timePeriods: [
+    { id: '1', label: 'Letzter Monat' },
+    { id: '3', label: 'Letzte 3 Monate' },
+    { id: '6', label: 'Letzte 6 Monate' },
+    { id: '12', label: 'Letzte 12 Monate' },
+  ],
+  kpis: {
+    widgetViews: 'Buchungswidget-Aufrufe',
+    revenue: 'Umsatz',
+    bookings: 'Buchungen',
+    cancellationRate: 'Abbrüche',
+    vsLastMonth: 'vs letzter Monat',
+  },
+  charts: {
+    conversionTitle: 'Conversion-Rate',
+    conversionSubtitle: 'Buchungen relativ zu Buchungsstarts im Zeitraum',
+    cancellationTitle: 'Abbruchquote',
+    cancellationSubtitle: 'Stornierungen relativ zu abgeschlossenen Buchungen',
+  },
+  funnel: {
+    stages: {
+      widgetLoaded: 'Widget geladen',
+      bookingStarted: 'Buchung gestartet',
+      checkoutStarted: 'Checkout gestartet',
+      paymentCompleted: 'Zahlung erfolgreich',
+    },
+    rateLabels: {
+      start: 'Start-Rate',
+      checkout: 'Checkout-Rate',
+      payment: 'Payment-Rate',
+    },
+    sessions: 'Sessions',
+    dropOff: 'Drop-off',
+    trackingNotice: 'Zahlungen werden nach Aktivierung der Stripe-Integration getrackt.',
+  },
+  traffic: {
+    browsers: 'Browser',
+    countries: 'Länder',
+    visitors: 'Visitors',
+    noData: 'Keine Daten verfügbar',
+  },
+  locale: 'de-DE',
+  currency: 'EUR',
+};
 
-const TIME_PERIODS = [
-  { id: '1', label: 'Letzter Monat' },
-  { id: '3', label: 'Letzte 3 Monate' },
-  { id: '6', label: 'Letzte 6 Monate' },
-  { id: '12', label: 'Letzte 12 Monate' },
-];
+const formatNumber = (content, num) => new Intl.NumberFormat(content.locale || 'de-DE').format(num);
+const formatCurrency = (content, num) =>
+  new Intl.NumberFormat(content.locale || 'de-DE', { style: 'currency', currency: content.currency || 'EUR' }).format(num);
 
-const formatNumber = (num) => new Intl.NumberFormat('de-DE').format(num);
-const formatCurrency = (num) =>
-  new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(num);
-
-const renderKPICards = (data) => {
+const renderKPICards = (content, data) => {
   const kpis = data?.kpis || {};
   const changes = data?.changes || {};
   return `
@@ -36,49 +79,49 @@ const renderKPICards = (data) => {
         <div class="kpi-card-top">
           <div class="kpi-main">
             <div class="kpi-header">
-              <span class="kpi-label">Buchungswidget-Aufrufe</span>
+              <span class="kpi-label">${content.kpis.widgetViews}</span>
             </div>
-            <div class="kpi-value">${formatNumber(kpis.widgetViews ?? 0)}</div>
+            <div class="kpi-value">${formatNumber(content, kpis.widgetViews ?? 0)}</div>
           </div>
         </div>
         <div class="kpi-change ${(changes.widgetViews ?? 0) >= 0 ? 'positive' : 'negative'}">
-          ${(changes.widgetViews ?? 0) >= 0 ? '+' : ''}${changes.widgetViews ?? 0}% vs letzter Monat
+          ${(changes.widgetViews ?? 0) >= 0 ? '+' : ''}${changes.widgetViews ?? 0}% ${content.kpis.vsLastMonth}
         </div>
       </div>
       <div class="insights-kpi-card">
         <div class="kpi-card-top">
           <div class="kpi-main">
             <div class="kpi-header">
-              <span class="kpi-label">Umsatz</span>
+              <span class="kpi-label">${content.kpis.revenue}</span>
               ${getIconString('credit-card')}
             </div>
-            <div class="kpi-value">${formatCurrency(kpis.revenue ?? 0)}</div>
+            <div class="kpi-value">${formatCurrency(content, kpis.revenue ?? 0)}</div>
           </div>
           <div class="kpi-icon-box">${getIconString('money-hand')}</div>
         </div>
         <div class="kpi-change ${(changes.revenue ?? 0) >= 0 ? 'positive' : 'negative'}">
-          ${(changes.revenue ?? 0) >= 0 ? '+' : ''}${changes.revenue ?? 0}% vs letzter Monat
+          ${(changes.revenue ?? 0) >= 0 ? '+' : ''}${changes.revenue ?? 0}% ${content.kpis.vsLastMonth}
         </div>
       </div>
       <div class="insights-kpi-card">
         <div class="kpi-card-top">
           <div class="kpi-main">
             <div class="kpi-header">
-              <span class="kpi-label">Buchungen</span>
+              <span class="kpi-label">${content.kpis.bookings}</span>
             </div>
-            <div class="kpi-value">${formatNumber(kpis.bookings ?? 0)}</div>
+            <div class="kpi-value">${formatNumber(content, kpis.bookings ?? 0)}</div>
           </div>
           <div class="kpi-icon-box">${getIconString('chart')}</div>
         </div>
         <div class="kpi-change ${(changes.bookings ?? 0) >= 0 ? 'positive' : 'negative'}">
-          ${(changes.bookings ?? 0) >= 0 ? '+' : ''}${changes.bookings ?? 0}% vs letzter Monat
+          ${(changes.bookings ?? 0) >= 0 ? '+' : ''}${changes.bookings ?? 0}% ${content.kpis.vsLastMonth}
         </div>
       </div>
       <div class="insights-kpi-card">
         <div class="kpi-card-top">
           <div class="kpi-main">
             <div class="kpi-header">
-              <span class="kpi-label">Abbrüche</span>
+              <span class="kpi-label">${content.kpis.cancellationRate}</span>
               ${getIconString('x-circle')}
             </div>
             <div class="kpi-value">${kpis.cancellationRate ?? 0}%</div>
@@ -86,14 +129,14 @@ const renderKPICards = (data) => {
           <div class="kpi-icon-box">${getIconString('chart')}</div>
         </div>
         <div class="kpi-change ${(changes.cancellationRate ?? 0) >= 0 ? 'positive' : 'negative'}">
-          ${(changes.cancellationRate ?? 0) >= 0 ? '+' : ''}${changes.cancellationRate ?? 0}% vs letzter Monat
+          ${(changes.cancellationRate ?? 0) >= 0 ? '+' : ''}${changes.cancellationRate ?? 0}% ${content.kpis.vsLastMonth}
         </div>
       </div>
     </div>
   `;
 };
 
-const renderFunnelSection = (data) => {
+const renderFunnelSection = (content, data) => {
   const funnel = data?.funnel || {
     widgetLoaded: { total: 0, unique: 0 },
     bookingStarted: { total: 0, unique: 0 },
@@ -103,7 +146,7 @@ const renderFunnelSection = (data) => {
 
   const stages = [
     {
-      label: 'Widget geladen',
+      label: content.funnel.stages.widgetLoaded,
       total: funnel.widgetLoaded.unique,
       rateLabel:
         funnel.widgetLoaded.total > 0
@@ -113,12 +156,12 @@ const renderFunnelSection = (data) => {
       width: 100,
     },
     {
-      label: 'Buchung gestartet',
+      label: content.funnel.stages.bookingStarted,
       total: funnel.bookingStarted.unique,
       rateLabel:
         funnel.widgetLoaded.unique > 0
-          ? `${((funnel.bookingStarted.unique / funnel.widgetLoaded.unique) * 100).toFixed(1)} % Start-Rate`
-          : '0 % Start-Rate',
+          ? `${((funnel.bookingStarted.unique / funnel.widgetLoaded.unique) * 100).toFixed(1)} % ${content.funnel.rateLabels.start}`
+          : `0 % ${content.funnel.rateLabels.start}`,
       dropOff:
         funnel.widgetLoaded.unique > 0
           ? (100 - (funnel.bookingStarted.unique / funnel.widgetLoaded.unique) * 100).toFixed(1)
@@ -129,12 +172,12 @@ const renderFunnelSection = (data) => {
           : 10,
     },
     {
-      label: 'Checkout gestartet',
+      label: content.funnel.stages.checkoutStarted,
       total: funnel.checkoutStarted.unique,
       rateLabel:
         funnel.bookingStarted.unique > 0
-          ? `${((funnel.checkoutStarted.unique / funnel.bookingStarted.unique) * 100).toFixed(1)} % Checkout-Rate`
-          : '0 % Checkout-Rate',
+          ? `${((funnel.checkoutStarted.unique / funnel.bookingStarted.unique) * 100).toFixed(1)} % ${content.funnel.rateLabels.checkout}`
+          : `0 % ${content.funnel.rateLabels.checkout}`,
       dropOff:
         funnel.bookingStarted.unique > 0
           ? (100 - (funnel.checkoutStarted.unique / funnel.bookingStarted.unique) * 100).toFixed(1)
@@ -145,12 +188,12 @@ const renderFunnelSection = (data) => {
           : 10,
     },
     {
-      label: 'Zahlung erfolgreich',
+      label: content.funnel.stages.paymentCompleted,
       total: funnel.paymentCompleted.unique,
       rateLabel:
         funnel.checkoutStarted.unique > 0
-          ? `${((funnel.paymentCompleted.unique / funnel.checkoutStarted.unique) * 100).toFixed(1)} % Payment-Rate`
-          : '0 % Payment-Rate',
+          ? `${((funnel.paymentCompleted.unique / funnel.checkoutStarted.unique) * 100).toFixed(1)} % ${content.funnel.rateLabels.payment}`
+          : `0 % ${content.funnel.rateLabels.payment}`,
       dropOff:
         funnel.checkoutStarted.unique > 0
           ? (100 - (funnel.paymentCompleted.unique / funnel.checkoutStarted.unique) * 100).toFixed(1)
@@ -195,8 +238,8 @@ const renderFunnelSection = (data) => {
                 <span class="funnel-label">${stage.label}</span>
                 <span class="funnel-rate-badge">${stage.rateLabel}</span>
               </div>
-              <div class="funnel-value">${formatNumber(stage.total)} <span class="funnel-sessions">Sessions</span></div>
-              ${stage.dropOff !== null ? `<div class="funnel-dropoff">Drop-off: ${stage.dropOff} %</div>` : ''}
+              <div class="funnel-value">${formatNumber(content, stage.total)} <span class="funnel-sessions">${content.funnel.sessions}</span></div>
+              ${stage.dropOff !== null ? `<div class="funnel-dropoff">${content.funnel.dropOff}: ${stage.dropOff} %</div>` : ''}
             </div>
             <div class="funnel-stage-chart">
               <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="funnel-stage-svg">
@@ -213,7 +256,7 @@ const renderFunnelSection = (data) => {
       funnel.paymentCompleted.total === 0
         ? `
       <div class="funnel-notice">
-        <p>Zahlungen werden nach Aktivierung der Stripe-Integration getrackt.</p>
+        <p>${content.funnel.trackingNotice}</p>
       </div>
     `
         : ''
@@ -221,10 +264,10 @@ const renderFunnelSection = (data) => {
   `;
 };
 
-const renderTrafficRows = (items) => {
+const renderTrafficRows = (content, items) => {
   const list = items || [];
   const maxCount = Math.max(...list.map((i) => i.count), 1);
-  if (!list.length) return '<p class="traffic-no-data">Keine Daten verfügbar</p>';
+  if (!list.length) return `<p class="traffic-no-data">${content.traffic.noData}</p>`;
   return list
     .map(
       (item) => `
@@ -233,17 +276,17 @@ const renderTrafficRows = (items) => {
       <div class="traffic-stat-bar-container">
         <div class="traffic-stat-bar" style="width: ${(item.count / maxCount) * 100}%"></div>
       </div>
-      <span class="traffic-stat-value">${formatNumber(item.count)}</span>
+      <span class="traffic-stat-value">${formatNumber(content, item.count)}</span>
     </div>
   `
     )
     .join('');
 };
 
-export const createAnalyticsPreviewCard = () => {
+export const createAnalyticsPreviewCard = ({ content = DEFAULT_CONTENT } = {}) => {
   const data = DEMO_INSIGHTS;
-  const defaultPeriod = TIME_PERIODS[0];
-  const tabsRow = INSIGHT_TABS.map((tab, i) => {
+  const defaultPeriod = (content.timePeriods || DEFAULT_CONTENT.timePeriods)[0];
+  const tabsRow = (content.tabs || DEFAULT_CONTENT.tabs).map((tab, i) => {
     const active = i === 0;
     const disabled = !active;
     return `
@@ -256,7 +299,7 @@ export const createAnalyticsPreviewCard = () => {
     `;
   }).join('');
 
-  const periodOptions = TIME_PERIODS.map(
+  const periodOptions = (content.timePeriods || DEFAULT_CONTENT.timePeriods).map(
     (p) => `
     <button type="button" class="time-period-option ${p.id === defaultPeriod.id ? 'active' : ''}" data-analytics-period="${escapeAttr(p.id)}">
       ${p.label}
@@ -268,10 +311,10 @@ export const createAnalyticsPreviewCard = () => {
   <div class="feature-demo-card" id="analytics-preview-card">
     <div class="feature-demo-card__header">
       <div class="feature-demo-card__title-group">
-        <h3 class="feature-demo-card__title">Insights</h3>
-        <p class="feature-demo-card__subtitle">Wie im Dashboard unter Analytics – Demo-Daten.</p>
+        <h3 class="feature-demo-card__title">${content.card.title}</h3>
+        <p class="feature-demo-card__subtitle">${content.card.subtitle}</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="Schließen">×</button>
+      <button type="button" class="feature-demo-card__close" aria-label="${content.card.closeLabel}">×</button>
     </div>
     <div class="zone-tabs">
       <div class="tabs-list">
@@ -288,19 +331,19 @@ export const createAnalyticsPreviewCard = () => {
     </div>
     <div class="analytics-demo-body" id="analytics-demo-body">
       <div class="modal-content-section" data-demo-section="an-overview">
-        ${renderKPICards(data)}
+        ${renderKPICards(content, data)}
         <div class="insights-chart-grid">
           <div class="insights-chart-card">
             <div class="chart-header">
-              <h3 class="chart-title">Conversion-Rate</h3>
-              <p class="chart-subtitle">Buchungen relativ zu Buchungsstarts im Zeitraum</p>
+              <h3 class="chart-title">${content.charts.conversionTitle}</h3>
+              <p class="chart-subtitle">${content.charts.conversionSubtitle}</p>
             </div>
             <div class="chart-container" id="analytics-demo-conversion-chart"></div>
           </div>
           <div class="insights-chart-card">
             <div class="chart-header">
-              <h3 class="chart-title">Abbruchquote</h3>
-              <p class="chart-subtitle">Stornierungen relativ zu abgeschlossenen Buchungen</p>
+              <h3 class="chart-title">${content.charts.cancellationTitle}</h3>
+              <p class="chart-subtitle">${content.charts.cancellationSubtitle}</p>
             </div>
             <div class="chart-container" id="analytics-demo-cancellation-chart"></div>
           </div>
@@ -308,24 +351,24 @@ export const createAnalyticsPreviewCard = () => {
       </div>
 
       <div class="modal-content-section" data-demo-section="an-funnel" style="margin-top: var(--space-md);">
-        ${renderFunnelSection(data)}
+        ${renderFunnelSection(content, data)}
       </div>
 
       <div class="modal-content-section" data-demo-section="an-optimize" style="margin-top: var(--space-md);">
         <div class="traffic-stat-card">
           <div class="traffic-stat-tabs">
-            <button type="button" class="traffic-stat-tab active" data-analytics-traffic="browsers">Browser</button>
-            <button type="button" class="traffic-stat-tab" data-analytics-traffic="countries">Länder</button>
+            <button type="button" class="traffic-stat-tab active" data-analytics-traffic="browsers">${content.traffic.browsers}</button>
+            <button type="button" class="traffic-stat-tab" data-analytics-traffic="countries">${content.traffic.countries}</button>
           </div>
           <div class="traffic-stat-header">
             <span></span>
-            <span>Visitors</span>
+            <span>${content.traffic.visitors}</span>
           </div>
           <div class="traffic-stat-content" id="analytics-traffic-browsers">
-            ${renderTrafficRows(data.traffic?.browsers)}
+            ${renderTrafficRows(content, data.traffic?.browsers)}
           </div>
           <div class="traffic-stat-content" id="analytics-traffic-countries" style="display: none;">
-            ${renderTrafficRows(data.traffic?.countries)}
+            ${renderTrafficRows(content, data.traffic?.countries)}
           </div>
         </div>
       </div>
@@ -358,7 +401,7 @@ const initCharts = () => {
   }, 50);
 };
 
-export const initAnalyticsPreviewCard = (root) => {
+export const initAnalyticsPreviewCard = (root, { content = DEFAULT_CONTENT } = {}) => {
   const card = root.querySelector('#analytics-preview-card');
   if (!card) return;
 
@@ -379,7 +422,7 @@ export const initAnalyticsPreviewCard = (root) => {
     opt.addEventListener('click', (e) => {
       e.stopPropagation();
       const id = opt.dataset.analyticsPeriod;
-      const selected = TIME_PERIODS.find((p) => p.id === id);
+      const selected = (content.timePeriods || DEFAULT_CONTENT.timePeriods).find((p) => p.id === id);
       if (selected && btn) {
         btn.innerHTML = `${getIconString('insights')} ${selected.label}`;
       }

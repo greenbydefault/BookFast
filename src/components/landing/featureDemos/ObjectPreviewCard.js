@@ -6,7 +6,43 @@ import { getIconString } from '../../Icons/Icon.js';
 import { escapeAttr } from '../../../lib/sanitize.js';
 import './featureDemos.css';
 
-const DAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+const DEFAULT_CONTENT = {
+  card: {
+    title: 'Objekt anlegen',
+    subtitle: 'Lege ein Objekt an.',
+    closeLabel: 'Schließen',
+    footerSecondary: 'Abbrechen',
+    footerPrimary: 'Objekt speichern',
+  },
+  days: [
+    { id: 'Mo', label: 'Mo' },
+    { id: 'Di', label: 'Di' },
+    { id: 'Mi', label: 'Mi' },
+    { id: 'Do', label: 'Do' },
+    { id: 'Fr', label: 'Fr' },
+    { id: 'Sa', label: 'Sa' },
+    { id: 'So', label: 'So' },
+  ],
+  placeholders: {
+    name: 'z. B. Villa Nord oder Hausboot Molchow',
+    description: 'Optional: Was ist enthalten, was soll der Gast mitbringen, wichtige Hinweise ...',
+  },
+  labels: {
+    description: 'Beschreibung',
+    optional: '(Optional)',
+    capacity: 'Kapazität',
+    bookableDays: 'Buchbare Tage',
+    bookingWindow: 'Buchungszeitfenster',
+    from: 'Von',
+    to: 'Bis',
+    customHours: 'Individuelle Zeiten pro Tag',
+    cleaningBuffer: 'Reinigungspuffer',
+    before: 'Davor',
+    after: 'Danach',
+    minutes: 'Minuten',
+    addTimeWindow: '+ Zeitfenster hinzufügen',
+  },
+};
 
 const INITIAL_STATE = {
   name: '',
@@ -28,12 +64,12 @@ const createRow = (id) => ({
   to: '18:00',
 });
 
-const renderCustomHoursRows = (state) => state.customHours.map((row) => `
+const renderCustomHoursRows = (state, content) => state.customHours.map((row) => `
   <div class="custom-hours-row" data-row-id="${escapeAttr(row.id)}">
     <div class="custom-hours-row-top">
       <div class="custom-hours-day-toggles">
-        ${DAYS.map((day) => `
-          <button class="custom-hours-day-toggle ${row.days.includes(day) ? 'active' : ''}" data-row-id="${escapeAttr(row.id)}" data-day="${day}" type="button">${day}</button>
+        ${content.days.map((day) => `
+          <button class="custom-hours-day-toggle ${row.days.includes(day.id) ? 'active' : ''}" data-row-id="${escapeAttr(row.id)}" data-day="${day.id}" type="button">${day.label}</button>
         `).join('')}
       </div>
       <button class="custom-hours-delete" data-row-id="${escapeAttr(row.id)}" type="button">
@@ -41,32 +77,32 @@ const renderCustomHoursRows = (state) => state.customHours.map((row) => `
       </button>
     </div>
     <div class="custom-hours-time-row">
-      <span class="label-inline">Von</span>
+      <span class="label-inline">${content.labels.from}</span>
       <input type="time" class="time-input" value="${escapeAttr(row.from)}" data-row-id="${escapeAttr(row.id)}" data-field="from">
-      <span class="label-inline">Bis</span>
+      <span class="label-inline">${content.labels.to}</span>
       <input type="time" class="time-input" value="${escapeAttr(row.to)}" data-row-id="${escapeAttr(row.id)}" data-field="to">
     </div>
   </div>
 `).join('');
 
-export const createObjectPreviewCard = () => `
+export const createObjectPreviewCard = ({ content = DEFAULT_CONTENT } = {}) => `
   <div class="feature-demo-card" id="object-preview-card">
     <div class="feature-demo-card__header">
       <div class="feature-demo-card__title-group">
-        <h3 class="feature-demo-card__title">Objekt Anlegen</h3>
-        <p class="feature-demo-card__subtitle">Lege einen Objekt an.</p>
+        <h3 class="feature-demo-card__title">${content.card.title}</h3>
+        <p class="feature-demo-card__subtitle">${content.card.subtitle}</p>
       </div>
-      <button type="button" class="feature-demo-card__close" aria-label="Schließen">×</button>
+      <button type="button" class="feature-demo-card__close" aria-label="${content.card.closeLabel}">×</button>
     </div>
     <div class="feature-demo-card__body" id="object-preview-body"></div>
     <div class="feature-demo-card__footer">
-      <button type="button" class="feature-demo-card__footer-btn">Abbrechen</button>
-      <button type="button" class="feature-demo-card__footer-btn feature-demo-card__footer-btn--primary">Modul speichern</button>
+      <button type="button" class="feature-demo-card__footer-btn">${content.card.footerSecondary}</button>
+      <button type="button" class="feature-demo-card__footer-btn feature-demo-card__footer-btn--primary">${content.card.footerPrimary}</button>
     </div>
   </div>
 `;
 
-export const initObjectPreviewCard = (heroContainer) => {
+export const initObjectPreviewCard = (heroContainer, { content = DEFAULT_CONTENT } = {}) => {
   const body = heroContainer.querySelector('#object-preview-body');
   if (!body) return;
 
@@ -114,8 +150,8 @@ export const initObjectPreviewCard = (heroContainer) => {
     if (!container) return;
 
     container.innerHTML = `
-      ${renderCustomHoursRows(state)}
-      <button class="custom-hours-add-btn" id="object-preview-add-custom-hours" type="button">+ Zeitfenster hinzufügen</button>
+      ${renderCustomHoursRows(state, content)}
+      <button class="custom-hours-add-btn" id="object-preview-add-custom-hours" type="button">${content.labels.addTimeWindow}</button>
     `;
 
     container.querySelectorAll('.custom-hours-day-toggle').forEach((btn) => {
@@ -145,16 +181,16 @@ export const initObjectPreviewCard = (heroContainer) => {
       <input
         type="text"
         class="modal-form-input modal-input-large"
-        placeholder="z. B. Villa Nord oder Hausboot Molchow"
+        placeholder="${escapeAttr(content.placeholders.name)}"
         value="${escapeAttr(state.name)}"
         id="object-preview-input-name"
       >
 
       <div class="modal-form-field">
-        <label class="modal-label modal-form-label">Beschreibung <span class="modal-label-optional">(Optional)</span></label>
+        <label class="modal-label modal-form-label">${content.labels.description} <span class="modal-label-optional">${content.labels.optional}</span></label>
         <textarea
           class="modal-form-input"
-          placeholder="Optional: Was ist enthalten, was soll der Gast mitbringen, wichtige Hinweise ..."
+          placeholder="${escapeAttr(content.placeholders.description)}"
           rows="3"
           id="object-preview-input-desc"
         >${escapeAttr(state.description)}</textarea>
@@ -163,7 +199,7 @@ export const initObjectPreviewCard = (heroContainer) => {
 
     <div class="modal-content-section">
       <div class="modal-row">
-        <div class="modal-label">${getIconString('users-2')} Kapazität</div>
+        <div class="modal-label">${getIconString('users-2')} ${content.labels.capacity}</div>
         <div class="modal-controls">
           <div class="number-control">
             <input type="number" class="number-input" value="${state.capacity}" min="0" id="object-preview-input-capacity">
@@ -172,32 +208,32 @@ export const initObjectPreviewCard = (heroContainer) => {
       </div>
 
       <div class="modal-row">
-        <div class="modal-label">${getIconString('calender-days-date')} Buchbare Tage</div>
+        <div class="modal-label">${getIconString('calender-days-date')} ${content.labels.bookableDays}</div>
         <div class="modal-controls">
           <div class="day-toggles" id="object-preview-day-toggles">
-            ${DAYS.map((day) => `
-              <button class="day-toggle ${state.bookableDays.includes(day) ? 'active' : ''}" data-day="${day}" type="button">${day}</button>
+            ${content.days.map((day) => `
+              <button class="day-toggle ${state.bookableDays.includes(day.id) ? 'active' : ''}" data-day="${day.id}" type="button">${day.label}</button>
             `).join('')}
           </div>
         </div>
       </div>
 
       <div class="modal-row">
-        <div class="modal-label">${getIconString('clock')} Buchungszeitfenster</div>
+        <div class="modal-label">${getIconString('clock')} ${content.labels.bookingWindow}</div>
         <div class="modal-controls">
           <div class="time-group">
-            <span>Von</span>
+            <span>${content.labels.from}</span>
             <input type="time" value="${escapeAttr(state.timeFrom)}" id="object-preview-input-time-from">
           </div>
           <div class="time-group">
-            <span>Bis</span>
+            <span>${content.labels.to}</span>
             <input type="time" value="${escapeAttr(state.timeTo)}" id="object-preview-input-time-to">
           </div>
         </div>
       </div>
 
       <div class="modal-row">
-        <div class="modal-label">${getIconString('date-cog')} Individuelle Zeiten pro Tag</div>
+        <div class="modal-label">${getIconString('date-cog')} ${content.labels.customHours}</div>
         <div class="modal-controls">
           <label class="toggle-switch">
             <input type="checkbox" id="object-preview-toggle-custom-hours">
@@ -211,21 +247,21 @@ export const initObjectPreviewCard = (heroContainer) => {
 
     <div class="modal-content-section">
       <div class="modal-row">
-        <div class="modal-label">${getIconString('clean')} Reinigungspuffer</div>
+        <div class="modal-label">${getIconString('clean')} ${content.labels.cleaningBuffer}</div>
         <div class="modal-controls modal-controls-column">
           <div class="control-group-row">
-            <span class="text-small-muted">Davor</span>
+            <span class="text-small-muted">${content.labels.before}</span>
             <div class="number-control">
               <input type="number" class="number-input" value="${state.bufferBefore}" min="0" id="object-preview-input-buffer-before">
             </div>
-            <span class="text-small">Minuten ⌄</span>
+            <span class="text-small">${content.labels.minutes} ⌄</span>
           </div>
           <div class="control-group-row">
-            <span class="text-small-muted">Danach</span>
+            <span class="text-small-muted">${content.labels.after}</span>
             <div class="number-control">
               <input type="number" class="number-input" value="${state.bufferAfter}" min="0" id="object-preview-input-buffer-after">
             </div>
-            <span class="text-small">Minuten ⌄</span>
+            <span class="text-small">${content.labels.minutes} ⌄</span>
           </div>
         </div>
       </div>

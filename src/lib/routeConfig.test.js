@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
+  CANONICAL_ROUTE_PAIRS,
+  PLACEHOLDER_ROUTE_PAIRS,
+  REDIRECT_ROUTE_PAIRS,
   ROUTE_PAIRS,
   DE_TO_EN_PATH,
   EN_TO_DE_PATH,
@@ -13,6 +16,12 @@ describe('routeConfig', () => {
       expect(pair.en).toBeTruthy();
       expect(pair.en.startsWith('/en')).toBe(true);
     }
+  });
+
+  it('keeps canonical, placeholder, and redirect routes separated', () => {
+    expect(CANONICAL_ROUTE_PAIRS.every((pair) => pair.routeType === 'canonical')).toBe(true);
+    expect(PLACEHOLDER_ROUTE_PAIRS.every((pair) => pair.routeType === 'placeholder')).toBe(true);
+    expect(REDIRECT_ROUTE_PAIRS.every((pair) => pair.routeType === 'redirect')).toBe(true);
   });
 
   it('DE_TO_EN_PATH and EN_TO_DE_PATH are consistent inverses', () => {
@@ -39,5 +48,15 @@ describe('routeConfig', () => {
     for (const p of expectedDePaths) {
       expect(DE_TO_EN_PATH[p]).toBeDefined();
     }
+  });
+
+  it('stores redirect targets for alias routes', () => {
+    expect(REDIRECT_ROUTE_PAIRS).toEqual([
+      expect.objectContaining({
+        de: '/integrationen',
+        en: '/en/integrations',
+        redirectTarget: { de: '/produkt', en: '/en/product' },
+      }),
+    ]);
   });
 });

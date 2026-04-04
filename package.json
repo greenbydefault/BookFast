@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "vite",
         "prebuild": "node scripts/inject-embed-env.mjs",
-        "build": "vite build",
+        "build": "vite build && node scripts/postbuild-marketing-seo.mjs",
         "preview": "vite preview",
         "test": "vitest run",
         "test:watch": "vitest"

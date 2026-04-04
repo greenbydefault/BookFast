@@ -70,7 +70,138 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/features/approval",
+      "destination": "/features/buchungen",
+      "permanent": true
+    },
+    {
+      "source": "/features/verfuegbarkeit",
+      "destination": "/features/objekte",
+      "permanent": true
+    },
+    {
+      "source": "/features/buffer",
+      "destination": "/features/objekte",
+      "permanent": true
+    },
+    {
+      "source": "/features/zeitfenster",
+      "destination": "/features/objekte",
+      "permanent": true
+    },
+    {
+      "source": "/features/urlaub",
+      "destination": "/features/objekte",
+      "permanent": true
+    },
+    {
+      "source": "/features/overnight",
+      "destination": "/features/services",
+      "permanent": true
+    },
+    {
+      "source": "/features/kaution",
+      "destination": "/features/zahlungen",
+      "permanent": true
+    },
+    {
+      "source": "/features/addons",
+      "destination": "/features/services",
+      "permanent": true
+    },
+    {
+      "source": "/features/gutscheine",
+      "destination": "/features/zahlungen",
+      "permanent": true
+    },
+    {
+      "source": "/features/email-templates",
+      "destination": "/features/buchungen",
+      "permanent": true
+    },
+    {
+      "source": "/features/kunden",
+      "destination": "/features/analytics",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/approval",
+      "destination": "/en/features/bookings",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/approval-flow",
+      "destination": "/en/features/bookings",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/availability",
+      "destination": "/en/features/objects",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/buffer",
+      "destination": "/en/features/objects",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/time-slots",
+      "destination": "/en/features/objects",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/vacation",
+      "destination": "/en/features/objects",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/overnight",
+      "destination": "/en/features/services",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/deposits",
+      "destination": "/en/features/payments",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/addons",
+      "destination": "/en/features/services",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/vouchers",
+      "destination": "/en/features/payments",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/email-templates",
+      "destination": "/en/features/bookings",
+      "permanent": true
+    },
+    {
+      "source": "/en/features/customers",
+      "destination": "/en/features/analytics",
+      "permanent": true
+    },
+    {
+      "source": "/integrationen",
+      "destination": "/produkt",
+      "permanent": true
+    },
+    {
+      "source": "/en/integrations",
+      "destination": "/en/product",
+      "permanent": true
+    }
+  ],
   "rewrites": [
+    { "source": "/dashboard", "destination": "/app-shell.html" },
+    { "source": "/dashboard/(.*)", "destination": "/app-shell.html" },
+    { "source": "/b", "destination": "/app-shell.html" },
+    { "source": "/b/(.*)", "destination": "/app-shell.html" },
     { "source": "/embed.js", "destination": "/embed.js" },
     { "source": "/login.html", "destination": "/login.html" },
     { "source": "/register.html", "destination": "/register.html" },
@@ -78,7 +209,6 @@
     { "source": "/update-password.html", "destination": "/update-password.html" },
     { "source": "/private-policies.html", "destination": "/private-policies.html" },
     { "source": "/datenschutzbestimmungen.html", "destination": "/datenschutzbestimmungen.html" },
-    { "source": "/impressum.html", "destination": "/impressum.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/impressum.html", "destination": "/impressum.html" }
   ]
 }
