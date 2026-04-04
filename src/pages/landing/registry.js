@@ -9,7 +9,6 @@ import { renderNotFoundPage } from './NotFoundPage.js';
 // Page imports
 import { renderHomePage } from './HomePage.js';
 import { renderPricingPage } from './PricingPage.js';
-import { renderIntegrationsPage } from './IntegrationsPage.js';
 import { renderProductPage } from './ProductPage.js';
 import { renderFeaturesHubPage } from './features/FeaturesHubPage.js';
 import { renderFeaturePage } from './features/FeaturePageTemplate.js';
@@ -27,32 +26,32 @@ import { platformEn } from '../../locales/en/features/platform.js';
 registerEnFeaturePages({ ...managementEn, ...platformEn });
 
 const FEATURE_REDIRECTS_DE = {
-  approval: '/features/buchungen#approval',
-  verfuegbarkeit: '/features/objekte#verfuegbarkeit',
-  buffer: '/features/objekte#buffer',
-  zeitfenster: '/features/objekte#zeitfenster',
-  urlaub: '/features/objekte#sperrzeiten',
-  overnight: '/features/services#overnight',
-  kaution: '/features/zahlungen#anzahlung',
-  addons: '/features/services#addons',
-  gutscheine: '/features/zahlungen#gutscheine',
-  'email-templates': '/features/buchungen#email-templates',
-  kunden: '/features/analytics#kunden',
+  approval: '/features/buchungen',
+  verfuegbarkeit: '/features/objekte',
+  buffer: '/features/objekte',
+  zeitfenster: '/features/objekte',
+  urlaub: '/features/objekte',
+  overnight: '/features/services',
+  kaution: '/features/zahlungen',
+  addons: '/features/services',
+  gutscheine: '/features/zahlungen',
+  'email-templates': '/features/buchungen',
+  kunden: '/features/analytics',
 };
 
 const FEATURE_REDIRECTS_EN = {
-  'approval': '/en/features/bookings#approval',
-  'approval-flow': '/en/features/bookings#approval',
-  availability: '/en/features/objects#verfuegbarkeit',
-  buffer: '/en/features/objects#buffer',
-  'time-slots': '/en/features/objects#zeitfenster',
-  vacation: '/en/features/objects#sperrzeiten',
-  overnight: '/en/features/services#overnight',
-  deposits: '/en/features/payments#anzahlung',
-  addons: '/en/features/services#addons',
-  vouchers: '/en/features/payments#gutscheine',
-  'email-templates': '/en/features/bookings#email-templates',
-  customers: '/en/features/analytics#kunden',
+  'approval': '/en/features/bookings',
+  'approval-flow': '/en/features/bookings',
+  availability: '/en/features/objects',
+  buffer: '/en/features/objects',
+  'time-slots': '/en/features/objects',
+  vacation: '/en/features/objects',
+  overnight: '/en/features/services',
+  deposits: '/en/features/payments',
+  addons: '/en/features/services',
+  vouchers: '/en/features/payments',
+  'email-templates': '/en/features/bookings',
+  customers: '/en/features/analytics',
 };
 
 const handleFeatureRedirect = (slug, locale) => {
@@ -87,6 +86,10 @@ const renderEnFeaturePage = (enSlug, locale) => {
   return renderFeaturePage(deSlug, locale || 'en');
 };
 
+const createLandingRedirect = (targetPath) => () => {
+  navigateLanding(targetPath, true);
+};
+
 const createPlaceholder = (title, description) => () => {
   setPageMeta(title, description || 'Diese Seite wird bald verfügbar sein.');
 
@@ -115,7 +118,7 @@ export const registerAllLandingPages = () => {
   registerLandingPage('/en', renderHomePage);
   registerLandingPage('/produkt', renderProductPage);
   registerLandingPage('/preise', renderPricingPage);
-  registerLandingPage('/integrationen', renderIntegrationsPage);
+  registerLandingPage('/integrationen', createLandingRedirect('/produkt'));
   registerLandingPage('/ressourcen', createPlaceholder('Ressourcen', 'Ressourcen und Hilfestellungen fuer BookFast folgen in Kuerze.'));
   registerLandingPage('/ueber-uns', renderAboutPage);
   registerLandingPage('/kontakt', renderContactPage);
@@ -129,7 +132,7 @@ export const registerAllLandingPages = () => {
 
   registerLandingPage('/en/product', renderProductPage);
   registerLandingPage('/en/pricing', renderPricingPage);
-  registerLandingPage('/en/integrations', renderIntegrationsPage);
+  registerLandingPage('/en/integrations', createLandingRedirect('/en/product'));
   registerLandingPage('/en/resources', createPlaceholder('Resources', 'Resources and guides for BookFast will be available soon.'));
   registerLandingPage('/en/about', renderAboutPage);
   registerLandingPage('/en/contact', renderContactPage);

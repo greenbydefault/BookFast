@@ -5,7 +5,6 @@
  */
 import { createFeatureHero } from '../../../components/landing/FeatureHero.js';
 import { getDemoModule } from '../../../components/landing/featureDemos/index.js';
-import { createFeatureSection } from '../../../components/landing/FeatureSection.js';
 import { createHowItWorksInteractive, initHowItWorksInteractive } from '../../../components/landing/HowItWorksInteractive.js';
 import { createFAQSection, initFAQAccordion } from '../../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../../components/landing/CTASection.js';
@@ -13,7 +12,6 @@ import { createFeatureRelatedSlider, initFeatureRelatedSlider } from '../../../c
 import { setPageMeta, setFAQSchema, setBreadcrumbSchema, setHreflangAlternates } from '../../../lib/seoHelper.js';
 import { escapeHtml } from '../../../lib/sanitize.js';
 import { svgAssetUrl, resolveSvgAssetUrl } from '../../../lib/landingAssets.js';
-import { featurePages } from '../../../data/features/index.js';
 import { getRelatedFeaturesFor } from '../../../data/features/relatedFeatures.js';
 import { getHowItWorksPreviewHtml } from '../../../lib/howItWorksPreviewSlice.js';
 import { getFeaturePage } from '../../../lib/getLocaleContent.js';
@@ -63,21 +61,6 @@ export const renderFeaturePage = (slug, locale = 'de') => {
     ]);
   }
 
-  // Build journey sections (alternating left/right like Integrations page)
-  const journeyHTML = page.journey?.length ? page.journey.map((step, i) => `
-    <section class="landing-section ${i % 2 === 0 ? 'landing-section-alt' : ''}">
-      <div class="landing-container">
-        ${createFeatureSection({
-          title: step.title,
-          description: step.description,
-          bullets: step.bullets || [],
-          reverse: !!step.reverse,
-        })}
-      </div>
-    </section>
-  `).join('') : '';
-
-  // Fallback: Steps when no journey
   const hasInteractiveHowItWorks = Boolean(page.interactiveHowItWorks && page.steps?.length);
   const interactiveHowItWorksHTML = hasInteractiveHowItWorks
     ? createHowItWorksInteractive({
@@ -87,29 +70,6 @@ export const renderFeaturePage = (slug, locale = 'de') => {
         previewHTML: '',
       })
     : '';
-
-  const fallbackHTML = !page.journey?.length ? `
-    <!-- 2. So funktioniert's (alternierendes links-rechts Layout) -->
-    ${page.steps?.length && !hasInteractiveHowItWorks ? `
-    <section class="landing-section">
-      <div class="landing-container text-center">
-        <p class="landing-label">So funktioniert's</p>
-        <h2 class="landing-h2">${page.meta.title} in ${page.steps.length} Schritten.</h2>
-      </div>
-    </section>
-    ${page.steps.map((step, i) => `
-    <section class="landing-section ${i % 2 === 1 ? 'landing-section-alt' : ''}">
-      <div class="landing-container">
-        ${createFeatureSection({
-          title: step.title?.startsWith(String(i + 1) + '.') ? step.title : `${i + 1}. ${step.title}`,
-          description: step.description,
-          bullets: step.bullets || [],
-          imageHTML: `<div class="landing-feature-image" style="height: 200px; display:flex; align-items:center; justify-content:center; background: var(--color-stone-100); border-radius: 12px;"><span style="width: 64px; height: 64px; border-radius: 50%; background: var(--color-vulcan-900); color: white; font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; justify-content: center;">${i + 1}</span></div>`,
-          reverse: step.reverse !== undefined ? step.reverse : (i % 2 === 1),
-        })}
-      </div>
-    </section>`).join('')}` : ''}
-  ` : '';
 
   // Build hero: FeatureHero for all feature pages (demo module or illustration)
   const demoMod = page.hero.demoModule ? getDemoModule(page.hero.demoModule) : null;
@@ -123,48 +83,14 @@ export const renderFeaturePage = (slug, locale = 'de') => {
     demoModuleHTML: demoMod ? demoMod.create() : '',
     demoHint: demoMod ? "Tippe, klicke & probier's aus — ganz ohne Account." : '',
   });
-  const relatedFeatures = getRelatedFeaturesFor(slug, { limit: 5 });
+  const relatedFeatures = getRelatedFeaturesFor(slug, { limit: 5, locale });
   const relatedFeaturesHTML = createFeatureRelatedSlider({
     currentTitle: page.meta.title,
     features: relatedFeatures,
+    locale,
   });
 
-  const sectionsHTML = (page.sections || []).map((section, sIdx) => {
-    const stepsHTML = (section.steps || []).map((step, i) => `
-      <section class="landing-section ${i % 2 === 1 ? 'landing-section-alt' : ''}">
-        <div class="landing-container">
-          ${createFeatureSection({
-            title: step.title,
-            description: step.description,
-            bullets: step.bullets || [],
-            reverse: step.reverse !== undefined ? step.reverse : (i % 2 === 1),
-          })}
-        </div>
-      </section>`).join('');
-
-    const sectionFaqHTML = section.faq?.length
-      ? `<div class="landing-section"><div class="landing-container">
-          ${createFAQSection({ pageFaq: section.faq, pageTitle: section.title, featureOnly: true })}
-         </div></div>`
-      : '';
-
-    return `
-      <div id="${section.id}" class="feature-section-anchor" style="scroll-margin-top: 80px;">
-        <section class="landing-section ${sIdx % 2 === 0 ? 'landing-section-alt' : ''}">
-          <div class="landing-container text-center">
-            <p class="landing-label">${section.title}</p>
-            <h2 class="landing-h2">${section.subtitle}</h2>
-          </div>
-        </section>
-        ${stepsHTML}
-        ${sectionFaqHTML}
-      </div>`;
-  }).join('');
-
-  const allSectionFaqs = (page.sections || []).flatMap(s => s.faq || []);
-  const combinedFaq = [...(page.faq || []), ...allSectionFaqs];
-
-  setFAQSchema(combinedFaq);
+  setFAQSchema(page.faq || []);
 
   content.innerHTML = `
     <!-- 1. Hero -->
@@ -174,13 +100,6 @@ export const renderFeaturePage = (slug, locale = 'de') => {
     <!-- 2. So funktioniert's (interactive) -->
     ${interactiveHowItWorksHTML}
     ` : ''}
-
-    ${page.journey?.length ? `
-    <!-- 2. Journey (alternating sections) -->
-    ${journeyHTML}
-    ` : fallbackHTML}
-
-    ${sectionsHTML}
 
     <!-- 5. CTA -->
     ${createCTASection({

@@ -138,7 +138,6 @@
   margin: 0 0 clamp(var(--space-10), 1.5vw, var(--space-14));
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--color-vulcan-500);
   display: flex;
@@ -1009,7 +1008,411 @@
   font-size: var(--space-14);
 }
 
+.feature-demo-card .bk-preview-section-label,
+.feature-demo-card .pay-preview-section-label,
+.feature-demo-card .inv-preview-section-label,
+.feature-demo-card .cp-preview-section-label {
+  margin: 0 0 clamp(var(--space-10), 1.5vw, var(--space-14));
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-vulcan-500);
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.feature-demo-card .booking-demo__filter-row,
+.feature-demo-card .payments-demo__steps,
+.feature-demo-card .payments-demo__payout-actions,
+.feature-demo-card .invoice-demo__action-buttons,
+.feature-demo-card .customer-portal-demo__actions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.feature-demo-card .booking-demo__filter,
+.feature-demo-card .booking-demo__link-btn,
+.feature-demo-card .payments-demo__action,
+.feature-demo-card .invoice-demo__secondary-btn,
+.feature-demo-card .customer-portal-demo__primary-btn,
+.feature-demo-card .customer-portal-demo__action {
+  border: 1px solid var(--color-stone-200);
+  background: #fff;
+  color: var(--color-vulcan-900);
+  border-radius: 10px;
+  min-height: 38px;
+  padding: 0 var(--space-12);
+  font: inherit;
+  cursor: pointer;
+}
+
+.feature-demo-card .booking-demo__filter.is-active,
+.feature-demo-card .payments-demo__action--primary,
+.feature-demo-card .invoice-demo__secondary-btn--primary,
+.feature-demo-card .customer-portal-demo__primary-btn {
+  background: var(--color-majorelle-blue-900);
+  color: #fff;
+  border-color: transparent;
+}
+
+.feature-demo-card .booking-demo__rows,
+.feature-demo-card .payments-demo__payout-list,
+.feature-demo-card .invoice-demo__line-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.feature-demo-card .booking-demo__row,
+.feature-demo-card .payments-demo__step {
+  width: 100%;
+  text-align: left;
+  padding: var(--space-12);
+  border-radius: 12px;
+  border: 1px solid var(--color-stone-200);
+  background: #fff;
+  color: var(--color-vulcan-900);
+  cursor: pointer;
+}
+
+.feature-demo-card .booking-demo__row.is-active,
+.feature-demo-card .payments-demo__step.is-active {
+  border-color: var(--color-majorelle-blue-700);
+  background: var(--color-majorelle-blue-50);
+}
+
+.feature-demo-card .booking-demo__row-main,
+.feature-demo-card .booking-demo__detail-top,
+.feature-demo-card .invoice-demo__paper-top,
+.feature-demo-card .customer-portal-demo__summary-top,
+.feature-demo-card .customer-portal-demo__actions-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-10);
+}
+
+.feature-demo-card .booking-demo__row-title,
+.feature-demo-card .booking-demo__detail-title {
+  margin: 0;
+  font-size: var(--space-14);
+  font-weight: 600;
+}
+
+.feature-demo-card .booking-demo__row-subtitle,
+.feature-demo-card .booking-demo__row-meta,
+.feature-demo-card .booking-demo__detail-subtitle,
+.feature-demo-card .booking-demo__detail-note,
+.feature-demo-card .payments-demo__status-card p,
+.feature-demo-card .payments-demo__payout-item p,
+.feature-demo-card .invoice-demo__portal-card p,
+.feature-demo-card .customer-portal-demo__summary p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-vulcan-500);
+  line-height: 1.45;
+}
+
+.feature-demo-card .booking-demo__row-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-10);
+}
+
+.feature-demo-card .booking-demo__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 var(--space-10);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.feature-demo-card .booking-demo__badge--pending {
+  background: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+}
+
+.feature-demo-card .booking-demo__badge--confirmed,
+.feature-demo-card .payments-demo__payout-item.is-refunded {
+  background: rgba(16, 185, 129, 0.1);
+  color: #166534;
+}
+
+.feature-demo-card .booking-demo__badge--completed {
+  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+}
+
+.feature-demo-card .booking-demo__badge--cancelled {
+  background: rgba(239, 68, 68, 0.1);
+  color: #b91c1c;
+}
+
+.feature-demo-card .booking-demo__mini-label,
+.feature-demo-card .payments-demo__step-copy small {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-vulcan-500);
+}
+
+.feature-demo-card .booking-demo__handoff,
+.feature-demo-card .payments-demo__split {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--space-10);
+  align-items: center;
+}
+
+.feature-demo-card .payments-demo__split {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.feature-demo-card .booking-demo__handoff-card,
+.feature-demo-card .booking-demo__detail-card,
+.feature-demo-card .payments-demo__status-card,
+.feature-demo-card .payments-demo__deposit-card,
+.feature-demo-card .invoice-demo__portal-card,
+.feature-demo-card .invoice-demo__actions-card,
+.feature-demo-card .customer-portal-demo__summary,
+.feature-demo-card .customer-portal-demo__pin-card,
+.feature-demo-card .customer-portal-demo__actions-card {
+  border: 1px solid var(--color-stone-200);
+  border-radius: 12px;
+  background: #fff;
+  padding: var(--space-12);
+}
+
+.feature-demo-card .booking-demo__handoff-card--accent,
+.feature-demo-card .invoice-demo__portal-card.is-open,
+.feature-demo-card .customer-portal-demo__pin-card.is-unlocked {
+  background: var(--color-majorelle-blue-50);
+  border-color: var(--color-majorelle-blue-200);
+}
+
+.feature-demo-card .booking-demo__handoff-card strong,
+.feature-demo-card .payments-demo__status-card strong,
+.feature-demo-card .invoice-demo__portal-card strong,
+.feature-demo-card .customer-portal-demo__summary strong,
+.feature-demo-card .customer-portal-demo__pin-top strong,
+.feature-demo-card .customer-portal-demo__actions-top strong {
+  display: block;
+  font-size: var(--space-14);
+  color: var(--color-vulcan-900);
+}
+
+.feature-demo-card .booking-demo__handoff-card p,
+.feature-demo-card .booking-demo__empty,
+.feature-demo-card .payments-demo__status-card p,
+.feature-demo-card .payments-demo__payout-item p,
+.feature-demo-card .invoice-demo__portal-card p,
+.feature-demo-card .customer-portal-demo__pin-top span,
+.feature-demo-card .customer-portal-demo__summary p {
+  margin-top: var(--space-6);
+}
+
+.feature-demo-card .booking-demo__handoff-arrow {
+  color: var(--color-vulcan-500);
+}
+
+.feature-demo-card .booking-demo__detail-grid,
+.feature-demo-card .payments-demo__split,
+.feature-demo-card .customer-portal-demo__pin-digits {
+  margin-top: var(--space-12);
+}
+
+.feature-demo-card .booking-demo__detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-10);
+}
+
+.feature-demo-card .booking-demo__detail-grid span,
+.feature-demo-card .payments-demo__split span,
+.feature-demo-card .invoice-demo__action-row span {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-vulcan-500);
+  margin-bottom: 2px;
+}
+
+.feature-demo-card .booking-demo__detail-grid strong,
+.feature-demo-card .payments-demo__split strong,
+.feature-demo-card .invoice-demo__action-row strong {
+  font-size: var(--space-14);
+  color: var(--color-vulcan-900);
+}
+
+.feature-demo-card .booking-demo__detail-actions {
+  display: flex;
+  gap: var(--space-8);
+  margin-top: var(--space-12);
+}
+
+.feature-demo-card .booking-demo__action {
+  flex: 1;
+  min-height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--color-stone-200);
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.feature-demo-card .booking-demo__action--primary {
+  background: var(--color-majorelle-blue-900);
+  color: #fff;
+  border-color: transparent;
+}
+
+.feature-demo-card .payments-demo__step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.feature-demo-card .payments-demo__step-index {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-stone-100);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.feature-demo-card .payments-demo__deposit-top,
+.feature-demo-card .invoice-demo__action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-10);
+}
+
+.feature-demo-card .payments-demo__deposit-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-majorelle-blue-900);
+}
+
+.feature-demo-card .payments-demo__range {
+  width: 100%;
+  margin-top: var(--space-12);
+}
+
+.feature-demo-card .payments-demo__payout-item,
+.feature-demo-card .invoice-demo__line-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-10);
+  padding: var(--space-10) var(--space-12);
+  border-radius: 10px;
+  background: var(--color-stone-50);
+}
+
+.feature-demo-card .payments-demo__payout-item strong,
+.feature-demo-card .invoice-demo__line-item strong {
+  font-size: var(--space-14);
+  color: var(--color-vulcan-900);
+}
+
+.feature-demo-card .invoice-demo__paper {
+  border: 1px solid var(--color-stone-200);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff 0%, #fcfcfd 100%);
+  padding: var(--space-14);
+}
+
+.feature-demo-card .invoice-demo__totals {
+  margin-top: var(--space-12);
+  padding-top: var(--space-12);
+  border-top: 1px solid var(--color-stone-200);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-10);
+  font-weight: 600;
+  color: var(--color-vulcan-900);
+}
+
+.feature-demo-card .invoice-demo__portal-card,
+.feature-demo-card .customer-portal-demo__pin-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.feature-demo-card .customer-portal-demo__pin-card {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.feature-demo-card .customer-portal-demo__pin-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-10);
+}
+
+.feature-demo-card .customer-portal-demo__pin-digits {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-8);
+}
+
+.feature-demo-card .customer-portal-demo__pin-digits span {
+  height: 42px;
+  border: 1px solid var(--color-stone-200);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  background: #fff;
+}
+
+.feature-demo-card .customer-portal-demo__actions-list {
+  margin-top: var(--space-12);
+}
+
+.feature-demo-card .customer-portal-demo__action {
+  width: 100%;
+  justify-content: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
 @media (max-width: 768px) {
+  .feature-demo-card .booking-demo__handoff,
+  .feature-demo-card .payments-demo__split,
+  .feature-demo-card .invoice-demo__portal-card,
+  .feature-demo-card .customer-portal-demo__pin-top,
+  .feature-demo-card .booking-demo__detail-top,
+  .feature-demo-card .customer-portal-demo__actions-top,
+  .feature-demo-card .customer-portal-demo__summary-top {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .feature-demo-card .booking-demo__detail-grid,
+  .feature-demo-card .customer-portal-demo__pin-digits {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-demo-card .booking-demo__detail-actions {
+    flex-direction: column;
+  }
+
   .feature-demo-card .modal-content-section {
     padding: var(--space-16);
   }

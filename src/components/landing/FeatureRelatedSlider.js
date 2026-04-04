@@ -1,16 +1,61 @@
 import { escapeAttr, escapeHtml } from '../../lib/sanitize.js';
 import { resolveSvgAssetUrl, svgAssetUrl } from '../../lib/landingAssets.js';
+import { deFeatureSlugToEn } from '../../lib/featureSlugLocale.js';
 import './FeatureRelatedSlider.css';
 
 const FALLBACK_ILLUSTRATION = svgAssetUrl('illustrations/landingpage/features/ft_objektverwaltung.svg');
 
-const createCardHTML = (feature) => {
-  const title = feature?.meta?.title || feature?.hero?.headline || 'Feature';
+const getSliderCopy = (locale = 'de') => {
+  if (locale === 'en') {
+    return {
+      featureFallback: 'Feature',
+      buttonLabel: 'View feature',
+      buttonTitle: (title) => `View ${title}`,
+      illustrationAlt: (title) => `Illustration for ${title} feature`,
+      titleLabelFallback: 'this feature',
+      headlineFallback: (title) => `More features around ${title}.`,
+      prevSlideLabel: 'Previous slide',
+      prevSlideTitle: 'Show previous slide',
+      nextSlideLabel: 'Next slide',
+      nextSlideTitle: 'Show next slide',
+      bubbleLabel: (index) => `Go to slide ${index}`,
+    };
+  }
+
+  return {
+    featureFallback: 'Feature',
+    buttonLabel: 'Ansehen',
+    buttonTitle: (title) => `${title} ansehen`,
+    illustrationAlt: (title) => `Illustration zum Feature ${title}`,
+    titleLabelFallback: 'dieses Feature',
+    headlineFallback: (title) => `Weitere Funktionen rund um ${title}.`,
+    prevSlideLabel: 'Vorheriger Slide',
+    prevSlideTitle: 'Vorherigen Slide anzeigen',
+    nextSlideLabel: 'Nächster Slide',
+    nextSlideTitle: 'Nächsten Slide anzeigen',
+    bubbleLabel: (index) => `Zu Slide ${index} wechseln`,
+  };
+};
+
+const getFeatureHref = (slug, locale) => {
+  if (!slug) return locale === 'en' ? '/en/features' : '/features';
+  if (locale === 'en') {
+    const enSlug = deFeatureSlugToEn(slug);
+    return enSlug ? `/en/features/${enSlug}` : '/en/features';
+  }
+  return `/features/${slug}`;
+};
+
+const createCardHTML = (feature, locale = 'de') => {
+  const copy = getSliderCopy(locale);
+  const title = feature?.meta?.title || feature?.hero?.headline || copy.featureFallback;
   const subtext = feature?.hero?.subheadline || '';
   const rawIllustration = feature?.hero?.illustration || FALLBACK_ILLUSTRATION;
   const resolvedIllustration = resolveSvgAssetUrl(rawIllustration);
   const illustration = resolvedIllustration || FALLBACK_ILLUSTRATION;
-  const href = feature?.slug ? `/features/${feature.slug}` : '/features';
+  const href = getFeatureHref(feature?.slug, locale);
+  const buttonLabel = copy.buttonLabel;
+  const buttonTitle = copy.buttonTitle(title);
 
   return `
     <article class="feature-related-slider__card">
@@ -19,9 +64,9 @@ const createCardHTML = (feature) => {
         <p class="feature-related-slider__card-subtext">${escapeHtml(subtext)}</p>
       </div>
       <div class="feature-related-slider__footer">
-        <a href="${escapeAttr(href)}" class="landing-btn landing-btn-primary feature-related-slider__card-btn" data-landing-link data-related-card-link title="${escapeAttr(`${title} ansehen`)}">Ansehen</a>
+        <a href="${escapeAttr(href)}" class="landing-btn landing-btn-primary feature-related-slider__card-btn" data-landing-link data-related-card-link title="${escapeAttr(buttonTitle)}">${escapeHtml(buttonLabel)}</a>
         <div class="feature-related-slider__media">
-          <img src="${escapeAttr(illustration)}" alt="${escapeAttr(`Illustration zum Feature ${title}`)}" loading="eager" decoding="async" />
+          <img src="${escapeAttr(illustration)}" alt="${escapeAttr(copy.illustrationAlt(title))}" loading="eager" decoding="async" />
         </div>
       </div>
     </article>
@@ -33,10 +78,12 @@ export const createFeatureRelatedSlider = ({
   features = [],
   label = 'Mehr entdecken',
   headline = '',
+  locale = 'de',
 } = {}) => {
   if (!Array.isArray(features) || !features.length) return '';
-  const titleLabel = currentTitle || 'dieses Feature';
-  const headlineText = headline || `Weitere Funktionen rund um ${escapeHtml(titleLabel)}.`;
+  const copy = getSliderCopy(locale);
+  const titleLabel = currentTitle || copy.titleLabelFallback;
+  const headlineText = headline || copy.headlineFallback(escapeHtml(titleLabel));
 
   return `
     <section class="landing-section feature-related-slider-section">
@@ -48,20 +95,20 @@ export const createFeatureRelatedSlider = ({
           </div>
         </div>
 
-        <div class="feature-related-slider" data-feature-related-slider>
+        <div class="feature-related-slider" data-feature-related-slider data-related-locale="${escapeAttr(locale)}">
           <div class="feature-related-slider__viewport" data-related-viewport>
             <div class="feature-related-slider__track" data-related-track>
               ${features.map((feature, index) => `
                 <div class="feature-related-slider__slide" data-related-slide-original data-original-index="${index}">
-                  ${createCardHTML(feature)}
+                  ${createCardHTML(feature, locale)}
                 </div>
               `).join('')}
             </div>
           </div>
           <div class="feature-related-slider__controls">
-            <button type="button" class="feature-related-slider__arrow" data-related-prev aria-label="Vorheriger Slide" title="Vorherigen Slide anzeigen">‹</button>
+            <button type="button" class="feature-related-slider__arrow" data-related-prev aria-label="${escapeAttr(copy.prevSlideLabel)}" title="${escapeAttr(copy.prevSlideTitle)}">‹</button>
             <div class="feature-related-slider__bubbles" data-related-bubbles></div>
-            <button type="button" class="feature-related-slider__arrow" data-related-next aria-label="Nächster Slide" title="Nächsten Slide anzeigen">›</button>
+            <button type="button" class="feature-related-slider__arrow" data-related-next aria-label="${escapeAttr(copy.nextSlideLabel)}" title="${escapeAttr(copy.nextSlideTitle)}">›</button>
           </div>
         </div>
       </div>
@@ -80,6 +127,8 @@ export const initFeatureRelatedSlider = (container) => {
 
   sliders.forEach((root) => {
     if (root.dataset.relatedSliderReady === 'true') return;
+    const locale = root.dataset.relatedLocale === 'en' ? 'en' : 'de';
+    const copy = getSliderCopy(locale);
 
     const viewport = root.querySelector('[data-related-viewport]');
     const track = root.querySelector('[data-related-track]');
@@ -93,7 +142,7 @@ export const initFeatureRelatedSlider = (container) => {
     if (!count) return;
 
     bubbles.innerHTML = originals.map((_, index) => (
-      `<button type="button" class="feature-related-slider__bubble" data-related-bubble data-bubble-index="${index}" aria-label="Zu Slide ${index + 1} wechseln"></button>`
+      `<button type="button" class="feature-related-slider__bubble" data-related-bubble data-bubble-index="${index}" aria-label="${escapeAttr(copy.bubbleLabel(index + 1))}"></button>`
     )).join('');
     const bubbleButtons = Array.from(bubbles.querySelectorAll('[data-related-bubble]'));
 

@@ -11,9 +11,15 @@ export const core = {
     hero: {
       headline: 'Jede Buchung an einem Ort – statt in 5 Postfächern.',
       subheadline: 'Status-Filter, Kalender- und Listenansicht, Bestätigen und Ablehnen – in einem Dashboard statt über E-Mail, Telefon und Excel.',
+      demoModule: 'buchungen',
       illustration: '/src/svg/illustrations/landingpage/features/ft_buchungsverwaltung.svg',
       trustClaims: ['Keine Kreditkarte nötig', 'In unter 5 Minuten startklar'],
     },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="bk-inbox"]',
+      '[data-demo-section="bk-magic-link"]',
+      '[data-demo-section="bk-review"]',
+    ],
     problem: {
       text: 'Verstreute Buchungen kosten dich Stunden pro Woche. Anfragen gehen unter, Status ist unklar, Kunden warten.',
       bullets: [
@@ -162,9 +168,15 @@ export const core = {
     hero: {
       headline: 'Geld auf deinem Konto, bevor der Termin startet.',
       subheadline: 'Stripe Connect in unter 5 Minuten aktiv. Deine Kunden zahlen bei Buchung, du erhältst die Auszahlung automatisch – ohne Provision.',
+      demoModule: 'zahlungen',
       illustration: '/src/svg/illustrations/landingpage/features/ft_zahlungen.svg',
       trustClaims: ['Keine Kreditkarte nötig', 'In unter 5 Minuten startklar'],
     },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="pay-connect"]',
+      '[data-demo-section="pay-deposit"]',
+      '[data-demo-section="pay-payouts"]',
+    ],
     problem: {
       text: 'Ohne Vorauszahlung taucht jeder Fünfte nicht auf. Manuelle Rechnungen und Überweisungen fressen deine Zeit.',
       bullets: [
@@ -213,72 +225,7 @@ export const core = {
       { icon: '🎨', title: 'Tattoo-Studios', description: 'Anzahlung sichert den Termin, weniger No-Shows.', link: '/features' },
       { icon: '🔐', title: 'Escape Rooms', description: 'Volle Zahlung bei Buchung. Kein Aufwand am Tag.', link: '/features' },
     ],
-    sections: [
-      {
-        id: 'anzahlung',
-        title: 'Kaution & Anzahlung',
-        subtitle: '30% bei Buchung – der Rest beim Termin.',
-        steps: [
-          {
-            title: 'Anzahlung aktivieren',
-            icon: 'bank-card',
-            bullets: [
-              { title: 'Einstellung pro Service im Detail', description: 'In den Service-Einstellungen einschalten.' },
-              { title: 'Prozent oder Festbetrag wählbar', description: 'z.B. 30% oder 50€ Kaution.' },
-              { title: 'Sofortiger Einzug bei Buchung', description: 'Restbetrag bei Termin oder nach Abschluss.' },
-            ],
-            reverse: false
-          },
-          {
-            title: 'Automatisch eingezogen',
-            icon: 'money-hand',
-            bullets: [
-              { title: 'Einzug bei Buchung automatisch', description: 'Stripe zieht den Betrag ein.' },
-              { title: 'Restbetrag auf Rechnung ausgewiesen', description: 'Kann bei Termin bezahlt werden.' },
-              { title: 'Rückerstattung bei Ablehnung automatisch', description: 'Bei Ablehnung durch Sie.' },
-            ],
-            reverse: true
-          },
-        ],
-        faq: [
-          { question: 'Wird die Anzahlung auf der Rechnung angezeigt?', answer: 'Ja, Anzahlung und Restbetrag werden auf der Rechnung ausgewiesen.' },
-          { question: 'Kann ich die Anzahlung als Prozentsatz konfigurieren?', answer: 'Ja. Du wählst zwischen Prozent (z. B. 30 %) oder Festbetrag (z. B. 50 €) – pro Service individuell.' },
-          { question: 'Reduziert eine Anzahlung No-Shows?', answer: 'In vielen Fällen ja. Eine Anzahlung erhöht die Verbindlichkeit bei der Buchung und senkt dadurch typischerweise die No-Show-Rate.' },
-        ],
-      },
-      {
-        id: 'gutscheine',
-        title: 'Gutscheine & Rabattcodes',
-        subtitle: 'Rabattcodes, die Buchungen bringen – nicht nur Klicks.',
-        steps: [
-          {
-            title: 'Code erstellen',
-            icon: 'ticket-percent',
-            bullets: [
-              { title: 'Prozent oder Festbetrag pro Code', description: 'z.B. YOGA25 für 25% oder 10€ Rabatt.' },
-              { title: 'Nutzungslimit und Gültigkeitsdatum optional', description: 'Im Dashboard unter "Gutscheine" anlegen.' },
-              { title: 'Code sofort nach Erstellung gültig', description: 'Keine Wartezeit.' },
-            ],
-            reverse: false
-          },
-          {
-            title: 'Verteilen & Tracken',
-            icon: 'chart',
-            bullets: [
-              { title: 'Eingabe im Checkout-Schritt des Widgets', description: 'Kunden geben den Code ein.' },
-              { title: 'Automatische Prüfung von Gültigkeit und Limit', description: 'Gültig, Limit nicht erreicht, Zeitraum ok.' },
-              { title: 'Einsätze pro Code im Dashboard sichtbar', description: 'Wie oft wurde der Code eingelöst?' },
-            ],
-            reverse: true
-          },
-        ],
-        faq: [
-          { question: 'Können Gutscheine auf bestimmte Services beschränkt werden?', answer: 'Aktuell gelten Gutscheine für alle Services. Servicespezifische Einschränkung ist in Planung.' },
-          { question: 'Wird der Rabatt auf der Rechnung angezeigt?', answer: 'Ja, eingelöste Gutscheine werden als Rabatt auf der Rechnung ausgewiesen.' },
-          { question: 'Kann ich ein Nutzungslimit pro Code setzen?', answer: 'Ja. Du legst fest, wie oft ein Code eingelöst werden kann – z. B. maximal 50 Mal.' },
-        ],
-      },
-    ],
+    sections: [],
     relatedFeatures: ['rechnungen', 'buchungen', 'services'],
     tags: ['zahlungen', 'stripe', 'checkout', 'deposit', 'refund', 'kaution', 'gutscheine'],
     faq: [
@@ -299,8 +246,14 @@ export const core = {
     hero: {
       headline: 'Rechnungen, die sich selbst schreiben.',
       subheadline: 'Nach Bestätigung oder Abschluss wird die Rechnung automatisch erstellt – mit allen Positionen, Add-ons und deinen Firmendaten. Das Feature, das andere Buchungssysteme nicht haben.',
+      demoModule: 'rechnungen',
       illustration: '/src/svg/illustrations/landingpage/features/ft_automatische_rechnung.svg',
     },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="inv-created"]',
+      '[data-demo-section="inv-portal"]',
+      '[data-demo-section="inv-dashboard"]',
+    ],
     problem: {
       text: 'Jede Buchung von Hand abrechnen kostet dich Stunden. Positionen werden vergessen, Kunden fragen nach – und du sitzt am Wochenende an Rechnungen.',
       bullets: [
@@ -423,42 +376,9 @@ export const core = {
     useCases: [
       { icon: '📈', title: 'Conversion optimieren', description: 'Finde heraus, wo Kunden im Buchungsprozess abspringen.', link: '/features/buchungen' },
       { icon: '💰', title: 'Revenue tracken', description: 'Verfolge Umsatz, Zahlungserfolgsrate und Refunds.', link: '/features/zahlungen' },
-      { icon: '🌍', title: 'Zielgruppe verstehen', description: 'Browser, Geräte, Länder und Städte deiner Besucher.', link: '/features/analytics#kunden' },
+      { icon: '🌍', title: 'Zielgruppe verstehen', description: 'Browser, Geräte, Länder und Städte deiner Besucher.', link: '/features/analytics' },
     ],
-    sections: [
-      {
-        id: 'kunden',
-        title: 'Kundenverwaltung',
-        subtitle: 'Wer bucht, wann, wie oft – Kundendaten ohne CRM.',
-        steps: [
-          {
-            title: 'Automatisch erfasst',
-            icon: 'user',
-            bullets: [
-              { title: 'Speicherung bei jeder Buchung automatisch', description: 'Name, E-Mail – ob Widget oder manuell angelegt.' },
-              { title: 'Wiederbucher werden erkannt', description: 'Erscheinen als bestehende Kunden mit Historie.' },
-              { title: 'Kein manueller Eintrag nötig', description: 'Alles läuft automatisch.' },
-            ],
-            reverse: false
-          },
-          {
-            title: 'Historie & Beziehungen pflegen',
-            icon: 'list',
-            bullets: [
-              { title: 'Alle Buchungen pro Kunde aufgelistet', description: 'Wer hat wann was gebucht?' },
-              { title: 'Zahlungs- und Rechnungshistorie', description: 'Welche Beträge sind offen?' },
-              { title: 'Notizen pro Kunde hinterlegen', description: 'Präferenzen oder besondere Wünsche.' },
-            ],
-            reverse: true
-          },
-        ],
-        faq: [
-          { question: 'Werden Kundendaten automatisch gespeichert?', answer: 'Ja, bei jeder Buchung werden Kontaktdaten automatisch in der Kundendatenbank hinterlegt.' },
-          { question: 'Werden Wiederbuchungen erkannt?', answer: 'Ja. BookFast erkennt wiederkehrende Kunden anhand der E-Mail-Adresse und ordnet alle Buchungen dem gleichen Kundenprofil zu.' },
-          { question: 'Ist die Kundenverwaltung DSGVO-konform?', answer: 'Ja. Alle Daten werden auf EU-Servern gespeichert. Du kannst Kundendaten auf Anfrage löschen.' },
-        ],
-      },
-    ],
+    sections: [],
     relatedFeatures: ['buchungen', 'zahlungen', 'integration'],
     tags: ['analytics', 'tracking', 'reports', 'conversion', 'insights', 'kunden', 'crm'],
     faq: [

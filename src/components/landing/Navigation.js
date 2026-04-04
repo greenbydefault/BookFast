@@ -1,76 +1,54 @@
 /**
  * Landing Navigation Component
- * Sticky top nav with mega menus for Features.
+ * Sticky top nav with direct links.
  */
 import { getIconString } from '../Icons/Icon.js';
 import { openWaitlistModal } from './WaitlistModal.js';
-import { featurePages } from '../../data/features/index.js';
+import { getAllFeaturePages } from '../../lib/getLocaleContent.js';
 import {
-  FEATURE_ICON_MAP,
-  MEGA_FEATURE_CATEGORIES,
-  MEGA_PRODUCT_ITEMS,
-  NAV_ITEMS,
   DISABLED_FEATURE_SLUGS,
+  FEATURE_GROUPS,
+  FEATURE_ICON_MAP,
+  NAV_ITEMS,
 } from './navConfig.js';
 import { getLocaleFromPath, normalizeLandingPath } from '../../lib/landingLocale.js';
 import { getLocaleSwitchTarget } from '../../lib/landingLocaleRoutes.js';
 import { deFeatureSlugToEn } from '../../lib/featureSlugLocale.js';
 import { NAV_EN } from '../../locales/en/navigation.js';
 
-/** Truncate text to max 7 words for mega menu descriptions */
-function truncateTo7Words(str) {
-  if (!str || typeof str !== 'string') return '';
-  const words = str.trim().split(/\s+/).slice(0, 7);
-  return words.join(' ');
-}
-
 const localizeNavHref = (deHref, locale) =>
   locale === 'en' ? getLocaleSwitchTarget(deHref, 'en') : deHref;
 
-function buildMegaProductHTML(locale) {
-  const items = MEGA_PRODUCT_ITEMS.map(item => {
-    const href = localizeNavHref(item.href, locale);
-    const en = locale === 'en' ? NAV_EN.megaProductItems[item.href] : null;
-    const label = en?.label || item.label;
-    const desc = en?.description || item.description;
-    return `
-    <a href="${href}" class="landing-mega-item" data-landing-link title="${label}">
-      <span class="landing-mega-item-icon">${getIconString(item.icon)}</span>
-      <div class="landing-mega-item-content">
-        <span class="landing-mega-item-title">${label}</span>
-        <span class="landing-mega-item-desc">${desc}</span>
-      </div>
-    </a>
-  `;
-  }).join('');
-  const heading = locale === 'en' ? NAV_EN.megaProductHeading : 'Produkt';
-  return `
-    <div class="landing-mega-column">
-      <div class="landing-mega-column-title">${heading}</div>
-      <div class="landing-mega-column-items">${items}</div>
-    </div>
-  `;
-}
+const truncateTo7Words = (str) => {
+  if (!str || typeof str !== 'string') return '';
+  return str.trim().split(/\s+/).slice(0, 7).join(' ');
+};
 
-function buildMegaFeaturesHTML(locale) {
-  return MEGA_FEATURE_CATEGORIES.map(cat => {
-    const items = cat.slugs
-      .map(slug => {
-        const page = featurePages[slug];
-        if (!page) return '';
+const getFeaturePathForLocale = (slug, locale) => {
+  const enSlug = deFeatureSlugToEn(slug);
+  if (locale === 'en' && enSlug) return `/en/features/${enSlug}`;
+  return `/features/${slug}`;
+};
+
+const buildMegaFeaturesHTML = (locale) => {
+  const pages = getAllFeaturePages(locale);
+
+  return FEATURE_GROUPS.map((group) => {
+    const heading = locale === 'en' ? (group.labelEn || group.label) : group.label;
+    const items = group.slugs
+      .map((slug) => {
+        const page = pages[slug];
+        if (!page?.meta?.title) return '';
+
         const iconName = FEATURE_ICON_MAP[slug] || 'target';
-        const desc = truncateTo7Words(page.meta?.description || page.hero?.subheadline || '');
+        const desc = truncateTo7Words(page.meta.description || page.hero?.subheadline || '');
         const disabled = DISABLED_FEATURE_SLUGS.has(slug);
         const tag = disabled ? 'span' : 'a';
-        const enSlug = deFeatureSlugToEn(slug);
-        const featurePath =
-          locale === 'en' && enSlug
-            ? `/en/features/${enSlug}`
-            : `/features/${slug}`;
-        const href = disabled ? '' : ` href="${featurePath}"`;
+        const href = disabled ? '' : ` href="${getFeaturePathForLocale(slug, locale)}"`;
         const cls = `landing-mega-item${disabled ? ' landing-mega-item--disabled' : ''}`;
         const dataLink = disabled ? '' : ' data-landing-link';
         const title = disabled ? '' : ` title="${page.meta.title}"`;
+
         return `
           <${tag}${href} class="${cls}"${dataLink}${title}>
             <span class="landing-mega-item-icon">${getIconString(iconName)}</span>
@@ -83,56 +61,76 @@ function buildMegaFeaturesHTML(locale) {
       })
       .filter(Boolean)
       .join('');
-    const catLabel = locale === 'en' ? (NAV_EN.megaCategoryLabels[cat.label] || cat.label) : cat.label;
+
     return `
       <div class="landing-mega-column">
-        <div class="landing-mega-column-title">${catLabel}</div>
+        <div class="landing-mega-column-title">${heading}</div>
         <div class="landing-mega-column-items">${items}</div>
       </div>
     `;
   }).join('');
-}
+};
+
+const getCurrentLandingChromeState = () => {
+  const path = normalizeLandingPath(
+    window.location.pathname === '/index.html' ? '/' : window.location.pathname,
+  );
+  const locale = getLocaleFromPath(path);
+  return {
+    locale,
+    hrefDe: getLocaleSwitchTarget(path, 'de'),
+    hrefEn: getLocaleSwitchTarget(path, 'en'),
+    homeHref: locale === 'en' ? '/en' : '/',
+  };
+};
+
+export const syncLandingNavigationChrome = (root = document) => {
+  const { locale, hrefDe, hrefEn, homeHref } = getCurrentLandingChromeState();
+
+  root.querySelectorAll('.landing-nav').forEach((nav) => {
+    const logo = nav.querySelector('.landing-nav-logo');
+    if (logo) {
+      logo.setAttribute('href', homeHref);
+    }
+
+    const deLink = nav.querySelector('.landing-lang-link[lang="de"]');
+    const enLink = nav.querySelector('.landing-lang-link[lang="en"]');
+
+    if (deLink) {
+      deLink.setAttribute('href', hrefDe);
+      deLink.classList.toggle('is-active', locale === 'de');
+    }
+
+    if (enLink) {
+      enLink.setAttribute('href', hrefEn);
+      enLink.classList.toggle('is-active', locale === 'en');
+    }
+  });
+};
 
 /**
  * Render the navigation into a container element
  */
 export const renderNavigation = (container, options = {}) => {
   const isLoggedIn = options.isLoggedIn || false;
-  const path = normalizeLandingPath(window.location.pathname);
-  const locale = getLocaleFromPath(path);
-  const hrefDe = getLocaleSwitchTarget(path, 'de');
-  const hrefEn = getLocaleSwitchTarget(path, 'en');
-  const homeHref = locale === 'en' ? '/en' : '/';
+  const { locale, hrefDe, hrefEn, homeHref } = getCurrentLandingChromeState();
   const nav = document.createElement('nav');
   nav.className = 'landing-nav';
 
-  const navLabel = (key) => locale === 'en' ? (NAV_EN[key] || key) : null;
+  const navLabel = (key, fallback) => locale === 'en' ? (NAV_EN[key] || fallback) : fallback;
   const linksHTML = NAV_ITEMS.map(item => {
-    const topHref = item.href ? localizeNavHref(item.href, locale) : '#';
-    const label = navLabel(item.label.toLowerCase()) || item.label;
-    if (item.mega) {
-      const megaContent = item.mega === 'features' ? buildMegaFeaturesHTML(locale)
-        : buildMegaProductHTML(locale);
+    const label = navLabel(item.labelKey, item.label);
+    if (item.labelKey === 'features') {
       return `
         <div class="landing-nav-mega-wrap">
-          <a href="${item.href ? topHref : '#'}" class="landing-nav-link landing-nav-mega-trigger" data-mega="${item.mega}" data-landing-link title="${label}">
+          <a href="${localizeNavHref(item.href, locale)}" class="landing-nav-link landing-nav-mega-trigger" data-mega="features" data-landing-link title="${label}">
             ${label} <span class="landing-nav-caret">${getIconString('arrow-down', 'landing-nav-caret-icon')}</span>
           </a>
-          <div class="landing-nav-mega-menu" id="mega-${item.mega}">
-            <div class="landing-mega-grid">${megaContent}</div>
+          <div class="landing-nav-mega-menu" id="mega-features">
+            <div class="landing-mega-grid">${buildMegaFeaturesHTML(locale)}</div>
           </div>
         </div>
       `;
-    }
-    if (item.children && !item.mega) {
-      const childrenHTML = item.children.map(child =>
-        `<a href="${child.href}" class="landing-nav-dropdown-item" data-landing-link title="${child.label}">${child.label}</a>`
-      ).join('');
-      return `
-        <div class="landing-nav-dropdown">
-          <a href="#" class="landing-nav-link">${label} <span class="landing-nav-caret">${getIconString('arrow-down', 'landing-nav-caret-icon')}</span></a>
-          <div class="landing-nav-dropdown-menu">${childrenHTML}</div>
-        </div>`;
     }
     return `<a href="${localizeNavHref(item.href, locale)}" class="landing-nav-link" data-landing-link title="${label}">${label}</a>`;
   }).join('');
@@ -180,9 +178,13 @@ export const renderNavigation = (container, options = {}) => {
 
   container.appendChild(nav);
 
-  // Mega menu: hover with delay to avoid closing when moving slowly from trigger to menu
+  const closeMegaMenus = () => {
+    nav.querySelectorAll('.landing-nav-mega-menu').forEach(menu => menu.classList.remove('open'));
+    nav.querySelectorAll('.landing-nav-mega-wrap').forEach(wrap => wrap.classList.remove('mega-open'));
+  };
+
   const CLOSE_DELAY_MS = 150;
-  nav.querySelectorAll('.landing-nav-mega-trigger').forEach(trigger => {
+  nav.querySelectorAll('.landing-nav-mega-trigger').forEach((trigger) => {
     const megaId = trigger.getAttribute('data-mega');
     const megaMenu = nav.querySelector(`#mega-${megaId}`);
     const wrap = trigger.closest('.landing-nav-mega-wrap');
@@ -192,8 +194,7 @@ export const renderNavigation = (container, options = {}) => {
     const open = () => {
       if (closeTimeout) clearTimeout(closeTimeout);
       closeTimeout = null;
-      nav.querySelectorAll('.landing-nav-mega-menu').forEach(m => m.classList.remove('open'));
-      nav.querySelectorAll('.landing-nav-mega-wrap').forEach(w => w.classList.remove('mega-open'));
+      closeMegaMenus();
       megaMenu.classList.add('open');
       wrap.classList.add('mega-open');
     };
@@ -202,7 +203,10 @@ export const renderNavigation = (container, options = {}) => {
       wrap.classList.remove('mega-open');
     };
     const scheduleClose = () => {
-      closeTimeout = setTimeout(() => { closeTimeout = null; close(); }, CLOSE_DELAY_MS);
+      closeTimeout = setTimeout(() => {
+        closeTimeout = null;
+        close();
+      }, CLOSE_DELAY_MS);
     };
     const cancelClose = () => {
       if (closeTimeout) clearTimeout(closeTimeout);
@@ -210,24 +214,23 @@ export const renderNavigation = (container, options = {}) => {
     };
 
     trigger.addEventListener('mouseenter', open);
-    wrap.addEventListener('mouseleave', () => scheduleClose());
-    megaMenu.addEventListener('mouseenter', () => { cancelClose(); open(); });
-    megaMenu.addEventListener('mouseleave', () => scheduleClose());
+    wrap.addEventListener('mouseleave', scheduleClose);
+    megaMenu.addEventListener('mouseenter', () => {
+      cancelClose();
+      open();
+    });
+    megaMenu.addEventListener('mouseleave', scheduleClose);
   });
 
-  // Close mega on click outside
   document.addEventListener('click', (e) => {
     if (!nav.contains(e.target)) {
-      nav.querySelectorAll('.landing-nav-mega-menu').forEach(m => m.classList.remove('open'));
-      nav.querySelectorAll('.landing-nav-mega-wrap').forEach(w => w.classList.remove('mega-open'));
+      closeMegaMenus();
     }
   });
 
-  // Close on link click (navigation)
-  nav.querySelectorAll('.landing-mega-item[data-landing-link]').forEach(link => {
+  nav.querySelectorAll('.landing-mega-item[data-landing-link]').forEach((link) => {
     link.addEventListener('click', () => {
-      nav.querySelectorAll('.landing-nav-mega-menu').forEach(m => m.classList.remove('open'));
-      nav.querySelectorAll('.landing-nav-mega-wrap').forEach(w => w.classList.remove('mega-open'));
+      closeMegaMenus();
     });
   });
 

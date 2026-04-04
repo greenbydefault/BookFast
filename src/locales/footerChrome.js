@@ -7,8 +7,10 @@ export const FOOTER_CHROME = {
     brandDesc: 'Das Buchungssystem fuer Webflow. Ohne Provision, mit Zahlung vor Termin.',
     illustrationAlt: 'BookFast Footer Illustration mit digitalem Buchungs- und Zahlungsfluss',
     columnHeadings: {
-      bookingMgmt: 'BUCHUNG & VERWALTUNG',
-      paymentPlatform: 'ZAHLUNG & PLATTFORM',
+      bookingsOperations: 'Buchungen & Workspaces',
+      offerResources: 'Services, Objekte & Team',
+      paymentsInvoices: 'Zahlungen & Rechnungen',
+      websiteGrowth: 'Integration & Analytics',
     },
     legal: {
       kontakt: 'Kontakt',
@@ -16,14 +18,23 @@ export const FOOTER_CHROME = {
       datenschutz: 'Datenschutz',
       agb: 'AGB',
     },
+    bottomBadges: [
+      'DSGVO-konform',
+      'EU-Server',
+      'SOC2-konform',
+      'AICPA SOC Trusted',
+      'Mit Liebe aus Berlin',
+    ],
   },
   en: {
     title: 'Try BookFast today and explore what you can do.',
     brandDesc: 'The booking system for Webflow. No commission, pay before appointment.',
     illustrationAlt: 'BookFast footer illustration: booking and payment flow',
     columnHeadings: {
-      bookingMgmt: 'BOOKING & MANAGEMENT',
-      paymentPlatform: 'PAYMENTS & PLATFORM',
+      bookingsOperations: 'Bookings & Workspaces',
+      offerResources: 'Services, Objects & Team',
+      paymentsInvoices: 'Payments & Invoices',
+      websiteGrowth: 'Integration & Analytics',
     },
     legal: {
       kontakt: 'Contact',
@@ -31,5 +42,12 @@ export const FOOTER_CHROME = {
       datenschutz: 'Privacy',
       agb: 'Terms',
     },
+    bottomBadges: [
+      'GDPR-compliant',
+      'EU servers',
+      'SOC2 compliant',
+      'AICPA SOC Trusted',
+      'Made with love in Berlin',
+    ],
   },
 };

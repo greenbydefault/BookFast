@@ -4,19 +4,10 @@
 import { createHero } from '../../../components/landing/Hero.js';
 import { createFeatureGrid } from '../../../components/landing/FeatureCard.js';
 import { createCTASection } from '../../../components/landing/CTASection.js';
+import { FEATURE_GROUPS } from '../../../components/landing/navConfig.js';
 import { setPageMeta, setBreadcrumbSchema, setHreflangAlternates } from '../../../lib/seoHelper.js';
 import { getAllFeaturePages } from '../../../lib/getLocaleContent.js';
 import { deFeatureSlugToEn } from '../../../lib/featureSlugLocale.js';
-
-const CATEGORIES_DE = [
-  { label: 'Buchung & Verwaltung', slugs: ['buchungen', 'objekte', 'services', 'mitarbeiter', 'workspaces'] },
-  { label: 'Zahlung & Plattform', slugs: ['zahlungen', 'rechnungen', 'analytics', 'integration', 'kundenportal'] },
-];
-
-const CATEGORIES_EN = [
-  { label: 'Booking & Management', slugs: CATEGORIES_DE[0].slugs },
-  { label: 'Payments & Platform', slugs: CATEGORIES_DE[1].slugs },
-];
 
 export const renderFeaturesHubPage = (locale = 'de') => {
   const content = document.getElementById('landing-content');
@@ -24,7 +15,10 @@ export const renderFeaturesHubPage = (locale = 'de') => {
 
   const isEn = locale === 'en';
   const pages = getAllFeaturePages(locale);
-  const categories = isEn ? CATEGORIES_EN : CATEGORIES_DE;
+  const categories = FEATURE_GROUPS.map((group) => ({
+    ...group,
+    label: isEn ? (group.labelEn || group.label) : group.label,
+  }));
   const homePath = isEn ? '/en' : '/';
   const featuresPath = isEn ? '/en/features' : '/features';
 

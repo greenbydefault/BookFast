@@ -7,6 +7,8 @@ import { clearSEO, setCanonical } from './seoHelper.js';
 import { renderNotFoundPage } from '../pages/landing/NotFoundPage.js';
 import { applyLandingAccessibilityTitles } from './landingAccessibility.js';
 import { normalizeLandingPath, getLocaleFromPath, applyDocumentLang } from './landingLocale.js';
+import { syncLandingNavigationChrome } from '../components/landing/Navigation.js';
+import { syncLandingFooterChrome } from '../components/landing/Footer.js';
 
 // Page registry: path → renderFn
 const landingPages = new Map();
@@ -115,6 +117,8 @@ const renderLandingRoute = (path) => {
   }
 
   // Update active nav links
+  syncLandingNavigationChrome();
+  syncLandingFooterChrome();
   document.querySelectorAll('.landing-nav-link').forEach(link => {
     const href = link.getAttribute('href');
     link.classList.toggle('active', href === normalizedPath || (href !== '/' && normalizedPath.startsWith(href)));

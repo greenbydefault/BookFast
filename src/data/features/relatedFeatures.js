@@ -1,4 +1,12 @@
+import { getFeaturePage } from '../../lib/getLocaleContent.js';
 import { featurePages } from './index.js';
+
+const localizeFeature = (feature, locale = 'de') => {
+  if (!feature?.slug) return feature ?? null;
+  const localizedFeature = getFeaturePage(feature.slug, locale);
+  if (!localizedFeature) return feature;
+  return { ...localizedFeature, slug: feature.slug };
+};
 
 const toTagSet = (feature) => {
   if (!feature || !Array.isArray(feature.tags)) return new Set();
@@ -25,7 +33,7 @@ const calcOverlap = (sourceTags, targetTags) => {
  * 2) shorter tag distance
  * 3) slug alphabetical (stable)
  */
-export const getRelatedFeaturesFor = (currentSlug, { limit = 6 } = {}) => {
+export const getRelatedFeaturesFor = (currentSlug, { limit = 6, locale = 'de' } = {}) => {
   const currentFeature = featurePages[currentSlug];
   if (!currentFeature) return [];
 
@@ -67,7 +75,12 @@ export const getRelatedFeaturesFor = (currentSlug, { limit = 6 } = {}) => {
     return true;
   });
 
-  if (merged.length >= limit) return merged.slice(0, limit);
+  if (merged.length >= limit) {
+    return merged
+      .slice(0, limit)
+      .map((feature) => localizeFeature(feature, locale))
+      .filter(Boolean);
+  }
 
   // 3) Fallback if still not enough (stable + deterministic).
   const existingSlugs = new Set(merged.map((feature) => feature.slug));
@@ -76,5 +89,12 @@ export const getRelatedFeaturesFor = (currentSlug, { limit = 6 } = {}) => {
     .sort((a, b) => a.feature.slug.localeCompare(b.feature.slug, 'de'))
     .map((item) => item.feature);
 
-  return [...merged, ...fallback].slice(0, limit);
+  return [...merged, ...fallback]
+    .slice(0, limit)
+    .map((feature) => localizeFeature(feature, locale))
+    .filter(Boolean);
 };
+
+export const getAllFeaturesForSlider = (locale = 'de') => Object.keys(featurePages)
+  .map((slug) => localizeFeature(featurePages[slug], locale))
+  .filter(Boolean);

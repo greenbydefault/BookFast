@@ -70,9 +70,15 @@ export const platform = {
     hero: {
       headline: 'Kein Login, kein Konto – deine Kunden buchen trotzdem.',
       subheadline: 'Ein Magic Link pro Buchung: einsehen, bezahlen, stornieren. Deine Kunden verwalten alles selbst – ohne Passwort und ohne Rückfragen an dich.',
+      demoModule: 'kundenportal',
       illustration: '/src/svg/illustrations/landingpage/features/ft_kundenportal.svg',
       trustClaims: ['Keine Kreditkarte nötig', 'In unter 5 Minuten startklar'],
     },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="cp-frictionless"]',
+      '[data-demo-section="cp-magic-link"]',
+      '[data-demo-section="cp-self-service"]',
+    ],
     problem: {
       text: 'Jede Registrierung ist eine Hürde. Studien zeigen: Bis zu 30% der Nutzer brechen ab, wenn sie ein Konto erstellen müssen.',
       bullets: [

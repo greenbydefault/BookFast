@@ -1,5 +1,5 @@
 /**
- * Navigation configuration constants for landing nav and mega menus.
+ * Navigation configuration constants for the landing pages.
  */
 
 export const FEATURE_ICON_MAP = {
@@ -17,28 +17,39 @@ export const FEATURE_ICON_MAP = {
 
 export const DISABLED_FEATURE_SLUGS = new Set();
 
-export const MEGA_FEATURE_CATEGORIES = [
-  { label: 'Buchung & Verwaltung', slugs: ['buchungen', 'objekte', 'services', 'mitarbeiter', 'workspaces'] },
-  { label: 'Zahlung & Plattform', slugs: ['zahlungen', 'rechnungen', 'analytics', 'integration', 'kundenportal'] },
-];
-
-export const MEGA_PRODUCT_ITEMS = [
+export const FEATURE_GROUPS = [
   {
-    label: 'Übersicht',
-    href: '/produkt',
-    icon: 'target',
-    description: 'Buchungssystem für Webflow. Widget, Dashboard, Zahlungen und Rechnungen.',
+    id: 'bookings-operations',
+    label: 'Buchungen & Workspaces',
+    labelEn: 'Bookings & Workspaces',
+    footerHeadingKey: 'bookingsOperations',
+    slugs: ['buchungen', 'workspaces'],
   },
   {
-    label: 'Integrationen',
-    href: '/integrationen',
-    icon: 'blocks-integration',
-    description: 'Webflow, Stripe, Google Calendar und Webhooks – nahtlos verbunden.',
+    id: 'offer-resources',
+    label: 'Services, Objekte & Team',
+    labelEn: 'Services, Objects & Team',
+    footerHeadingKey: 'offerResources',
+    slugs: ['objekte', 'services', 'mitarbeiter'],
+  },
+  {
+    id: 'payments-invoices',
+    label: 'Zahlungen & Rechnungen',
+    labelEn: 'Payments & Invoices',
+    footerHeadingKey: 'paymentsInvoices',
+    slugs: ['zahlungen', 'rechnungen', 'kundenportal'],
+  },
+  {
+    id: 'website-growth',
+    label: 'Integration & Analytics',
+    labelEn: 'Integration & Analytics',
+    footerHeadingKey: 'websiteGrowth',
+    slugs: ['integration', 'analytics'],
   },
 ];
 
 export const NAV_ITEMS = [
-  { label: 'Produkt', mega: 'product', href: '/produkt' },
-  { label: 'Features', mega: 'features', href: '/features' },
-  { label: 'Preise', href: '/preise' },
+  { label: 'Produkt', labelKey: 'product', href: '/produkt' },
+  { label: 'Features', labelKey: 'features', href: '/features' },
+  { label: 'Preise', labelKey: 'pricing', href: '/preise' },
 ];

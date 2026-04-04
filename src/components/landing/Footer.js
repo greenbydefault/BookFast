@@ -1,15 +1,11 @@
-import { featurePages } from '../../data/features/index.js';
+import { FEATURE_GROUPS } from './navConfig.js';
 import { getLocaleFromPath, normalizeLandingPath } from '../../lib/landingLocale.js';
 import { getLocaleSwitchTarget } from '../../lib/landingLocaleRoutes.js';
 import { deFeatureSlugToEn } from '../../lib/featureSlugLocale.js';
+import { getFeaturePage } from '../../lib/getLocaleContent.js';
 import { FOOTER_CHROME } from '../../locales/footerChrome.js';
 
 const FOOTER_ILLUSTRATION_URL = new URL('../../svg/illustrations/landingpage/footer/footer_illustration.svg', import.meta.url).href;
-
-const FOOTER_COLUMNS = [
-  { headingKey: 'bookingMgmt', slugs: ['buchungen', 'objekte', 'services', 'mitarbeiter', 'workspaces'] },
-  { headingKey: 'paymentPlatform', slugs: ['zahlungen', 'rechnungen', 'analytics', 'integration', 'kundenportal'] },
-];
 
 const LEGAL_KEYS = [
   { hrefDe: '/kontakt', labelKey: 'kontakt' },
@@ -18,22 +14,27 @@ const LEGAL_KEYS = [
   { hrefDe: '/agb', labelKey: 'agb' },
 ];
 
-const BOTTOM_BADGES = ['DSGVO-konform', 'EU-Server', 'SOC2 Compliant', 'AICPA SOC Trusted', 'Made with passion and love from Berlin'];
-
 const featurePathForLocale = (slug, locale) => {
   const en = deFeatureSlugToEn(slug);
   if (locale === 'en' && en) return `/en/features/${en}`;
   return `/features/${slug}`;
 };
 
+const getCurrentLandingFooterLocale = () => {
+  const path = normalizeLandingPath(
+    window.location.pathname === '/index.html' ? '/' : window.location.pathname,
+  );
+  return getLocaleFromPath(path);
+};
+
 function buildFooterColumns(locale) {
   const chrome = locale === 'en' ? FOOTER_CHROME.en : FOOTER_CHROME.de;
 
-  return FOOTER_COLUMNS.map((column) => {
-    const heading = chrome.columnHeadings[column.headingKey];
-    const links = column.slugs
+  return FEATURE_GROUPS.map((group) => {
+    const heading = chrome.columnHeadings[group.footerHeadingKey] || group.label;
+    const links = group.slugs
       .map((slug) => {
-        const page = featurePages[slug];
+        const page = getFeaturePage(slug, locale);
         if (!page?.meta?.title) return null;
         return {
           label: page.meta.title,
@@ -49,14 +50,8 @@ function buildFooterColumns(locale) {
   });
 }
 
-export const renderFooter = (container) => {
-  const path = normalizeLandingPath(window.location.pathname);
-  const locale = getLocaleFromPath(path);
+const createFooterHTML = (locale) => {
   const chrome = locale === 'en' ? FOOTER_CHROME.en : FOOTER_CHROME.de;
-
-  const footer = document.createElement('footer');
-  footer.className = 'landing-footer';
-
   const columns = buildFooterColumns(locale);
   const primaryColumnsHTML = columns
     .map(
@@ -77,9 +72,11 @@ export const renderFooter = (container) => {
     return `<a href="${href}" data-landing-link title="${label}">${label}</a>`;
   }).join('');
 
-  const bottomBadgesHTML = BOTTOM_BADGES.map((item) => `<span class="landing-footer-badge">${item}</span>`).join('');
+  const bottomBadgesHTML = (chrome.bottomBadges || [])
+    .map((item) => `<span class="landing-footer-badge">${item}</span>`)
+    .join('');
 
-  footer.innerHTML = `
+  return `
     <div class="landing-container">
       <div class="landing-footer-header">
         <h2 class="landing-footer-title">${chrome.title}</h2>
@@ -110,6 +107,20 @@ export const renderFooter = (container) => {
       </div>
     </div>
   `;
+};
+
+export const syncLandingFooterChrome = (root = document) => {
+  const locale = getCurrentLandingFooterLocale();
+  root.querySelectorAll('.landing-footer').forEach((footer) => {
+    footer.innerHTML = createFooterHTML(locale);
+  });
+};
+
+export const renderFooter = (container) => {
+  const locale = getCurrentLandingFooterLocale();
+  const footer = document.createElement('footer');
+  footer.className = 'landing-footer';
+  footer.innerHTML = createFooterHTML(locale);
 
   container.appendChild(footer);
 };

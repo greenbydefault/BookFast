@@ -135,9 +135,15 @@ export const platformEn = {
       headline: 'No login, no account—customers still book and self-serve.',
       subheadline:
         'One magic link per booking: view details, pay, cancel. Customers handle everything themselves—no passwords, no back-and-forth with you.',
+      demoModule: 'kundenportal',
       illustration: '/src/svg/illustrations/landingpage/features/ft_kundenportal.svg',
       trustClaims: ['No credit card required', 'Live in under 5 minutes'],
     },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="cp-frictionless"]',
+      '[data-demo-section="cp-magic-link"]',
+      '[data-demo-section="cp-self-service"]',
+    ],
     problem: {
       text: 'Every signup is friction. Research shows up to 30% of people abandon flows that force account creation.',
       bullets: [

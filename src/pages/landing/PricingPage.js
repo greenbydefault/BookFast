@@ -5,7 +5,7 @@ import { createHero } from '../../components/landing/Hero.js';
 import { createPricingCard } from '../../components/landing/PricingCard.js';
 import { createFeatureRelatedSlider, initFeatureRelatedSlider } from '../../components/landing/FeatureRelatedSlider.js';
 import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
-import { featurePages } from '../../data/features/index.js';
+import { getAllFeaturesForSlider } from '../../data/features/relatedFeatures.js';
 import { setPageMeta, setFAQSchema, setProductSchema, setBreadcrumbSchema, setHreflangAlternates } from '../../lib/seoHelper.js';
 import { createNumberReel } from '../../lib/animation/numberReel.js';
 
@@ -171,6 +171,7 @@ export const renderPricingPage = (locale = 'de') => {
   const planFeatures = isEn ? PLAN_FEATURES_EN : PLAN_FEATURES;
   const securityBadges = isEn ? SECURITY_BADGES_EN : SECURITY_BADGES;
   const pageFaq = isEn ? PAGE_FAQ_EN : PAGE_FAQ;
+  const sliderFeatures = getAllFeaturesForSlider(locale);
   const pricingCardOpts = { plans, planFeatures, securityBadges };
 
   setPageMeta(
@@ -227,7 +228,8 @@ export const renderPricingPage = (locale = 'de') => {
     ${createFAQSection({ pageFaq, pageTitle: isEn ? 'Pricing' : 'Preise', featureOnly: true })}
 
     ${createFeatureRelatedSlider({
-      features: Object.values(featurePages),
+      features: sliderFeatures,
+      locale,
       label: isEn ? 'Included in all plans' : 'In allen Plänen enthalten',
       headline: isEn ? 'Always included.' : 'Immer dabei.',
     })}

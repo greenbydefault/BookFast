@@ -10,8 +10,16 @@ import { createServicePreviewCard, initServicePreviewCard } from './ServicePrevi
 import { createIntegrationStatusPreviewCard, initIntegrationStatusPreviewCard } from './IntegrationStatusPreviewCard.js';
 import { createWorkspacesPreviewCard, initWorkspacesPreviewCard } from './WorkspacesPreviewCard.js';
 import { createAnalyticsPreviewCard, initAnalyticsPreviewCard } from './AnalyticsPreviewCard.js';
+import { createBookingPreviewCard, initBookingPreviewCard } from './BookingPreviewCard.js';
+import { createPaymentsPreviewCard, initPaymentsPreviewCard } from './PaymentsPreviewCard.js';
+import { createInvoicesPreviewCard, initInvoicesPreviewCard } from './InvoicesPreviewCard.js';
+import { createCustomerPortalPreviewCard, initCustomerPortalPreviewCard } from './CustomerPortalPreviewCard.js';
 
 export const featureDemoModules = {
+  buchungen: { create: createBookingPreviewCard, init: initBookingPreviewCard },
+  zahlungen: { create: createPaymentsPreviewCard, init: initPaymentsPreviewCard },
+  rechnungen: { create: createInvoicesPreviewCard, init: initInvoicesPreviewCard },
+  kundenportal: { create: createCustomerPortalPreviewCard, init: initCustomerPortalPreviewCard },
   mitarbeiter: { create: createStaffPreviewCard, init: initStaffPreviewCard },
   objekte: { create: createObjectPreviewCard, init: initObjectPreviewCard },
   services: { create: createServicePreviewCard, init: initServicePreviewCard },

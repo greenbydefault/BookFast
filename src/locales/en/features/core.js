@@ -11,9 +11,15 @@ export const coreEn = {
     hero: {
       headline: 'Every booking in one place — not scattered across five inboxes.',
       subheadline: 'Status filters, calendar and list views, approve and decline — one dashboard instead of email, phone, and spreadsheets.',
+      demoModule: 'buchungen',
       illustration: '/src/svg/illustrations/landingpage/features/ft_buchungsverwaltung.svg',
       trustClaims: ['No credit card required', 'Live in under 5 minutes'],
     },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="bk-inbox"]',
+      '[data-demo-section="bk-magic-link"]',
+      '[data-demo-section="bk-review"]',
+    ],
     problem: {
       text: 'Scattered bookings cost you hours every week. Requests get lost, status is unclear, and customers wait.',
       bullets: [
@@ -162,9 +168,15 @@ export const coreEn = {
     hero: {
       headline: 'Money in your account before the appointment starts.',
       subheadline: 'Stripe Connect live in under 5 minutes. Customers pay at booking; payouts land automatically — with no BookFast commission.',
+      demoModule: 'zahlungen',
       illustration: '/src/svg/illustrations/landingpage/features/ft_zahlungen.svg',
       trustClaims: ['No credit card required', 'Live in under 5 minutes'],
     },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="pay-connect"]',
+      '[data-demo-section="pay-deposit"]',
+      '[data-demo-section="pay-payouts"]',
+    ],
     problem: {
       text: 'Without prepayment, roughly one in five no-shows. Manual invoices and bank transfers eat your time.',
       bullets: [
@@ -213,72 +225,7 @@ export const coreEn = {
       { icon: '🎨', title: 'Tattoo studios', description: 'Deposit secures the slot — fewer no-shows.', link: '/features' },
       { icon: '🔐', title: 'Escape rooms', description: 'Full payment at booking — nothing to chase on the day.', link: '/features' },
     ],
-    sections: [
-      {
-        id: 'anzahlung',
-        title: 'Deposits',
-        subtitle: '30% at booking—the rest at the appointment.',
-        steps: [
-          {
-            title: 'Enable deposit',
-            icon: 'bank-card',
-            bullets: [
-              { title: 'Per service in detail settings', description: 'Turn on in service settings.' },
-              { title: 'Percent or fixed', description: 'e.g. 30% or €50 deposit.' },
-              { title: 'Charged at booking', description: 'Balance at appointment or after completion.' },
-            ],
-            reverse: false,
-          },
-          {
-            title: 'Charged automatically',
-            icon: 'money-hand',
-            bullets: [
-              { title: 'Stripe charges at booking', description: 'No manual collection.' },
-              { title: 'Funds to your account', description: 'No chasing payment on site.' },
-              { title: 'Refund on your decline', description: 'Automatic when you reject.' },
-            ],
-            reverse: true,
-          },
-        ],
-        faq: [
-          { question: 'Shown on the invoice?', answer: 'Yes. Deposit and balance are itemized.' },
-          { question: 'Percentage deposits?', answer: 'Yes—percent (e.g. 30%) or fixed (e.g. €50), per service.' },
-          { question: 'Do deposits reduce no-shows?', answer: 'Often yes. Money down increases commitment and typically lowers no-show rates.' },
-        ],
-      },
-      {
-        id: 'gutscheine',
-        title: 'Vouchers & Discount Codes',
-        subtitle: 'Discount codes that drive bookings—not just clicks.',
-        steps: [
-          {
-            title: 'Create the code',
-            icon: 'ticket-percent',
-            bullets: [
-              { title: 'Percentage or fixed amount per code', description: 'e.g. YOGA25 for 25% off or a €10 discount.' },
-              { title: 'Optional usage limit and expiry', description: 'Set it up under "Vouchers" in the dashboard.' },
-              { title: 'Active immediately after creation', description: 'No waiting period.' },
-            ],
-            reverse: false,
-          },
-          {
-            title: 'Distribute & Track',
-            icon: 'chart',
-            bullets: [
-              { title: 'Entered in the widget checkout step', description: 'Customers type the code when booking.' },
-              { title: 'Automatic checks for validity and limits', description: 'Must be valid, under the cap, and inside the date range.' },
-              { title: 'Redemptions per code in the dashboard', description: 'See how often each code was used.' },
-            ],
-            reverse: true,
-          },
-        ],
-        faq: [
-          { question: 'Can vouchers be limited to specific services?', answer: 'Today vouchers apply across services. Service-specific rules are planned.' },
-          { question: 'Does the invoice show the discount?', answer: 'Yes. Redeemed vouchers appear as a discount line on the invoice.' },
-          { question: 'Can I cap how many times a code is used?', answer: 'Yes. Set a maximum number of redemptions—e.g. 50 uses total.' },
-        ],
-      },
-    ],
+    sections: [],
     relatedFeatures: ['rechnungen', 'buchungen', 'services'],
     tags: ['zahlungen', 'stripe', 'checkout', 'deposit', 'refund', 'kaution', 'gutscheine'],
     faq: [
@@ -299,8 +246,14 @@ export const coreEn = {
     hero: {
       headline: 'Invoices that write themselves.',
       subheadline: 'After confirmation or completion, the invoice is created automatically — with every line item, add-on, and your company details. The capability other systems often lack.',
+      demoModule: 'rechnungen',
       illustration: '/src/svg/illustrations/landingpage/features/ft_automatische_rechnung.svg',
     },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="inv-created"]',
+      '[data-demo-section="inv-portal"]',
+      '[data-demo-section="inv-dashboard"]',
+    ],
     problem: {
       text: 'Invoicing every booking by hand costs hours. Line items get missed, customers chase you — and you spend weekends on paperwork.',
       bullets: [
@@ -423,42 +376,9 @@ export const coreEn = {
     useCases: [
       { icon: '📈', title: 'Improve conversion', description: 'Find where people quit the booking flow.', link: '/features/buchungen' },
       { icon: '💰', title: 'Track revenue', description: 'Monitor revenue, payment success, and refunds.', link: '/features/zahlungen' },
-      { icon: '🌍', title: 'Understand your audience', description: 'Browser, device, countries, and cities.', link: '/features/analytics#kunden' },
+      { icon: '🌍', title: 'Understand your audience', description: 'Browser, device, countries, and cities.', link: '/features/analytics' },
     ],
-    sections: [
-      {
-        id: 'kunden',
-        title: 'Customer Management',
-        subtitle: 'Who books, when, how often—without a separate CRM.',
-        steps: [
-          {
-            title: 'Captured automatically',
-            icon: 'user',
-            bullets: [
-              { title: 'Stored on every booking', description: 'Name and email—widget or manually created bookings alike.' },
-              { title: 'Returning customers are recognized', description: 'They appear as existing profiles with full history.' },
-              { title: 'No manual entry required', description: 'The system keeps records up to date.' },
-            ],
-            reverse: false,
-          },
-          {
-            title: 'Review history & nurture',
-            icon: 'list',
-            bullets: [
-              { title: 'All bookings listed per customer', description: 'See who booked what and when.' },
-              { title: 'Payment and invoice history', description: 'Spot open balances quickly.' },
-              { title: 'Internal notes per customer', description: 'Capture preferences or special requests.' },
-            ],
-            reverse: true,
-          },
-        ],
-        faq: [
-          { question: 'Are customer records created automatically?', answer: 'Yes. Each booking saves contact data into your customer database.' },
-          { question: 'Do repeat bookings link to the same profile?', answer: 'Yes. BookFast matches returning customers by email and attaches every booking to the same profile.' },
-          { question: 'Is this GDPR-friendly?', answer: 'Data is hosted on EU servers. You can delete customer data on request.' },
-        ],
-      },
-    ],
+    sections: [],
     relatedFeatures: ['buchungen', 'zahlungen', 'integration'],
     tags: ['analytics', 'tracking', 'reports', 'conversion', 'insights', 'kunden', 'crm'],
     faq: [
