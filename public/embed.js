@@ -883,6 +883,7 @@
 
         if (isSplitMode()) {
             const svc = state.sel.service;
+            const visibleSlots = state.slots.filter(s => s.available);
             c.style.display = '';
             clearGenerated(c);
             showTemplate(c, 'timeslot-item', false);
@@ -896,15 +897,14 @@
                 html += `<p class="bf-split-time-hint" data-bf-part="timeslots-hint">Ich wähle zuerst das Datum aus, um einen passenden Zeitslot angezeigt zu bekommen.</p>`;
             } else if (state.cal.avail?.error) {
                 html += `<p class="bf-split-time-desc" data-bf-part="timeslots-desc">${state.cal.avail.error}</p>`;
-            } else if (!state.slots.length) {
+            } else if (!visibleSlots.length) {
                 html += `<p class="bf-split-time-desc" data-bf-part="timeslots-desc">Keine freien Termine an diesem Tag.</p>`;
             } else {
                 html += `<p class="bf-split-time-desc" data-bf-part="timeslots-desc">Wähle deine passende Uhrzeit aus.</p>`;
                 html += `<div class="bf-split-slots" data-bf-part="timeslots-list">`;
-                html += state.slots.map(s => {
+                html += visibleSlots.map(s => {
                     const sel = state.sel.time === s.start;
-                    const dotCls = s.available ? 'is-available' : 'is-unavailable';
-                    return `<button type="button" class="bf-split-slot${sel ? ' is-selected' : ''}" data-bf-action="select-time" data-time="${s.start}"${!s.available ? ' disabled' : ''}><span class="bf-split-slot-dot ${dotCls}"></span>${s.start}</button>`;
+                    return `<button type="button" class="bf-split-slot${sel ? ' is-selected' : ''}" data-bf-action="select-time" data-time="${s.start}"><span class="bf-split-slot-dot is-available"></span>${s.start}</button>`;
                 }).join('');
                 html += `</div>`;
             }

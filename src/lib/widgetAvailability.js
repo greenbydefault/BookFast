@@ -102,6 +102,13 @@ export function getDaySlotAvailability(service, object, availability, dateStr) {
   return generateHourlySlots(service, object, bookings, dateStr).some((slot) => slot.available);
 }
 
+export function getAvailableHourlySlots(service, object, availability, dateStr) {
+  if (!service || service.service_type !== 'hourly') return [];
+  if (!availability?.loaded || availability.error) return [];
+  const bookings = (availability.bookings || []).filter((booking) => booking.date === dateStr);
+  return generateHourlySlots(service, object, bookings, dateStr).filter((slot) => slot.available);
+}
+
 export function hasAvailableSlotsForDate(service, object, availability, dateStr) {
   return getDaySlotAvailability(service, object, availability, dateStr) === true;
 }

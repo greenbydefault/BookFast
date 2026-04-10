@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  getAvailableHourlySlots,
   generateHourlySlots,
   getDaySlotAvailability,
   hasAvailableSlotsForDate,
@@ -56,6 +57,9 @@ describe('widget availability helpers', () => {
     });
 
     expect(getDaySlotAvailability(service, {}, availability, '2026-04-01')).toBe(true);
+    expect(getAvailableHourlySlots(service, {}, availability, '2026-04-01')).toEqual([
+      { start: '11:00', available: true },
+    ]);
     expect(hasAvailableSlotsForDate(service, {}, availability, '2026-04-01')).toBe(true);
   });
 
@@ -75,6 +79,7 @@ describe('widget availability helpers', () => {
     };
 
     expect(generateHourlySlots(service, {}, [], '2026-04-01')).toEqual([]);
+    expect(getAvailableHourlySlots(service, {}, normalizeAvailabilityPayload({ bookings: [] }), '2026-04-01')).toEqual([]);
     expect(hasAvailableSlotsForDate(service, {}, normalizeAvailabilityPayload({ bookings: [] }), '2026-04-01')).toBe(false);
   });
 
