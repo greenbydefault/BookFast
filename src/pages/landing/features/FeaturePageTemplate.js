@@ -106,6 +106,7 @@ export const renderFeaturePage = (slug, locale = 'de') => {
 
     <!-- 5. CTA -->
     ${createCTASection({
+      locale,
       headline: page.cta?.headline ?? (locale === 'en'
         ? `Try ${page.meta.title} for free.`
         : `${page.meta.title} kostenlos testen.`),
@@ -116,7 +117,6 @@ export const renderFeaturePage = (slug, locale = 'de') => {
           : '3 Tage kostenlos testen. Keine Kreditkarte nötig. In unter 5 Minuten startklar.'),
       ...(locale === 'en' ? {
         primaryCTA: 'Start live demo',
-        secondaryCTA: 'Try for free',
       } : {}),
     })}
 

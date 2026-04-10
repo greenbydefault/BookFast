@@ -3,7 +3,6 @@
  * Sticky top nav with direct links.
  */
 import { getIconString } from '../Icons/Icon.js';
-import { openWaitlistModal } from './WaitlistModal.js';
 import { getAllFeaturePages } from '../../lib/getLocaleContent.js';
 import {
   DISABLED_FEATURE_SLUGS,
@@ -15,6 +14,7 @@ import { getLocaleFromPath, normalizeLandingPath } from '../../lib/landingLocale
 import { getLocaleSwitchTarget } from '../../lib/landingLocaleRoutes.js';
 import { deFeatureSlugToEn } from '../../lib/featureSlugLocale.js';
 import { NAV_EN } from '../../locales/en/navigation.js';
+import { getWaitlistLabel } from './waitlistLabels.js';
 
 const localizeNavHref = (deHref, locale) =>
   locale === 'en' ? getLocaleSwitchTarget(deHref, 'en') : deHref;
@@ -142,7 +142,7 @@ export const renderNavigation = (container, options = {}) => {
   const mobileFeaturesLabel = locale === 'en' ? NAV_EN.mobileFeatures : 'Features';
   const mobilePreiseLabel = locale === 'en' ? NAV_EN.mobilePreise : 'Preise';
   const dashboardLabel = locale === 'en' ? NAV_EN.dashboard : 'Zum Dashboard';
-  const waitlistLabel = locale === 'en' ? NAV_EN.waitlist : 'Zur Warteliste anmelden';
+  const waitlistLabel = getWaitlistLabel(locale);
 
   nav.innerHTML = `
     <div class="landing-nav-inner">
@@ -245,12 +245,4 @@ export const renderNavigation = (container, options = {}) => {
     });
   });
 
-  // Waitlist button: open modal, prevent default
-  nav.querySelectorAll('.nav-join-waitlist').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      nav.querySelector('#mobile-menu')?.classList.remove('open');
-      openWaitlistModal();
-    });
-  });
 };

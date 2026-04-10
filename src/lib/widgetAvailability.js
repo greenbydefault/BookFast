@@ -4,17 +4,37 @@ export const createAvailabilityState = (overrides = {}) => ({
   blocked_dates: [],
   bookings: [],
   error: null,
+  loaded: false,
   ...overrides,
 });
 
+export function normalizeDateKey(value) {
+  if (!value) return '';
+  const normalized = String(value).trim();
+  return normalized.slice(0, 10);
+}
+
 export function normalizeAvailabilityPayload(payload, fallbackError = 'Verfugbarkeit konnte nicht geladen werden.') {
   if (!payload || payload.__rpc_failed) {
-    return createAvailabilityState({ error: payload?.error || fallbackError });
+    return createAvailabilityState({
+      error: payload?.error || fallbackError,
+      loaded: true,
+    });
   }
 
   return createAvailabilityState({
-    blocked_dates: Array.isArray(payload.blocked_dates) ? payload.blocked_dates : [],
-    bookings: Array.isArray(payload.bookings) ? payload.bookings : [],
+    blocked_dates: Array.isArray(payload.blocked_dates)
+      ? payload.blocked_dates.map(normalizeDateKey).filter(Boolean)
+      : [],
+    bookings: Array.isArray(payload.bookings)
+      ? payload.bookings
+        .map((booking) => ({
+          ...booking,
+          date: normalizeDateKey(booking?.date),
+        }))
+        .filter((booking) => booking.date)
+      : [],
+    loaded: true,
   });
 }
 
@@ -75,9 +95,13 @@ export function generateHourlySlots(service, object, booked = [], dateStr = null
   return slots;
 }
 
-export function hasAvailableSlotsForDate(service, object, availability, dateStr) {
+export function getDaySlotAvailability(service, object, availability, dateStr) {
   if (!service || service.service_type !== 'hourly') return true;
-  if (!availability || availability.error) return false;
-  const bookings = (availability.bookings || []).filter((booking) => String(booking?.date || '').slice(0, 10) === dateStr);
+  if (!availability?.loaded || availability.error) return null;
+  const bookings = (availability.bookings || []).filter((booking) => booking.date === dateStr);
   return generateHourlySlots(service, object, bookings, dateStr).some((slot) => slot.available);
+}
+
+export function hasAvailableSlotsForDate(service, object, availability, dateStr) {
+  return getDaySlotAvailability(service, object, availability, dateStr) === true;
 }

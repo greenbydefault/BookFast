@@ -38,15 +38,26 @@
         blocked_dates: [],
         bookings: [],
         error: null,
+        loaded: false,
         ...overrides
     });
+    const normalizeDateKey = value => {
+        if (!value) return '';
+        return String(value).trim().slice(0, 10);
+    };
     const normalizeAvailability = (payload, fallbackError = 'Verfügbarkeit konnte nicht geladen werden.') => {
         if (!payload || payload.__rpc_failed) {
-            return createAvailabilityState({ error: payload?.error || fallbackError });
+            return createAvailabilityState({ error: payload?.error || fallbackError, loaded: true });
         }
-        const bookings = Array.isArray(payload.bookings) ? payload.bookings : [];
-        const blockedDates = Array.isArray(payload.blocked_dates) ? payload.blocked_dates : [];
-        return createAvailabilityState({ bookings, blocked_dates: blockedDates });
+        const bookings = Array.isArray(payload.bookings)
+            ? payload.bookings
+                .map(booking => ({ ...booking, date: normalizeDateKey(booking?.date) }))
+                .filter(booking => booking.date)
+            : [];
+        const blockedDates = Array.isArray(payload.blocked_dates)
+            ? payload.blocked_dates.map(normalizeDateKey).filter(Boolean)
+            : [];
+        return createAvailabilityState({ bookings, blocked_dates: blockedDates, loaded: true });
     };
 
     let root, state = {
@@ -128,7 +139,11 @@
         return (parts[0] || 0) * 60 + (parts[1] || 0);
     };
     const fmtTime = m => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
-    const normDate = d => { if (!d) return ''; const s = typeof d === 'string' ? d : d.toISOString?.() || String(d); return s.slice(0, 10); };
+    const normDate = d => {
+        if (!d) return '';
+        const s = typeof d === 'string' ? d : d.toISOString?.() || String(d);
+        return normalizeDateKey(s);
+    };
 
     // --- Slot-Generierung (Kaskade: Service > Objekt, custom_hours > booking_window) ---
     const genSlots = (svc, obj, booked = [], dateStr = null) => {
@@ -181,8 +196,8 @@
     const hasAvailableSlots = (ds) => {
         const svc = state.sel.service, obj = state.sel.object;
         if (!svc || svc.service_type !== 'hourly') return true;
-        if (!state.cal.avail || state.cal.avail.error) return false;
-        const bookings = state.cal.avail?.bookings?.filter(b => normDate(b?.date) === ds) || [];
+        if (!state.cal.avail?.loaded || state.cal.avail.error) return null;
+        const bookings = state.cal.avail?.bookings?.filter(b => b?.date === ds) || [];
         const slots = genSlots(svc, obj, bookings, ds);
         return slots.some(s => s.available);
     };
@@ -254,6 +269,7 @@
             '.bf-split-cal-day.is-selected{background:#f8f7fe;font-weight:600;color:#12111f}',
             '.bf-split-cal-day.is-range{background:rgba(248,247,254,.5)}',
             '.bf-split-cal-day.is-today{box-shadow:inset 0 0 0 2px currentColor;border-radius:12px}',
+            '.bf-cal-error{margin:0 0 16px;font-size:14px;line-height:1.4;color:#dc2626}',
             // Time slots (Split-Screen version)
             '.bf-split-time{border-top:1px solid #e7e5e4;padding-top:24px;margin-top:auto}',
             '.bf-split-time-title{font-size:18px;font-weight:400;color:#12111f;line-height:1.2;margin-bottom:12px}',
@@ -807,9 +823,13 @@
         start.setDate(start.getDate() - ((start.getDay() + 6) % 7));
         const days = Array.from({ length: 42 }, (_, i) => { const d = new Date(start); d.setDate(d.getDate() + i); return d; });
         const blocked = state.cal.avail?.blocked_dates || [];
-        const availReady = !!state.cal.avail && !state.cal.avail.error;
+        const availReady = !!state.cal.avail?.loaded && !state.cal.avail.error;
+        const calendarError = state.cal.avail?.error
+            ? `<p class="bf-cal-error" data-bf-part="calendar-error">${state.cal.avail.error}</p>`
+            : '';
         const today = fmtDate(new Date());
         const isON = state.sel.service?.service_type === 'overnight';
+        const isHourly = state.sel.service?.service_type === 'hourly';
 
         if (isSplitMode()) {
             clearGenerated(c);
@@ -822,12 +842,12 @@
                 <div class="bf-split-cal-title"><span class="bf-split-cal-title-month" data-bf-part="calendar-month">${MONTHS[m]}</span><span class="bf-split-cal-title-year" data-bf-part="calendar-year">${y}</span></div>
                 <button type="button" class="bf-split-cal-nav" data-bf-action="nav-month" data-nav="-1">${SVG_CHEVRON_LEFT}</button>
                 <button type="button" class="bf-split-cal-nav" data-bf-action="nav-month" data-nav="1">${SVG_CHEVRON_RIGHT}</button>
-            </div><div class="bf-split-cal-grid">${DAYS.map(d => `<span class="bf-split-cal-weekday">${d}</span>`).join('')}${days.map(d => {
+            </div>${calendarError}<div class="bf-split-cal-grid">${DAYS.map(d => `<span class="bf-split-cal-weekday">${d}</span>`).join('')}${days.map(d => {
                 const ds = fmtDate(d), other = d.getMonth() !== m, ok = bookable(d, state.sel.service, state.sel.object), bk = blocked.includes(ds);
                 const isSel = sameDay(d, state.sel.startDate) || sameDay(d, state.sel.endDate);
                 const inR = isON && inRange(d, state.sel.startDate, state.sel.endDate);
-                const hasSlots = hasAvailableSlots(ds);
-                const canClick = availReady && !other && ok && !bk && hasSlots;
+                const slotAvailability = hasAvailableSlots(ds);
+                const canClick = !other && ok && !bk && (isHourly ? slotAvailability !== false : availReady);
                 let cls = 'bf-split-cal-day';
                 if (other) cls += ' is-other';
                 if (isSel) cls += ' is-selected';
@@ -837,12 +857,12 @@
             }).join('')}</div>`;
             c.appendChild(wrap);
         } else {
-            c.innerHTML = `<div class="bf-cal"><div class="bf-cal-header"><button type="button" class="bf-cal-nav" data-nav="-1">‹ Zurück</button><span><strong>${MONTHS[m]} ${y}</strong></span><button type="button" class="bf-cal-nav" data-nav="1">Weiter ›</button></div><div class="bf-cal-grid"><div class="bf-cal-weekdays">${DAYS.map(d => `<span class="bf-cal-weekday">${d}</span>`).join('')}</div><div class="bf-cal-days">${days.map(d => {
+            c.innerHTML = `<div class="bf-cal"><div class="bf-cal-header"><button type="button" class="bf-cal-nav" data-nav="-1">‹ Zurück</button><span><strong>${MONTHS[m]} ${y}</strong></span><button type="button" class="bf-cal-nav" data-nav="1">Weiter ›</button></div>${calendarError}<div class="bf-cal-grid"><div class="bf-cal-weekdays">${DAYS.map(d => `<span class="bf-cal-weekday">${d}</span>`).join('')}</div><div class="bf-cal-days">${days.map(d => {
                 const ds = fmtDate(d), other = d.getMonth() !== m, ok = bookable(d, state.sel.service, state.sel.object), bk = blocked.includes(ds);
                 const isSel = sameDay(d, state.sel.startDate) || sameDay(d, state.sel.endDate);
                 const inR = isON && inRange(d, state.sel.startDate, state.sel.endDate);
-                const hasSlots = hasAvailableSlots(ds);
-                const canClick = availReady && !other && ok && !bk && hasSlots;
+                const slotAvailability = hasAvailableSlots(ds);
+                const canClick = !other && ok && !bk && (isHourly ? slotAvailability !== false : availReady);
                 let cls = 'bf-day';
                 if (other) cls += ' bf-day-other';
                 else if (!canClick) cls += ' bf-day-disabled';
@@ -1494,7 +1514,7 @@
         } else {
             state.sel.startDate = ds; state.sel.endDate = state.sel.time = null;
             if (svc?.service_type === 'hourly') {
-                const bookings = state.cal.avail?.bookings?.filter(b => normDate(b.date) === ds) || [];
+                const bookings = state.cal.avail?.bookings?.filter(b => b?.date === ds) || [];
                 state.slots = genSlots(svc, state.sel.object, bookings);
             } else {
                 await checkAvail();
@@ -1526,7 +1546,7 @@
         if (ok !== true) {
             await loadAvail();
             if (svc.service_type === 'hourly' && sd) {
-                const bookings = state.cal.avail?.bookings?.filter(b => normDate(b?.date) === sd) || [];
+                const bookings = state.cal.avail?.bookings?.filter(b => b?.date === sd) || [];
                 state.slots = genSlots(svc, obj, bookings, sd);
             }
         }

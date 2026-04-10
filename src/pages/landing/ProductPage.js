@@ -355,6 +355,7 @@ export const renderProductPage = (locale = 'de') => {
     })}
 
     ${createCTASection({
+      locale,
       headline: isEn
         ? 'Put bookings, payments, and operations into one flow.'
         : 'Bring Buchungen, Zahlungen und Betrieb in einen einzigen Flow.',
@@ -363,7 +364,6 @@ export const renderProductPage = (locale = 'de') => {
         : 'Starte mit der Produkterklaerung und geh nur dort tiefer rein, wo dein Team wirklich Details braucht.',
       ...(isEn ? {
         primaryCTA: 'Start live demo',
-        secondaryCTA: 'Try for free',
       } : {}),
     })}
 

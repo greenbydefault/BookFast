@@ -80,11 +80,12 @@ export const renderFeaturesHubPage = (locale = 'de') => {
     </section>
 
     ${createCTASection({
+      locale,
       headline: isEn ? 'Try all features for free.' : 'Alle Features kostenlos testen.',
       subheadline: isEn
         ? '3-day free trial. No credit card required. Ready in under 5 minutes.'
         : '3 Tage kostenlos. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
-      ...(isEn ? { primaryCTA: 'Start live demo', secondaryCTA: 'Try for free' } : {}),
+      ...(isEn ? { primaryCTA: 'Start live demo' } : {}),
     })}
   `;
 };

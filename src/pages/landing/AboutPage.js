@@ -100,8 +100,10 @@ export const renderAboutPage = (locale = 'de') => {
     </section>
 
     ${createCTASection({
+      locale,
       headline: isEn ? 'Try BookFast for free.' : 'BookFast kostenlos testen.',
       subheadline: isEn ? '3 days free. No credit card. Live in under 5 minutes.' : '3 Tage kostenlos. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
+      ...(isEn ? { primaryCTA: 'Start live demo' } : {}),
     })}
   `;
 };

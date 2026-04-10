@@ -41,4 +41,16 @@ describe('landing registry redirects', () => {
     expect(document.title).toBe('Resources | BookFast');
     expect(document.querySelector('#landing-content')?.textContent).toContain('This page will be available soon.');
   });
+
+  it('opens the waitlist modal for delegated waitlist triggers', () => {
+    history.replaceState({}, '', '/en');
+
+    registerAllLandingPages();
+    initLandingRouter();
+
+    document.body.insertAdjacentHTML('beforeend', '<a href="#" data-landing-waitlist>Join the waitlist</a>');
+    document.querySelector('[data-landing-waitlist]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+    expect(document.getElementById('waitlist-modal')).not.toBeNull();
+  });
 });

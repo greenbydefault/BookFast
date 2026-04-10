@@ -57,6 +57,7 @@ const renderHomePageDe = () => {
     ${featuresSectionHTML}
 
     ${createCTASection({
+      locale: 'de',
       headline: 'Buchungen auf deiner Website – in 5 Minuten eingerichtet.',
       subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig.\nIn unter 5 Minuten startklar.',
     })}
@@ -110,8 +111,10 @@ const renderHomePageEn = () => {
     ${featuresSectionHTML}
 
     ${createCTASection({
+      locale: 'en',
       headline: CTA.headline,
       subheadline: CTA.subheadline,
+      primaryCTA: 'Start live demo',
     })}
 
     ${createFAQSection({ sharedFaq: FAQ_EN, pageFaq: [] })}

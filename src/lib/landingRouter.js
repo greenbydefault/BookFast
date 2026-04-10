@@ -9,6 +9,7 @@ import { applyLandingAccessibilityTitles } from './landingAccessibility.js';
 import { normalizeLandingPath, getLocaleFromPath, applyDocumentLang } from './landingLocale.js';
 import { syncLandingNavigationChrome } from '../components/landing/Navigation.js';
 import { syncLandingFooterChrome } from '../components/landing/Footer.js';
+import { openWaitlistModal } from '../components/landing/WaitlistModal.js';
 
 // Page registry: path → renderFn
 const landingPages = new Map();
@@ -27,6 +28,14 @@ const handleLandingPopstate = (event) => {
 };
 
 const handleLandingDocumentClick = (e) => {
+  const waitlistTrigger = e.target.closest('[data-landing-waitlist]');
+  if (waitlistTrigger) {
+    e.preventDefault();
+    waitlistTrigger.closest('.landing-nav')?.querySelector('#mobile-menu')?.classList.remove('open');
+    openWaitlistModal();
+    return;
+  }
+
   const link = e.target.closest('[data-landing-link]');
   if (link) {
     e.preventDefault();

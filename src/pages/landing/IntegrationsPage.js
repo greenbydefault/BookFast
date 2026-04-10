@@ -222,6 +222,7 @@ export const renderIntegrationsPage = (locale = 'de') => {
     </section>
 
     ${createCTASection({
+      locale,
       headline: isEn
         ? 'Set up integrations in under 5 minutes.'
         : 'Integrationen in unter 5 Minuten einrichten.',
@@ -231,8 +232,6 @@ export const renderIntegrationsPage = (locale = 'de') => {
       ...(isEn
         ? {
             primaryCTA: 'Start live demo',
-            primaryHref: '/en',
-            secondaryCTA: 'Try for free',
           }
         : {}),
     })}
