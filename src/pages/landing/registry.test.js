@@ -42,6 +42,19 @@ describe('landing registry redirects', () => {
     expect(document.querySelector('#landing-content')?.textContent).toContain('This page will be available soon.');
   });
 
+  it('uses umlauts on the German resources placeholder', () => {
+    history.replaceState({}, '', '/ressourcen');
+
+    registerAllLandingPages();
+    initLandingRouter();
+
+    const description = document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
+    expect(description).toContain('für');
+    expect(description).toContain('Kürze');
+    expect(description).not.toContain('fuer');
+    expect(description).not.toContain('Kuerze');
+  });
+
   it('opens the waitlist modal for delegated waitlist triggers', () => {
     history.replaceState({}, '', '/en');
 
@@ -52,5 +65,6 @@ describe('landing registry redirects', () => {
     document.querySelector('[data-landing-waitlist]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
     expect(document.getElementById('waitlist-modal')).not.toBeNull();
+    expect(document.querySelector('#waitlist-modal-title')?.textContent).toBe('Join the waitlist');
   });
 });

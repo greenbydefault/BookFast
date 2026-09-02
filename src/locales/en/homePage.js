@@ -9,6 +9,8 @@ export const HOME_META = {
 
 export const HERO = {
   tagline: 'Booking for Webflow',
+  headline: 'Try Book {logo} Fast now.<br>No sign-up.',
+  logoAlt: 'BookFast plus logo',
   subheadline: 'Enter a workspace name and start the live demo.',
   illustrationAlt: 'Homepage illustration with BookFast demo, bookings, and pay-before-appointment',
   formLabel: 'Workspace name',
@@ -20,11 +22,11 @@ export const HERO = {
 
 export const HOW_IT_WORKS = {
   label: 'Main features',
-  headline: 'The booking system for Webflow — the essentials.',
+  headline: 'What BookFast actually does on a Webflow page.',
 };
 
 export const CTA = {
-  headline: 'Bookings on your site — set up in 5 minutes.',
+  headline: 'Bookings on your site. Set up in 5 minutes.',
   subheadline: '3-day free trial. No credit card required.\nReady to go in under 5 minutes.',
 };
 
@@ -34,8 +36,8 @@ export const HOME_FEATURES_STEPS_EN = [
     title: 'Webflow-native',
     icon: 'globe',
     bullets: [
-      { title: 'Add embed script, copy template in Webflow', description: 'Both are required — then the widget is live.' },
-      { title: 'No iframe — full design control', description: 'The widget lives natively on your page.' },
+      { title: 'Add embed script, copy template in Webflow', description: 'Both are required. Then the widget is live.' },
+      { title: 'No iframe. Full design control', description: 'The widget lives on your page, not in a box.' },
       { title: 'Set up in under 5 minutes', description: 'Copy, paste, live.' },
     ],
   },
@@ -53,7 +55,7 @@ export const HOME_FEATURES_STEPS_EN = [
     icon: 'money-hand',
     bullets: [
       { title: 'Money in your account before the slot starts', description: 'Fewer no-shows with prepayment.' },
-      { title: 'Deposits configurable', description: 'Percentage or fixed per service. Charged at booking — ideal for larger rentals or premium services.' },
+      { title: 'Deposits configurable', description: 'Percentage or fixed per service. Charged at booking. Useful for larger rentals or expensive services.' },
       { title: 'Automatic refund on decline', description: 'No manual busywork.' },
     ],
   },
@@ -81,29 +83,29 @@ export const FAQ_EN = [
   {
     question: 'What is BookFast?',
     answer:
-      'BookFast is a Webflow booking system with payments. You offer bookings on your own site — no redirects, no iframes, no commission per booking.',
+      'A booking system for Webflow with Stripe. Guests book on your page. No redirect, no iframe, no BookFast commission per booking.',
   },
   {
     question: 'How does setup work?',
     answer:
-      'Create objects and services in the dashboard, connect Stripe Connect, and embed the widget via script tag and Webflow template. You can go live in under 5 minutes.',
+      'Create objects and services, connect Stripe Connect, add the script tag and the Webflow template. Often under 5 minutes if the site is ready.',
   },
   {
     question: 'What does BookFast cost?',
     answer:
-      'From €9.49/month (Basic, 1 workspace). All plans include the same features — only workspace count differs. 0% commission per booking.',
+      'From €9.49/month (Basic, 1 workspace). Same features on every plan. You pay for workspace count. 0% commission per booking.',
   },
   {
     question: 'Does BookFast only work with Webflow?',
     answer:
-      'Yes. BookFast is built for Webflow and currently does not run on other site builders.',
+      'Built for Webflow. The embed script also runs on other sites. Template copy is Webflow only.',
   },
   {
     question: 'Do I need technical skills?',
-    answer: 'No. Add the script tag and Webflow template — done. No coding required.',
+    answer: 'No. Paste a script tag and import the template. No custom code.',
   },
   {
     question: 'Which payment methods are supported?',
-    answer: 'Currently card (Visa, Mastercard, Amex) via Stripe Connect. Klarna and PayPal are planned.',
+    answer: 'Card (Visa, Mastercard, Amex) via Stripe Connect. Klarna and PayPal are planned.',
   },
 ];

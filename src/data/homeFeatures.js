@@ -1,15 +1,15 @@
 /**
  * Hauptfeatures für die Startseite – Accordion-Sektion
  * Kurze Übersicht, keine Detail-Schritte.
- * Sprachrichtlinien: BookFast_UI_Language_Guidelines_v1.0.md
+ * Sprachrichtlinien: SaaS-Landing-Page-Wording-Guidelines-2026.md
  */
 export const HOME_FEATURES_STEPS = [
   {
     title: 'Webflow-Native',
     icon: 'globe',
     bullets: [
-      { title: 'Embed-Script einfügen, Template in Webflow kopieren', description: 'Beides nötig – dann ist das Widget live.' },
-      { title: 'Kein iFrame – volle Design-Kontrolle', description: 'Das Widget lebt nativ in deiner Seite.' },
+      { title: 'Embed-Script einfügen, Template in Webflow kopieren', description: 'Beides nötig. Dann ist das Widget live.' },
+      { title: 'Kein iFrame, volle Design-Kontrolle', description: 'Das Widget lebt nativ in deiner Seite.' },
       { title: 'In unter 5 Minuten eingerichtet', description: 'Copy, Paste, Live.' },
     ],
   },
@@ -27,7 +27,7 @@ export const HOME_FEATURES_STEPS = [
     icon: 'money-hand',
     bullets: [
       { title: 'Geld auf deinem Konto, bevor der Termin startet', description: 'Weniger No-Shows durch Vorauszahlung.' },
-      { title: 'Kaution konfigurierbar', description: 'Prozentual oder Festbetrag pro Service. Bei Buchung einziehbar – du bist bei größeren Objekten oder teuren Services abgesichert.' },
+      { title: 'Anzahlung konfigurierbar', description: 'Prozentual oder Festbetrag pro Service. Bei Buchung einziehbar. Sinnvoll bei größeren Objekten oder teuren Services.' },
       { title: 'Automatische Rückerstattung bei Ablehnung', description: 'Ohne manuellen Aufwand.' },
     ],
   },

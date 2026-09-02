@@ -19,10 +19,15 @@ import { renderSidebar } from '../Sidebar/Sidebar.js';
 import { renderTopBar } from '../TopBar/TopBar.js';
 import { openWaitlistModal } from './WaitlistModal.js';
 import { DEMO_WORKSPACE } from '../../lib/DemoData.js';
+import { getLocaleFromPath, normalizeLandingPath } from '../../lib/landingLocale.js';
+import { getUiChrome } from '../../locales/uiChrome.js';
 
 const HERO_LOGO_URL = new URL('../../svg/logo-bookfast-hero.svg', import.meta.url).href;
 const HERO_ILLUSTRATION_URL = new URL('../../svg/hero-illustration.svg', import.meta.url).href;
 let dashboardPagesRegistered = false;
+
+export const createHeroLogoImg = (alt = 'BookFast Plus-Logo') =>
+  `<img src="${HERO_LOGO_URL}" alt="${alt}" class="hero-new__logo" width="56" height="56">`;
 
 const createDashboardShellHTML = () => {
   const sidebarHTML = renderSidebar({ activePage: 'home' });
@@ -43,11 +48,11 @@ const createDashboardShellHTML = () => {
  */
 export const createHeroNew = (config = {}) => {
   const {
-    tagline = 'Buchungen & Zahlungen für Webflow',
-    headline = `Book <img src="${HERO_LOGO_URL}" alt="BookFast Plus-Logo" class="hero-new__logo" width="56" height="56"> Fast jetzt testen<br>– ohne Anmeldung.`,
+    tagline = 'Buchungssystem für Webflow',
+    headline = `Book ${createHeroLogoImg()} Fast jetzt testen.<br>Ohne Anmeldung.`,
     subheadline = 'Workspace-Name eingeben und Live-Demo starten.',
     illustrationSrc = HERO_ILLUSTRATION_URL,
-    illustrationAlt = 'Illustration der BookFast Demo mit Buchungsablauf und Dashboard',
+    illustrationAlt = 'Startseiten-Illustration mit BookFast Demo, Buchungen und Zahlung vor Termin',
     formLabel = 'Workspace-Name',
     formPlaceholder = 'z.B. Alpine Chalets, Studio Nordlicht…',
     formButtonText = 'Live-Demo starten',
@@ -83,7 +88,7 @@ export const createHeroNew = (config = {}) => {
           <!-- Group 5: Workspace Card -->
           <div class="hero-new__card" id="hero-new-card">
             <!-- Phase 1: Form -->
-            <div class="hero-new__form" id="hero-new-form">
+            <form class="hero-new__form" id="hero-new-form">
               <label class="hero-new__card-label" for="hero-new-workspace-name">${formLabel}</label>
               <input
                 type="text"
@@ -93,11 +98,11 @@ export const createHeroNew = (config = {}) => {
                 maxlength="60"
                 autocomplete="off"
               >
-              <button type="button" class="hero-new__card-btn" id="hero-new-create-btn">
+              <button type="submit" class="hero-new__card-btn" id="hero-new-create-btn">
                 ${formButtonText}
               </button>
               ${formHint ? `<p class="hero-new__card-hint">${formHint}</p>` : ''}
-            </div>
+            </form>
 
             <!-- Phase 2: Dashboard (expands on submit) -->
             <div class="hero-new__dashboard dashboard-layout" id="hero-new-dashboard"></div>
@@ -117,11 +122,15 @@ export const createHeroNew = (config = {}) => {
  */
 export const initHeroNew = () => {
   const card = document.getElementById('hero-new-card');
+  const form = document.getElementById('hero-new-form');
   const createBtn = document.getElementById('hero-new-create-btn');
   const nameInput = document.getElementById('hero-new-workspace-name');
   const dashboardContainer = document.getElementById('hero-new-dashboard');
 
-  if (!card || !createBtn || !nameInput || !dashboardContainer) return;
+  if (!card || !form || !createBtn || !nameInput || !dashboardContainer) return;
+
+  const locale = getLocaleFromPath(normalizeLandingPath(window.location.pathname));
+  const demoError = getUiChrome(locale).hero.demoError;
 
   const EXPAND_DURATION_MS = 560;
   const DASHBOARD_REVEAL_DELAY_MS = 140;
@@ -132,7 +141,7 @@ export const initHeroNew = () => {
     dashboardContainer.dataset.hydrated = 'true';
   };
 
-  createBtn.addEventListener('click', async () => {
+  const startDemo = async () => {
     const name = nameInput.value.trim();
     if (!name) {
       nameInput.classList.add('hero-new__card-input--error');
@@ -158,7 +167,7 @@ export const initHeroNew = () => {
       }
     } catch (error) {
       console.error('Demo page registration failed:', error);
-      alert('Die Demo konnte nicht gestartet werden. Bitte versuche es erneut.');
+      alert(demoError);
       return;
     }
 
@@ -190,6 +199,11 @@ export const initHeroNew = () => {
     }, EXPAND_DURATION_MS);
 
     setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+  };
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    startDemo();
   });
 
   // Sidebar navigation within demo
@@ -237,10 +251,6 @@ export const initHeroNew = () => {
     });
   }, true);
 
-  // Enter key
-  nameInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') { e.preventDefault(); createBtn.click(); }
-  });
 };
 
 // ── Helpers ──────────────────────────────────────

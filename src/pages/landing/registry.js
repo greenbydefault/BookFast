@@ -165,7 +165,7 @@ export const registerAllLandingPages = () => {
 
   registerLandingPage(
     PLACEHOLDER_ROUTE_BY_KEY.resources.de,
-    createPlaceholder('Ressourcen', 'Ressourcen und Hilfestellungen fuer BookFast folgen in Kuerze.'),
+    createPlaceholder('Ressourcen', 'Ressourcen und Hilfestellungen für BookFast folgen in Kürze.'),
   );
   registerLandingPage(
     PLACEHOLDER_ROUTE_BY_KEY.resources.en,

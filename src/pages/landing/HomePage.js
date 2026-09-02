@@ -1,7 +1,7 @@
 /**
  * Homepage - New Hero Design
  */
-import { createHeroNew, initHeroNew } from '../../components/landing/HeroNew.js';
+import { createHeroNew, initHeroNew, createHeroLogoImg } from '../../components/landing/HeroNew.js';
 import { createHowItWorksInteractive, initHowItWorksInteractive } from '../../components/landing/HowItWorksInteractive.js';
 import {
   createIntegrationStatusPreviewCard,
@@ -11,94 +11,71 @@ import { createObjectPreviewCard, initObjectPreviewCard } from '../../components
 import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQAccordion.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
 import { setPageMeta, setFAQSchema, setHreflangAlternates } from '../../lib/seoHelper.js';
-import { SHARED_FAQ } from '../../data/faq.js';
-import { HOME_FEATURES_STEPS } from '../../data/homeFeatures.js';
 import { getLocaleFromPath, normalizeLandingPath } from '../../lib/landingLocale.js';
+import { getFeatureDemoModuleContent } from '../../lib/getLocaleDemoModule.js';
+import * as homeDe from '../../data/homePage.js';
 import * as homeEn from '../../locales/en/homePage.js';
 
-const createObjectPreviewHTML = () =>
-  `<div class="landing-frosted-frame feature-hero__card-frame">${createObjectPreviewCard()}</div>`;
-
-const createIntegrationPreviewHTML = () =>
-  `<div class="landing-frosted-frame feature-hero__card-frame">${createIntegrationStatusPreviewCard()}</div>`;
-
-const renderHomePageDe = () => {
-  const content = document.getElementById('landing-content');
-  if (!content) return;
-
-  setPageMeta(null, 'Das Webflow Buchungssystem für Terminbuchung & Online-Zahlungen. 0 % Provision, Zahlung vor Termin. In 5 Min. live.', {
-    locale: 'de',
-  });
-  setHreflangAlternates([
-    { hreflang: 'de', path: '/' },
-    { hreflang: 'en', path: '/en' },
-  ]);
-  setFAQSchema(SHARED_FAQ);
-
-  const featuresSectionHTML = createHowItWorksInteractive({
-    label: 'Hauptfeatures',
-    headline: 'Das Buchungssystem für Webflow – die wichtigsten Vorteile.',
-    steps: HOME_FEATURES_STEPS,
-    previewHTML: createIntegrationPreviewHTML(),
-  });
-
-  content.innerHTML = `
-    ${createHeroNew({
-      tagline: 'Buchungssystem für Webflow',
-      subheadline: 'Workspace-Name eingeben und Live-Demo starten.',
-      illustrationAlt: 'Startseiten-Illustration mit BookFast Demo, Buchungen und Zahlung vor Termin',
-      formLabel: 'Workspace-Name',
-      formPlaceholder: 'z.B. Alpine Chalets, Studio Nordlicht…',
-      formButtonText: 'Live-Demo starten',
-      formHint: 'Ohne Account Live Demo testen.',
-      trustClaims: ['0% Provision', 'Webflow-native', 'Zahlung vor Termin'],
-    })}
-
-    ${featuresSectionHTML}
-
-    ${createCTASection({
-      locale: 'de',
-      headline: 'Buchungen auf deiner Website – in 5 Minuten eingerichtet.',
-      subheadline: '3 Tage kostenlos testen. Keine Kreditkarte nötig.\nIn unter 5 Minuten startklar.',
-    })}
-
-    ${createFAQSection({ sharedFaq: SHARED_FAQ, pageFaq: [] })}
-  `;
-
-  initHeroNew();
-  initHowItWorksInteractive(content, {
-    renderPreview: (nextIndex) => (nextIndex === 0 ? createIntegrationPreviewHTML() : createObjectPreviewHTML()),
-    onPreviewRendered: (previewNode, nextIndex) => {
-      if (nextIndex === 0) initIntegrationStatusPreviewCard(previewNode);
-      else initObjectPreviewCard(previewNode);
-    },
-  });
-  initFAQAccordion(content);
+const getHomeCopy = (locale) => {
+  if (locale === 'en') {
+    return {
+      HOME_META: homeEn.HOME_META,
+      HERO: homeEn.HERO,
+      HOW_IT_WORKS: homeEn.HOW_IT_WORKS,
+      CTA: homeEn.CTA,
+      HOME_FEATURES_STEPS: homeEn.HOME_FEATURES_STEPS_EN,
+      FAQ: homeEn.FAQ_EN,
+    };
+  }
+  return {
+    HOME_META: homeDe.HOME_META,
+    HERO: homeDe.HERO,
+    HOW_IT_WORKS: homeDe.HOW_IT_WORKS,
+    CTA: homeDe.CTA,
+    HOME_FEATURES_STEPS: homeDe.HOME_FEATURES_STEPS,
+    FAQ: homeDe.FAQ,
+  };
 };
 
-const renderHomePageEn = () => {
+const createObjectPreviewHTML = (locale) => {
+  const content = getFeatureDemoModuleContent('objekte', locale);
+  return `<div class="landing-frosted-frame feature-hero__card-frame">${createObjectPreviewCard(content ? { content } : {})}</div>`;
+};
+
+const createIntegrationPreviewHTML = (locale) => {
+  const content = getFeatureDemoModuleContent('integration', locale);
+  return `<div class="landing-frosted-frame feature-hero__card-frame">${createIntegrationStatusPreviewCard(content ? { content } : {})}</div>`;
+};
+
+export const renderHomePage = (localeArg) => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
-  const { HOME_META, HERO, HOW_IT_WORKS, CTA, HOME_FEATURES_STEPS_EN, FAQ_EN } = homeEn;
+  const locale = localeArg === 'en' || localeArg === 'de'
+    ? localeArg
+    : getLocaleFromPath(normalizeLandingPath(window.location.pathname));
+  const { HOME_META, HERO, HOW_IT_WORKS, CTA, HOME_FEATURES_STEPS, FAQ } = getHomeCopy(locale);
+  const logoHtml = createHeroLogoImg(HERO.logoAlt);
+  const headline = (HERO.headline || '').replace('{logo}', logoHtml);
 
-  setPageMeta(HOME_META.title, HOME_META.description, { locale: 'en' });
+  setPageMeta(HOME_META.title, HOME_META.description, { locale });
   setHreflangAlternates([
     { hreflang: 'de', path: '/' },
     { hreflang: 'en', path: '/en' },
   ]);
-  setFAQSchema(FAQ_EN);
+  setFAQSchema(FAQ);
 
   const featuresSectionHTML = createHowItWorksInteractive({
     label: HOW_IT_WORKS.label,
     headline: HOW_IT_WORKS.headline,
-    steps: HOME_FEATURES_STEPS_EN,
-    previewHTML: createIntegrationPreviewHTML(),
+    steps: HOME_FEATURES_STEPS,
+    previewHTML: createIntegrationPreviewHTML(locale),
   });
 
   content.innerHTML = `
     ${createHeroNew({
       tagline: HERO.tagline,
+      headline,
       subheadline: HERO.subheadline,
       illustrationAlt: HERO.illustrationAlt,
       formLabel: HERO.formLabel,
@@ -111,34 +88,26 @@ const renderHomePageEn = () => {
     ${featuresSectionHTML}
 
     ${createCTASection({
-      locale: 'en',
+      locale,
       headline: CTA.headline,
       subheadline: CTA.subheadline,
-      primaryCTA: 'Start live demo',
+      primaryHref: '#hero-new-workspace-name',
     })}
 
-    ${createFAQSection({ sharedFaq: FAQ_EN, pageFaq: [] })}
+    ${createFAQSection({ locale, sharedFaq: FAQ, pageFaq: [] })}
   `;
 
   initHeroNew();
   initHowItWorksInteractive(content, {
-    renderPreview: (nextIndex) => (nextIndex === 0 ? createIntegrationPreviewHTML() : createObjectPreviewHTML()),
+    renderPreview: (nextIndex) => (
+      nextIndex === 0 ? createIntegrationPreviewHTML(locale) : createObjectPreviewHTML(locale)
+    ),
     onPreviewRendered: (previewNode, nextIndex) => {
-      if (nextIndex === 0) initIntegrationStatusPreviewCard(previewNode);
-      else initObjectPreviewCard(previewNode);
+      const demoContent = getFeatureDemoModuleContent(nextIndex === 0 ? 'integration' : 'objekte', locale);
+      const opts = demoContent ? { content: demoContent } : {};
+      if (nextIndex === 0) initIntegrationStatusPreviewCard(previewNode, opts);
+      else initObjectPreviewCard(previewNode, opts);
     },
   });
   initFAQAccordion(content);
-};
-
-export const renderHomePage = () => {
-  const content = document.getElementById('landing-content');
-  if (!content) return;
-
-  const locale = getLocaleFromPath(normalizeLandingPath(window.location.pathname));
-  if (locale === 'en') {
-    renderHomePageEn();
-    return;
-  }
-  renderHomePageDe();
 };
