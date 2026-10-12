@@ -126,7 +126,7 @@
 /* Expanded dashboard state */
 .hero-new__card.expanded {
     max-width: 92vw;
-    width: 100%;
+    width: 92vw;
     height: 85vh;
     padding: 0;
     border-radius: var(--space-8);
@@ -304,7 +304,8 @@
     }
 
     .hero-new__card.expanded {
-        max-width: 100%;
+        width: calc(100vw - 1.5rem);
+        max-width: calc(100vw - 1.5rem);
         border-radius: 8px;
         height: 78vh;
     }
