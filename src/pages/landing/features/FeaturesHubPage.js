@@ -8,6 +8,7 @@ import { FEATURE_GROUPS } from '../../../components/landing/navConfig.js';
 import { setPageMeta, setBreadcrumbSchema, setHreflangAlternates } from '../../../lib/seoHelper.js';
 import { getAllFeaturePages } from '../../../lib/getLocaleContent.js';
 import { deFeatureSlugToEn } from '../../../lib/featureSlugLocale.js';
+import { setLandingContent } from '../../../lib/landingContent.js';
 
 export const renderFeaturesHubPage = (locale = 'de') => {
   const content = document.getElementById('landing-content');
@@ -23,10 +24,10 @@ export const renderFeaturesHubPage = (locale = 'de') => {
   const featuresPath = isEn ? '/en/features' : '/features';
 
   setPageMeta(
-    isEn ? 'Features — Webflow Booking System' : 'Features – Webflow Buchungssystem',
+    isEn ? 'Features. Webflow booking system' : 'Features. Webflow Buchungssystem',
     isEn
-      ? 'All features of the Webflow booking system: booking management, appointments, online payments, invoices, analytics.'
-      : 'Alle Features des Webflow Buchungssystems: Buchungsverwaltung, Terminbuchung, Online-Zahlungen, Rechnungen, Analytics.',
+      ? 'Booking inbox, widget, Stripe, invoices, objects, services, analytics. One page per feature.'
+      : 'Buchungs-Inbox, Widget, Stripe, Rechnungen, Objekte, Services, Analytics. Eine Seite pro Feature.',
     { locale },
   );
   setBreadcrumbSchema([
@@ -57,19 +58,21 @@ export const renderFeaturesHubPage = (locale = 'de') => {
 
     return `
       <div style="margin-bottom: 3rem;">
-        <h3 class="landing-h3" style="margin-bottom: 1.5rem;">${cat.label}</h3>
+        <h2 class="landing-h2" style="margin-bottom: 1.5rem;">${cat.label}</h2>
         ${createFeatureGrid(features)}
       </div>`;
   }).join('');
 
-  content.innerHTML = `
+  setLandingContent(content, `
     ${createHero({
       headline: isEn
-        ? 'Webflow booking system — all features at a glance'
-        : 'Webflow Buchungssystem – alle Features im Überblick',
+        ? 'Every BookFast feature, one page each.'
+        : 'Jedes BookFast-Feature, eine Seite.',
       subheadline: isEn
-        ? 'Discover all features: From booking management to analytics. Every feature with a clear benefit for your business.'
-        : 'Entdecke alle Features: Von der Buchungsverwaltung bis zu Analytics. Jedes Feature mit klarem Benefit für dein Business.',
+        ? 'Inbox, widget, Stripe, invoices, objects, staff, analytics. Open the one you need.'
+        : 'Inbox, Widget, Stripe, Rechnungen, Objekte, Mitarbeiter, Analytics. Mach die auf, die du brauchst.',
+      primaryCTA: isEn ? 'Start live demo' : 'Kostenlos testen',
+      primaryHref: isEn ? '/en' : '/',
       secondaryCTA: '',
     })}
 
@@ -81,11 +84,11 @@ export const renderFeaturesHubPage = (locale = 'de') => {
 
     ${createCTASection({
       locale,
-      headline: isEn ? 'Try all features for free.' : 'Alle Features kostenlos testen.',
+      headline: isEn ? 'Click through the ones you will actually use.' : 'Klick die durch, die du wirklich brauchst.',
       subheadline: isEn
-        ? '3-day free trial. No credit card required. Ready in under 5 minutes.'
-        : '3 Tage kostenlos. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
+        ? '3-day trial. No card. Under 5 minutes if the site is ready.'
+        : '3 Tage testen. Keine Karte. Unter 5 Minuten, wenn die Seite steht.',
       ...(isEn ? { primaryCTA: 'Start live demo' } : {}),
     })}
-  `;
+  `);
 };

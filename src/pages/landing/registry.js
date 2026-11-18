@@ -18,6 +18,7 @@ import { renderAGBPage } from './legal/AGBPage.js';
 import { renderAboutPage } from './AboutPage.js';
 import { renderContactPage } from './ContactPage.js';
 import { renderWaitlistConfirmPage } from './WaitlistConfirmPage.js';
+import { renderCompareFlowbookingsPage } from './CompareFlowbookingsPage.js';
 import { setPageMeta } from '../../lib/seoHelper.js';
 import {
   CANONICAL_ROUTE_BY_KEY,
@@ -137,6 +138,8 @@ export const registerAllLandingPages = () => {
     [CANONICAL_ROUTE_BY_KEY.contact.en]: renderContactPage,
     [CANONICAL_ROUTE_BY_KEY.features.de]: renderFeaturesHubPage,
     [CANONICAL_ROUTE_BY_KEY.features.en]: renderFeaturesHubPage,
+    [CANONICAL_ROUTE_BY_KEY['compare-flowbookings'].de]: renderCompareFlowbookingsPage,
+    [CANONICAL_ROUTE_BY_KEY['compare-flowbookings'].en]: renderCompareFlowbookingsPage,
     [CANONICAL_ROUTE_BY_KEY.imprint.de]: renderImpressumPage,
     [CANONICAL_ROUTE_BY_KEY.imprint.en]: renderImpressumPage,
     [CANONICAL_ROUTE_BY_KEY.privacy.de]: renderDatenschutzPage,

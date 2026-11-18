@@ -81,8 +81,15 @@
   line-height: 1.35;
 }
 
-.landing-faq-question > span:first-child {
+.landing-faq-question-heading {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
+.landing-faq-question-text {
   min-width: 0;
+  text-align: left;
   text-wrap: balance;
 }
 

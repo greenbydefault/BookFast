@@ -1,4 +1,3 @@
-import { NAV_EN } from '../../locales/en/navigation.js';
+import { getUiChrome } from '../../locales/uiChrome.js';
 
-export const getWaitlistLabel = (locale = 'de') =>
-  locale === 'en' ? NAV_EN.waitlist : 'Zur Warteliste anmelden';
+export const getWaitlistLabel = (locale = 'de') => getUiChrome(locale).nav.waitlist;

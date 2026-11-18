@@ -13,7 +13,7 @@ const confirmBooking = async ({ bookingId, paymentStatus, onRefresh }) => {
     }
 
     try {
-        if (paymentStatus === 'paid') {
+        if (paymentStatus === 'paid' || paymentStatus === 'deposit_paid') {
             await approveBooking(bookingId);
         } else {
             await updateEntity('bookings', bookingId, { status: 'confirmed' });
@@ -45,7 +45,7 @@ const rejectBooking = ({ booking, openRejectBookingModal, onRefresh }) => {
         booking,
         onConfirm: async (reason) => {
             try {
-                if (paymentStatus === 'paid') {
+                if (paymentStatus === 'paid' || paymentStatus === 'deposit_paid') {
                     await declineBooking(booking.id, reason);
                 } else {
                     await updateEntity('bookings', booking.id, { status: 'rejected' });
@@ -134,7 +134,7 @@ export const openBookingActionsMenu = ({
     }
 
     if (bookingStatus !== 'cancelled' && bookingStatus !== 'rejected') {
-        if (!(bookingStatus === 'pending_approval' && paymentStatus === 'paid')) {
+        if (!(bookingStatus === 'pending_approval' && (paymentStatus === 'paid' || paymentStatus === 'deposit_paid'))) {
             actions.push({
                 label: 'Buchung stornieren',
                 iconName: 'banknote-x',

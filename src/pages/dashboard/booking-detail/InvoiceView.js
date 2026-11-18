@@ -5,12 +5,13 @@
  */
 
 import { formatDate } from '../../../lib/dateUtils.js';
-import { fmt, buildLineItems, calculateTotals, getInvoiceNumber, getLeistungszeitraum } from './invoiceUtils.js';
+import { fmt, buildLineItems, calculateTotals, getInvoiceNumber, getLeistungszeitraum, getCustomerAddressLines } from './invoiceUtils.js';
 
 // Payment status labels and colors
 const PAYMENT_BADGES = {
     unpaid: { label: 'Unbezahlt', class: 'invoice-badge--unpaid' },
     paid: { label: 'Bezahlt', class: 'invoice-badge--paid' },
+    deposit_paid: { label: 'Angezahlt', class: 'invoice-badge--unpaid' },
     refunded: { label: 'Erstattet', class: 'invoice-badge--refunded' },
     partial_refunded: { label: 'Teilweise erstattet', class: 'invoice-badge--refunded' },
     failed: { label: 'Fehlgeschlagen', class: 'invoice-badge--failed' },
@@ -59,10 +60,7 @@ const renderAddresses = (booking, workspace) => {
     const fromCountry = workspace?.company_country || 'Deutschland';
 
     const toName = booking.customer_name || 'Kundenname';
-    // Customer address placeholder (not in DB yet)
-    const toAddress = 'Adresse';
-    const toZip = 'PLZ';
-    const toCity = 'Stadt';
+    const toLines = getCustomerAddressLines(booking);
 
     return `
         <div class="invoice-addresses">
@@ -76,8 +74,7 @@ const renderAddresses = (booking, workspace) => {
             <div class="invoice-address-block">
                 <span class="invoice-address-label">An</span>
                 <p class="invoice-address-name">${toName}</p>
-                <p>${toAddress}</p>
-                <p>${toZip} ${toCity}</p>
+                ${toLines.map((line) => `<p>${line}</p>`).join('')}
             </div>
         </div>
     `;
@@ -152,6 +149,15 @@ const renderSummary = (totals) => {
                     <td>Gesamtbetrag</td>
                     <td>${fmt(totals.total)}</td>
                 </tr>
+                ${totals.depositPaid > 0 ? `
+                <tr class="invoice-summary-row">
+                    <td>Anzahlung erhalten</td>
+                    <td>− ${fmt(totals.depositPaid)}</td>
+                </tr>
+                <tr class="invoice-summary-row">
+                    <td>Restbetrag offen</td>
+                    <td>${fmt(totals.balanceDue)}</td>
+                </tr>` : ''}
             </table>
         </div>
     `;

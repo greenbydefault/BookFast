@@ -3,6 +3,7 @@
  */
 import { setPageMeta, setBreadcrumbSchema, setHreflangAlternates } from '../../../lib/seoHelper.js';
 import { legalConfig } from '../../../data/legalConfig.js';
+import { setLandingContent } from '../../../lib/landingContent.js';
 
 export const renderImpressumPage = (locale = 'de') => {
   const content = document.getElementById('landing-content');
@@ -32,7 +33,7 @@ export const renderImpressumPage = (locale = 'de') => {
   ]);
 
   const c = legalConfig;
-  content.innerHTML = `
+  setLandingContent(content, `
     <section class="landing-section">
       <div class="landing-container-narrow">
         <h1 class="landing-h1">${isEn ? 'Imprint' : 'Impressum'}</h1>
@@ -69,5 +70,5 @@ export const renderImpressumPage = (locale = 'de') => {
         </div>
       </div>
     </section>
-  `;
+  `);
 };

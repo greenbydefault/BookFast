@@ -14,6 +14,7 @@ const ROUTES = {
     staff: '/dashboard/staff',
     addons: '/dashboard/addons',
     vouchers: '/dashboard/vouchers',
+    vacations: '/dashboard/vacations',
     customers: '/dashboard/customers',
     insights: '/dashboard/insights',
     settings: '/dashboard/settings'

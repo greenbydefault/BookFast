@@ -43,18 +43,20 @@ export const getHowItWorksPreviewHtml = (container, stepIndex, { sliceSelectors 
   const sourceCard = frame.querySelector('.feature-demo-card');
   if (!sourceCard) return cloneFullFrame();
 
-  const section = sourceCard.querySelector(selector);
-  if (!section) return cloneFullFrame();
+  const sections = [...sourceCard.querySelectorAll(selector)];
+  if (!sections.length) return cloneFullFrame();
 
   const fullClone = frame.cloneNode(true);
   const sliceCard = fullClone.querySelector('.feature-demo-card');
-  const body = sliceCard?.querySelector('.feature-demo-card__body');
+  const body = sliceCard?.querySelector('.feature-demo-card__body, [data-demo-body]');
   if (!sliceCard || !body) return cloneFullFrame();
 
-  const sectionClone = section.cloneNode(true);
-  stripIds(sectionClone);
   body.innerHTML = '';
-  body.appendChild(sectionClone);
+  sections.forEach((section) => {
+    const sectionClone = section.cloneNode(true);
+    stripIds(sectionClone);
+    body.appendChild(sectionClone);
+  });
   stripIds(fullClone);
   return fullClone.outerHTML;
 };

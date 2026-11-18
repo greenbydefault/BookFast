@@ -1,33 +1,34 @@
 # BookFast
 
-> BookFast ist ein Buchungssystem fuer Webflow und andere Websites mit integrierter Zahlungsabwicklung, Kundenportal und Verwaltungsfunktionen fuer Teams.
+> Buchungssystem für Webflow. Widget auf der Seite, Stripe vor dem Termin, 0 % Provision an BookFast.
 
 ## Services
 
-- [Produkt](https://book-fast.de/produkt): Ueberblick ueber die Plattform und Kernfunktionen.
-- [Preise](https://book-fast.de/preise): Tarife und Preismodelle.
-- [Integrationen](https://book-fast.de/integrationen): Verfuegbare Integrationen und Einbindung.
-- [Features](https://book-fast.de/features): Vollstaendige Funktionsuebersicht.
+- [Produkt](https://book-fast.de/produkt): Widget, Zahlung, Dashboard, Funnel.
+- [Preise](https://book-fast.de/preise): Basic, Team, Agentur. Unterschied ist die Anzahl Workspaces.
+- [Integrationen](https://book-fast.de/features/integration): Webflow, Stripe, Webhooks. Kalender-Sync ist nicht live.
+- [Features](https://book-fast.de/features): Eine Seite pro Funktion.
+- [BookFast vs FlowBookings](https://book-fast.de/vergleich/flowbookings): Webflow-Buchung mit Kundenportal, Anzahlung, Stripe Connect. Kein Secret Key, keine Booking-Caps.
 
 ## What We Do Not Do
 
 - Keine Rechtsberatung.
 - Keine Steuerberatung.
-- Keine Zahlungsabwicklung ausserhalb angebundener Zahlungsdienstleister.
+- Keine Zahlungsabwicklung außerhalb von Stripe.
 
 ## Contact
 
-- [Kontakt](https://book-fast.de/kontakt): Allgemeine Anfragen und Support.
+- [Kontakt](https://book-fast.de/kontakt): Formular und Support.
 - [Impressum](https://book-fast.de/impressum): Rechtliche Angaben.
 
 ## Key Information
 
-- [Ueber Uns](https://book-fast.de/ueber-uns): Unternehmen und Mission.
+- [Über uns](https://book-fast.de/ueber-uns): Warum BookFast gebaut wurde.
 - [Datenschutz](https://book-fast.de/datenschutz): Datenschutzinformationen.
-- [AGB](https://book-fast.de/agb): Allgemeine Geschaeftsbedingungen.
+- [AGB](https://book-fast.de/agb): Allgemeine Geschäftsbedingungen.
 
 ## AI Discovery Files
 
-- [llms.txt](https://book-fast.de/llms.txt): Kuratierte Uebersicht fuer AI-Systeme.
-- [sitemap.xml](https://book-fast.de/sitemap.xml): Vollstaendige URL-Uebersicht.
-- [robots.txt](https://book-fast.de/robots.txt): Crawl-Regeln.
+- [llms.txt](https://book-fast.de/llms.txt)
+- [sitemap.xml](https://book-fast.de/sitemap.xml)
+- [robots.txt](https://book-fast.de/robots.txt)

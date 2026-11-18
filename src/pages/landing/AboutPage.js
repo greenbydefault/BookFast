@@ -5,6 +5,7 @@ import { createHero } from '../../components/landing/Hero.js';
 import { createCTASection } from '../../components/landing/CTASection.js';
 import { iconImg } from '../../lib/landingAssets.js';
 import { setPageMeta, setBreadcrumbSchema, setHreflangAlternates } from '../../lib/seoHelper.js';
+import { setLandingContent } from '../../lib/landingContent.js';
 
 export const renderAboutPage = (locale = 'de') => {
   const content = document.getElementById('landing-content');
@@ -15,8 +16,8 @@ export const renderAboutPage = (locale = 'de') => {
   setPageMeta(
     isEn ? 'About us' : 'Über uns',
     isEn
-      ? 'The story behind BookFast — why we built the booking system for Webflow.'
-      : 'Die Geschichte hinter BookFast – warum wir das Buchungssystem für Webflow gebaut haben.',
+      ? 'Why BookFast exists: Webflow booking without iframes and without a cut per booking.'
+      : 'Warum es BookFast gibt: Webflow-Buchung ohne iFrame und ohne Schnitt pro Buchung.',
     { locale },
   );
   setBreadcrumbSchema([
@@ -28,12 +29,12 @@ export const renderAboutPage = (locale = 'de') => {
     { hreflang: 'en', path: '/en/about' },
   ]);
 
-  content.innerHTML = `
+  setLandingContent(content, `
     ${createHero({
-      headline: isEn ? 'Why we built BookFast.' : 'Warum wir BookFast gebaut haben.',
+      headline: isEn ? 'We built the booking tool we kept installing for clients.' : 'Wir haben das Booking-Tool gebaut, das wir bei Kunden immer nachgerüstet haben.',
       subheadline: isEn
-        ? 'We were frustrated with booking options for Webflow. So we built the tool we wished existed — no iframes, no commission, real control.'
-        : 'Wir waren frustriert von den Booking-Lösungen für Webflow. Also haben wir das Tool gebaut, das wir selbst vermisst haben – ohne iFrames, ohne Provision, mit echter Kontrolle.',
+        ? 'Webflow sites deserved a widget that stays on the page, takes payment before the slot, and does not skim a commission. The plugins we found did at least one of those wrong.'
+        : 'Webflow-Seiten brauchen ein Widget, das auf der Seite bleibt, vor dem Termin kassiert und keine Provision abzweigt. Die Plugins, die wir gefunden haben, haben mindestens eins davon falsch gemacht.',
       illustrationAlt: isEn
         ? 'Illustration of BookFast’s origin and digital booking'
         : 'Illustration zur Entstehung von BookFast und digitaler Buchungsabwicklung',
@@ -43,21 +44,16 @@ export const renderAboutPage = (locale = 'de') => {
 
     <section class="landing-section">
       <div class="landing-container-narrow">
-        <h2 class="landing-h2">${isEn ? 'Our mission' : 'Unsere Mission'}</h2>
+        <h2 class="landing-h2">${isEn ? 'What we would not ship' : 'Was wir nicht ausliefern wollten'}</h2>
         <p class="landing-text" style="margin-top: 1rem;">
           ${isEn
-            ? `Webflow designers and their clients deserve a booking system that fits seamlessly.
-          No iframes, no redirects, no commissions. A system that gives designers full control
-          and end customers a first-class booking experience.`
-            : `Webflow-Designer und ihre Kunden verdienen ein Buchungssystem, das sich nahtlos integriert. 
-          Keine iFrames, keine Redirects, keine Provisionen. Ein System, das dem Designer volle Kontrolle gibt 
-          und dem Endkunden ein erstklassiges Booking-Erlebnis bietet.`}
+            ? `An iframe that ignores your type. A redirect to a domain nobody booked on. A "free" widget that takes a cut of every appointment. BookFast is the widget plus the operator dashboard, on your Webflow site, with Stripe and invoices attached.`
+            : `Ein iFrame, der deine Schrift ignoriert. Ein Redirect auf eine Domain, auf der niemand gebucht hat. Ein "kostenloses" Widget, das an jeder Buchung mitverdient. BookFast ist das Widget plus das Operator-Dashboard, auf deiner Webflow-Seite, mit Stripe und Rechnung dran.`}
         </p>
         <p class="landing-text" style="margin-top: 1rem;">
           ${isEn
-            ? 'BookFast is that solution: a booking widget + operator dashboard that lives in Webflow. With real data, real payments, and automatic invoices. Try it — 3 days free, no credit card.'
-            : `BookFast ist diese Lösung: Ein Booking-Widget + Operator-Dashboard, das in Webflow lebt.
-          Mit echten Daten, echten Zahlungen und automatischen Rechnungen. Probier es aus – 3 Tage kostenlos, keine Kreditkarte nötig.`}
+            ? '3 days free, no card. If the demo does not book a test slot on your own page, we failed.'
+            : '3 Tage kostenlos, keine Karte. Wenn die Demo auf deiner Seite keinen Test-Slot bucht, haben wir den Job nicht gemacht.'}
         </p>
       </div>
     </section>
@@ -65,23 +61,23 @@ export const renderAboutPage = (locale = 'de') => {
     <section class="landing-section landing-section-alt">
       <div class="landing-container">
         <div class="text-center" style="margin-bottom: 2.5rem;">
-          <h2 class="landing-h2">${isEn ? 'Our values' : 'Unsere Werte'}</h2>
+          <h2 class="landing-h2">${isEn ? 'How we price and ship' : 'Wie wir Preise und Features machen'}</h2>
         </div>
         <div class="landing-grid landing-grid-3" style="max-width: 960px; margin: 0 auto;">
           <div style="padding: 2rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200); text-align: center;">
             <div style="font-size: 2rem; margin-bottom: 1rem;">${iconImg('target.svg')}</div>
-            <h3 class="landing-h4">${isEn ? 'Clarity' : 'Klarheit'}</h3>
-            <p class="landing-text-sm">${isEn ? 'Simple pricing, clear communication, no hidden fees.' : 'Einfache Preise, klare Kommunikation, keine versteckten Kosten.'}</p>
+            <h3 class="landing-h4">${isEn ? 'Same features on every plan' : 'Dieselben Features in jedem Plan'}</h3>
+            <p class="landing-text-sm">${isEn ? 'You pay for workspace count. Not for unlocking analytics later.' : 'Du zahlst für die Anzahl Workspaces. Nicht dafür, Analytics später freizuschalten.'}</p>
           </div>
           <div style="padding: 2rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200); text-align: center;">
             <div style="font-size: 2rem; margin-bottom: 1rem;">${iconImg('Bulp.svg')}</div>
-            <h3 class="landing-h4">${isEn ? 'Speed' : 'Geschwindigkeit'}</h3>
-            <p class="landing-text-sm">${isEn ? 'Live in under 5 minutes. No learning curve, no ramp-up.' : 'In unter 5 Minuten startklar. Keine Lernkurve, keine Einarbeitungszeit.'}</p>
+            <h3 class="landing-h4">${isEn ? 'Live in minutes, not a workshop' : 'Live in Minuten, kein Workshop'}</h3>
+            <p class="landing-text-sm">${isEn ? 'Script tag, template copy, Stripe Connect. If it needs a consultant, we built it wrong.' : 'Script-Tag, Template-Copy, Stripe Connect. Wenn dafür ein Consultant nötig ist, haben wir es falsch gebaut.'}</p>
           </div>
           <div style="padding: 2rem; background: white; border-radius: 12px; border: 1px solid var(--color-stone-200); text-align: center;">
             <div style="font-size: 2rem; margin-bottom: 1rem;">${iconImg('gear.svg')}</div>
-            <h3 class="landing-h4">${isEn ? 'Control' : 'Kontrolle'}</h3>
-            <p class="landing-text-sm">${isEn ? 'You define the booking flow, design, and rules.' : 'Du bestimmst den Booking-Flow, das Design und die Regeln.'}</p>
+            <h3 class="landing-h4">${isEn ? 'You set the rules' : 'Du setzt die Regeln'}</h3>
+            <p class="landing-text-sm">${isEn ? 'Hours, buffers, cleaning fee, minimum notice. The widget follows the service, not a generic template.' : 'Zeiten, Puffer, Reinigungsgebühr, Mindestvorlauf. Das Widget folgt dem Service, keinem Einheits-Template.'}</p>
           </div>
         </div>
       </div>
@@ -92,18 +88,17 @@ export const renderAboutPage = (locale = 'de') => {
         <h2 class="landing-h2">${isEn ? 'Team' : 'Team'}</h2>
         <p class="landing-text" style="margin-top: 1rem;">
           ${isEn
-            ? 'BookFast is built by a small, focused team in Germany. We are Webflow enthusiasts building the tool we missed ourselves.'
-            : `BookFast wird von einem kleinen, fokussierten Team aus Deutschland entwickelt. 
-          Wir sind Webflow-Enthusiasten, die das Tool bauen, das sie selbst vermisst haben.`}
+            ? 'Small team in Germany. We still design in Webflow. If a booking plugin needs a workaround in the Designer, we feel it first.'
+            : 'Kleines Team in Deutschland. Wir gestalten selbst in Webflow. Wenn ein Booking-Plugin im Designer einen Workaround braucht, merken wir das zuerst.'}
         </p>
       </div>
     </section>
 
     ${createCTASection({
       locale,
-      headline: isEn ? 'Try BookFast for free.' : 'BookFast kostenlos testen.',
-      subheadline: isEn ? '3 days free. No credit card. Live in under 5 minutes.' : '3 Tage kostenlos. Keine Kreditkarte nötig. In unter 5 Minuten startklar.',
+      headline: isEn ? 'Run a test booking on a Webflow page.' : 'Testbuchung auf einer Webflow-Seite durchklicken.',
+      subheadline: isEn ? '3 days. No card. Under 5 minutes if the site is ready.' : '3 Tage. Keine Karte. Unter 5 Minuten, wenn die Seite steht.',
       ...(isEn ? { primaryCTA: 'Start live demo' } : {}),
     })}
-  `;
+  `);
 };

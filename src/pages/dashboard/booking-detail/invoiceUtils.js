@@ -65,12 +65,18 @@ export const calculateTotals = (booking, lineItems, workspace) => {
 
     const subtotalAfterDiscount = subtotal - discountAmount;
 
-    // Tax rate from workspace settings (default 19% MwSt.)
-    const taxRate = parseFloat(workspace?.tax_rate) || 19;
+    // 0 ist ein gültiger Steuersatz (Kleinunternehmer), nur fehlende Werte fallen auf 19 zurück.
+    const parsedTaxRate = parseFloat(workspace?.tax_rate);
+    const taxRate = Number.isFinite(parsedTaxRate) ? parsedTaxRate : 19;
 
     // Brutto -> Netto: Netto = Brutto / (1 + Steuersatz)
     const netAmount = total / (1 + taxRate / 100);
     const taxAmount = total - netAmount;
+
+    const depositPaid = booking.payment_status === 'deposit_paid'
+        ? parseFloat(booking.amount_deposit) || 0
+        : 0;
+    const balanceDue = depositPaid > 0 ? Math.max(0, total - depositPaid) : 0;
 
     return {
         subtotal,
@@ -81,7 +87,17 @@ export const calculateTotals = (booking, lineItems, workspace) => {
         taxAmount,
         netAmount,
         total,
+        depositPaid,
+        balanceDue,
     };
+};
+
+/**
+ * Customer address lines for the "An" block, empty when the widget did not collect an address
+ */
+export const getCustomerAddressLines = (booking) => {
+    const zipCity = [booking.customer_zip, booking.customer_city].filter(Boolean).join(' ');
+    return [booking.customer_address, zipCity].filter(Boolean);
 };
 
 /**

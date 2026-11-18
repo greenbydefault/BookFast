@@ -13,6 +13,7 @@
  * @param {'waitlist'|'register'|'link'} [config.secondaryBehavior]
  */
 import { getWaitlistLabel } from './waitlistLabels.js';
+import { getUiChrome } from '../../locales/uiChrome.js';
 
 const CTA_ILLUSTRATION_URL = new URL('../../svg/illustrations/landingpage/cta/cta_illustration.svg', import.meta.url).href;
 
@@ -21,12 +22,13 @@ export const createCTASection = (config) => {
     headline,
     subheadline = '',
     locale = 'de',
-    primaryCTA = 'Live-Demo starten',
-    primaryHref = locale === 'en' ? '/en' : '/',
-    secondaryCTA = getWaitlistLabel(locale),
     secondaryHref = '#',
     secondaryBehavior = 'waitlist',
   } = config;
+  const chrome = getUiChrome(locale);
+  const primaryCTA = config.primaryCTA ?? chrome.cta.primary;
+  const primaryHref = config.primaryHref ?? (locale === 'en' ? '/en' : '/');
+  const secondaryCTA = config.secondaryCTA ?? getWaitlistLabel(locale);
 
   const secondaryAttrs = secondaryBehavior === 'waitlist'
     ? 'href="#" data-landing-waitlist'
@@ -37,7 +39,7 @@ export const createCTASection = (config) => {
     <section class="landing-section">
       <div class="landing-container">
         <div class="landing-cta-section">
-          <img src="${CTA_ILLUSTRATION_URL}" alt="BookFast Call-to-Action Illustration zur Einrichtung des Buchungssystems" class="landing-cta-illustration" width="380" height="380" />
+          <img src="${CTA_ILLUSTRATION_URL}" alt="${chrome.cta.illustrationAlt}" class="landing-cta-illustration" width="380" height="380" loading="lazy" decoding="async" />
           <h2 class="landing-h2">${headline}</h2>
           ${subheadline ? `<p class="landing-text">${subheadline}</p>` : ''}
           <div class="landing-cta-buttons">

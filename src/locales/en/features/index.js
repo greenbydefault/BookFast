@@ -1,5 +1,5 @@
 /**
- * EN feature page translations – aggregated index.
+ * EN feature page translations. Aggregated index.
  * Auto-registers with getLocaleContent on import.
  */
 import { registerEnFeaturePages } from '../../../lib/getLocaleContent.js';

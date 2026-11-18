@@ -15,6 +15,7 @@ export const renderWaitlistConfirmPage = (locale = 'de') => {
     isEn
       ? 'Confirm your email address for the BookFast waitlist.'
       : 'Bestätige deine E-Mail-Adresse für die BookFast-Waitlist.',
+    { locale, noindex: true },
   );
 
   const content = document.getElementById('landing-content');

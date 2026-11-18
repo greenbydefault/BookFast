@@ -7,7 +7,7 @@ describe('getFeatureDemoModuleContent', () => {
     const module = getFeatureDemoModuleContent('buchungen', 'de');
 
     expect(module?.card.title).toBe('Buchungen');
-    expect(module?.filters.map((item) => item.label)).toEqual(['Wartend', 'Bestätigt', 'Abgeschlossen']);
+    expect(module?.filters.map((item) => item.label)).toEqual(['Wartet', 'Offene Zahlungen', 'Bestätigt']);
   });
 
   it('returns localized EN content for English locale', () => {

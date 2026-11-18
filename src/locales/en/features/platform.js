@@ -5,83 +5,60 @@ export const platformEn = {
   integration: {
     slug: 'integration',
     meta: {
-      title: 'Webflow Integration',
+      title: 'Webflow integration',
       description:
-        'Webflow booking widget: embed script or template copy. BookFast sits natively inside your Webflow site—no iframe.',
+        'Webflow booking widget: paste the template into the Designer, add the script. BookFast sits natively inside your Webflow site, no iframe.',
     },
     hero: {
-      headline: 'Your booking widget lives inside Webflow—not in an iframe.',
-      subheadline:
-        'One script tag or a template import, and the widget is part of your page. Full design control, no redirect, no conversion leak.',
+      headline: 'Your booking widget lives in Webflow, not in an iframe.',
+      subheadline: 'Paste the booking flow template into the Designer, add one script tag, done. No redirect, no iframe.',
       illustration: '/src/svg/illustrations/landingpage/features/ft_integrationen.svg',
       demoModule: 'integration',
     },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="int-template"]',
+      '[data-demo-section="int-embed"]',
+      '[data-demo-section="int-domain"]',
+    ],
     problem: {
-      text: 'Iframes feel foreign; redirects kill conversion. Visitors feel the break—and they bounce.',
+      text: 'Iframes look foreign, redirects cost conversion. Visitors notice the break and leave.',
       bullets: [
-        'Embed script: drop one tag in the body, done.',
-        'Template copy: import the widget into the Webflow Designer.',
-        'Data attributes instead of an iframe—full styling control.',
+        'The booking flow as real Webflow elements on your page.',
+        'One script tag connects those elements to your workspace.',
+        'You style everything in the Webflow Designer.',
       ],
     },
     interactiveHowItWorks: true,
     interactiveHowItWorksLabel: 'How to integrate BookFast',
-    interactiveHowItWorksHeadline: 'Embed the widget in under five minutes.',
+    interactiveHowItWorksHeadline: 'Embed the widget in under 5 minutes.',
     steps: [
       {
-        title: 'Pick your method',
-        icon: 'puzzle',
+        title: 'Paste the template',
+        icon: 'copy',
         bullets: [
-          {
-            title: 'Embed script: one tag, done',
-            description: 'Works on any website.',
-          },
-          {
-            title: 'Template copy: built for Webflow',
-            description: 'Full control inside the Webflow Designer.',
-          },
-          {
-            title: 'No iframe—true embed',
-            description: 'The widget lives inside your page.',
-          },
+          { title: '"Copy template" under Settings → Workspace', description: 'The booking flow is now on your clipboard.' },
+          { title: 'Paste into the Webflow Designer', description: 'Cmd+V drops every step onto the page as regular Webflow elements.' },
+          { title: 'Every step included', description: 'Resource, service, staff, extras, calendar, time slots, voucher, summary.' },
         ],
         reverse: false,
       },
       {
-        title: 'Drop in the code',
-        icon: 'copy',
+        title: 'Add the script',
+        icon: 'blocks-integration',
         bullets: [
-          {
-            title: 'Script tag in the body or Webflow custom code',
-            description: 'Place it before </body>.',
-          },
-          {
-            title: 'Template copy: import inside the Designer',
-            description: 'Bring in the exported template.',
-          },
-          {
-            title: 'Asynchronous loading',
-            description: 'Minimal impact on performance.',
-          },
+          { title: '"Copy code" and paste before </body>', description: 'In Webflow under Site settings → Custom code.' },
+          { title: 'One attribute: data-site-id', description: 'It connects the page to your workspace.' },
+          { title: 'No iframe', description: 'The script fills the elements on your page with live data.' },
         ],
         reverse: true,
       },
       {
-        title: 'Tune it',
-        icon: 'gear',
+        title: 'Check the connection',
+        icon: 'check',
         bullets: [
-          {
-            title: 'Data attributes for workspace, objects, services',
-            description: 'e.g. data-bookfast-workspace, data-bookfast-objects.',
-          },
-          {
-            title: 'Inherits styling from your site',
-            description: 'Webflow styles flow through automatically.',
-          },
-          {
-            title: 'No separate widget theme required',
-            description: 'Native embed keeps everything cohesive.',
-          },
+          { title: 'Linked domain in the dashboard', description: '"Check connection" shows whether the widget is live.' },
+          { title: 'The design stays yours', description: 'Fonts, colors, spacing: set them in the Designer.' },
+          { title: 'Tracking runs automatically', description: 'From the first load, events land in Insights.' },
         ],
         reverse: false,
       },
@@ -90,36 +67,33 @@ export const platformEn = {
       {
         icon: '🌐',
         title: 'Webflow designers',
-        description: 'Ideal for agencies and freelancers shipping client sites.',
+        description: 'For agencies and freelancers shipping client sites.',
         link: '/produkt',
       },
     ],
     relatedFeatures: ['buchungen', 'zahlungen', 'workspaces'],
-    tags: ['integration', 'website', 'widget', 'embed', 'api'],
+    tags: ['integration', 'website', 'widget', 'embed'],
     faq: [
       {
-        question: 'Is this Webflow-only?',
+        question: 'Does it only work with Webflow?',
         answer:
-          'No. The embed script works on any site. Template copy is exclusive to Webflow.',
+          'The template is for Webflow. The script needs the elements with data-bf attributes on the page. On other platforms you would have to rebuild that markup yourself.',
       },
       {
-        question: 'Will it slow down my page?',
-        answer: 'The script loads asynchronously and is built to keep performance impact small.',
+        question: 'Do I need both the template and the script?',
+        answer: 'Yes. The template provides the elements, the script connects them to your workspace.',
       },
       {
-        question: 'Can I style the widget?',
-        answer:
-          'Template copy gives you full control in the Webflow Designer. The embed script inherits your page styles automatically.',
+        question: 'Can I customize the widget design?',
+        answer: 'Yes, fully. The template is made of regular Webflow elements you style in the Designer.',
       },
       {
         question: 'Do I need to code?',
-        answer:
-          'No. Embed script is copy-paste. Template copy is a Designer import. Neither requires custom engineering.',
+        answer: 'No. Paste the template and copy one script tag. Neither needs code.',
       },
       {
-        question: 'Can I embed multiple widgets?',
-        answer:
-          'Yes. Target different objects or services with data attributes—e.g. one widget per room.',
+        question: 'Which language does the widget use?',
+        answer: 'German. An English widget version does not exist yet.',
       },
     ],
   },
@@ -127,14 +101,14 @@ export const platformEn = {
   kundenportal: {
     slug: 'kundenportal',
     meta: {
-      title: 'Customer Portal',
+      title: 'Customer portal',
       description:
-        'Magic link for invoices, payments, and cancellations. Book and manage without an account—less friction, more conversion.',
+        'Magic link with PIN for invoices, payments, and cancellations. Book without an account.',
     },
     hero: {
-      headline: 'No login, no account—customers still book and self-serve.',
+      headline: 'No login, no account. Guests still book and pay.',
       subheadline:
-        'One magic link per booking: view details, pay, cancel. Customers handle everything themselves—no passwords, no back-and-forth with you.',
+        'One magic link per booking: view, pay, cancel. Customers handle it themselves, no password, no emails to you.',
       demoModule: 'kundenportal',
       illustration: '/src/svg/illustrations/landingpage/features/ft_kundenportal.svg',
       trustClaims: ['No credit card required', 'Live in under 5 minutes'],
@@ -145,71 +119,44 @@ export const platformEn = {
       '[data-demo-section="cp-self-service"]',
     ],
     problem: {
-      text: 'Every signup is friction. Research shows up to 30% of people abandon flows that force account creation.',
+      text: 'A forced account before checkout is an extra page. A lot of guests never finish it.',
       bullets: [
-        'Book and manage instantly—no account required.',
-        'Magic link per booking—view, pay, cancel.',
-        'Less friction, fewer drop-offs, more completed bookings.',
+        'Book without an account.',
+        'Magic link per booking: view, pay, cancel.',
+        'No password, fewer drop-offs.',
       ],
     },
     interactiveHowItWorks: true,
     interactiveHowItWorksLabel: 'How the customer portal works',
-    interactiveHowItWorksHeadline: 'Book, manage, pay—without an account.',
+    interactiveHowItWorksHeadline: 'Book, manage, pay. No account.',
     steps: [
       {
-        title: 'Frictionless booking',
+        title: 'Book without friction',
         icon: 'blocks-integration',
         bullets: [
-          {
-            title: 'Checkout completes inside the widget',
-            description: 'No password wall, no forced registration.',
-          },
-          {
-            title: 'Customers never need an account',
-            description: 'Less friction means more conversions.',
-          },
-          {
-            title: 'More completions with fewer steps',
-            description: 'They book straight through the widget.',
-          },
+          { title: 'Checkout completes inside the widget', description: 'No password wall, no registration.' },
+          { title: 'Only name, email, and address', description: 'That is all the widget asks for.' },
+          { title: 'Payment in the same pass', description: 'By card, right after choosing.' },
         ],
         reverse: false,
       },
       {
-        title: 'Magic link—view and manage everything',
+        title: 'Magic link with PIN',
         icon: 'key',
         bullets: [
-          {
-            title: 'Unique magic link per booking, PIN-protected',
-            description: 'Customers open the email, enter the PIN, and they are in.',
-          },
-          {
-            title: 'View invoices, download PDF, pay online',
-            description: 'Self-service without pinging your inbox.',
-          },
-          {
-            title: 'Cancel in self-service when you allow it',
-            description: 'Fewer “how do I cancel?” tickets for you.',
-          },
+          { title: 'Link and 5-digit PIN by email', description: 'Sent with the confirmation. The customer opens the link and enters the PIN.' },
+          { title: 'View invoice and download PDF', description: 'Self-service without pinging your inbox.' },
+          { title: 'Pay open amounts', description: 'Unpaid bookings show "Pay now".' },
         ],
         reverse: true,
       },
       {
-        title: 'Value for both sides',
+        title: 'Cancel themselves',
         icon: 'check',
         bullets: [
-          {
-            title: 'Customers stay in control',
-            description: 'No extra apps or logins to remember.',
-          },
-          {
-            title: 'Less support, more bookings',
-            description: 'No password-reset emails or account administration.',
-          },
-          {
-            title: 'Unique link + PIN per booking',
-            description: 'Simple for customers, structured for you.',
-          },
+          { title: 'Cancel with email confirmation', description: 'The customer confirms with their email address.' },
+          { title: 'You see it in the dashboard right away', description: 'The booking switches to Cancelled.' },
+          { title: 'Link valid until 60 days after the appointment', description: 'Then access expires.' },
         ],
         reverse: false,
       },
@@ -218,13 +165,13 @@ export const platformEn = {
       {
         icon: '🏠',
         title: 'Vacation rentals',
-        description: 'Guests book and pay—invoice and cancellation live in the portal.',
+        description: 'Guests download their invoice and cancel in the portal.',
         link: '/features',
       },
       {
         icon: '💇',
         title: 'Salons',
-        description: 'Appointments booked online—invoice and changes via the magic link.',
+        description: 'Customers pay manually created appointments via the magic link.',
         link: '/features',
       },
     ],
@@ -238,27 +185,30 @@ export const platformEn = {
     faq: [
       {
         question: 'Do customers have to register?',
-        answer: 'No—not to book and not to view the booking. The magic link plus PIN is enough.',
+        answer: 'No, not to book and not to view the booking. Magic link plus PIN is enough.',
       },
       {
         question: 'Is the link sent automatically?',
         answer:
-          'Yes. After a booking is confirmed—and for manual bookings when enabled—BookFast emails the magic link.',
+          'Yes, when you approve a paid widget booking, and for manual bookings with "Send confirmation email" ticked.',
       },
       {
         question: 'Can customers pay from the portal?',
-        answer:
-          'Yes. Unpaid bookings show a “Pay now” button. Payment runs through Stripe.',
+        answer: 'Yes. Unpaid bookings show "Pay now". Payment runs by card through Stripe.',
       },
       {
         question: 'How is access secured?',
         answer:
-          'Each link is unique to a booking. A PIN adds a second factor—only someone with both can open the portal.',
+          'Each link is unique to a booking and also protected by a 5-digit PIN. Only someone with both can open the portal.',
       },
       {
-        question: 'Can customers cancel there?',
+        question: 'Do customers get their money back when they cancel?',
         answer:
-          'Yes, when you allow self-service cancellations. They cancel via the magic link; payment handling follows your booking status and cancellation rules.',
+          'Not automatically. The booking is cancelled, and you trigger a refund in Stripe if needed. Custom cancellation rules with deadlines don\'t exist yet.',
+      },
+      {
+        question: 'Can customers reschedule?',
+        answer: 'Not yet. They can cancel and book again.',
       },
     ],
   },

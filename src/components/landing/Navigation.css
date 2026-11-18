@@ -1,3 +1,24 @@
+/* Skip link */
+.landing-skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 1100;
+  padding: 0.5rem 0.875rem;
+  background: var(--color-vulcan-900);
+  color: #fff;
+  font-size: var(--space-14);
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+}
+
+.landing-skip-link:focus {
+  top: 0.75rem;
+  outline: 2px solid var(--color-majorelle-blue-500, #6366f1);
+  outline-offset: 2px;
+}
+
 /* Navigation */
 .landing-nav {
   position: sticky;

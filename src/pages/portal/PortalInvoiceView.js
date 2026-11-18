@@ -12,12 +12,14 @@ import {
     calculateTotals,
     getInvoiceNumber,
     getLeistungszeitraum,
+    getCustomerAddressLines,
 } from '../dashboard/booking-detail/invoiceUtils.js';
 
 // Payment badges
 const PAYMENT_BADGES = {
     unpaid: { label: 'Unbezahlt', class: 'invoice-badge--unpaid' },
     paid: { label: 'Bezahlt', class: 'invoice-badge--paid' },
+    deposit_paid: { label: 'Angezahlt', class: 'invoice-badge--unpaid' },
     refunded: { label: 'Erstattet', class: 'invoice-badge--refunded' },
     partial_refunded: { label: 'Teilweise erstattet', class: 'invoice-badge--refunded' },
     failed: { label: 'Fehlgeschlagen', class: 'invoice-badge--failed' },
@@ -77,6 +79,7 @@ const renderAddresses = (booking, workspace) => {
             <div class="invoice-address-block">
                 <span class="invoice-address-label">An</span>
                 <p class="invoice-address-name">${toName}</p>
+                ${getCustomerAddressLines(booking).map((line) => `<p>${line}</p>`).join('')}
                 ${booking.customer_email ? `<p>${booking.customer_email}</p>` : ''}
             </div>
         </div>
@@ -146,6 +149,15 @@ const renderSummary = (totals) => {
                     <td>Gesamtbetrag</td>
                     <td>${fmt(totals.total)}</td>
                 </tr>
+                ${totals.depositPaid > 0 ? `
+                <tr class="invoice-summary-row">
+                    <td>Anzahlung erhalten</td>
+                    <td>− ${fmt(totals.depositPaid)}</td>
+                </tr>
+                <tr class="invoice-summary-row">
+                    <td>Restbetrag offen</td>
+                    <td>${fmt(totals.balanceDue)}</td>
+                </tr>` : ''}
             </table>
         </div>
     `;

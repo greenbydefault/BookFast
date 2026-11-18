@@ -9,7 +9,7 @@ const DEFAULT_POLL_INTERVAL_MS = 15000;
 const STATIC_FALLBACK = {
   stripe: { key: 'inactive', label: 'Nicht verbunden', tone: 'disconnected' },
   webflow_embed: { key: 'inactive', label: 'Nicht verbunden', tone: 'disconnected' },
-  webhooks: { key: 'active', label: 'Aktiv', tone: 'connected' },
+  webhooks: { key: 'coming-soon', label: 'Coming Soon', tone: 'coming-soon' },
   google_calendar: { key: 'coming-soon', label: 'Coming Soon', tone: 'coming-soon' },
 };
 

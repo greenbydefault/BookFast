@@ -36,7 +36,7 @@ const PLANS = [
     priceAnnual: '91,10',
     priceEffectiveMonthly: '7,59',
     workspaces: 1,
-    description: 'Einzelbetreiber, 1 Website. Ein Setup – alles, was du zum Start brauchst.',
+    description: 'Einzelbetreiber, 1 Website. Ein Workspace reicht zum Start.',
     cta: 'Mit Basic starten',
   },
   {
@@ -45,7 +45,7 @@ const PLANS = [
     priceAnnual: '158,30',
     priceEffectiveMonthly: '13,19',
     workspaces: 3,
-    description: 'Mehrere Angebote/Setups, 2–3 Websites, Wachstum.',
+    description: 'Mehrere Angebote, 2–3 Websites.',
     cta: 'Mit Team starten',
   },
   {
@@ -60,9 +60,9 @@ const PLANS = [
 ];
 
 const PLANS_EN = [
-  { name: 'Basic', price: '9,49', priceAnnual: '91,10', priceEffectiveMonthly: '7,59', workspaces: 1, description: 'Solo operators, 1 website. One setup — everything you need to start.', cta: 'Start with Basic' },
-  { name: 'Team', price: '16,49', priceAnnual: '158,30', priceEffectiveMonthly: '13,19', workspaces: 3, description: 'Multiple offerings/setups, 2–3 websites, growth.', cta: 'Start with Team' },
-  { name: 'Agentur', price: '29,49', priceAnnual: '283,10', priceEffectiveMonthly: '23,59', workspaces: 10, description: 'Agencies, franchise, portfolio operators, many websites.', cta: 'Start with Agency' },
+  { name: 'Basic', price: '9,49', priceAnnual: '91,10', priceEffectiveMonthly: '7,59', workspaces: 1, description: 'Solo operator, 1 website. One workspace is enough to start.', cta: 'Start with Basic' },
+  { name: 'Team', price: '16,49', priceAnnual: '158,30', priceEffectiveMonthly: '13,19', workspaces: 3, description: 'Several offers, 2–3 websites.', cta: 'Start with Team' },
+  { name: 'Agency', price: '29,49', priceAnnual: '283,10', priceEffectiveMonthly: '23,59', workspaces: 10, description: 'Agencies, franchise, many sites.', cta: 'Start with Agency' },
 ];
 
 const SECURITY_BADGES = [
@@ -95,23 +95,23 @@ const PLAN_FEATURES_EN = [
 ];
 
 const PAGE_FAQ = [
-  { question: 'Was ist ein Workspace?', answer: 'Ein Workspace ist ein eigenes Setup – z.B. eine Website oder ein Projekt mit eigenen Angeboten, Regeln und Buchungen.' },
-  { question: 'Ist Analytics in jedem Plan gleich?', answer: 'Ja. Du bekommst den vollen Analytics-Umfang in jedem Plan – damit du sofort siehst, was funktioniert.' },
-  { question: 'Gibt es Buchungsgebühren oder Provision?', answer: 'Nein. BookFast nimmt keine Provision pro Buchung.' },
-  { question: 'Kann ich später upgraden?', answer: 'Ja. Du kannst jederzeit auf Team oder Agentur wechseln.' },
-  { question: 'Was bedeutet Nachhaltigkeits-Impact?', answer: 'Ein Teil deines Plans fließt in einen nachhaltigen Impact – messbar, transparent, ohne Extra-Aufwand für dich.' },
-  { question: 'Was ist der Vorteil vom Jahresplan?', answer: 'Du sparst 20% (entspricht 2 Monaten gratis) und hast volle Planbarkeit.' },
-  { question: 'Founder Deal – wie lange gilt der?', answer: 'Aktuell ist kein Founder Deal aktiv. Sobald ein Founder Deal verfügbar ist, kommunizieren wir Laufzeit und Bedingungen transparent auf dieser Seite.' },
+  { question: 'Was ist ein Workspace?', answer: 'Ein Workspace ist ein Setup: eine Website oder ein Projekt mit eigenen Objekten, Services und Buchungen.' },
+  { question: 'Ist Analytics in jedem Plan gleich?', answer: 'Ja. Funnel und Traffic sind in Basic, Team und Agentur dieselben. Du zahlst für Workspaces, nicht für Zahlen.' },
+  { question: 'Gibt es Buchungsgebühren oder Provision?', answer: 'Nein. BookFast nimmt keine Provision pro Buchung. Stripe-Gebühren bleiben.' },
+  { question: 'Kann ich später upgraden?', answer: 'Ja. Wechsel auf Team oder Agentur geht jederzeit.' },
+  { question: 'Was bedeutet 1 kg Plastik?', answer: 'Pro Monat fließt ein Teil des Plans in 1 kg Plastik, das aus dem Meer geholt wird. Kein Extra-Produkt, das du buchen musst.' },
+  { question: 'Was bringt der Jahresplan?', answer: '20 % weniger, entspricht 2 Monate gratis. Dieselben Features.' },
+  { question: 'Gibt es einen Founder Deal?', answer: 'Gerade nicht. Wenn einer läuft, stehen Laufzeit und Bedingungen hier.' },
 ];
 
 const PAGE_FAQ_EN = [
-  { question: 'What is a workspace?', answer: 'A workspace is its own setup — e.g. a website or project with its own offerings, rules, and bookings.' },
-  { question: 'Is Analytics the same in every plan?', answer: 'Yes. You get full analytics in every plan — so you see what works right away.' },
-  { question: 'Are there booking fees or commissions?', answer: 'No. BookFast charges no commission per booking.' },
-  { question: 'Can I upgrade later?', answer: 'Yes. You can switch to Team or Agency at any time.' },
-  { question: 'What does sustainability impact mean?', answer: 'Part of your plan flows into a sustainable impact — measurable, transparent, no extra effort for you.' },
-  { question: 'What is the annual plan advantage?', answer: 'You save 20% (equivalent to 2 months free) with full planning certainty.' },
-  { question: 'Founder Deal — how long does it last?', answer: 'Currently no Founder Deal is active. When available, we will communicate duration and conditions transparently on this page.' },
+  { question: 'What is a workspace?', answer: 'A workspace is one setup: a website or project with its own objects, services, and bookings.' },
+  { question: 'Is analytics the same on every plan?', answer: 'Yes. Funnel and traffic are identical on Basic, Team, and Agency. You pay for workspaces, not for numbers.' },
+  { question: 'Are there booking fees or commissions?', answer: 'No. BookFast takes no cut per booking. Stripe fees still apply.' },
+  { question: 'Can I upgrade later?', answer: 'Yes. Switch to Team or Agency anytime.' },
+  { question: 'What does 1 kg of plastic mean?', answer: 'Each month, part of the plan funds 1 kg of ocean plastic removal. Not a separate product you have to buy.' },
+  { question: 'What does the annual plan change?', answer: '20% off, equal to 2 months free. Same features.' },
+  { question: 'Is there a Founder Deal?', answer: 'Not right now. If one is live, duration and terms will be on this page.' },
 ];
 
 const SECURITY_BADGES_EN = [
@@ -127,7 +127,7 @@ function getPlanByWorkspaces(workspaceCount, plans) {
   return plans[2];
 }
 
-function renderActivePricingCard(workspaceCount, isAnnual, { plans, planFeatures, securityBadges }) {
+function renderActivePricingCard(workspaceCount, isAnnual, { plans, planFeatures, securityBadges, locale = 'de' }) {
   const activePlan = getPlanByWorkspaces(workspaceCount, plans);
   return createPricingCard({
     ...activePlan,
@@ -135,6 +135,7 @@ function renderActivePricingCard(workspaceCount, isAnnual, { plans, planFeatures
     isAnnual,
     planFeatures,
     securityBadges,
+    locale,
   });
 }
 
@@ -172,13 +173,13 @@ export const renderPricingPage = (locale = 'de') => {
   const securityBadges = isEn ? SECURITY_BADGES_EN : SECURITY_BADGES;
   const pageFaq = isEn ? PAGE_FAQ_EN : PAGE_FAQ;
   const sliderFeatures = getAllFeaturesForSlider(locale);
-  const pricingCardOpts = { plans, planFeatures, securityBadges };
+  const pricingCardOpts = { plans, planFeatures, securityBadges, locale };
 
   setPageMeta(
-    isEn ? 'Pricing – Webflow booking system' : 'Preise – Webflow Buchungssystem',
+    isEn ? 'Pricing. Webflow booking system' : 'Preise. Webflow Buchungssystem',
     isEn
-      ? 'Webflow booking system from €9.49/month. Every feature in every plan — 0% commission. Only workspaces differ.'
-      : 'Webflow Buchungssystem ab 9,49 €/Monat. Alle Features in jedem Plan – 0 % Provision. Nur Workspaces unterscheiden sich.',
+      ? 'From €9.49/month. Same features on every plan. 0% commission. You pay for workspace count.'
+      : 'Ab 9,49 €/Monat. Dieselben Features in jedem Plan. 0 % Provision. Du zahlst für die Anzahl Workspaces.',
     { locale },
   );
   setFAQSchema(pageFaq);
@@ -194,7 +195,7 @@ export const renderPricingPage = (locale = 'de') => {
 
   const founderNoteHTML = FOUNDER_DEAL_ACTIVE
     ? `<div class="landing-pricing-founder-note">
-        <span class="landing-pricing-founder-badge">Founder Deal – limitiert</span>
+        <span class="landing-pricing-founder-badge">Founder Deal, limitiert</span>
         <span class="landing-pricing-founder-text">25% im ersten Jahr für Early Access Nutzer.</span>
       </div>`
     : '';
@@ -212,10 +213,10 @@ export const renderPricingPage = (locale = 'de') => {
 
   content.innerHTML = `
     ${createHero({
-      headline: isEn ? 'Pricing – booking for Webflow' : 'Preise – Buchungssystem für Webflow',
+      headline: isEn ? 'Pricing. Booking for Webflow.' : 'Preise. Buchungssystem für Webflow.',
       subheadline: isEn
-        ? 'BookFast brings bookings, online payments, and analytics together — for services, day rentals, and overnight stays.'
-        : 'BookFast verbindet Buchungen, Online-Zahlungen und Analytics in einem System – für Services, Tagesmieten und Übernachtungen.',
+        ? 'Hours, day rentals, nights. Stripe in the widget. Same features on Basic, Team, and Agency.'
+        : 'Stunden, Tagesmieten, Nächte. Stripe im Widget. Dieselben Features in Basic, Team und Agentur.',
       illustrationAlt: isEn
         ? 'Pricing overview and analytics illustration for BookFast workspaces'
         : 'Preisübersicht und Analytics-Illustration für BookFast Workspaces',
@@ -225,13 +226,13 @@ export const renderPricingPage = (locale = 'de') => {
       slotContent: pricingSlotContent,
     })}
 
-    ${createFAQSection({ pageFaq, pageTitle: isEn ? 'Pricing' : 'Preise', featureOnly: true })}
+    ${createFAQSection({ locale, pageFaq, pageTitle: isEn ? 'Pricing' : 'Preise', featureOnly: true })}
 
     ${createFeatureRelatedSlider({
       features: sliderFeatures,
       locale,
       label: isEn ? 'Included in all plans' : 'In allen Plänen enthalten',
-      headline: isEn ? 'Always included.' : 'Immer dabei.',
+      headline: isEn ? 'Always in the plan you pick.' : 'Immer im Plan, den du nimmst.',
     })}
   `;
 
@@ -246,11 +247,11 @@ export const renderPricingPage = (locale = 'de') => {
   };
 };
 
-function initPricingControls(content, { isEn, plans, planFeatures, securityBadges }) {
+function initPricingControls(content, { isEn, plans, planFeatures, securityBadges, locale = 'de' }) {
   const container = content.querySelector('#pricing-cards-container');
   if (!container) return;
 
-  const pricingCardOpts = { plans, planFeatures, securityBadges };
+  const pricingCardOpts = { plans, planFeatures, securityBadges, locale };
 
   const state = {
     isAnnual: false,

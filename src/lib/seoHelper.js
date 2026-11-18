@@ -167,23 +167,6 @@ export const setProductSchema = (plans, options = {}) => {
   if (!Array.isArray(plans) || plans.length === 0) return;
 
   const priceValidUntil = oneYearFromNowIsoDate();
-  const shippingDetails = {
-    '@type': 'OfferShippingDetails',
-    shippingRate: { '@type': 'MonetaryAmount', value: 0, currency: 'EUR' },
-    shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'DE' },
-    deliveryTime: {
-      '@type': 'ShippingDeliveryTime',
-      handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 0, unitCode: 'DAY' },
-      transitTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 0, unitCode: 'DAY' },
-    },
-  };
-  const hasMerchantReturnPolicy = {
-    '@type': 'MerchantReturnPolicy',
-    applicableCountry: 'DE',
-    returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
-    merchantReturnDays: 14,
-    returnFees: 'https://schema.org/FreeReturn',
-  };
 
   const products = plans.map((plan) => {
     const monthlyPrice = parseEuroPrice(plan.price);
@@ -200,8 +183,6 @@ export const setProductSchema = (plans, options = {}) => {
         priceValidUntil,
         category: 'monthly',
         url: toAbsoluteUrl(isEn ? '/en/pricing' : '/preise'),
-        shippingDetails,
-        hasMerchantReturnPolicy,
       });
     }
 
@@ -215,8 +196,6 @@ export const setProductSchema = (plans, options = {}) => {
         priceValidUntil,
         category: 'yearly',
         url: toAbsoluteUrl(isEn ? '/en/pricing' : '/preise'),
-        shippingDetails,
-        hasMerchantReturnPolicy,
       });
     }
 

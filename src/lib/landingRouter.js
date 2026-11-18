@@ -10,6 +10,7 @@ import { normalizeLandingPath, getLocaleFromPath, applyDocumentLang } from './la
 import { syncLandingNavigationChrome } from '../components/landing/Navigation.js';
 import { syncLandingFooterChrome } from '../components/landing/Footer.js';
 import { openWaitlistModal } from '../components/landing/WaitlistModal.js';
+import { prepareLandingContentHydration, finishLandingContentHydration } from './landingContent.js';
 
 // Page registry: path → renderFn
 const landingPages = new Map();
@@ -40,7 +41,20 @@ const handleLandingDocumentClick = (e) => {
   if (link) {
     e.preventDefault();
     const href = link.getAttribute('href');
-    if (href && href.startsWith('/')) {
+    if (!href) return;
+
+    if (href.startsWith('#')) {
+      const targetEl = document.querySelector(href);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (typeof targetEl.focus === 'function') {
+          targetEl.focus({ preventScroll: true });
+        }
+      }
+      return;
+    }
+
+    if (href.startsWith('/')) {
       const current = normalizeLandingPath(
         window.location.pathname === '/index.html' ? '/' : window.location.pathname,
       );
@@ -141,15 +155,20 @@ const renderLandingRoute = (path) => {
 
   const locale = getLocaleFromPath(normalizedPath);
   const route = findRoute(normalizedPath);
-  if (route) {
-    const result = route.slug
-      ? route.renderFn(route.slug, locale)
-      : route.renderFn(locale);
-    if (typeof result === 'function') {
-      currentCleanup = result;
+  prepareLandingContentHydration(document.getElementById('landing-content'), normalizedPath);
+  try {
+    if (route) {
+      const result = route.slug
+        ? route.renderFn(route.slug, locale)
+        : route.renderFn(locale);
+      if (typeof result === 'function') {
+        currentCleanup = result;
+      }
+    } else {
+      render404(locale);
     }
-  } else {
-    render404(locale);
+  } finally {
+    finishLandingContentHydration();
   }
 
   // Update active nav links

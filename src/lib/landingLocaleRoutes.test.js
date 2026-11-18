@@ -23,6 +23,11 @@ describe('getLocaleSwitchTarget', () => {
     expect(getLocaleSwitchTarget('/en/pricing', 'de')).toBe('/preise');
   });
 
+  it('maps compare path', () => {
+    expect(getLocaleSwitchTarget('/vergleich/flowbookings', 'en')).toBe('/en/compare/flowbookings');
+    expect(getLocaleSwitchTarget('/en/compare/flowbookings', 'de')).toBe('/vergleich/flowbookings');
+  });
+
   it('returns same path when target locale already active', () => {
     expect(getLocaleSwitchTarget('/preise', 'de')).toBe('/preise');
     expect(getLocaleSwitchTarget('/en/pricing', 'en')).toBe('/en/pricing');

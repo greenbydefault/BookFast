@@ -26,6 +26,7 @@ export const MENU_ITEMS_MANAGEMENT = [
     { label: 'Addons', id: 'addons', icon: 'blocks-integration' },
     { label: 'Mitarbeiter', id: 'staff', icon: 'user' },
     { label: 'Gutscheine', id: 'vouchers', icon: 'ticket-percent' },
+    { label: 'Urlaub', id: 'vacations', icon: 'calender-days-date' },
 ];
 
 export const MENU_ITEMS_ANALYTICS = [

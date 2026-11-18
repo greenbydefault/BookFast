@@ -47,7 +47,7 @@ export const createHero = (config) => {
 
   const ctaHTML = `
     <div class="landing-hero-ctas">
-      ${primaryCTA ? `<a href="${primaryHref}" class="landing-btn landing-btn-primary landing-btn-lg" title="${primaryCTA}">${primaryCTA}</a>` : ''}
+      ${primaryCTA ? `<a href="${primaryHref}" class="landing-btn landing-btn-primary landing-btn-lg"${primaryHref.startsWith('/') && !primaryHref.includes('.html') ? ' data-landing-link' : ''} title="${primaryCTA}">${primaryCTA}</a>` : ''}
       ${secondaryCTA ? `<a href="${secondaryHref}" class="landing-btn landing-btn-secondary landing-btn-lg" data-landing-link title="${secondaryCTA}">${secondaryCTA}</a>` : ''}
     </div>`;
 

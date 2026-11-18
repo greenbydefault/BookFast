@@ -138,6 +138,7 @@ export const openCreateServiceModal = async (onSuccess) => {
 
         if (state.serviceType === 'hourly') {
             data.duration_minutes = state.durationHours * 60;
+            data.fixed_start_times = state.fixedStartTimesEnabled;
             data.booking_window_start = state.bookingWindowStart;
             data.booking_window_end = state.bookingWindowEnd;
             data.min_advance_hours = state.minAdvance;

@@ -1,5 +1,5 @@
 /**
- * Hauptfeatures für die Startseite – Accordion-Sektion
+ * Hauptfeatures für die Startseite (Accordion-Sektion)
  * Kurze Übersicht, keine Detail-Schritte.
  * Sprachrichtlinien: SaaS-Landing-Page-Wording-Guidelines-2026.md
  */
@@ -19,7 +19,7 @@ export const HOME_FEATURES_STEPS = [
     bullets: [
       { title: 'Keine BookFast-Provision', description: 'Du zahlst nur die Stripe-Transaktionsgebühren.' },
       { title: 'Stripe Connect in wenigen Minuten', description: 'Onboarding direkt aus den Einstellungen.' },
-      { title: 'Auszahlung 24 Stunden nach Bestätigung', description: 'Geld landet auf deinem Konto.' },
+      { title: 'Auszahlung über dein Stripe-Konto', description: 'Nach deinem Stripe-Auszahlungsplan.' },
     ],
   },
   {
@@ -27,7 +27,7 @@ export const HOME_FEATURES_STEPS = [
     icon: 'money-hand',
     bullets: [
       { title: 'Geld auf deinem Konto, bevor der Termin startet', description: 'Weniger No-Shows durch Vorauszahlung.' },
-      { title: 'Anzahlung konfigurierbar', description: 'Prozentual oder Festbetrag pro Service. Bei Buchung einziehbar. Sinnvoll bei größeren Objekten oder teuren Services.' },
+      { title: 'Anzahlung konfigurierbar', description: 'Prozent pro Service. Der Kunde zahlt bei der Buchung nur den Anteil, den Rest später im Kundenportal.' },
       { title: 'Automatische Rückerstattung bei Ablehnung', description: 'Ohne manuellen Aufwand.' },
     ],
   },
@@ -35,7 +35,7 @@ export const HOME_FEATURES_STEPS = [
     title: 'Buchungsverwaltung',
     icon: 'list',
     bullets: [
-      { title: 'Alle Buchungen an einem Ort', description: 'Status, Kalender, Listenansicht.' },
+      { title: 'Alle Buchungen an einem Ort', description: 'Eine Liste mit Status-Tabs.' },
       { title: 'Bestätigen oder Ablehnen', description: 'Mit einem Klick.' },
       { title: 'Keine verstreuten Anfragen mehr', description: 'Zentrale Übersicht statt E-Mail-Chaos.' },
     ],
@@ -45,7 +45,7 @@ export const HOME_FEATURES_STEPS = [
     icon: 'key',
     bullets: [
       { title: 'Magic Link pro Buchung', description: 'Kein Konto, kein Passwort nötig.' },
-      { title: 'Rechnung einsehen, bezahlen, stornieren', description: 'Self-Service für deine Gäste.' },
+      { title: 'Rechnung laden, bezahlen, stornieren', description: 'Self-Service für deine Gäste, geschützt per PIN.' },
       { title: 'Direkt buchen ohne Registrierung', description: 'Weniger Hürden, mehr Buchungen.' },
     ],
   },

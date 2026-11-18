@@ -9,8 +9,8 @@ const BASE_URL = 'https://book-fast.de';
 
 const toLocalizedRouteRecords = (pairs, routeType) =>
   pairs.flatMap((pair) => ([
-    { key: `${pair.key}:de`, groupKey: pair.key, locale: 'de', path: pair.de, routeType },
-    { key: `${pair.key}:en`, groupKey: pair.key, locale: 'en', path: pair.en, routeType },
+    { key: `${pair.key}:de`, groupKey: pair.key, locale: 'de', path: pair.de, routeType, noindex: Boolean(pair.noindex) },
+    { key: `${pair.key}:en`, groupKey: pair.key, locale: 'en', path: pair.en, routeType, noindex: Boolean(pair.noindex) },
   ]));
 
 export const CANONICAL_STATIC_ROUTES = Object.freeze([
@@ -71,7 +71,9 @@ const xmlEscape = (value) => value
   .replaceAll("'", '&apos;');
 
 export const buildSitemapXml = () => {
-  const urls = CANONICAL_STATIC_ROUTES.map(({ path }) => `${BASE_URL}${path}`);
+  const urls = CANONICAL_STATIC_ROUTES
+    .filter(({ noindex }) => !noindex)
+    .map(({ path }) => `${BASE_URL}${path}`);
   const rows = urls
     .map((url) => `  <url><loc>${xmlEscape(url)}</loc></url>`)
     .join('\n');

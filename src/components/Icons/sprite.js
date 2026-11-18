@@ -71,6 +71,9 @@ const sprite = `<svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
 <symbol id="icon-arrow-down" viewBox="0 0 24 24" fill="none" stroke="currentColor">
 <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </symbol>
+<symbol id="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+<path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
 <symbol id="icon-arrow-up-down" viewBox="0 0 24 24" fill="none" stroke="currentColor">
 <path d="M12.001 5.25L8.31104 9.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M12.001 5.25L15.691 9.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

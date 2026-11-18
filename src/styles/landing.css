@@ -10,14 +10,11 @@
 /* Component CSS (co-located) */
 @import '../components/landing/Navigation.css';
 @import '../components/landing/Hero.css';
-@import '../components/landing/HeroInteractive.css';
 @import '../components/landing/HeroNew.css';
 @import '../components/landing/FeatureCard.css';
 @import '../components/landing/FeatureSection.css';
-@import '../components/landing/StepsSection.css';
 @import '../components/landing/CTASection.css';
 @import '../components/landing/FAQAccordion.css';
-@import '../components/landing/TestimonialSlider.css';
 @import '../components/landing/PricingCard.css';
 @import '../components/landing/CompareTable.css';
 @import '../components/landing/IntegrationCard.css';

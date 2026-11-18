@@ -5,7 +5,7 @@
  */
 
 /** @typedef {{ key: string, de: string, en: string }} LocalizedRoutePair */
-/** @typedef {LocalizedRoutePair & { routeType: 'canonical' }} CanonicalRoutePair */
+/** @typedef {LocalizedRoutePair & { routeType: 'canonical', noindex?: boolean }} CanonicalRoutePair */
 /** @typedef {LocalizedRoutePair & { routeType: 'placeholder', noindex: true }} PlaceholderRoutePair */
 /** @typedef {LocalizedRoutePair & { routeType: 'redirect', redirectTarget: { de: string, en: string } }} RedirectRoutePair */
 
@@ -17,10 +17,11 @@ export const CANONICAL_ROUTE_PAIRS = Object.freeze([
   { key: 'about', de: '/ueber-uns', en: '/en/about', routeType: 'canonical' },
   { key: 'contact', de: '/kontakt', en: '/en/contact', routeType: 'canonical' },
   { key: 'features', de: '/features', en: '/en/features', routeType: 'canonical' },
+  { key: 'compare-flowbookings', de: '/vergleich/flowbookings', en: '/en/compare/flowbookings', routeType: 'canonical' },
   { key: 'imprint', de: '/impressum', en: '/en/imprint', routeType: 'canonical' },
   { key: 'privacy', de: '/datenschutz', en: '/en/privacy', routeType: 'canonical' },
   { key: 'terms', de: '/agb', en: '/en/terms', routeType: 'canonical' },
-  { key: 'waitlist-confirm', de: '/waitlist/confirm', en: '/en/waitlist/confirm', routeType: 'canonical' },
+  { key: 'waitlist-confirm', de: '/waitlist/confirm', en: '/en/waitlist/confirm', routeType: 'canonical', noindex: true },
 ]);
 
 /** @type {ReadonlyArray<PlaceholderRoutePair>} */

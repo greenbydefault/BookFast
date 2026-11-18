@@ -125,6 +125,10 @@ const buildCenterPreview = (service) => {
                     <span class="detail-preview-label">Reinigungsgebühr</span>
                     <span class="detail-preview-value">${service.cleaning_fee ? fmt(service.cleaning_fee) : '—'}</span>
                 </div>
+                <div class="detail-preview-item">
+                    <span class="detail-preview-label">Anzahlung</span>
+                    <span class="detail-preview-value">${service.deposit_enabled && service.deposit_percent > 0 ? `${service.deposit_percent} %, Rest im Kundenportal` : 'Keine, voller Betrag bei Buchung'}</span>
+                </div>
                 ${isOvernight ? `
                 <div class="detail-preview-item">
                     <span class="detail-preview-label">Min. Nächte</span>
@@ -307,6 +311,22 @@ const renderSideCard = (service) => {
                 ${navField({ label: 'Reinigungsgebühr (€)', name: 'cleaning_fee', value: service.cleaning_fee ?? '', type: 'number', placeholder: '0.00' })}
             `
         }),
+        sideCardSection({
+            title: 'Anzahlung',
+            content: `
+                <div class="custom-hours-toggle-row">
+                    <span class="custom-hours-toggle-label">Nur Anzahlung bei Buchung</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="deposit_enabled" ${service.deposit_enabled ? 'checked' : ''}>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div id="deposit-percent-field" style="${service.deposit_enabled ? '' : 'display: none;'}">
+                    ${navField({ label: 'Anzahlung (%)', name: 'deposit_percent', value: service.deposit_percent || '', type: 'number', placeholder: '30' })}
+                </div>
+                <p class="detail-nav-hint" style="margin-top: 6px; font-size: 0.8rem; color: var(--color-stone-500);">Der Kunde zahlt bei der Buchung nur diesen Anteil per Karte. Den Restbetrag begleicht er im Kundenportal.</p>
+            `
+        }),
         ...(isOvernight ? [sideCardSection({
             content: `
                 ${navField({ label: 'Min. Nächte', name: 'min_nights', value: service.min_nights ?? '', type: 'number', placeholder: '1' })}
@@ -439,6 +459,8 @@ const collectFormValues = (currentType) => {
         buffer_before_minutes: intOrNull('buffer_before_minutes'),
         buffer_after_minutes: intOrNull('buffer_after_minutes'),
         capacity_based_booking: checked('capacity_based_booking'),
+        deposit_enabled: checked('deposit_enabled'),
+        deposit_percent: Math.min(99, Math.max(0, intOrNull('deposit_percent') ?? 0)),
         bookable_days,
         min_advance_hours: intOrNull('min_advance_hours'),
     };
@@ -503,6 +525,11 @@ const wireUpSideCard = (serviceId, ctx, signal) => {
         // Toggle changed → rebuild to show/hide slot preview reactively
         if (e?.target?.name === 'fixed_start_times') {
             ctx.currentService = { ...ctx.currentService, ...values };
+        }
+
+        if (e?.target?.name === 'deposit_enabled') {
+            const percentField = card.querySelector('#deposit-percent-field');
+            if (percentField) percentField.style.display = e.target.checked ? '' : 'none';
         }
 
         updateCenter(buildCenterPreview(merged));

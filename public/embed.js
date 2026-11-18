@@ -145,6 +145,18 @@
         return normalizeDateKey(s);
     };
 
+    // Objekt-Puffer ist die Mindest-Reinigungszeit, der Service kann mehr verlangen.
+    const effectiveBuffers = (svc, obj) => ({
+        before: Math.max(+svc?.buffer_before_minutes || 0, +obj?.buffer_before_minutes || 0),
+        after: Math.max(+svc?.buffer_after_minutes || 0, +obj?.buffer_after_minutes || 0),
+    });
+
+    const isOnVacation = (ds, svc, staffId) => (state.data?.vacations || []).some(v =>
+        v.start_date <= ds && v.end_date >= ds && (
+            (v.scope === 'service' && v.service_id === svc?.id) ||
+            (v.scope === 'staff' && staffId && v.staff_id === staffId)
+        ));
+
     // --- Slot-Generierung (Kaskade: Service > Objekt, custom_hours > booking_window) ---
     const genSlots = (svc, obj, booked = [], dateStr = null) => {
         if (!svc || svc.service_type !== 'hourly') return [];
@@ -156,10 +168,9 @@
         const start = parseTime(customH?.from || svc.booking_window_start || obj?.booking_window_start || '09:00');
         const end = parseTime(customH?.to || svc.booking_window_end || obj?.booking_window_end || '18:00');
         const dur = svc.duration_minutes || 60;
-        const step = svc.fixed_start_times ? dur + (svc.buffer_after_minutes || 0) : 30;
+        const { before: bufB, after: bufA } = effectiveBuffers(svc, obj);
+        const step = svc.fixed_start_times ? dur + bufA : 30;
         const slots = [];
-        const bufB = svc.buffer_before_minutes || 0;
-        const bufA = svc.buffer_after_minutes || 0;
         for (let c = start; c + dur <= end; c += step) {
             const slotStart = c - bufB;
             const slotEnd = c + dur + bufA;
@@ -190,6 +201,7 @@
             if (!check(obj.bookable_days)) return false;
         }
         if (svc.min_advance_hours > 0 && new Date(d) < new Date(Date.now() + svc.min_advance_hours * 36e5)) return false;
+        if (isOnVacation(fmtDate(d), svc, state.sel.staff)) return false;
         return true;
     };
 
@@ -1253,7 +1265,7 @@
                     if (!it) return;
                     const def = items[ii]; if (!def) return;
                     const detail = it.variant ? ` ${it.variant}` : '';
-                    const qty = it.qty || 1;
+                    const qty = (it.qty || 1) * addonNightFactor(a);
                     priceRows.push(buildPriceRow(`+ ${def.name}${detail}`, `€${(+a.price * qty).toFixed(2)}`));
                 });
                 (sel.guests || []).forEach((guest, gi) => {
@@ -1262,7 +1274,7 @@
                         if (!it) return;
                         const def = items[ii]; if (!def) return;
                         const detail = it.variant ? ` ${it.variant}` : '';
-                        const qty = it.qty || 1;
+                        const qty = (it.qty || 1) * addonNightFactor(a);
                         priceRows.push(buildPriceRow(`+ ${def.name}${detail}${guestLabel}`, `€${(+a.price * qty).toFixed(2)}`));
                     });
                 });
@@ -1276,6 +1288,9 @@
         if (state.voucher.data) priceRows.push(buildPriceRow(`🎫 ${state.voucher.data.name}`, `-€${calcDisc().toFixed(2)}`));
 
         const totalStr = `€${calcTotal().toFixed(2)}`;
+        const deposit = calcDeposit();
+        const depositStr = deposit !== null ? `€${deposit.toFixed(2)}` : '';
+        const balanceStr = deposit !== null ? `€${(calcTotal() - deposit).toFixed(2)}` : '';
 
         const templateBindInputs = step2Scope.querySelectorAll('[data-bf-bind]');
         const summaryRows = step2Scope.querySelectorAll('[data-bf-summary]');
@@ -1331,12 +1346,24 @@
             showRow('staff', !!stf);
             showRow('time', isH && !!time);
 
+            if (deposit !== null) {
+                priceRows.push(
+                    buildPriceRow(`Jetzt fällig (Anzahlung ${svc.deposit_percent} %)`, depositStr),
+                    buildPriceRow('Später im Kundenportal', balanceStr),
+                );
+            }
             priceRowsEl.replaceChildren(...priceRows);
             priceRowsEl.style.display = priceRows.length ? '' : 'none';
             setVal('total', totalStr);
+            setVal('deposit', depositStr);
+            setVal('balance', balanceStr);
+            showRow('deposit', deposit !== null);
+            showRow('balance', deposit !== null);
         }
 
-        if (td) td.innerHTML = `<strong>Gesamt: ${totalStr}</strong>`;
+        if (td) td.innerHTML = deposit !== null
+            ? `<strong>Gesamt: ${totalStr}</strong><br>Jetzt fällig: ${depositStr}, Rest ${balanceStr} später`
+            : `<strong>Gesamt: ${totalStr}</strong>`;
     };
 
     const updVoucher = () => {
@@ -1373,10 +1400,19 @@
         return bookingUnits + guestUnits;
     }
 
+    // Spiegelt calculateAddonQuantity in supabase/functions/_shared/pricing.ts.
+    function addonNightFactor(addon) {
+        const svc = state.sel.service;
+        if (addon?.pricing_type !== 'per_night' || svc?.service_type !== 'overnight') return 1;
+        return state.sel.startDate && state.sel.endDate ? Math.max(1, nights(state.sel.startDate, state.sel.endDate)) : 1;
+    }
+
     function addonQuantity(addon, guestCount, sel) {
         const selectedUnits = countAddonUnits(sel);
-        if (selectedUnits > 0) return selectedUnits;
-        return normalizeAddonPricingType(addon?.pricing_type) === 'per_guest' ? (guestCount || 1) : 1;
+        const baseUnits = selectedUnits > 0
+            ? selectedUnits
+            : normalizeAddonPricingType(addon?.pricing_type) === 'per_guest' ? (guestCount || 1) : 1;
+        return baseUnits * addonNightFactor(addon);
     }
 
     function serviceBasePrice(svc, guestCount, startDate, endDate) {
@@ -1417,12 +1453,12 @@
             if (items.length) {
                 // Per Booking
                 (sel.items || []).forEach((it, ii) => {
-                    if (it) t += +a.price * (it.qty || 1);
+                    if (it) t += +a.price * (it.qty || 1) * addonNightFactor(a);
                 });
                 // Per Guest
                 (sel.guests || []).forEach(guest => {
                     (guest.items || []).forEach((it, ii) => {
-                        if (it) t += +a.price * (it.qty || 1);
+                        if (it) t += +a.price * (it.qty || 1) * addonNightFactor(a);
                     });
                 });
             } else {
@@ -1433,6 +1469,14 @@
         return t;
     };
     const calcTotal = () => Math.max(0, calcSub() - calcDisc());
+    // Spiegelt calculatePricing in supabase/functions/_shared/pricing.ts.
+    const calcDeposit = () => {
+        const svc = state.sel.service;
+        const pct = +svc?.deposit_percent || 0;
+        const total = calcTotal();
+        if (state.data.payout_status !== 'active' || !svc?.deposit_enabled || pct <= 0 || pct >= 100 || total <= 0) return null;
+        return Math.round(total * pct) / 100;
+    };
 
     // --- Interaktions-Handler ---
     const isSplitMode = () => !!root?.querySelector('[data-bf-card]');
@@ -1541,7 +1585,8 @@
         else if (svc.service_type === 'daily') { st = new Date(`${sd}T${svc.booking_window_start || '09:00'}`); et = new Date(`${sd}T${svc.booking_window_end || '18:00'}`); }
         else if (svc.service_type === 'overnight' && ed) { st = new Date(`${sd}T${svc.checkin_start || '14:00'}`); et = new Date(`${ed}T${svc.checkout_end || '11:00'}`); }
         else { state.availStatus = null; return; }
-        const ok = await rpc('check_availability', { p_object_id: obj.id, p_start_time: st.toISOString(), p_end_time: et.toISOString(), p_buffer_before: svc.buffer_before_minutes || 0, p_buffer_after: svc.buffer_after_minutes || 0, p_session_id: sessionId });
+        const buffers = effectiveBuffers(svc, obj);
+        const ok = await rpc('check_availability', { p_object_id: obj.id, p_start_time: st.toISOString(), p_end_time: et.toISOString(), p_buffer_before: buffers.before, p_buffer_after: buffers.after, p_session_id: sessionId });
         state.availStatus = ok === true ? 'available' : 'unavailable';
         if (ok !== true) {
             await loadAvail();
@@ -1892,6 +1937,8 @@
             return;
         }
         state.data = d;
+        const vacations = await rpc('get_widget_vacations', { p_site_id: siteId });
+        state.data.vacations = Array.isArray(vacations) ? vacations : [];
         const workspaceNameEl = disp('workspace-name');
         if (workspaceNameEl && state.data?.workspace_name) workspaceNameEl.textContent = state.data.workspace_name;
 

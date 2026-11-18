@@ -13,6 +13,9 @@
 .feature-related-slider__intro {
   margin: 0;
   color: var(--color-stone-500);
+  font-size: clamp(var(--space-14), 1.7vw, var(--space-16));
+  line-height: 1.5;
+  align-self: end;
 }
 
 .feature-related-slider__viewport {

@@ -51,5 +51,6 @@ export const FEATURE_GROUPS = [
 export const NAV_ITEMS = [
   { label: 'Produkt', labelKey: 'product', href: '/produkt' },
   { label: 'Features', labelKey: 'features', href: '/features' },
+  { label: 'Vergleich', labelKey: 'compare', href: '/vergleich/flowbookings' },
   { label: 'Preise', labelKey: 'pricing', href: '/preise' },
 ];

@@ -14,6 +14,7 @@ export const buildBookingsConfig = (getIconString) => ({
     PAYMENT_STATUS_MAP: {
         unpaid: { label: 'Unbezahlt', color: '#666' },
         paid: { label: 'Bezahlt', color: '#10b981' },
+        deposit_paid: { label: 'Angezahlt', color: '#3b82f6' },
         refunded: { label: 'Erstattet', color: '#f59e0b' },
         partial_refunded: { label: 'Teilweise erstattet', color: '#f59e0b' },
         failed: { label: 'Fehlgeschlagen', color: '#ef4444' },

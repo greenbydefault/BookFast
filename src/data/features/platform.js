@@ -4,60 +4,65 @@
 export const platform = {
   integration: {
     slug: 'integration',
-    meta: { title: 'Webflow Booking Widget', description: 'Webflow Booking Widget: Embed-Script oder Template-Copy. BookFast lebt nativ in deiner Webflow-Seite – kein iFrame.' },
+    meta: { title: 'Webflow Booking Widget', description: 'Webflow Booking Widget: Template in den Designer einfügen, Script einbinden. BookFast lebt nativ in deiner Webflow-Seite, ohne iFrame.' },
     hero: {
-      headline: 'Dein Booking-Widget lebt in Webflow – nicht in einem iFrame.',
-      subheadline: 'Ein Script-Tag oder Template-Copy, und dein Buchungswidget ist Teil deiner Seite. Volle Design-Kontrolle, kein Redirect, keine Conversion-Verluste.',
+      headline: 'Dein Booking-Widget lebt in Webflow, nicht in einem iFrame.',
+      subheadline: 'Booking Flow Template in den Designer einfügen, Script-Tag einbinden, fertig. Kein Redirect, kein iFrame.',
       illustration: '/src/svg/illustrations/landingpage/features/ft_integrationen.svg',
       demoModule: 'integration',
     },
-    problem: { text: 'iFrames sehen fremd aus, Redirects kosten Conversion. Deine Besucher merken den Bruch – und springen ab.', bullets: ['Embed-Script: Ein Tag in den Body, fertig.', 'Template-Copy: Widget in den Webflow Designer importieren.', 'Datenattribute statt iFrame – volle Design-Kontrolle.'] },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="int-template"]',
+      '[data-demo-section="int-embed"]',
+      '[data-demo-section="int-domain"]',
+    ],
+    problem: { text: 'iFrames sehen fremd aus, Redirects kosten Conversion. Deine Besucher merken den Bruch und springen ab.', bullets: ['Booking Flow als echte Webflow-Elemente in deiner Seite.', 'Ein Script-Tag verbindet die Elemente mit deinem Workspace.', 'Du gestaltest alles im Webflow Designer.'] },
     interactiveHowItWorks: true,
     interactiveHowItWorksLabel: 'So integrierst du BookFast',
     interactiveHowItWorksHeadline: 'Widget einbetten in unter 5 Minuten.',
     steps: [
       {
-        title: 'Methode wählen',
-        icon: 'puzzle',
+        title: 'Template einfügen',
+        icon: 'copy',
         bullets: [
-          { title: 'Embed-Script: ein Tag, fertig', description: 'Funktioniert auf jeder Website.' },
-          { title: 'Template-Copy: für Webflow', description: 'Volle Design-Kontrolle im Webflow Designer.' },
-          { title: 'Kein iFrame – natives Einbetten', description: 'Widget lebt in Ihrer Seite.' },
+          { title: '"Template kopieren" unter Einstellungen → Workspace', description: 'Der Booking Flow liegt danach in deiner Zwischenablage.' },
+          { title: 'Im Webflow Designer einfügen', description: 'Mit Cmd+V landen alle Schritte als normale Webflow-Elemente auf der Seite.' },
+          { title: 'Alle Schritte dabei', description: 'Objekt, Service, Mitarbeiter, Extras, Kalender, Zeitslots, Gutschein, Zusammenfassung.' },
         ],
         reverse: false
       },
       {
-        title: 'Code einbetten',
-        icon: 'copy',
+        title: 'Script einbinden',
+        icon: 'blocks-integration',
         bullets: [
-          { title: 'Script-Tag in Body oder Webflow Custom Code', description: 'Vor </body> einfügen.' },
-          { title: 'Template-Copy: Import im Webflow Designer', description: 'Export-Template importieren.' },
-          { title: 'Asynchrones Laden', description: 'Minimaler Performance-Impact.' },
+          { title: '"Code kopieren" und vor </body> einfügen', description: 'In Webflow unter Site Settings → Custom Code.' },
+          { title: 'Ein Attribut: data-site-id', description: 'Es verbindet die Seite mit deinem Workspace.' },
+          { title: 'Kein iFrame', description: 'Das Script füllt die Elemente auf deiner Seite mit Live-Daten.' },
         ],
         reverse: true
       },
       {
-        title: 'Anpassen',
-        icon: 'gear',
+        title: 'Verbindung prüfen',
+        icon: 'check',
         bullets: [
-          { title: 'Datenattribute für Workspace, Objekte, Services', description: 'data-bookfast-workspace, data-bookfast-objects.' },
-          { title: 'Design wird von Ihrer Seite übernommen', description: 'Webflow-Styles automatisch.' },
-          { title: 'Keine separaten Widget-Styles nötig', description: 'Natives Einbetten.' },
+          { title: 'Verknüpfte Domain im Dashboard', description: 'Mit "Verbindung prüfen" siehst du, ob das Widget aktiv ist.' },
+          { title: 'Design bleibt deins', description: 'Schriften, Farben, Abstände stellst du im Designer ein.' },
+          { title: 'Tracking läuft automatisch', description: 'Ab dem ersten Aufruf landen die Events in Insights.' },
         ],
         reverse: false
       }
     ],
     useCases: [
-      { icon: '🌐', title: 'Webflow-Designer', description: 'Für Agenturen und Freelancer die Kunden-Projekte bauen.', link: '/produkt' },
+      { icon: '🌐', title: 'Webflow-Designer', description: 'Für Agenturen und Freelancer, die Kunden-Projekte bauen.', link: '/produkt' },
     ],
     relatedFeatures: ['buchungen', 'zahlungen', 'workspaces'],
-    tags: ['integration', 'website', 'widget', 'embed', 'api'],
+    tags: ['integration', 'website', 'widget', 'embed'],
     faq: [
-      { question: 'Funktioniert es nur mit Webflow?', answer: 'Nein, das Embed-Script funktioniert auf jeder Website. Template-Copy ist Webflow-exklusiv.' },
-      { question: 'Beeinflusst es die Ladezeit?', answer: 'Das Script wird asynchron geladen und ist auf minimalen Performance-Impact ausgelegt.' },
-      { question: 'Kann ich das Widget-Design anpassen?', answer: 'Bei Template-Copy hast du volle Design-Kontrolle im Webflow Designer. Beim Embed-Script übernimmt das Widget die Styles deiner Seite automatisch.' },
-      { question: 'Brauche ich Programmierkenntnisse?', answer: 'Nein. Embed-Script: Copy-Paste eines Script-Tags. Template-Copy: Import im Webflow Designer. Beides ohne Code.' },
-      { question: 'Kann ich mehrere Widgets auf einer Seite einbetten?', answer: 'Ja. Du kannst verschiedene Objekte oder Services über Datenattribute gezielt ansprechen – z. B. ein Widget pro Raum.' },
+      { question: 'Funktioniert es nur mit Webflow?', answer: 'Das Template gibt es für Webflow. Das Script braucht auf der Seite die Elemente mit den data-bf-Attributen. Auf anderen Systemen müsstest du dieses Markup selbst nachbauen.' },
+      { question: 'Brauche ich Template und Script?', answer: 'Ja. Das Template liefert die Elemente, das Script verbindet sie mit deinem Workspace.' },
+      { question: 'Kann ich das Widget-Design anpassen?', answer: 'Ja, komplett. Das Template besteht aus normalen Webflow-Elementen, die du im Designer gestaltest.' },
+      { question: 'Brauche ich Programmierkenntnisse?', answer: 'Nein. Template einfügen und einen Script-Tag kopieren. Beides ohne Code.' },
+      { question: 'In welcher Sprache läuft das Widget?', answer: 'Auf Deutsch. Eine englische Widget-Version gibt es noch nicht.' },
     ],
   },
 
@@ -65,11 +70,11 @@ export const platform = {
     slug: 'kundenportal',
     meta: {
       title: 'Kundenportal',
-      description: 'Magic Link für Rechnung, Zahlung und Stornierung. Buchen und verwalten ohne Konto – weniger Friction, mehr Conversion.',
+      description: 'Magic Link mit PIN für Rechnung, Zahlung und Stornierung. Buchen ohne Konto.',
     },
     hero: {
-      headline: 'Kein Login, kein Konto – deine Kunden buchen trotzdem.',
-      subheadline: 'Ein Magic Link pro Buchung: einsehen, bezahlen, stornieren. Deine Kunden verwalten alles selbst – ohne Passwort und ohne Rückfragen an dich.',
+      headline: 'Kein Login, kein Konto. Deine Kunden buchen trotzdem.',
+      subheadline: 'Ein Magic Link pro Buchung: ansehen, bezahlen, stornieren. Deine Kunden erledigen das selbst, ohne Passwort und ohne Rückfragen an dich.',
       demoModule: 'kundenportal',
       illustration: '/src/svg/illustrations/landingpage/features/ft_kundenportal.svg',
       trustClaims: ['Keine Kreditkarte nötig', 'In unter 5 Minuten startklar'],
@@ -80,51 +85,51 @@ export const platform = {
       '[data-demo-section="cp-self-service"]',
     ],
     problem: {
-      text: 'Jede Registrierung ist eine Hürde. Studien zeigen: Bis zu 30% der Nutzer brechen ab, wenn sie ein Konto erstellen müssen.',
+      text: 'Ein Pflichtkonto vor der Buchung ist eine extra Seite. Viele Gäste schließen dort nicht ab.',
       bullets: [
-        'Direkt buchen, direkt verwalten – kein Konto nötig.',
-        'Magic Link pro Buchung – einsehen, bezahlen, stornieren.',
-        'Weniger Friction, weniger Abbrüche, mehr Buchungen.',
+        'Buchen ohne Konto.',
+        'Magic Link pro Buchung: ansehen, zahlen, stornieren.',
+        'Kein Passwort, weniger Abbrüche.',
       ],
     },
     interactiveHowItWorks: true,
     interactiveHowItWorksLabel: 'So funktioniert das Kundenportal',
-    interactiveHowItWorksHeadline: 'Buchen, verwalten, bezahlen – ohne Konto.',
+    interactiveHowItWorksHeadline: 'Buchen, verwalten, bezahlen. Ohne Konto.',
     steps: [
       {
         title: 'Buchen ohne Hürden',
         icon: 'blocks-integration',
         bullets: [
-          { title: 'Direkter Buchungsabschluss im Widget', description: 'Keine Passwort-Eingabe, keine Konto-Hürde.' },
-          { title: 'Keine Konto-Pflicht für Ihre Kunden', description: 'Weniger Reibung = mehr Abschlüsse.' },
-          { title: 'Mehr Abschlüsse durch weniger Friction', description: 'Kunden buchen direkt über das Widget.' },
+          { title: 'Buchung direkt im Widget abschließen', description: 'Keine Passwort-Eingabe, keine Registrierung.' },
+          { title: 'Nur Name, E-Mail und Adresse', description: 'Mehr fragt das Widget nicht ab.' },
+          { title: 'Zahlung im selben Durchgang', description: 'Per Karte, direkt nach der Auswahl.' },
         ],
         reverse: false
       },
       {
-        title: 'Magic Link – alles einsehen & verwalten',
+        title: 'Magic Link mit PIN',
         icon: 'key',
         bullets: [
-          { title: 'Magic Link pro Buchung mit PIN-Schutz', description: 'Kunde öffnet Link per E-Mail, gibt PIN ein.' },
-          { title: 'Rechnung ansehen, PDF laden, online bezahlen', description: 'Self-Service ohne Rückfragen.' },
-          { title: 'Stornieren – Self-Service für Ihre Kunden', description: 'Weniger Support-Anfragen für Sie.' },
+          { title: 'Link und 5-stellige PIN per E-Mail', description: 'Kommt mit der Bestätigung. Der Kunde öffnet den Link und gibt die PIN ein.' },
+          { title: 'Rechnung ansehen und PDF laden', description: 'Self-Service ohne Rückfragen.' },
+          { title: 'Offene Beträge bezahlen', description: 'Bei unbezahlten Buchungen erscheint "Jetzt bezahlen".' },
         ],
         reverse: true
       },
       {
-        title: 'Mehrwert für Kunde und Anbieter',
+        title: 'Selbst stornieren',
         icon: 'check',
         bullets: [
-          { title: 'Selbstbedienung für Ihre Kunden', description: 'Kontrolle ohne Aufwand.' },
-          { title: 'Weniger Support, mehr Buchungen', description: 'Keine Passwort-Mails, keine Konto-Verwaltung.' },
-          { title: 'Einzigartiger Link + PIN pro Buchung', description: 'Sicher und einfach.' },
+          { title: 'Stornieren mit E-Mail-Abgleich', description: 'Der Kunde bestätigt mit seiner E-Mail-Adresse.' },
+          { title: 'Du siehst es sofort im Dashboard', description: 'Die Buchung steht dann auf Storniert.' },
+          { title: 'Link gilt bis 60 Tage nach dem Termin', description: 'Danach läuft der Zugang ab.' },
         ],
         reverse: false
       }
     ],
     useCases: [
-      { icon: '🏠', title: 'Ferienwohnungen', description: 'Deine Gäste buchen und zahlen direkt – Rechnung und Stornierung im Portal.', link: '/features' },
-      { icon: '💇', title: 'Friseure & Salons', description: 'Termin direkt buchbar – Rechnung und Stornierung über den Magic Link.', link: '/features' },
+      { icon: '🏠', title: 'Ferienwohnungen', description: 'Gäste laden ihre Rechnung selbst und stornieren im Portal.', link: '/features' },
+      { icon: '💇', title: 'Friseure & Salons', description: 'Manuell angelegte Termine bezahlt der Kunde über den Magic Link.', link: '/features' },
     ],
     relatedFeatures: ['rechnungen', 'buchungen', 'zahlungen'],
     tags: ['kundenportal', 'selfservice', 'magic-link', 'status', 'payments'],
@@ -134,11 +139,12 @@ export const platform = {
       subheadline: '',
     },
     faq: [
-      { question: 'Müssen sich deine Kunden registrieren?', answer: 'Nein. Weder zum Buchen noch zum Einsehen der Buchung. Der Magic Link mit PIN reicht.' },
-      { question: 'Wird der Link automatisch verschickt?', answer: 'Ja, bei Bestätigung einer Buchung und bei manuell angelegten Buchungen (wenn aktiviert) verschickt BookFast den Magic Link per E-Mail.' },
-      { question: 'Kann der Kunde auch bezahlen?', answer: 'Ja, bei unbezahlten Buchungen erscheint ein „Jetzt bezahlen"-Button. Die Zahlung läuft über Stripe.' },
-      { question: 'Wie ist der Zugang geschützt?', answer: 'Jeder Link ist einzigartig pro Buchung. Zusätzlich ist der Zugang per PIN geschützt – nur wer beides hat, kommt ins Portal.' },
-      { question: 'Kann der Kunde im Portal stornieren?', answer: 'Ja, wenn du Stornierungen im Self-Service erlaubst. Der Kunde kann über den Magic Link stornieren; was mit Zahlungen passiert, richtet sich nach deinem Buchungsstatus und deiner Stornoregel.' },
+      { question: 'Müssen sich deine Kunden registrieren?', answer: 'Nein. Weder zum Buchen noch zum Einsehen der Buchung. Magic Link und PIN reichen.' },
+      { question: 'Wird der Link automatisch verschickt?', answer: 'Ja, wenn du eine bezahlte Widget-Buchung bestätigst, und bei manuell angelegten Buchungen mit Häkchen "Bestätigung per E-Mail senden".' },
+      { question: 'Kann der Kunde auch bezahlen?', answer: 'Ja. Bei unbezahlten Buchungen erscheint "Jetzt bezahlen". Die Zahlung läuft per Karte über Stripe.' },
+      { question: 'Wie ist der Zugang geschützt?', answer: 'Jeder Link ist einzigartig pro Buchung und zusätzlich mit einer 5-stelligen PIN geschützt. Nur wer beides hat, kommt ins Portal.' },
+      { question: 'Bekommt der Kunde bei Storno sein Geld zurück?', answer: 'Nicht automatisch. Die Buchung wird storniert, eine Erstattung löst du bei Bedarf in Stripe aus. Eigene Stornoregeln mit Fristen gibt es noch nicht.' },
+      { question: 'Kann der Kunde umbuchen?', answer: 'Noch nicht. Er kann stornieren und neu buchen.' },
     ],
   },
 };

@@ -1,6 +1,7 @@
 /**
- * ServicePreviewCard – Landing-only mirror of "Service anlegen" modal.
- * Tab-based UI (Stunden / Tagesmiete / Übernachtung) with local demo state.
+ * ServicePreviewCard – Landing-only mirror of "Service anlegen" modal
+ * (src/pages/dashboard/modals/CreateServiceModal.js) plus the add-on link
+ * from the service detail page. Local demo state only.
  */
 import { getIconString } from '../../Icons/Icon.js';
 import { escapeAttr } from '../../../lib/sanitize.js';
@@ -28,12 +29,22 @@ const DEFAULT_CONTENT = {
     { id: 'overnight', label: 'Übernachtung' },
   ],
   priceUnits: { hourly: 'Stunde', daily: 'Tag', overnight: 'Nacht' },
+  priceTypes: { perPerson: 'pro Person', total: 'gesamt' },
   advanceUnits: { hourly: 'Stunden', daily: 'Tage', overnight: 'Tage' },
   defaultPrices: { hourly: 120, daily: 560, overnight: 140 },
   objects: [
     { value: 'demo-obj-1', label: 'Villa Nord' },
     { value: 'demo-obj-2', label: 'Studio Süd' },
     { value: 'demo-obj-3', label: 'Loft Mitte' },
+  ],
+  staff: [
+    { value: 'demo-staff-1', label: 'Jennifer P.' },
+    { value: 'demo-staff-2', label: 'Max K.' },
+  ],
+  addons: [
+    { value: 'demo-addon-1', label: 'Beamer' },
+    { value: 'demo-addon-2', label: 'Frühstück' },
+    { value: 'demo-addon-3', label: 'Yogamatte' },
   ],
   placeholders: {
     name: 'z. B. Massage (60 Min.) oder Hausboot (4 Std.)',
@@ -43,12 +54,16 @@ const DEFAULT_CONTENT = {
     description: 'Beschreibung',
     optional: '(Optional)',
     object: 'Objekt',
+    staff: 'Mitarbeiter',
+    addons: 'Add-ons',
     price: 'Preis',
     duration: 'Dauer',
     bookingWindow: 'Buchungszeitfenster',
     checkinCheckout: 'Check-in/Out',
     from: 'Von',
     to: 'Bis',
+    customHours: 'Individuelle Zeiten pro Tag',
+    capacityBased: 'Kapazitätsbasiert buchbar',
     bookableDays: 'Buchbare Tage',
     minAdvance: 'Mindestvorlauf',
     fixedStartTimes: 'Feste Startzeiten',
@@ -58,9 +73,10 @@ const DEFAULT_CONTENT = {
     cleaningBuffer: 'Reinigungspuffer',
     before: 'Davor',
     after: 'Danach',
-    minutesShort: 'Min.',
+    minutes: 'Minuten',
     euro: '€',
     hours: 'Stunden',
+    addTimeWindow: '+ Zeitfenster hinzufügen',
   },
 };
 
@@ -69,7 +85,10 @@ const getInitialState = () => ({
   name: '',
   description: '',
   price: 120,
+  priceType: 'per_unit',
   selectedObjects: ['demo-obj-1'],
+  selectedStaff: [],
+  selectedAddons: ['demo-addon-1'],
   bookableDays: DEFAULT_CONTENT.days.map((day) => day.id),
   durationHours: 4,
   bookingWindowStart: '10:00',
@@ -78,12 +97,26 @@ const getInitialState = () => ({
   checkoutEnd: '10:30',
   minAdvance: 4,
   fixedStartTimesEnabled: false,
+  customHoursEnabled: false,
+  capacityBasedBooking: false,
   minNightsEnabled: false,
   minNights: 2,
   cleaningFee: 40,
   bufferBefore: 120,
   bufferAfter: 60,
 });
+
+const renderTags = (items, selected, dataAttr) => (items || []).map((item) => `
+  <button class="svc-demo-tag ${selected.includes(item.value) ? 'active' : ''}"
+          ${dataAttr}="${escapeAttr(item.value)}" type="button">${item.label}</button>
+`).join('');
+
+const renderToggle = (id, checked) => `
+  <label class="toggle-switch">
+    <input type="checkbox" id="${id}" ${checked ? 'checked' : ''}>
+    <span class="toggle-slider"></span>
+  </label>
+`;
 
 export const createServicePreviewCard = ({ content = DEFAULT_CONTENT } = {}) => `
   <div class="feature-demo-card" id="service-preview-card">
@@ -105,147 +138,192 @@ export const initServicePreviewCard = (heroContainer, { content = DEFAULT_CONTEN
   const body = heroContainer.querySelector('#service-preview-body');
   if (!body) return;
 
+  const labels = { ...DEFAULT_CONTENT.labels, ...(content.labels || {}) };
+  const priceTypes = { ...DEFAULT_CONTENT.priceTypes, ...(content.priceTypes || {}) };
+  const staffOptions = content.staff || DEFAULT_CONTENT.staff;
+  const addonOptions = content.addons || DEFAULT_CONTENT.addons;
   const state = getInitialState();
-
-  const captureValues = () => {
-    const q = (sel) => body.querySelector(sel);
-    const v = (sel) => q(sel)?.value ?? '';
-
-    const name = v('#svc-input-name');
-    if (name !== undefined) state.name = name;
-    const desc = v('#svc-input-desc');
-    if (desc !== undefined) state.description = desc;
-
-    const price = parseFloat(v('#svc-input-price'));
-    if (!isNaN(price)) state.price = price;
-    const fee = parseFloat(v('#svc-input-cleaning-fee'));
-    if (!isNaN(fee)) state.cleaningFee = fee;
-    const adv = parseInt(v('#svc-input-advance'), 10);
-    if (!isNaN(adv)) state.minAdvance = adv;
-    const bb = parseInt(v('#svc-input-buffer-before'), 10);
-    if (!isNaN(bb)) state.bufferBefore = bb;
-    const ba = parseInt(v('#svc-input-buffer-after'), 10);
-    if (!isNaN(ba)) state.bufferAfter = ba;
-
-    const activeDays = [...body.querySelectorAll('.day-toggle.active')].map((b) => b.dataset.day);
-    if (activeDays.length > 0 || body.querySelector('.day-toggle')) {
-      state.bookableDays = activeDays;
-    }
-
-    if (state.serviceType === 'hourly') {
-      const dur = parseInt(v('#svc-input-duration'), 10);
-      if (!isNaN(dur)) state.durationHours = dur;
-      const ts = v('#svc-input-time-start'); if (ts) state.bookingWindowStart = ts;
-      const te = v('#svc-input-time-end'); if (te) state.bookingWindowEnd = te;
-    } else if (state.serviceType === 'daily') {
-      const ts = v('#svc-input-time-start'); if (ts) state.bookingWindowStart = ts;
-      const te = v('#svc-input-time-end'); if (te) state.bookingWindowEnd = te;
-    } else {
-      const ci = v('#svc-input-time-start'); if (ci) state.checkinStart = ci;
-      const co = v('#svc-input-time-end'); if (co) state.checkoutEnd = co;
-    }
-  };
+  let customHoursRows = [];
+  let customHoursCounter = 0;
 
   const switchTab = (tabId) => {
-    captureValues();
     const old = state.serviceType;
-      state.serviceType = tabId;
-      if (state.price === content.defaultPrices[old]) state.price = content.defaultPrices[tabId];
-    render();
-  };
-
-  const toggleDay = (day) => {
-    if (state.bookableDays.includes(day)) {
-      state.bookableDays = state.bookableDays.filter((d) => d !== day);
-    } else {
-      state.bookableDays = [...state.bookableDays, day];
+    state.serviceType = tabId;
+    if (state.price === content.defaultPrices[old]) state.price = content.defaultPrices[tabId];
+    if (tabId === 'overnight') {
+      state.customHoursEnabled = false;
+      customHoursRows = [];
     }
     render();
   };
 
-  const toggleObject = (val) => {
-    if (state.selectedObjects.includes(val)) {
-      if (state.selectedObjects.length <= 1) return;
-      state.selectedObjects = state.selectedObjects.filter((v) => v !== val);
+  const toggleInList = (key, value, { keepOne = false } = {}) => {
+    const list = state[key];
+    if (list.includes(value)) {
+      if (keepOne && list.length <= 1) return;
+      state[key] = list.filter((v) => v !== value);
     } else {
-      state.selectedObjects = [...state.selectedObjects, val];
+      state[key] = [...list, value];
     }
     render();
+  };
+
+  const renderCustomHours = () => {
+    const container = body.querySelector('#svc-custom-hours-container');
+    if (!container) return;
+    container.style.display = state.customHoursEnabled ? '' : 'none';
+    if (!state.customHoursEnabled) return;
+
+    container.innerHTML = `
+      ${customHoursRows.map((row) => `
+        <div class="custom-hours-row" data-row-id="${escapeAttr(row.id)}">
+          <div class="custom-hours-row-top">
+            <div class="custom-hours-day-toggles">
+              ${content.days.map((day) => `
+                <button class="custom-hours-day-toggle ${row.days.includes(day.id) ? 'active' : ''}" data-row-id="${escapeAttr(row.id)}" data-day="${day.id}" type="button">${day.label}</button>
+              `).join('')}
+            </div>
+            <button class="custom-hours-delete" data-row-id="${escapeAttr(row.id)}" type="button">${getIconString('trash')}</button>
+          </div>
+          <div class="custom-hours-time-row">
+            <span class="label-inline">${labels.from}</span>
+            <input type="time" class="time-input" value="${escapeAttr(row.from)}" data-row-id="${escapeAttr(row.id)}" data-field="from">
+            <span class="label-inline">${labels.to}</span>
+            <input type="time" class="time-input" value="${escapeAttr(row.to)}" data-row-id="${escapeAttr(row.id)}" data-field="to">
+          </div>
+        </div>
+      `).join('')}
+      <button class="custom-hours-add-btn" id="svc-add-custom-hours" type="button">${labels.addTimeWindow}</button>
+    `;
+
+    container.querySelectorAll('.custom-hours-day-toggle').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const row = customHoursRows.find((r) => r.id === btn.dataset.rowId);
+        if (!row) return;
+        row.days = row.days.includes(btn.dataset.day)
+          ? row.days.filter((d) => d !== btn.dataset.day)
+          : [...row.days, btn.dataset.day];
+        renderCustomHours();
+      });
+    });
+    container.querySelectorAll('.custom-hours-delete').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        customHoursRows = customHoursRows.filter((r) => r.id !== btn.dataset.rowId);
+        renderCustomHours();
+      });
+    });
+    container.querySelectorAll('.time-input').forEach((input) => {
+      input.addEventListener('change', (e) => {
+        const row = customHoursRows.find((r) => r.id === e.target.dataset.rowId);
+        if (row) row[e.target.dataset.field] = e.target.value;
+      });
+    });
+    container.querySelector('#svc-add-custom-hours')?.addEventListener('click', addCustomHoursRow);
+  };
+
+  const addCustomHoursRow = () => {
+    customHoursCounter += 1;
+    customHoursRows.push({ id: `svc-ch-${customHoursCounter}`, days: [], from: '10:00', to: '18:00' });
+    renderCustomHours();
   };
 
   const render = () => {
     const type = state.serviceType;
     const priceUnit = content.priceUnits[type];
     const advanceUnit = content.advanceUnits[type];
+    const isOvernight = type === 'overnight';
 
     body.innerHTML = `
-      <div class="svc-demo-tabs">
-        ${(content.tabs || []).map((tab) => `
-          <button class="svc-demo-tab ${state.serviceType === tab.id ? 'active' : ''}"
-                  data-tab="${tab.id}" type="button">${tab.label}</button>
-        `).join('')}
-      </div>
-
-      <div class="modal-content-section">
+      <div class="modal-content-section" data-demo-section="svc-type">
+        <div class="svc-demo-tabs">
+          ${(content.tabs || []).map((tab) => `
+            <button class="svc-demo-tab ${state.serviceType === tab.id ? 'active' : ''}"
+                    data-tab="${tab.id}" type="button">${tab.label}</button>
+          `).join('')}
+        </div>
         <div class="modal-form-field">
           <input type="text" class="modal-form-input modal-input-large"
                  placeholder="${escapeAttr(content.placeholders.name)}"
                  value="${escapeAttr(state.name)}" id="svc-input-name">
         </div>
         <div class="modal-form-field">
-          <label class="modal-label modal-form-label">${content.labels.description} <span class="modal-label-optional">${content.labels.optional}</span></label>
+          <label class="modal-label modal-form-label">${labels.description} <span class="modal-label-optional">${labels.optional}</span></label>
           <textarea class="modal-form-input" placeholder="${escapeAttr(content.placeholders.description)}"
                     rows="2" id="svc-input-desc">${escapeAttr(state.description)}</textarea>
         </div>
-        <div class="modal-form-field">
-          <div class="modal-row">
-            <div class="modal-label">${getIconString('home')} ${content.labels.object}</div>
-            <div class="modal-controls">
-              <div class="svc-demo-tags">
-                ${(content.objects || []).map((obj) => `
-                  <button class="svc-demo-tag ${state.selectedObjects.includes(obj.value) ? 'active' : ''}"
-                          data-obj="${escapeAttr(obj.value)}" type="button">${obj.label}</button>
-                `).join('')}
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <div class="modal-content-section">
+      <div class="modal-content-section" data-demo-section="svc-pricing">
         <div class="modal-row">
-          <div class="modal-label">${getIconString('coins')} ${content.labels.price}</div>
+          <div class="modal-label">${getIconString('money-hand')} ${labels.price}</div>
           <div class="modal-controls svc-demo-price-controls">
             <input type="number" class="svc-demo-price-input" value="${state.price}" id="svc-input-price" step="1">
-            <span class="svc-demo-price-currency">${content.labels.euro}</span>
-            <span class="svc-demo-price-unit">${priceUnit}</span>
+            <span class="svc-demo-price-currency">${labels.euro}</span>
+            <select class="svc-demo-price-unit" id="svc-input-price-type">
+              <option value="per_unit" ${state.priceType === 'per_unit' ? 'selected' : ''}>${priceUnit}</option>
+              <option value="per_person" ${state.priceType === 'per_person' ? 'selected' : ''}>${priceTypes.perPerson}</option>
+              <option value="per_total" ${state.priceType === 'per_total' ? 'selected' : ''}>${priceTypes.total}</option>
+            </select>
           </div>
         </div>
 
         ${type === 'hourly' ? `
           <div class="modal-row">
-            <div class="modal-label">${getIconString('clock')} ${content.labels.duration}</div>
+            <div class="modal-label">${getIconString('clock')} ${labels.duration}</div>
             <div class="modal-controls svc-demo-price-controls">
               <input type="number" class="svc-demo-price-input" value="${state.durationHours}" id="svc-input-duration" min="1">
-              <span class="svc-demo-price-unit">${content.labels.hours}</span>
+              <span class="svc-demo-price-unit">${labels.hours}</span>
             </div>
           </div>
         ` : ''}
 
         <div class="modal-row">
-          <div class="modal-label">${getIconString('clock')} ${type === 'overnight' ? content.labels.checkinCheckout : content.labels.bookingWindow}</div>
+          <div class="modal-label">${getIconString('clock')} ${isOvernight ? labels.checkinCheckout : labels.bookingWindow}</div>
           <div class="modal-controls">
-            <span class="svc-demo-label-inline">${content.labels.from}</span>
-            <input type="time" class="svc-demo-time-input" value="${type === 'overnight' ? state.checkinStart : state.bookingWindowStart}" id="svc-input-time-start">
-            <span class="svc-demo-label-inline">${content.labels.to}</span>
-            <input type="time" class="svc-demo-time-input" value="${type === 'overnight' ? state.checkoutEnd : state.bookingWindowEnd}" id="svc-input-time-end">
+            <span class="svc-demo-label-inline">${labels.from}</span>
+            <input type="time" class="svc-demo-time-input" value="${isOvernight ? state.checkinStart : state.bookingWindowStart}" id="svc-input-time-start">
+            <span class="svc-demo-label-inline">${labels.to}</span>
+            <input type="time" class="svc-demo-time-input" value="${isOvernight ? state.checkoutEnd : state.bookingWindowEnd}" id="svc-input-time-end">
           </div>
         </div>
       </div>
 
-      <div class="modal-content-section">
+      <div class="modal-content-section" data-demo-section="svc-assign">
         <div class="modal-row">
-          <div class="modal-label">${getIconString('calender-days-date')} ${content.labels.bookableDays}</div>
+          <div class="modal-label">${getIconString('home')} ${labels.object}</div>
+          <div class="modal-controls">
+            <div class="svc-demo-tags">${renderTags(content.objects, state.selectedObjects, 'data-obj')}</div>
+          </div>
+        </div>
+        <div class="modal-row">
+          <div class="modal-label">${getIconString('user')} ${labels.staff}</div>
+          <div class="modal-controls">
+            <div class="svc-demo-tags">${renderTags(staffOptions, state.selectedStaff, 'data-staff')}</div>
+          </div>
+        </div>
+        <div class="modal-row">
+          <div class="modal-label">${getIconString('blocks-integration')} ${labels.addons}</div>
+          <div class="modal-controls">
+            <div class="svc-demo-tags">${renderTags(addonOptions, state.selectedAddons, 'data-addon')}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-content-section" data-demo-section="svc-rules">
+        ${!isOvernight ? `
+          <div class="modal-row">
+            <div class="modal-label">${getIconString('date-cog')} ${labels.customHours}</div>
+            <div class="modal-controls">${renderToggle('svc-toggle-custom-hours', state.customHoursEnabled)}</div>
+          </div>
+          <div class="modal-row">
+            <div class="modal-label">${getIconString('users-2')} ${labels.capacityBased}</div>
+            <div class="modal-controls">${renderToggle('svc-toggle-capacity', state.capacityBasedBooking)}</div>
+          </div>
+          <div id="svc-custom-hours-container" class="custom-hours-container" style="display:none;"></div>
+        ` : ''}
+
+        <div class="modal-row">
+          <div class="modal-label">${getIconString('calender-days-date')} ${labels.bookableDays}</div>
           <div class="modal-controls">
             <div class="day-toggles" id="svc-day-toggles">
               ${content.days.map((day) => `
@@ -257,7 +335,7 @@ export const initServicePreviewCard = (heroContainer, { content = DEFAULT_CONTEN
         </div>
 
         <div class="modal-row">
-          <div class="modal-label">${getIconString('clock')} ${content.labels.minAdvance}</div>
+          <div class="modal-label">${getIconString('clock')} ${labels.minAdvance}</div>
           <div class="modal-controls svc-demo-price-controls">
             <input type="number" class="svc-demo-price-input" value="${state.minAdvance}" id="svc-input-advance" min="0">
             <span class="svc-demo-price-unit">${advanceUnit}</span>
@@ -266,90 +344,81 @@ export const initServicePreviewCard = (heroContainer, { content = DEFAULT_CONTEN
 
         ${type === 'hourly' ? `
           <div class="modal-row">
-            <div class="modal-label">${getIconString('clock')} ${content.labels.fixedStartTimes}</div>
-            <div class="modal-controls">
-              <label class="toggle-switch">
-                <input type="checkbox" id="svc-toggle-fixed" ${state.fixedStartTimesEnabled ? 'checked' : ''}>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
+            <div class="modal-label">${getIconString('clock')} ${labels.fixedStartTimes}</div>
+            <div class="modal-controls">${renderToggle('svc-toggle-fixed', state.fixedStartTimesEnabled)}</div>
           </div>
         ` : ''}
 
-        ${type === 'overnight' ? `
+        ${isOvernight ? `
           <div class="modal-row">
-            <div class="modal-label">${getIconString('bed')} ${content.labels.minNights}</div>
-            <div class="modal-controls">
-              <label class="toggle-switch">
-                <input type="checkbox" id="svc-toggle-min-nights" ${state.minNightsEnabled ? 'checked' : ''}>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
+            <div class="modal-label">${getIconString('bed')} ${labels.minNights}</div>
+            <div class="modal-controls">${renderToggle('svc-toggle-min-nights', state.minNightsEnabled)}</div>
           </div>
           ${state.minNightsEnabled ? `
             <div class="modal-row" style="padding-left:20px;margin-top:-8px;">
               <div class="modal-label"></div>
               <div class="modal-controls svc-demo-price-controls">
                 <input type="number" class="svc-demo-price-input" value="${state.minNights}" id="svc-input-min-nights" min="1">
-                <span class="svc-demo-price-unit">${content.labels.nights}</span>
+                <span class="svc-demo-price-unit">${labels.nights}</span>
               </div>
             </div>
           ` : ''}
         ` : ''}
       </div>
 
-      <div class="modal-content-section">
+      <div class="modal-content-section" data-demo-section="svc-cleaning">
         <div class="modal-row">
-          <div class="modal-label">${getIconString('sparkles')} ${content.labels.cleaningFee}</div>
+          <div class="modal-label">${getIconString('clean')} ${labels.cleaningFee}</div>
           <div class="modal-controls svc-demo-price-controls">
             <input type="number" class="svc-demo-price-input" value="${state.cleaningFee}" id="svc-input-cleaning-fee" step="1">
-            <span class="svc-demo-price-currency">${content.labels.euro}</span>
+            <span class="svc-demo-price-currency">${labels.euro}</span>
           </div>
         </div>
 
         <div class="modal-row">
-          <div class="modal-label">${getIconString('clock')} ${content.labels.cleaningBuffer}</div>
+          <div class="modal-label">${getIconString('clean')} ${labels.cleaningBuffer}</div>
           <div class="modal-controls modal-controls-column">
             <div class="control-group-row">
-              <span class="text-small-muted">${content.labels.before}</span>
+              <span class="text-small-muted">${labels.before}</span>
               <div class="number-control">
                 <input type="number" class="number-input" value="${state.bufferBefore}" min="0" id="svc-input-buffer-before">
               </div>
-              <span class="text-small">${content.labels.minutesShort}</span>
+              <span class="text-small">${labels.minutes}</span>
             </div>
             <div class="control-group-row">
-              <span class="text-small-muted">${content.labels.after}</span>
+              <span class="text-small-muted">${labels.after}</span>
               <div class="number-control">
                 <input type="number" class="number-input" value="${state.bufferAfter}" min="0" id="svc-input-buffer-after">
               </div>
-              <span class="text-small">${content.labels.minutesShort}</span>
+              <span class="text-small">${labels.minutes}</span>
             </div>
           </div>
         </div>
       </div>
     `;
 
-    // --- Event listeners ---
+    const bindNumber = (selector, key, { int = false, min = null } = {}) => {
+      body.querySelector(selector)?.addEventListener('input', (e) => {
+        let value = int ? parseInt(e.target.value, 10) : parseFloat(e.target.value);
+        if (Number.isNaN(value)) value = 0;
+        if (min !== null) value = Math.max(min, value);
+        state[key] = value;
+      });
+    };
 
     body.querySelectorAll('.svc-demo-tab').forEach((btn) => {
       btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
-
     body.querySelector('#svc-input-name')?.addEventListener('input', (e) => { state.name = e.target.value; });
     body.querySelector('#svc-input-desc')?.addEventListener('input', (e) => { state.description = e.target.value; });
-    body.querySelector('#svc-input-price')?.addEventListener('input', (e) => { state.price = parseFloat(e.target.value) || 0; });
-    body.querySelector('#svc-input-duration')?.addEventListener('input', (e) => { state.durationHours = parseInt(e.target.value, 10) || 1; });
-    body.querySelector('#svc-input-advance')?.addEventListener('input', (e) => { state.minAdvance = parseInt(e.target.value, 10) || 0; });
-    body.querySelector('#svc-input-cleaning-fee')?.addEventListener('input', (e) => { state.cleaningFee = parseFloat(e.target.value) || 0; });
-
-    body.querySelector('#svc-input-buffer-before')?.addEventListener('input', (e) => {
-      state.bufferBefore = Math.max(0, parseInt(e.target.value, 10) || 0);
-      e.target.value = state.bufferBefore;
-    });
-    body.querySelector('#svc-input-buffer-after')?.addEventListener('input', (e) => {
-      state.bufferAfter = Math.max(0, parseInt(e.target.value, 10) || 0);
-      e.target.value = state.bufferAfter;
-    });
+    body.querySelector('#svc-input-price-type')?.addEventListener('change', (e) => { state.priceType = e.target.value; });
+    bindNumber('#svc-input-price', 'price');
+    bindNumber('#svc-input-duration', 'durationHours', { int: true, min: 1 });
+    bindNumber('#svc-input-advance', 'minAdvance', { int: true, min: 0 });
+    bindNumber('#svc-input-cleaning-fee', 'cleaningFee');
+    bindNumber('#svc-input-buffer-before', 'bufferBefore', { int: true, min: 0 });
+    bindNumber('#svc-input-buffer-after', 'bufferAfter', { int: true, min: 0 });
+    bindNumber('#svc-input-min-nights', 'minNights', { int: true, min: 1 });
 
     body.querySelector('#svc-input-time-start')?.addEventListener('change', (e) => {
       if (state.serviceType === 'overnight') state.checkinStart = e.target.value;
@@ -361,25 +430,38 @@ export const initServicePreviewCard = (heroContainer, { content = DEFAULT_CONTEN
     });
 
     body.querySelectorAll('#svc-day-toggles .day-toggle').forEach((btn) => {
-      btn.addEventListener('click', () => toggleDay(btn.dataset.day));
+      btn.addEventListener('click', () => toggleInList('bookableDays', btn.dataset.day));
     });
-
-    body.querySelectorAll('.svc-demo-tag').forEach((btn) => {
-      btn.addEventListener('click', () => toggleObject(btn.dataset.obj));
+    body.querySelectorAll('[data-obj]').forEach((btn) => {
+      btn.addEventListener('click', () => toggleInList('selectedObjects', btn.dataset.obj, { keepOne: true }));
+    });
+    body.querySelectorAll('[data-staff]').forEach((btn) => {
+      btn.addEventListener('click', () => toggleInList('selectedStaff', btn.dataset.staff));
+    });
+    body.querySelectorAll('[data-addon]').forEach((btn) => {
+      btn.addEventListener('click', () => toggleInList('selectedAddons', btn.dataset.addon));
     });
 
     body.querySelector('#svc-toggle-fixed')?.addEventListener('change', (e) => {
       state.fixedStartTimesEnabled = e.target.checked;
     });
-
+    body.querySelector('#svc-toggle-capacity')?.addEventListener('change', (e) => {
+      state.capacityBasedBooking = e.target.checked;
+    });
+    body.querySelector('#svc-toggle-custom-hours')?.addEventListener('change', (e) => {
+      state.customHoursEnabled = e.target.checked;
+      if (state.customHoursEnabled && customHoursRows.length === 0) {
+        addCustomHoursRow();
+        return;
+      }
+      renderCustomHours();
+    });
     body.querySelector('#svc-toggle-min-nights')?.addEventListener('change', (e) => {
       state.minNightsEnabled = e.target.checked;
       render();
     });
 
-    body.querySelector('#svc-input-min-nights')?.addEventListener('input', (e) => {
-      state.minNights = parseInt(e.target.value, 10) || 1;
-    });
+    renderCustomHours();
   };
 
   render();

@@ -6,11 +6,11 @@ export const coreResources = {
     slug: 'analytics',
     meta: {
       title: 'Analytics & Insights',
-      description: 'Conversion-Funnel, Drop-off-Raten, Traffic-Daten und Zahlungs-Statistiken – Daten die andere Booking-Tools nicht zeigen.',
+      description: 'Conversion-Funnel, Drop-off, Traffic nach Browser, OS und Gerät sowie Zahlungs-Statistiken direkt im Buchungs-Dashboard.',
     },
     hero: {
       headline: 'Sieh genau, wo Kunden abspringen.',
-      subheadline: 'Conversion-Funnel, Drop-off-Analyse und Traffic-Daten – verstehe, warum Besucher nicht buchen und wo du optimieren kannst.',
+      subheadline: 'Conversion-Funnel, Drop-off und Traffic-Daten. Du siehst, warum Besucher nicht buchen und wo du nachbessern kannst.',
       demoModule: 'analytics',
       illustration: '/src/svg/illustrations/empty-state-analytics.svg',
     },
@@ -20,24 +20,24 @@ export const coreResources = {
       '[data-demo-section="an-optimize"]',
     ],
     problem: {
-      text: 'Andere Buchungssysteme zeigen dir Buchungszahlen. Aber nicht, warum 70% deiner Besucher den Checkout nicht abschließen.',
+      text: 'Andere Buchungssysteme zeigen dir, wie viele Buchungen reinkamen. Aber nicht, wie viele Besucher den Checkout abbrechen und an welcher Stelle.',
       bullets: [
-        'Conversion-Funnel: Widget geladen → Buchung gestartet → Checkout → Zahlung.',
-        'Drop-off-Analyse zeigt, wo Kunden abspringen.',
-        'Traffic-Daten: Browser, Geräte, Länder, Städte.',
+        'Conversion-Funnel: Widget geladen, Buchung gestartet, Checkout gestartet, Zahlung erfolgreich.',
+        'Drop-off pro Schritt zeigt, wo Kunden abspringen.',
+        'Traffic-Daten: Browser, Betriebssystem, Gerät.',
       ],
     },
     interactiveHowItWorks: true,
-    interactiveHowItWorksLabel: 'So nutzen Sie Analytics',
-    interactiveHowItWorksHeadline: 'Vom Widget-Aufruf bis zur Conversion – alles sichtbar.',
+    interactiveHowItWorksLabel: 'So nutzt du Analytics',
+    interactiveHowItWorksHeadline: 'Vom Widget-Aufruf bis zur Zahlung, alles sichtbar.',
     steps: [
       {
         title: 'Widget einbetten',
         icon: 'globe',
         bullets: [
-          { title: 'Tracking startet automatisch mit Widget-Einbindung', description: 'Widget-Aufrufe, Buchungsstarts, Checkouts und Zahlungen.' },
-          { title: 'Keine zusätzliche Konfiguration nötig', description: 'Das Tracking startet mit dem ersten Aufruf.' },
-          { title: 'DSGVO-konform, keine externen Cookies', description: 'Datenschutz gewährleistet.' },
+          { title: 'Tracking startet mit der Widget-Einbindung', description: 'Widget-Aufrufe, Buchungsstarts, Checkouts und Zahlungen.' },
+          { title: 'Keine zusätzliche Konfiguration nötig', description: 'Das Tracking läuft ab dem ersten Aufruf.' },
+          { title: 'Ohne Google Analytics und Drittanbieter-Cookies', description: 'Die Events landen nur in deinem BookFast-Workspace.' },
         ],
         reverse: false
       },
@@ -45,9 +45,9 @@ export const coreResources = {
         title: 'Insights öffnen',
         icon: 'chart',
         bullets: [
-          { title: 'Funnel-Visualisierung zeigt jeden Schritt', description: 'Widget geladen → Buchung gestartet → Checkout → Zahlung.' },
-          { title: 'Drop-off-Analyse identifiziert Schwachstellen', description: 'Wo springen Kunden ab?' },
-          { title: 'Traffic- und Payment-Metriken auf einen Blick', description: 'Browser, Geräte, Länder, Städte.' },
+          { title: 'Funnel zeigt jeden Schritt', description: 'Widget geladen, Buchung gestartet, Checkout, Zahlung.' },
+          { title: 'Drop-off pro Schritt', description: 'Wo springen Kunden ab?' },
+          { title: 'Traffic und Zahlungen in eigenen Tabs', description: 'Browser, OS, Gerät. Dazu gestartete und erfolgreiche Zahlungen.' },
         ],
         reverse: true
       },
@@ -56,49 +56,54 @@ export const coreResources = {
         icon: 'target',
         bullets: [
           { title: 'Engpässe im Funnel gezielt angehen', description: 'Wo springen die meisten Kunden ab?' },
-          { title: 'A/B-Tests oder Anpassungen priorisieren', description: 'Datenbasiert statt Bauchgefühl.' },
-          { title: 'Mit Vergleichszeiträumen Fortschritt messen', description: 'Letzter Monat, 3, 6 oder 12 Monate.' },
+          { title: 'Änderungen nach Daten priorisieren', description: 'Zum Beispiel weniger Pflichtfelder, wenn viele im Checkout abbrechen.' },
+          { title: 'Zeiträume wechseln', description: 'Letzter Monat, 3, 6 oder 12 Monate.' },
         ],
         reverse: false
       }
     ],
     useCases: [
-      { icon: '📈', title: 'Conversion optimieren', description: 'Finde heraus, wo Kunden im Buchungsprozess abspringen.', link: '/features/buchungen' },
-      { icon: '💰', title: 'Revenue tracken', description: 'Verfolge Umsatz, Zahlungserfolgsrate und Refunds.', link: '/features/zahlungen' },
-      { icon: '🌍', title: 'Zielgruppe verstehen', description: 'Browser, Geräte, Länder und Städte deiner Besucher.', link: '/features/analytics' },
+      { icon: '📈', title: 'Conversion verbessern', description: 'Finde heraus, wo Kunden im Buchungsprozess abspringen.', link: '/features/buchungen' },
+      { icon: '💰', title: 'Umsatz verfolgen', description: 'Umsatz, Zahlungserfolgsrate und Erstattungen.', link: '/features/zahlungen' },
+      { icon: '📱', title: 'Geräte verstehen', description: 'Siehst du viel Mobile-Traffic, testest du das Widget zuerst auf dem Handy.', link: '/features/analytics' },
     ],
     sections: [],
     relatedFeatures: ['buchungen', 'zahlungen', 'integration'],
-    tags: ['analytics', 'tracking', 'reports', 'conversion', 'insights', 'kunden', 'crm'],
+    tags: ['analytics', 'tracking', 'reports', 'conversion', 'insights'],
     faq: [
-      { question: 'Werden die Daten in Echtzeit angezeigt?', answer: 'Ja, Analytics-Daten werden in Echtzeit erfasst und im Dashboard angezeigt.' },
-      { question: 'Welche Zeiträume kann ich auswählen?', answer: 'Letzter Monat, letzte 3, 6 oder 12 Monate. Mit Vergleichswerten zum vorherigen Zeitraum.' },
-      { question: 'Brauche ich ein externes Analytics-Tool?', answer: 'Nein, BookFast hat eigene Analytics. Du kannst aber weiterhin Google Analytics oder Plausible parallel nutzen.' },
-      { question: 'Welche Daten werden erfasst?', answer: 'Widget-Aufrufe, Buchungsstarts, Checkouts, Zahlungen, Browser, OS, Geräte, Länder und Städte. Alles DSGVO-konform.' },
-      { question: 'Ist das Tracking DSGVO-konform?', answer: 'Ja. Das Tracking läuft ohne externe Analytics-Cookies und die Daten werden auf EU-Servern verarbeitet.' },
+      { question: 'Werden die Daten in Echtzeit angezeigt?', answer: 'Ja, jedes Widget-Event landet sofort in Insights.' },
+      { question: 'Welche Zeiträume kann ich auswählen?', answer: 'Letzter Monat, letzte 3, 6 oder 12 Monate.' },
+      { question: 'Brauche ich ein externes Analytics-Tool?', answer: 'Nein, BookFast hat eigene Analytics. Google Analytics oder Plausible kannst du parallel weiter nutzen.' },
+      { question: 'Welche Daten werden erfasst?', answer: 'Widget-Aufrufe, Buchungsstarts, Checkouts, Zahlungen sowie Browser, Betriebssystem und Gerätetyp. Länder und Städte erfasst BookFast aktuell nicht.' },
+      { question: 'Setzt das Tracking Cookies?', answer: 'Keine Cookies von Drittanbietern. Das Widget speichert eine zufällige Session-ID im Browser, damit ein Besuch als ein Funnel zählt. Erwähne das in deiner Datenschutzerklärung.' },
     ],
   },
   objekte: {
     slug: 'objekte',
-    meta: { title: 'Objektverwaltung', description: 'Räume, Wohnungen, Studios – alle buchbaren Objekte mit Kapazität, Bildern und Verfügbarkeiten.' },
+    meta: { title: 'Objektverwaltung', description: 'Räume, Wohnungen, Studios: alle buchbaren Objekte mit Kapazität, buchbaren Tagen, Zeiten und verknüpften Services.' },
     hero: {
-      headline: 'Räume, Wohnungen, Plätze – an einem Ort verwaltet.',
-      subheadline: 'Jedes Objekt mit Kapazität, Fotos, buchbaren Tagen und individuellen Regeln. Einmal einrichten, dauerhaft im Griff.',
+      headline: 'Räume, Wohnungen, Plätze. An einem Ort verwaltet.',
+      subheadline: 'Jedes Objekt mit Kapazität, buchbaren Tagen, Zeitfenster und Zeiten pro Wochentag. Einmal einrichten, dann läuft es.',
       demoModule: 'objekte',
       illustration: '/src/svg/illustrations/landingpage/features/ft_objektverwaltung.svg',
     },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="obj-basics"]',
+      '[data-demo-section="obj-availability"]',
+      '[data-demo-section="obj-services"]',
+    ],
     interactiveHowItWorks: true,
     interactiveHowItWorksLabel: 'So richtest du Objekte ein',
     interactiveHowItWorksHeadline: 'So richtest du deine Objekte ein.',
-    problem: { text: 'Jedes Objekt hat eigene Regeln, Kapazitäten und Zeiten. Ohne System verlierst du den Überblick – und Kunden buchen, was nicht verfügbar ist.', bullets: ['Kapazität und buchbare Tage pro Objekt konfigurieren.', 'Buchungsfenster: Wie weit im Voraus können Kunden buchen?', 'Reinigungspuffer zwischen Buchungen.'] },
+    problem: { text: 'Jedes Objekt hat eigene Zeiten und Kapazitäten. Ohne System verlierst du den Überblick, und Kunden buchen, was gar nicht frei ist.', bullets: ['Kapazität und buchbare Tage pro Objekt.', 'Zeitfenster und eigene Zeiten pro Wochentag.', 'Belegte Zeiten sind im Widget nicht mehr buchbar.'] },
     steps: [
       {
         title: 'Objekt erstellen',
         icon: 'package',
         bullets: [
-          { title: 'Name, Beschreibung und Kapazität Pflicht', description: 'Name, Kapazität, Beschreibung – damit Kunden sofort wissen, was sie buchen.' },
-          { title: 'Bilder helfen bei der Auswahl', description: 'Fotos erhöhen Vertrauen und reduzieren Rückfragen vor der Buchung deutlich.' },
-          { title: 'Pro Objekt individuelle Einstellungen möglich', description: 'Zeiten, Puffer, Übernachtung – alles individuell pro Objekt klar konfigurierbar, jederzeit.' },
+          { title: 'Name ist Pflicht, der Rest optional', description: 'Name, Beschreibung, Kapazität. Kunden sehen sofort, was sie buchen.' },
+          { title: 'Kapazität für Gruppen', description: 'Wie viele Personen passen rein? Zum Beispiel 8 für einen Seminarraum.' },
+          { title: 'Als Entwurf speichern', description: 'Erst fertig einrichten, dann veröffentlichen.' },
         ],
         reverse: false
       },
@@ -106,32 +111,22 @@ export const coreResources = {
         title: 'Verfügbarkeit setzen',
         icon: 'calender-days-date',
         bullets: [
-          { title: 'Buchbare Tage und Uhrzeiten pro Objekt', description: 'Mo–Fr, 8–20 Uhr – konfigurierbar pro Objekt.' },
-          { title: 'Buchungsfenster: z.B. maximal 3 Monate im Voraus', description: 'Wie weit im Voraus können Kunden buchen? Du legst fest.' },
-          { title: 'Puffer zwischen Buchungen für Reinigung oder Umbau', description: 'Zeit zwischen Buchungen – für Reinigung oder Umbau.' },
+          { title: 'Buchbare Tage pro Objekt', description: 'Zum Beispiel Montag bis Freitag.' },
+          { title: 'Zeitfenster und Zeiten pro Wochentag', description: 'Etwa 10 bis 18 Uhr, samstags nur bis 14 Uhr.' },
+          { title: 'Service-Zeiten haben Vorrang', description: 'Hat ein Service eigene Zeiten, gelten die. Sonst die vom Objekt.' },
         ],
         reverse: true
       },
       {
-        title: 'Services zuordnen',
-        icon: 'spark-magic',
+        title: 'Services verknüpfen',
+        icon: 'list',
         bullets: [
-          { title: 'Services unter Objekt-Detail zuordnen', description: 'Im Objekt-Detail ordnest du die passenden Services zu.' },
-          { title: 'Ein Objekt kann mehrere Services haben', description: 'Ein Raum: Stunden- und Tagesmiete – alles möglich.' },
-          { title: 'Ohne Zuordnung keine Buchung möglich', description: 'Mindestens ein Service pro Objekt – sonst keine Buchung.' },
+          { title: 'Verknüpfte Services im Objekt', description: 'Du siehst, welche Services auf dieses Objekt laufen, und entfernst sie mit einem Klick.' },
+          { title: 'Ein Objekt kann mehrere Services haben', description: 'Ein Raum mit Stunden- und Tagesmiete, alles möglich.' },
+          { title: 'Ohne Service keine Buchung', description: 'Kunden buchen immer einen Service auf einem Objekt.' },
         ],
         reverse: false
       },
-      {
-        title: 'Im Widget prüfen',
-        icon: 'spark-magic',
-        bullets: [
-          { title: 'Objektanzeige aus Kundensicht prüfen', description: 'So sehen Kunden dein Objekt – prüfe vor dem Go-Live.' },
-          { title: 'Texte und Einstellungen bei Bedarf anpassen', description: 'Anpassen, bis alles klar ist.' },
-          { title: 'Buchungsfluss testen, bevor du live gehst', description: 'Test durchklicken – dann starten.' },
-        ],
-        reverse: true
-      }
     ],
     useCases: [
       { icon: '🏠', title: 'Ferienwohnungen', description: 'Jede Wohnung als eigenes Objekt.', link: '/features' },
@@ -139,25 +134,30 @@ export const coreResources = {
     ],
     sections: [],
     relatedFeatures: ['services', 'workspaces', 'buchungen'],
-    tags: ['objekte', 'resources', 'availability', 'capacity', 'locations', 'buffer', 'zeitfenster', 'verfuegbarkeit', 'urlaub'],
+    tags: ['objekte', 'resources', 'availability', 'capacity', 'locations', 'zeitfenster', 'verfuegbarkeit'],
     faq: [
-      { question: 'Wie viele Objekte kann ich anlegen?', answer: 'Objekte verwaltest du innerhalb deiner Workspaces. Welche Workspace-Anzahl du nutzen kannst, hängt von deinem Plan ab.' },
-      { question: 'Kann ich Bilder hochladen?', answer: 'Ja. Bilder und Beschreibungen pro Objekt – Kunden sehen sie im Buchungs-Widget.' },
-      { question: 'Kann ich buchbare Tage und Zeiten pro Objekt setzen?', answer: 'Ja. Du konfigurierst pro Objekt individuelle Verfügbarkeiten – z. B. Mo–Fr 8–20 Uhr. Außerhalb dieser Zeiten ist nicht buchbar.' },
-      { question: 'Was ist ein Reinigungspuffer?', answer: 'Eine konfigurierbare Zeitspanne zwischen Buchungen – z. B. 2 Stunden für Reinigung oder Umbau. Kunden sehen den Puffer nicht, er wird im Hintergrund berechnet.' },
-      { question: 'Kann ich Objekte nachträglich bearbeiten?', answer: 'Ja, jederzeit. Du kannst Name, Beschreibung, Kapazität, Bilder und Verfügbarkeiten anpassen. Bestehende Buchungen bleiben unverändert.' },
+      { question: 'Wie viele Objekte kann ich anlegen?', answer: 'So viele du brauchst. Objekte gehören zu einem Workspace.' },
+      { question: 'Kann ich Bilder hochladen?', answer: 'Noch nicht. Objekte haben Name, Beschreibung und Kapazität, aber noch kein Bildfeld.' },
+      { question: 'Kann ich buchbare Tage und Zeiten pro Objekt setzen?', answer: 'Ja. Buchbare Tage, ein Zeitfenster und auf Wunsch eigene Zeiten pro Wochentag. Hat der Service eigene Zeiten, gelten die vorrangig.' },
+      { question: 'Wo stelle ich den Reinigungspuffer ein?', answer: 'Am Objekt und am Service, jeweils Minuten davor und danach. Es gilt der größere Wert. Der Objekt-Puffer ist also die Mindestzeit für die Reinigung, ein Service kann mehr verlangen. Kunden sehen den Puffer nicht.' },
+      { question: 'Kann ich Objekte nachträglich bearbeiten?', answer: 'Ja, jederzeit im Objekt-Detail. Änderungen speichern automatisch. Bestehende Buchungen bleiben unverändert.' },
     ],
   },
   services: {
     slug: 'services',
-    meta: { title: 'Service-Konfiguration', description: 'Stunden-, Tages- oder Übernachtungsbuchungen – konfiguriere deine Services flexibel.' },
+    meta: { title: 'Service-Konfiguration', description: 'Stunden-, Tages- oder Übernachtungsbuchungen mit Preis, Dauer, Zeitfenster, Reinigungsgebühr und Puffer pro Service.' },
     hero: {
-      headline: 'Stunden, Tage, Nächte – ein System für jeden Buchungstyp.',
-      subheadline: 'Konfiguriere Preise, Dauern, Puffer und Regeln pro Service. Ob 30-Minuten-Termin oder Wochenbuchung – BookFast passt sich deinem Angebot an.',
+      headline: 'Stunden, Tage, Nächte. Ein System für jeden Buchungstyp.',
+      subheadline: 'Preis, Dauer, Puffer und Regeln pro Service. Ob Massage-Termin oder Wochenbuchung im Ferienhaus.',
       demoModule: 'services',
       illustration: '/src/svg/illustrations/landingpage/features/ft_service_konfi.svg',
     },
-    problem: { text: 'Stundenmiete, Tagesmiete, Übernachtung – jeder Typ braucht eigene Logik. Mit einem starren System biegst du dein Angebot zurecht statt es abzubilden.', bullets: ['Drei Service-Typen: hourly, daily, overnight.', 'Individuelle Preise, Dauern und Zeitfenster.', 'Objekt-, Mitarbeiter- und Addon-Zuordnung pro Service.'] },
+    howItWorksPreviewSlices: [
+      '[data-demo-section="svc-type"]',
+      '[data-demo-section="svc-pricing"], [data-demo-section="svc-rules"], [data-demo-section="svc-cleaning"]',
+      '[data-demo-section="svc-assign"]',
+    ],
+    problem: { text: 'Stundenmiete, Tagesmiete, Übernachtung: Jeder Typ braucht eigene Logik. Mit einem starren System biegst du dein Angebot zurecht, statt es abzubilden.', bullets: ['Drei Service-Typen: Stunden, Tagesmiete, Übernachtung.', 'Eigene Preise, Dauern und Zeitfenster.', 'Objekte, Mitarbeiter und Add-ons pro Service zuordnen.'] },
     interactiveHowItWorks: true,
     interactiveHowItWorksLabel: 'So richtest du Services ein',
     interactiveHowItWorksHeadline: 'Service anlegen, Regeln setzen, loslegen.',
@@ -166,9 +166,9 @@ export const coreResources = {
         title: 'Service-Typ wählen',
         icon: 'gear',
         bullets: [
-          { title: 'Drei Typen: stündlich, täglich, Übernachtung', description: 'Typ bestimmt Buchungslogik und Preisberechnung.' },
-          { title: 'Pro Typ eigene Zusatzoptionen', description: 'z.B. Check-in/out bei Übernachtungen oder Mindestbuchungsdauer.' },
-          { title: 'Kunden buchen im Widget', description: 'Wie Sie den Typ wählen, so buchen Ihre Kunden.' },
+          { title: 'Drei Typen: Stunden, Tagesmiete, Übernachtung', description: 'Der Typ bestimmt Buchungslogik und Preisberechnung.' },
+          { title: 'Pro Typ eigene Optionen', description: 'Zum Beispiel Check-in und Check-out samt Mindestnächten bei Übernachtungen.' },
+          { title: 'Kunden buchen im Widget', description: 'Wie du den Typ wählst, so buchen deine Kunden.' },
         ],
         reverse: false
       },
@@ -176,9 +176,9 @@ export const coreResources = {
         title: 'Preis & Dauer setzen',
         icon: 'receipt-euro',
         bullets: [
-          { title: 'Preis pro Einheit und optionale Mindestdauer', description: '€/Stunde, €/Tag oder €/Nacht.' },
-          { title: 'Zeitfenster und Regeln pro Service', description: 'Verfügbarkeit aus Objekt-Einstellungen übernommen.' },
-          { title: 'Anzahlung, Approval und Puffer individuell einstellbar', description: 'Pro Service separat konfigurierbar.' },
+          { title: 'Preis pro Stunde, Tag oder Nacht', description: 'Pro Person oder gesamt. Dazu die Dauer bei Stunden-Services.' },
+          { title: 'Zeitfenster, Tage und Mindestvorlauf', description: 'Eigene Zeiten pro Wochentag, kapazitätsbasiert buchbar oder feste Startzeiten.' },
+          { title: 'Reinigungsgebühr und Puffer', description: 'Gebühr in Euro, Puffer in Minuten davor und danach.' },
         ],
         reverse: true
       },
@@ -187,15 +187,15 @@ export const coreResources = {
         icon: 'spark-magic',
         bullets: [
           { title: 'Objekte: mindestens eins pro Service', description: 'Ohne Zuordnung keine Buchung möglich.' },
-          { title: 'Mitarbeiter: optional, für Personal-Auswahl', description: 'Kunde wählt beim Buchen einen Mitarbeiter.' },
-          { title: 'Add-ons: optionale Extras pro Service', description: 'z.B. Yogamatte oder Beamer.' },
+          { title: 'Mitarbeiter: optional', description: 'Der Kunde wählt beim Buchen einen Mitarbeiter oder "Egal".' },
+          { title: 'Add-ons: optionale Extras', description: 'Zum Beispiel Yogamatte oder Beamer, zugeordnet im Service-Detail.' },
         ],
         reverse: false
       }
     ],
     useCases: [
       { icon: '🧘', title: 'Yoga-Kurse', description: 'Stündliche Sessions mit verschiedenen Trainern.', link: '/features' },
-      { icon: '🏠', title: 'Ferienwohnungen', description: 'Overnight mit Check-in/out.', link: '/features' },
+      { icon: '🏠', title: 'Ferienwohnungen', description: 'Übernachtung mit Check-in, Check-out und Mindestnächten.', link: '/features' },
     ],
     sections: [],
     relatedFeatures: ['objekte', 'zahlungen', 'mitarbeiter'],
@@ -203,9 +203,10 @@ export const coreResources = {
     faq: [
       { question: 'Kann ich verschiedene Preise pro Service haben?', answer: 'Ja, jeder Service hat seinen eigenen Preis.' },
       { question: 'Kann ein Objekt mehrere Services haben?', answer: 'Ja, einem Raum kannst du z.B. Stundenmiete und Tagesmiete zuordnen.' },
-      { question: 'Was ist der Unterschied zwischen stündlich, täglich und Übernachtung?', answer: 'Stündlich: Buchung in Stunden-Slots. Täglich: Buchung ganzer Tage. Übernachtung: Check-in/Check-out mit Nachtlogik und optionalem Mindestaufenthalt.' },
-      { question: 'Kann ich Add-ons einem Service zuordnen?', answer: 'Ja. Pro Service konfigurierst du optionale Extras, die Kunden im Buchungsprozess dazubuchen können – z. B. Yogamatte oder Beamer.' },
-      { question: 'Kann ich Mitarbeiter einem Service zuordnen?', answer: 'Ja. Kunden können beim Buchen einen Mitarbeiter auswählen, wenn du die Mitarbeiter-Zuordnung für den Service aktivierst.' },
+      { question: 'Was ist der Unterschied zwischen stündlich, täglich und Übernachtung?', answer: 'Stunden: Buchung in Slots nach Dauer. Tagesmiete: Buchung ganzer Tage im Zeitfenster. Übernachtung: Check-in und Check-out mit Nachtlogik und optionalen Mindestnächten.' },
+      { question: 'Kann ich Add-ons einem Service zuordnen?', answer: 'Ja. Im Service-Detail ordnest du Extras zu, die Kunden im Widget dazubuchen, zum Beispiel Yogamatte oder Beamer.' },
+      { question: 'Kann ich Mitarbeiter einem Service zuordnen?', answer: 'Ja. Ordnest du dem Service Mitarbeiter zu, wählt der Kunde im Widget einen davon oder lässt BookFast den nächsten freien nehmen.' },
+      { question: 'Kann ich eine Anzahlung pro Service festlegen?', answer: 'Ja. Im Service-Detail schaltest du die Anzahlung ein und legst den Prozentsatz fest. Den Rest zahlt der Kunde im Kundenportal.' },
     ],
   },
 };

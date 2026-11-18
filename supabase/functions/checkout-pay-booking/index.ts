@@ -61,7 +61,7 @@ serve(async (req: Request) => {
             );
         }
 
-        if (booking.payment_status === 'paid') {
+        if (!['unpaid', 'deposit_paid'].includes(booking.payment_status)) {
             return new Response(
                 JSON.stringify({ error: 'Booking is already paid' }),
                 { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -82,18 +82,19 @@ serve(async (req: Request) => {
             );
         }
 
-        // 4. Build Line Items
-        // Use booking.total_price directly? Or reconstruct?
-        // Stripe requires line items to equal the total.
-        // To match `total_price` exactly, we might need a "Booking" item.
-        // But it's better to show details.
-        // However, if manual adjustments were made or addons changed, `total_price` in DB is the authority?
-        // Let's rely on `total_price` from the booking record as the single truth to avoid discrepancies.
-        // We can create a single line item "Buchung #{number}" for the full amount.
-        // OR we optionally reconstruct line items if we trust them.
-        // Let's just use "Booking Service" line item for simplicity and exactness.
+        // total_price aus der DB ist die Wahrheit, auch nach manuellen Anpassungen.
+        const isBalancePayment = booking.payment_status === 'deposit_paid';
+        const amountDue = isBalancePayment
+            ? Number(booking.total_price) - (Number(booking.amount_deposit) || 0)
+            : Number(booking.total_price);
+        const amountCents = Math.round(amountDue * 100);
 
-        const amountCents = Math.round(Number(booking.total_price) * 100);
+        if (amountCents <= 0) {
+            return new Response(
+                JSON.stringify({ error: 'Nothing left to pay' }),
+                { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
+        }
         const platformFeeCents = calculatePlatformFee(amountCents);
 
         // Create Stripe Session
@@ -107,7 +108,9 @@ serve(async (req: Request) => {
                     price_data: {
                         currency: 'eur',
                         product_data: {
-                            name: `Buchung #${booking.booking_number}`,
+                            name: isBalancePayment
+                                ? `Restbetrag Buchung #${booking.booking_number}`
+                                : `Buchung #${booking.booking_number}`,
                             description: `${booking.service?.name} @ ${booking.object?.name}`,
                         },
                         unit_amount: amountCents,
@@ -123,7 +126,7 @@ serve(async (req: Request) => {
                 site_id: booking.site_id || '' // Might be null for manual bookings
             },
             payment_intent_data: {
-                application_fee_amount: platformFeeCents,
+                ...(platformFeeCents > 0 ? { application_fee_amount: platformFeeCents } : {}),
                 metadata: {
                     booking_id: booking.id,
                     workspace_id: booking.workspace_id
@@ -137,11 +140,12 @@ serve(async (req: Request) => {
             stripeAccount: workspace.stripe_connected_account_id,
         });
 
-        // Save session ID to booking?
-        await supabaseAdmin
-            .from('bookings')
-            .update({ checkout_session_id: session.id })
-            .eq('id', booking.id);
+        if (!isBalancePayment) {
+            await supabaseAdmin
+                .from('bookings')
+                .update({ checkout_session_id: session.id })
+                .eq('id', booking.id);
+        }
 
         return new Response(
             JSON.stringify({

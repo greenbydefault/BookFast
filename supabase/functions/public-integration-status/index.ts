@@ -81,7 +81,7 @@ serve(async (req: Request) => {
             domain: site.domain || null,
           },
           webhooks: {
-            status: 'active',
+            status: 'coming-soon',
           },
           google_calendar: {
             status: 'coming-soon',

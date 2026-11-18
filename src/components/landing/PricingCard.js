@@ -1,4 +1,5 @@
 import { iconUrl } from '../../lib/landingAssets.js';
+import { getUiChrome } from '../../locales/uiChrome.js';
 
 /**
  * Pricing Card Component
@@ -15,6 +16,7 @@ import { iconUrl } from '../../lib/landingAssets.js';
  * @param {Array} [config.securityBadges] - { icon, label }[] für DSGVO, SSL, etc.
  * @param {string} [config.cta] - CTA text
  * @param {string} [config.ctaHref]
+ * @param {'de'|'en'} [config.locale]
  * @returns {string} HTML
  */
 export const createPricingCard = (config) => {
@@ -24,8 +26,11 @@ export const createPricingCard = (config) => {
     description = '', workspaces,
     planFeatures = [],
     securityBadges = [],
-    cta = 'Kostenlos testen', ctaHref = '/register.html'
+    ctaHref = '/register.html',
+    locale = 'de',
   } = config;
+  const chrome = getUiChrome(locale);
+  const cta = config.cta ?? chrome.pricing.ctaDefault;
 
   const featuresList = planFeatures.length ? planFeatures : [...securityBadges];
   const featuresHTML = featuresList.map((feature) => {
@@ -41,19 +46,21 @@ export const createPricingCard = (config) => {
   const featuresRightHTML = featureItems.slice(splitIndex).join('');
 
   const priceValue = price === '0'
-    ? 'Kostenlos'
+    ? chrome.pricing.free
     : isAnnual && priceAnnual
       ? `${priceAnnual.replace('.', ',')} €`
       : `${price.replace('.', ',')} €`;
 
   const periodDisplay = price === '0'
-    ? 'für immer'
+    ? chrome.pricing.forever
     : isAnnual && priceAnnual
-      ? '/Jahr'
-      : '/Monat';
+      ? chrome.pricing.perYear
+      : chrome.pricing.perMonth;
 
   const annualHintContent = isAnnual && priceEffectiveMonthly
-    ? `≈ ${priceEffectiveMonthly.replace('.', ',')} €/Monat, 2 Monate gratis`
+    ? locale === 'en'
+      ? `≈ ${priceEffectiveMonthly.replace('.', ',')} €/month, 2 months free`
+      : `≈ ${priceEffectiveMonthly.replace('.', ',')} €/Monat, 2 Monate gratis`
     : '';
   const annualHintHTML = `<div class="landing-pricing-annual-hint" ${!annualHintContent ? 'style="display:none"' : ''}>${annualHintContent}</div>`;
 
@@ -68,15 +75,15 @@ export const createPricingCard = (config) => {
         </div>
         <div class="landing-pricing-card__header-controls">
           <div class="landing-pricing-toggle-pill" id="pricing-toggle-pill">
-            <button type="button" class="${!isAnnual ? 'is-active' : ''}" data-period="monthly" title="Monatliche Abrechnung wählen">Monatlich</button>
-            <button type="button" class="${isAnnual ? 'is-active' : ''}" data-period="annual" title="Jährliche Abrechnung wählen">Jährlich</button>
+            <button type="button" class="${!isAnnual ? 'is-active' : ''}" data-period="monthly" title="${chrome.pricing.monthlyTitle}">${chrome.pricing.monthly}</button>
+            <button type="button" class="${isAnnual ? 'is-active' : ''}" data-period="annual" title="${chrome.pricing.annualTitle}">${chrome.pricing.annual}</button>
           </div>
-          <span class="landing-pricing-toggle-save">2 Monate gratis</span>
+          <span class="landing-pricing-toggle-save">${chrome.pricing.saveBadge}</span>
         </div>
       </div>
       <div class="landing-pricing-card__metrics">
         <div>
-          <div class="landing-pricing-card__metric-label">Workspaces</div>
+          <div class="landing-pricing-card__metric-label">${chrome.pricing.workspaces}</div>
           <div class="landing-pricing-card__metric-value">${workspaceMetric}</div>
         </div>
         <div class="landing-pricing-card__price-wrap">
@@ -92,8 +99,8 @@ export const createPricingCard = (config) => {
         max="10"
         step="1"
         value="${workspaces || 1}"
-        aria-label="Anzahl der Workspaces"
-        title="Anzahl der Workspaces auswählen"
+        aria-label="${chrome.pricing.workspaceAria}"
+        title="${chrome.pricing.workspaceTitle}"
       />
       ${annualHintHTML}
       <div class="landing-pricing-features-grid">

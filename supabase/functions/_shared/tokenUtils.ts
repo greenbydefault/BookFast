@@ -45,6 +45,7 @@ export const PORTAL_BOOKING_SELECT = `
   id, workspace_id, object_id, service_id,
   start_time, end_time, status, created_at, updated_at,
   customer_name, customer_email, customer_phone, customer_notes,
+  customer_address, customer_city, customer_zip,
   service_price, addons_price, discount_amount, total_price,
   amount_deposit, amount_refunded,
   payment_status, invoice_number, booking_number,

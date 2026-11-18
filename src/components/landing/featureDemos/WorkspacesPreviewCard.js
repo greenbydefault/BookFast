@@ -19,8 +19,8 @@ const DEFAULT_CONTENT = {
     workspaceName: 'Workspace-Name *',
     placeholder: 'z. B. Salon München',
     hintTitle: 'Hinweis:',
-    hintBody: 'Jeder Workspace ist isoliert – eigene Objekte, Services und Einstellungen. Demo: noch',
-    hintRemaining: '22',
+    hintBody: 'Jeder Workspace hat eigene Objekte, Services und Einstellungen. Im Plan Agentur sind noch',
+    hintRemaining: '7',
     hintSuffix: 'weitere möglich.',
     perWorkspace: 'Pro Workspace',
     objectsServices: 'Objekte & Services',
@@ -30,7 +30,7 @@ const DEFAULT_CONTENT = {
     bookingsCustomers: 'Buchungen & Kunden',
     bookingsCustomersDescription: 'nur in diesem Kontext',
     switchTitle: 'Workspace wechseln',
-    switchHint: 'Oben in der Sidebar oder im Dropdown – ein Klick, neuer Kontext.',
+    switchHint: 'Oben in der Sidebar oder per ⌘1 bis ⌘9. Ein Klick, neuer Kontext.',
     switchAria: 'Demo Workspaces',
   },
 };
@@ -108,15 +108,15 @@ export const initWorkspacesPreviewCard = (heroContainer, { content = DEFAULT_CON
       <ul class="ws-setup-list">
         <li class="ws-setup-item">
           ${getIconString('package', 'ws-setup-item__icon')}
-          <span><strong>${content.labels.objectsServices}</strong> – ${content.labels.objectsServicesDescription}</span>
+          <span><strong>${content.labels.objectsServices}</strong>: ${content.labels.objectsServicesDescription}</span>
         </li>
         <li class="ws-setup-item">
           ${getIconString('users-2', 'ws-setup-item__icon')}
-          <span><strong>${content.labels.teamAddons}</strong> – ${content.labels.teamAddonsDescription}</span>
+          <span><strong>${content.labels.teamAddons}</strong>: ${content.labels.teamAddonsDescription}</span>
         </li>
         <li class="ws-setup-item">
           ${getIconString('list', 'ws-setup-item__icon')}
-          <span><strong>${content.labels.bookingsCustomers}</strong> – ${content.labels.bookingsCustomersDescription}</span>
+          <span><strong>${content.labels.bookingsCustomers}</strong>: ${content.labels.bookingsCustomersDescription}</span>
         </li>
       </ul>
     </div>

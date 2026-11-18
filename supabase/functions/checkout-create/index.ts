@@ -212,12 +212,14 @@ serve(async (req: Request) => {
       );
     }
 
-    // Get object for name
     const { data: object } = await supabaseAdmin
       .from('objects')
-      .select('name')
+      .select('name, buffer_before_minutes, buffer_after_minutes')
       .eq('id', object_id)
       .single();
+
+    const bufferBefore = Math.max(Number(service.buffer_before_minutes) || 0, Number(object?.buffer_before_minutes) || 0);
+    const bufferAfter = Math.max(Number(service.buffer_after_minutes) || 0, Number(object?.buffer_after_minutes) || 0);
 
     const { data: serviceObjectLink, error: serviceObjectError } = await supabaseAdmin
       .from('service_objects')
@@ -251,14 +253,34 @@ serve(async (req: Request) => {
         p_object_id: object_id,
         p_start_time: start_time,
         p_end_time: end_time,
-        p_buffer_before: service.buffer_before_minutes || 0,
-        p_buffer_after: service.buffer_after_minutes || 0,
+        p_buffer_before: bufferBefore,
+        p_buffer_after: bufferAfter,
         p_session_id: session_id || null,
       });
 
     if (availError || !isAvailable) {
       return new Response(
         JSON.stringify({ error: 'Selected time slot is not available' }),
+        { status: 409, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { data: isOnVacation, error: vacationError } = await supabaseAdmin
+      .rpc('is_vacation_blocked', {
+        p_object_id: object_id,
+        p_service_id: service_id,
+        p_staff_id: staff_id || null,
+        p_start_time: start_time,
+        p_end_time: end_time,
+      });
+
+    if (vacationError) {
+      throw vacationError;
+    }
+
+    if (isOnVacation) {
+      return new Response(
+        JSON.stringify({ error: 'Selected date is blocked by a vacation' }),
         { status: 409, headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' } }
       );
     }
@@ -337,7 +359,7 @@ serve(async (req: Request) => {
 
       if (reservationError) throw reservationError;
 
-      // Build line items for Stripe
+      const isDeposit = pricing.depositAmount !== null;
       const lineItems = [
         {
           price_data: {
@@ -371,11 +393,26 @@ serve(async (req: Request) => {
           .map((selection) => [selection.addon_id, selection]),
       );
 
-      addonItems.forEach(addon => {
+      if (isDeposit) {
+        lineItems.splice(0, lineItems.length, {
+          price_data: {
+            currency: 'eur',
+            product_data: {
+              name: `Anzahlung ${service.deposit_percent} % · ${service.name}`,
+              description: `Gesamtpreis ${pricing.totalPrice.toFixed(2)} €, Restbetrag ${(pricing.totalPrice - (pricing.depositAmount ?? 0)).toFixed(2)} € später`,
+            },
+            unit_amount: amountCents,
+          },
+          quantity: 1,
+        });
+      }
+
+      if (!isDeposit) addonItems.forEach(addon => {
         const quantity = calculateAddonQuantity(
           addon,
           pricing.guests,
           addonSelectionsById.get(addon.id) || null,
+          pricing.nights,
         );
         if (quantity < 1) return;
 
@@ -414,6 +451,7 @@ serve(async (req: Request) => {
         reservation_id: checkoutSessionId,
         session_id: session_id || '',
         guest_count: pricing.guests.toString(),
+        nights: pricing.nights?.toString() || '',
         addon_selections: addon_selections ? JSON.stringify(addon_selections) : '',
         customer_address: customer_address || '',
         customer_city: customer_city || '',
@@ -427,13 +465,13 @@ serve(async (req: Request) => {
         mode: 'payment',
         payment_method_types: ['card'],
         line_items: lineItems,
-        discounts: pricing.discountAmount > 0 ? [{
+        discounts: !isDeposit && pricing.discountAmount > 0 ? [{
           coupon: await createStripeCoupon(pricing.discountAmount, workspace.stripe_connected_account_id),
         }] : undefined,
         customer_email,
         metadata,
         payment_intent_data: {
-          application_fee_amount: platformFeeCents,
+          ...(platformFeeCents > 0 ? { application_fee_amount: platformFeeCents } : {}),
           metadata,
         },
         success_url: success_url || `${baseUrl}/booking-success?session_id={CHECKOUT_SESSION_ID}`,

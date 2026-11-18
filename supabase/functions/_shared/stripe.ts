@@ -11,8 +11,8 @@ export const stripe = new Stripe(stripeSecretKey || '', {
   httpClient: Stripe.createFetchHttpClient(),
 });
 
-// Platform fee percentage (e.g., 5% = 0.05)
-export const PLATFORM_FEE_PERCENT = 0.05;
+// BookFast verdient über Abos, nicht pro Buchung. Die Landing verspricht 0 % Provision.
+export const PLATFORM_FEE_PERCENT = 0;
 
 // Calculate platform fee in cents
 export function calculatePlatformFee(amountCents: number): number {

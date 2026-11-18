@@ -69,7 +69,7 @@ export const createStaffFormFields = (config = {}) => {
 
     const render = () => {
         container.innerHTML = `
-            <div class="modal-content-section">
+            <div class="modal-content-section" data-demo-section="staff-profile">
                 <div class="staff-form-fields__header">
                     <input type="text" class="modal-form-input modal-input-large" placeholder="${escapeAttr(ui.placeholderName)}" value="${escapeAttr(state.name)}" data-field="name">
                     <div class="staff-form-fields__status-badge">
@@ -84,7 +84,7 @@ export const createStaffFormFields = (config = {}) => {
                 ` : ''}
             </div>
 
-            <div class="modal-content-section">
+            <div class="modal-content-section" data-demo-section="staff-availability">
                 <div class="modal-row">
                     <div class="modal-label">${getIconString('calender-days-date')} ${ui.bookableDays}</div>
                     <div class="modal-controls">
@@ -112,7 +112,7 @@ export const createStaffFormFields = (config = {}) => {
                 ` : ''}
             </div>
 
-            <div class="modal-content-section">
+            <div class="modal-content-section" data-demo-section="staff-services">
                 <div class="modal-row">
                     <div class="modal-label">${getIconString('gear')} ${ui.services}</div>
                     <div class="modal-controls modal-controls-stretch">

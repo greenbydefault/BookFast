@@ -139,16 +139,21 @@ export function calculateAddonQuantity(
   addon: PricingAddon,
   guests: number,
   selection?: PricingAddonSelection | null,
+  nights?: number | null,
 ): number {
   const selectedUnits = countAddonUnits(selection);
-  if (selectedUnits > 0) return selectedUnits;
-  return normalizeAddonScope(addon) === 'per_guest' ? guests : 1;
+  const baseUnits = selectedUnits > 0
+    ? selectedUnits
+    : normalizeAddonScope(addon) === 'per_guest' ? guests : 1;
+  const nightFactor = addon.pricing_type === 'per_night' && nights && nights > 0 ? nights : 1;
+  return baseUnits * nightFactor;
 }
 
 function calculateAddonsPrice(
   addons: PricingAddon[] | undefined,
   guests: number,
   addonSelections?: PricingAddonSelection[] | null,
+  nights?: number | null,
 ): number {
   if (!addons?.length) return 0;
   const selectionMap = new Map((addonSelections || [])
@@ -157,7 +162,7 @@ function calculateAddonsPrice(
 
   return addons.reduce((sum, addon) => {
     const unit = toNumber(addon.price);
-    const quantity = calculateAddonQuantity(addon, guests, selectionMap.get(addon.id));
+    const quantity = calculateAddonQuantity(addon, guests, selectionMap.get(addon.id), nights);
     return sum + (unit * quantity);
   }, 0);
 }
@@ -181,14 +186,15 @@ export function calculatePricing(ctx: PricingContext): PricingResult {
 
   const servicePrice = calculateServicePrice(ctx.service, nights, guests);
   const cleaningFee = toNumber(ctx.service.cleaning_fee);
-  const addonsPrice = calculateAddonsPrice(ctx.addons, guests, ctx.addon_selections);
+  const addonsPrice = calculateAddonsPrice(ctx.addons, guests, ctx.addon_selections, nights);
   const subtotal = servicePrice + cleaningFee + addonsPrice;
   const discountAmount = calculateDiscountAmount(ctx.voucher, subtotal);
   const totalPrice = Math.max(0, subtotal - discountAmount);
 
   let depositAmount: number | null = null;
-  if (ctx.service.deposit_enabled && toNumber(ctx.service.deposit_percent) > 0) {
-    depositAmount = Math.round(totalPrice * (toNumber(ctx.service.deposit_percent) / 100));
+  const depositPercent = toNumber(ctx.service.deposit_percent);
+  if (ctx.service.deposit_enabled && depositPercent > 0 && depositPercent < 100 && totalPrice > 0) {
+    depositAmount = Math.round(totalPrice * depositPercent) / 100;
   }
 
   return {

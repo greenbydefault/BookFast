@@ -49,6 +49,13 @@ const buildCenterPreview = (staff) => {
             ` : ''}
 
             <div class="detail-preview-section">
+                <p class="detail-preview-section__title">Beschreibung</p>
+                <div class="detail-preview-description">
+                    <span class="detail-preview-value detail-preview-value--left">${staff.description ? esc(staff.description) : '<span style="color: var(--color-stone-400);">Keine Beschreibung</span>'}</span>
+                </div>
+            </div>
+
+            <div class="detail-preview-section">
                 <p class="detail-preview-section__title">Arbeitstage</p>
                 <div class="detail-preview-item">
                     <span class="detail-preview-label">Verfügbar</span>
@@ -84,6 +91,7 @@ const renderSideCard = (staff) => {
                         title: 'Allgemein',
                         content: `
                             ${navField({ label: 'Name', name: 'name', value: esc(staff.name), placeholder: 'Mitarbeiter-Name' })}
+                            ${navField({ label: 'Beschreibung', name: 'description', value: esc(staff.description), tag: 'textarea', placeholder: 'Beschreibung...' })}
                             ${navField({ label: 'Bild-URL', name: 'image_url', value: esc(staff.image_url), placeholder: 'https://...' })}
                         `
                     }),
@@ -130,6 +138,7 @@ const collectFormValues = () => {
 
     return {
         name: card.querySelector('[name="name"]')?.value || '',
+        description: card.querySelector('[name="description"]')?.value || null,
         image_url: card.querySelector('[name="image_url"]')?.value || '',
         bookable_days,
     };

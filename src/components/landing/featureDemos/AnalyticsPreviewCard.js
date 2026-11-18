@@ -12,7 +12,7 @@ import './featureDemos.css';
 const DEFAULT_CONTENT = {
   card: {
     title: 'Insights',
-    subtitle: 'Wie im Dashboard unter Analytics – Demo-Daten.',
+    subtitle: 'Wie im Dashboard unter Insights. Demo-Daten.',
   },
   tabs: [
     { id: 'overview', label: 'Überblick' },
@@ -57,7 +57,7 @@ const DEFAULT_CONTENT = {
   },
   traffic: {
     browsers: 'Browser',
-    countries: 'Länder',
+    devices: 'Geräte',
     visitors: 'Visitors',
     noData: 'Keine Daten verfügbar',
   },
@@ -327,7 +327,7 @@ export const createAnalyticsPreviewCard = ({ content = DEFAULT_CONTENT } = {}) =
         </div>
       </div>
     </div>
-    <div class="analytics-demo-body" id="analytics-demo-body">
+    <div class="analytics-demo-body" id="analytics-demo-body" data-demo-body>
       <div class="modal-content-section" data-demo-section="an-overview">
         ${renderKPICards(content, data)}
         <div class="insights-chart-grid">
@@ -356,7 +356,7 @@ export const createAnalyticsPreviewCard = ({ content = DEFAULT_CONTENT } = {}) =
         <div class="traffic-stat-card">
           <div class="traffic-stat-tabs">
             <button type="button" class="traffic-stat-tab active" data-analytics-traffic="browsers">${content.traffic.browsers}</button>
-            <button type="button" class="traffic-stat-tab" data-analytics-traffic="countries">${content.traffic.countries}</button>
+            <button type="button" class="traffic-stat-tab" data-analytics-traffic="devices">${content.traffic.devices}</button>
           </div>
           <div class="traffic-stat-header">
             <span></span>
@@ -365,8 +365,8 @@ export const createAnalyticsPreviewCard = ({ content = DEFAULT_CONTENT } = {}) =
           <div class="traffic-stat-content" id="analytics-traffic-browsers">
             ${renderTrafficRows(content, data.traffic?.browsers)}
           </div>
-          <div class="traffic-stat-content" id="analytics-traffic-countries" style="display: none;">
-            ${renderTrafficRows(content, data.traffic?.countries)}
+          <div class="traffic-stat-content" id="analytics-traffic-devices" style="display: none;">
+            ${renderTrafficRows(content, data.traffic?.devices)}
           </div>
         </div>
       </div>
@@ -445,7 +445,7 @@ export const initAnalyticsPreviewCard = (root, { content = DEFAULT_CONTENT } = {
         c.style.display = 'none';
       });
       const show =
-        id === 'countries' ? wrap.querySelector('#analytics-traffic-countries') : wrap.querySelector('#analytics-traffic-browsers');
+        id === 'devices' ? wrap.querySelector('#analytics-traffic-devices') : wrap.querySelector('#analytics-traffic-browsers');
       if (show) show.style.display = 'block';
     });
   });

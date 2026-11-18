@@ -9,8 +9,8 @@ const DEFAULT_CONTENT = {
   card: {
     title: 'Rechnung',
     subtitle: 'Automatisch aus Buchung, Add-ons und Firmendaten gebaut.',
-    footerSecondary: 'Entwurf',
-    footerPrimary: 'PDF öffnen',
+    footerSecondary: 'Zur Buchung',
+    footerPrimary: 'Rechnung herunterladen',
   },
   lineItems: [],
   sections: {
@@ -32,7 +32,7 @@ const DEFAULT_CONTENT = {
   portalStates: {
     readyTitle: 'Magic Link vorbereitet',
     openTitle: 'Magic Link geöffnet',
-    readyDescription: 'Nach Bestätigung landet die Rechnung ohne Login im Self-Service.',
+    readyDescription: 'Nach der Bestätigung bekommt der Kunde Magic Link und PIN per Mail.',
     openDescription: 'Kunde sieht Rechnung, PDF und offenen Betrag direkt.',
     readyAction: 'Portal öffnen',
     openAction: 'Portal aktiv',
@@ -42,11 +42,11 @@ const DEFAULT_CONTENT = {
     pdfNotReady: 'Noch nicht geöffnet',
     download: 'PDF erzeugen',
     redownload: 'PDF erneut laden',
-    markPaid: 'Als bezahlt markieren',
-    markUnpaid: 'Als offen zeigen',
+    markPaid: 'Kunde zahlt im Portal',
+    markUnpaid: 'Zurücksetzen',
   },
   values: {
-    invoiceNumber: '#2026-1047',
+    invoiceNumber: 'RE-2026-1047',
     total: '175 EUR',
     paidOutstanding: '0 EUR',
     unpaidOutstanding: '175 EUR',

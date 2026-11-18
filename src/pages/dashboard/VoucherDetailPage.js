@@ -19,7 +19,9 @@ import {
 import { debounce } from '../../lib/utils.js';
 
 const esc = (v) => (v || '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const DISCOUNT_TYPE_LABELS = { percent: 'Prozent (%)', fixed: 'Festbetrag (€)' };
+// Werte des DB-Enums, identisch mit CreateVoucherModal.
+const DISCOUNT_TYPE_LABELS = { percentage: 'Prozent (%)', fixed_amount: 'Festbetrag (€)' };
+const normalizeDiscountType = (type) => (type === 'percent' ? 'percentage' : type === 'fixed' ? 'fixed_amount' : type);
 
 const fmt = (v) => {
     const n = parseFloat(v);
@@ -33,7 +35,7 @@ const formatDateInput = (d) => d ? new Date(d).toISOString().split('T')[0] : '';
 
 const buildCenterPreview = (voucher) => {
     const linkedServices = voucher.linked_services || [];
-    const discountDisplay = voucher.discount_type === 'percent'
+    const discountDisplay = normalizeDiscountType(voucher.discount_type) === 'percentage'
         ? `${voucher.discount_value || 0} %`
         : fmt(voucher.discount_value);
 
@@ -67,7 +69,7 @@ const buildCenterPreview = (voucher) => {
                 </div>
                 <div class="detail-preview-item">
                     <span class="detail-preview-label">Rabattart</span>
-                    <span class="detail-preview-value">${DISCOUNT_TYPE_LABELS[voucher.discount_type] || voucher.discount_type || '—'}</span>
+                    <span class="detail-preview-value">${DISCOUNT_TYPE_LABELS[normalizeDiscountType(voucher.discount_type)] || voucher.discount_type || '—'}</span>
                 </div>
             </div>
 
@@ -129,7 +131,7 @@ const renderSideCard = (voucher) => buildSideCardWithTabs({
                     content: `
                         ${navField({
                             label: 'Rabattart', name: 'discount_type', tag: 'select',
-                            options: Object.entries(DISCOUNT_TYPE_LABELS).map(([v, l]) => `<option value="${v}" ${voucher.discount_type === v ? 'selected' : ''}>${l}</option>`).join('')
+                            options: Object.entries(DISCOUNT_TYPE_LABELS).map(([v, l]) => `<option value="${v}" ${normalizeDiscountType(voucher.discount_type) === v ? 'selected' : ''}>${l}</option>`).join('')
                         })}
                         ${navField({ label: 'Rabattwert', name: 'discount_value', value: voucher.discount_value ?? '', type: 'number', placeholder: '0' })}
                     `

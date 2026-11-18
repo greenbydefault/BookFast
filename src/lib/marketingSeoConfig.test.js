@@ -36,6 +36,10 @@ describe('marketingSeoConfig', () => {
     const sitemap = buildSitemapXml();
     expect(sitemap).toContain('<loc>https://book-fast.de/produkt</loc>');
     expect(sitemap).toContain('<loc>https://book-fast.de/en/product</loc>');
+    expect(sitemap).toContain('<loc>https://book-fast.de/vergleich/flowbookings</loc>');
+    expect(sitemap).toContain('<loc>https://book-fast.de/en/compare/flowbookings</loc>');
+    expect(sitemap).not.toContain('/waitlist/confirm');
+    expect(sitemap).not.toContain('/en/waitlist/confirm');
     expect(sitemap).not.toContain('/integrationen');
     expect(sitemap).not.toContain('/en/integrations');
     expect(sitemap).not.toContain('/ressourcen');

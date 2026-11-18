@@ -47,7 +47,7 @@ export const HOME_FEATURES_STEPS_EN = [
     bullets: [
       { title: 'No BookFast commission', description: 'You only pay Stripe transaction fees.' },
       { title: 'Stripe Connect in minutes', description: 'Onboarding from settings.' },
-      { title: 'Payout 24 hours after confirmation', description: 'Money lands in your account.' },
+      { title: 'Payouts through your Stripe account', description: 'On your Stripe payout schedule.' },
     ],
   },
   {
@@ -55,7 +55,7 @@ export const HOME_FEATURES_STEPS_EN = [
     icon: 'money-hand',
     bullets: [
       { title: 'Money in your account before the slot starts', description: 'Fewer no-shows with prepayment.' },
-      { title: 'Deposits configurable', description: 'Percentage or fixed per service. Charged at booking. Useful for larger rentals or expensive services.' },
+      { title: 'Deposits configurable', description: 'A percentage per service. Customers pay that share at booking and the rest later in the customer portal.' },
       { title: 'Automatic refund on decline', description: 'No manual busywork.' },
     ],
   },
@@ -63,7 +63,7 @@ export const HOME_FEATURES_STEPS_EN = [
     title: 'Booking management',
     icon: 'list',
     bullets: [
-      { title: 'All bookings in one place', description: 'Status, calendar, list view.' },
+      { title: 'All bookings in one place', description: 'One list with status tabs.' },
       { title: 'Confirm or decline', description: 'One click.' },
       { title: 'No scattered requests', description: 'Central overview instead of email chaos.' },
     ],
@@ -73,7 +73,7 @@ export const HOME_FEATURES_STEPS_EN = [
     icon: 'key',
     bullets: [
       { title: 'Magic link per booking', description: 'No account, no password.' },
-      { title: 'View invoice, pay, cancel', description: 'Self-service for your guests.' },
+      { title: 'Download invoice, pay, cancel', description: 'Self-service for your guests, protected by a PIN.' },
       { title: 'Book without signing up', description: 'Fewer hurdles, more bookings.' },
     ],
   },
@@ -98,11 +98,11 @@ export const FAQ_EN = [
   {
     question: 'Does BookFast only work with Webflow?',
     answer:
-      'Built for Webflow. The embed script also runs on other sites. Template copy is Webflow only.',
+      'Built for Webflow. The script needs the markup from the Webflow template. On other platforms you would have to rebuild it yourself.',
   },
   {
     question: 'Do I need technical skills?',
-    answer: 'No. Paste a script tag and import the template. No custom code.',
+    answer: 'No. Paste the template into the Webflow Designer and copy one script tag. No custom code.',
   },
   {
     question: 'Which payment methods are supported?',

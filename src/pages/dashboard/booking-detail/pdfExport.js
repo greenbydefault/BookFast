@@ -13,6 +13,7 @@ import {
     calculateTotals,
     getInvoiceNumber,
     getLeistungszeitraum,
+    getCustomerAddressLines,
 } from './invoiceUtils.js';
 
 // Register embedded Roboto fonts (vfs_fonts.js exports the vfs object directly in 0.2.x)
@@ -77,9 +78,7 @@ const buildAddresses = (booking, workspace) => {
     const fromCountry = workspace?.company_country || 'Deutschland';
 
     const toName = booking.customer_name || 'Kundenname';
-    const toAddress = 'Adresse';
-    const toZip = 'PLZ';
-    const toCity = 'Stadt';
+    const toLines = getCustomerAddressLines(booking);
 
     return [
         {
@@ -99,8 +98,7 @@ const buildAddresses = (booking, workspace) => {
                     stack: [
                         { text: 'An', style: 'label' },
                         { text: toName, bold: true, margin: [0, 2, 0, 0] },
-                        { text: toAddress, style: 'bodySmall' },
-                        { text: `${toZip} ${toCity}`, style: 'bodySmall' },
+                        ...toLines.map((line) => ({ text: line, style: 'bodySmall' })),
                     ],
                 },
             ],
@@ -175,6 +173,20 @@ const buildSummary = (totals) => {
     ]);
 
     summaryBody.push(totalRow);
+    const totalRowIndex = summaryBody.length - 1;
+
+    if (totals.depositPaid > 0) {
+        summaryBody.push(
+            [
+                { text: 'Anzahlung erhalten', fontSize: 9, color: C.muted },
+                { text: `\u2212 ${fmt(totals.depositPaid)}`, fontSize: 9, alignment: 'right' },
+            ],
+            [
+                { text: 'Restbetrag offen', fontSize: 9, bold: true },
+                { text: fmt(totals.balanceDue), fontSize: 9, bold: true, alignment: 'right' },
+            ],
+        );
+    }
 
     return [
         {
@@ -187,7 +199,7 @@ const buildSummary = (totals) => {
                         body: summaryBody,
                     },
                     layout: {
-                        hLineWidth: (i, node) => (i === node.table.body.length - 1) ? 0.5 : 0,
+                        hLineWidth: (i) => (i === totalRowIndex) ? 0.5 : 0,
                         vLineWidth: () => 0,
                         hLineColor: () => C.border,
                         paddingLeft: () => 4,

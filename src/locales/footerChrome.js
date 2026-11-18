@@ -3,8 +3,8 @@
  */
 export const FOOTER_CHROME = {
   de: {
-    title: 'Probiere BookFast noch heute und entdecke alle Moeglichkeiten.',
-    brandDesc: 'Das Buchungssystem fuer Webflow. Ohne Provision, mit Zahlung vor Termin.',
+    title: 'BookFast auf deiner Website testen.',
+    brandDesc: 'Buchungssystem für Webflow. Keine Provision, Zahlung vor Termin.',
     illustrationAlt: 'BookFast Footer Illustration mit digitalem Buchungs- und Zahlungsfluss',
     columnHeadings: {
       bookingsOperations: 'Buchungen & Workspaces',
@@ -27,8 +27,8 @@ export const FOOTER_CHROME = {
     ],
   },
   en: {
-    title: 'Try BookFast today and explore what you can do.',
-    brandDesc: 'The booking system for Webflow. No commission, pay before appointment.',
+    title: 'Put BookFast on your site and take a test booking.',
+    brandDesc: 'Booking for Webflow. No commission. Pay before the slot.',
     illustrationAlt: 'BookFast footer illustration: booking and payment flow',
     columnHeadings: {
       bookingsOperations: 'Bookings & Workspaces',

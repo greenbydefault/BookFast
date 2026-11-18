@@ -14,17 +14,17 @@ const contactFormHTML = (isEn) => `
     <h2 class="landing-h2 contact-form-heading">${isEn ? 'Send message' : 'Nachricht senden'}</h2>
     <form id="contact-form" class="contact-form">
       <div>
-        <label class="contact-form__label">Name</label>
-        <input type="text" name="name" required placeholder="${isEn ? 'Your name' : 'Dein Name'}" class="contact-form__input">
+        <label class="contact-form__label" for="contact-name">${isEn ? 'Name' : 'Name'}</label>
+        <input id="contact-name" type="text" name="name" required placeholder="${isEn ? 'Your name' : 'Dein Name'}" class="contact-form__input">
       </div>
       <div>
-        <label class="contact-form__label">${isEn ? 'Email' : 'E-Mail'}</label>
-        <input type="email" name="email" required placeholder="deine@email.de" class="contact-form__input">
+        <label class="contact-form__label" for="contact-email">${isEn ? 'Email' : 'E-Mail'}</label>
+        <input id="contact-email" type="email" name="email" required placeholder="${isEn ? 'you@email.com' : 'deine@email.de'}" class="contact-form__input">
         <p class="landing-text-sm contact-form__hint">${isEn ? 'We will reply to this address.' : 'Wir antworten an diese Adresse.'}</p>
       </div>
       <div>
-        <label class="contact-form__label">${isEn ? 'Subject' : 'Betreff'}</label>
-        <select name="subject" class="contact-form__input contact-form__select">
+        <label class="contact-form__label" for="contact-subject">${isEn ? 'Subject' : 'Betreff'}</label>
+        <select id="contact-subject" name="subject" class="contact-form__input contact-form__select">
           <option>${isEn ? 'General question' : 'Allgemeine Frage'}</option>
           <option>${isEn ? 'Technical support' : 'Technischer Support'}</option>
           <option>${isEn ? 'Enterprise inquiry' : 'Enterprise-Anfrage'}</option>
@@ -33,8 +33,8 @@ const contactFormHTML = (isEn) => `
         </select>
       </div>
       <div>
-        <label class="contact-form__label">${isEn ? 'Message' : 'Nachricht'}</label>
-        <textarea name="message" rows="5" required placeholder="${isEn ? 'Briefly describe your request…' : 'Beschreibe kurz dein Anliegen …'}" class="contact-form__input contact-form__textarea"></textarea>
+        <label class="contact-form__label" for="contact-message">${isEn ? 'Message' : 'Nachricht'}</label>
+        <textarea id="contact-message" name="message" rows="5" required placeholder="${isEn ? 'Briefly describe your request…' : 'Beschreibe kurz dein Anliegen …'}" class="contact-form__input contact-form__textarea"></textarea>
       </div>
       <div>
         <button type="submit" class="landing-btn landing-btn-primary">${isEn ? 'Send message' : 'Nachricht senden'}</button>
@@ -52,8 +52,8 @@ export const renderContactPage = (locale = 'de') => {
   setPageMeta(
     isEn ? 'Contact' : 'Kontakt',
     isEn
-      ? 'Contact the BookFast team — we are here to help.'
-      : 'Kontaktiere das BookFast-Team – wir helfen dir weiter.',
+      ? 'Write to the BookFast team. Use the form, or email admin@bookfast.de.'
+      : 'Schreib dem BookFast-Team. Formular, oder Mail an admin@bookfast.de.',
     { locale },
   );
   setBreadcrumbSchema(
@@ -76,17 +76,18 @@ export const renderContactPage = (locale = 'de') => {
   content.innerHTML = `
     ${createFeatureHero({
       headline: isEn
-        ? 'Write to us — we are happy to help.'
-        : 'Schreib uns – wir helfen dir weiter.',
+        ? 'Form, or a mail. We read both.'
+        : 'Formular, oder eine Mail. Beides kommt an.',
       subheadline: isEn
-        ? 'Technical support, enterprise inquiries, or feedback — just use the form.'
-        : 'Technischer Support, Enterprise-Anfragen oder Feedback – einfach das Formular ausfüllen.',
+        ? 'Support, partnership, or something that is broken. Pick a subject and write.'
+        : 'Support, Partnerschaft, oder etwas das kaputt ist. Betreff wählen und schreiben.',
       illustrationSrc: '/src/svg/illustrations/landingpage/features/ft_kontakt.svg',
       illustrationAlt: isEn
         ? 'Illustration for contacting the BookFast team'
         : 'Illustration zur Kontaktaufnahme mit dem BookFast Team',
       breadcrumb: isEn ? ['Home', 'Contact'] : ['Home', 'Kontakt'],
       breadcrumbHrefs: isEn ? ['/en'] : undefined,
+      locale,
       demoModuleHTML: contactFormHTML(isEn),
     })}
   `;

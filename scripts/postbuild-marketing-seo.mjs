@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile, copyFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -8,6 +8,7 @@ import {
   ALL_STATIC_ROUTES,
   buildSitemapXml,
 } from '../src/lib/marketingSeoConfig.js';
+import { rewritePrerenderAssetUrls } from './rewriteAssetUrls.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +18,16 @@ const distIndexPath = path.join(distDir, 'index.html');
 const distAppShellPath = path.join(distDir, 'app-shell.html');
 const dist404Path = path.join(distDir, '404.html');
 const distSitemapPath = path.join(distDir, 'sitemap.xml');
+const distViteDir = path.join(distDir, '.vite');
+const distManifestPath = path.join(distViteDir, 'manifest.json');
+
+const readManifest = async () => {
+  try {
+    return JSON.parse(await readFile(distManifestPath, 'utf8'));
+  } catch {
+    return {};
+  }
+};
 
 const flush = async () => {
   await delay(0);
@@ -43,6 +54,8 @@ const installDomGlobals = (window) => {
     'Event',
     'CustomEvent',
     'DOMParser',
+    'AbortController',
+    'AbortSignal',
     'MutationObserver',
     'getComputedStyle',
     'requestAnimationFrame',
@@ -123,7 +136,13 @@ const setupPrerenderWindow = (window) => {
   }
 };
 
-const renderRouteHtml = async (templateHtml, pathname, initLandingPages, cleanupLandingPages) => {
+const renderRouteHtml = async (
+  templateHtml,
+  pathname,
+  initLandingPages,
+  cleanupLandingPages,
+  { markPrerendered = false } = {},
+) => {
   const dom = new JSDOM(templateHtml, {
     url: `https://book-fast.de${pathname}`,
     pretendToBeVisual: true,
@@ -137,6 +156,10 @@ const renderRouteHtml = async (templateHtml, pathname, initLandingPages, cleanup
     initLandingPages({ isLoggedIn: false });
     await flush();
     await flush();
+    if (markPrerendered) {
+      // Tells the client router to keep this DOM on first render instead of rebuilding it.
+      window.document.getElementById('landing-content')?.setAttribute('data-prerendered', pathname);
+    }
     return dom.serialize();
   } finally {
     cleanupLandingPages?.();
@@ -155,6 +178,8 @@ const outputPathForRoute = (pathname) => {
 const main = async () => {
   const templateHtml = await readFile(distIndexPath, 'utf8');
   await copyFile(distIndexPath, distAppShellPath);
+  const manifest = await readManifest();
+  const fixAssets = (html) => rewritePrerenderAssetUrls(html, { projectRoot, distDir, manifest });
 
   const vite = await createServer({
     root: projectRoot,
@@ -170,16 +195,21 @@ const main = async () => {
     for (const route of ALL_STATIC_ROUTES) {
       const outputPath = outputPathForRoute(route.path);
       await mkdir(path.dirname(outputPath), { recursive: true });
-      const html = await renderRouteHtml(templateHtml, route.path, initLandingPages, cleanupLandingPages);
-      await writeFile(outputPath, html, 'utf8');
+      const html = await renderRouteHtml(templateHtml, route.path, initLandingPages, cleanupLandingPages, {
+        markPrerendered: true,
+      });
+      await writeFile(outputPath, fixAssets(html), 'utf8');
     }
 
     const notFoundHtml = await renderRouteHtml(templateHtml, '/404', initLandingPages, cleanupLandingPages);
-    await writeFile(dist404Path, notFoundHtml, 'utf8');
+    await writeFile(dist404Path, fixAssets(notFoundHtml), 'utf8');
     await writeFile(distSitemapPath, buildSitemapXml(), 'utf8');
   } finally {
     await vite.close();
   }
+
+  // The manifest is only a build input for the prerender. Keep it out of the deploy.
+  await rm(distViteDir, { recursive: true, force: true });
 };
 
 main().catch((error) => {

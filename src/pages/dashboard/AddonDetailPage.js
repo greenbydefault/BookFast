@@ -19,7 +19,12 @@ import {
 import { debounce } from '../../lib/utils.js';
 
 const esc = (v) => (v || '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const PRICING_TYPE_LABELS = { per_booking: 'Pro Buchung', per_unit: 'Pro Einheit', per_hour: 'Pro Stunde', per_day: 'Pro Tag' };
+// Werte des DB-Enums addon_pricing_type, identisch mit CreateAddonModal. per_booking ist ein Altwert.
+const PRICING_TYPE_LABELS = { one_time: 'Einmalig', per_night: 'Pro Nacht', per_person: 'Pro Person', per_ticket: 'Pro Ticket', per_booking: 'Pro Buchung' };
+const pricingTypeOptions = (current) => Object.entries(PRICING_TYPE_LABELS)
+    .filter(([value]) => value !== 'per_booking' || current === 'per_booking')
+    .map(([value, label]) => `<option value="${value}" ${current === value ? 'selected' : ''}>${label}</option>`)
+    .join('');
 const APPLICABILITY_LABELS = { booking: 'Für die Buchung (einmalig)', guest: 'Pro Gast' };
 const MODE_LABELS = { single_choice: 'Eine Variante', quantity: 'Menge wählbar' };
 
@@ -117,7 +122,7 @@ const renderSideCard = (addon) => buildSideCardWithTabs({
                         ${navField({ label: 'Preis (€)', name: 'price', value: addon.price ?? '', type: 'number', placeholder: '0.00' })}
                         ${navField({
                             label: 'Preismodell', name: 'pricing_type', tag: 'select',
-                            options: Object.entries(PRICING_TYPE_LABELS).map(([v, l]) => `<option value="${v}" ${addon.pricing_type === v ? 'selected' : ''}>${l}</option>`).join('')
+                            options: pricingTypeOptions(addon.pricing_type)
                         })}
                     `
                 }),

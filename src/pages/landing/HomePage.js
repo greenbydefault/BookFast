@@ -12,6 +12,7 @@ import { createFAQSection, initFAQAccordion } from '../../components/landing/FAQ
 import { createCTASection } from '../../components/landing/CTASection.js';
 import { setPageMeta, setFAQSchema, setHreflangAlternates } from '../../lib/seoHelper.js';
 import { getLocaleFromPath, normalizeLandingPath } from '../../lib/landingLocale.js';
+import { setLandingContent } from '../../lib/landingContent.js';
 import { getFeatureDemoModuleContent } from '../../lib/getLocaleDemoModule.js';
 import * as homeDe from '../../data/homePage.js';
 import * as homeEn from '../../locales/en/homePage.js';
@@ -72,7 +73,7 @@ export const renderHomePage = (localeArg) => {
     previewHTML: createIntegrationPreviewHTML(locale),
   });
 
-  content.innerHTML = `
+  setLandingContent(content, `
     ${createHeroNew({
       tagline: HERO.tagline,
       headline,
@@ -95,7 +96,7 @@ export const renderHomePage = (localeArg) => {
     })}
 
     ${createFAQSection({ locale, sharedFaq: FAQ, pageFaq: [] })}
-  `;
+  `);
 
   initHeroNew();
   initHowItWorksInteractive(content, {

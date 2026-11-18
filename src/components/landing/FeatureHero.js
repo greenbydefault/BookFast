@@ -6,6 +6,7 @@
  */
 import { escapeHtml, escapeAttr } from '../../lib/sanitize.js';
 import { getIconString } from '../Icons/Icon.js';
+import { getUiChrome } from '../../locales/uiChrome.js';
 import './FeatureHero.css';
 
 const BG_IMAGE = new URL('../../svg/illustrations/gradient_noise_bg.avif', import.meta.url).href;
@@ -31,7 +32,11 @@ export const createFeatureHero = (config) => {
     breadcrumbHrefs = null,
     demoModuleHTML = '',
     demoHint = '',
+    locale = 'de',
+    breadcrumbNavLabel,
   } = config;
+  const chrome = getUiChrome(locale);
+  const navLabel = breadcrumbNavLabel || chrome.feature.breadcrumbNavLabel;
 
   const breadcrumbHTML = breadcrumb.map((item, i) => {
     const isLast = i === breadcrumb.length - 1;
@@ -44,7 +49,7 @@ export const createFeatureHero = (config) => {
   }).join(' ');
 
   const illustrationHTML = illustrationSrc
-    ? `<div class="feature-hero__illustration"><img src="${escapeAttr(illustrationSrc)}" alt="${escapeAttr(illustrationAlt || `Illustration zum Feature ${headline}`)}" loading="eager"></div>`
+    ? `<div class="feature-hero__illustration"><img src="${escapeAttr(illustrationSrc)}" alt="${escapeAttr(illustrationAlt || chrome.feature.illustrationAlt(headline))}" loading="eager"></div>`
     : '';
   const demoFrameHTML = demoModuleHTML
     ? `<div class="landing-frosted-frame feature-hero__card-frame">${demoModuleHTML}</div>`
@@ -55,7 +60,7 @@ export const createFeatureHero = (config) => {
       <!-- Zone 1: White top -->
       <div class="feature-hero__top">
         <div class="landing-container">
-          <nav class="feature-hero__breadcrumb" aria-label="Breadcrumb Navigation">${breadcrumbHTML}</nav>
+          <nav class="feature-hero__breadcrumb" aria-label="${escapeAttr(navLabel)}">${breadcrumbHTML}</nav>
           ${illustrationHTML}
           <h1 class="hero-new__headline">${escapeHtml(headline)}</h1>
           <p class="hero-new__subheadline">${escapeHtml(subheadline)}</p>

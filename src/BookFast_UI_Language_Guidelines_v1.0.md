@@ -1,10 +1,10 @@
-# BookFast UI Language Guidelines (DE + EN) — v1.0
+# BookFast UI language guidelines (DE + EN)
 
-**UI-Sprachleitfaden (Deutsch + Englisch)**  
 **Version:** v1.0  
-**Datum:** 2026-01-08  
-**Owner:** BookFast product team  
-**Scope:** Customer booking widget (B2C) + Partner/Admin dashboard (B2B) + in-app messages (errors, confirmations, empty states)
+**Datum:** 2026-01-08, Review 2026-09-02  
+**Scope:** Booking-Widget (Gäste), Partner-Dashboard, In-App-Texte (Fehler, Bestätigungen, leere Zustände).
+
+Marketing-Website folgt einem eigenen Dokument: `src/Knowlage/SaaS-Landing-Page-Wording-Guidelines-2026.md`. Dort Du, hier die Tabelle unten.
 
 ---
 
@@ -33,7 +33,7 @@ If you only read one page, read this.
 - **One concept, one term:** follow the glossary and avoid synonyms.
 - **Keep it calm:** no blame or panic language in warnings/errors.
 - **Make fixes obvious:** errors must say how to resolve the issue.
-- **Du/Sie is fixed per surface:** widget = Du, dashboard = Sie. *(Note: This was v1.0; later project decisions may override.)*
+- **Du/Sie is fixed per surface:** Widget = Du, Dashboard = Sie, Marketing-Website = Du. Nicht mischen.
 - **Sentence case:** headings, labels, and buttons (no ALL CAPS).
 - **Plain language:** avoid jargon and idioms; short sentences.
 - **Localize formats:** date/time/currency follow locale.
@@ -43,7 +43,9 @@ If you only read one page, read this.
 
 ## 2. Product voice and tone
 
-**Voice** is stable (who BookFast is). **Tone** adapts to context (what is happening).
+Voice stays the same. Tone changes with the moment (success vs. error).
+
+Website copy has a harder rule: if a sentence could sit on another SaaS site unchanged, rewrite it. Name the mechanism (Stripe Connect, Magic Link, Embed-Script), not a feeling.
 
 ### Voice attributes
 
@@ -72,7 +74,8 @@ BookFast has two distinct audiences. Consistency is required within each surface
 | Surface | Audience | DE form | EN form |
 |---|---|---|---|
 | Booking widget (public) | Guests / end customers | Du | You |
-| Partner dashboard | Spa operators / businesses | Sie | You |
+| Partner dashboard | Operators / businesses | Sie | You |
+| Marketing website | Operators evaluating BookFast | Du | You |
 | Admin tools (internal) | BookFast team | Sie (default) or EN-only | You |
 
 **Rule:** Do not mix Du and Sie within the same flow. If a UI surface can be used by both audiences, create two locale variants.  
@@ -293,4 +296,4 @@ Use this checklist before shipping any screen or feature.
 
 ---
 
-**Next step:** Build a shared string library (e.g., JSON/CSV or a design system) that stores approved patterns per UI component (buttons, field errors, empty states) and prevents drift over time.
+Approved strings live in code: `src/locales/` for marketing chrome, feature files under `src/data/features/` (DE) and `src/locales/en/features/` (EN), dashboard copy next to the screens. Do not invent a second glossary in a spreadsheet.

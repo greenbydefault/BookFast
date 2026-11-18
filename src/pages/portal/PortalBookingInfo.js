@@ -25,6 +25,7 @@ const STATUS_MAP = {
 const PAYMENT_MAP = {
     unpaid: { label: 'Unbezahlt', class: 'portal-payment--unpaid' },
     paid: { label: 'Bezahlt', class: 'portal-payment--paid' },
+    deposit_paid: { label: 'Angezahlt', class: 'portal-payment--unpaid' },
     refunded: { label: 'Erstattet', class: 'portal-payment--refunded' },
     partial_refunded: { label: 'Teilweise erstattet', class: 'portal-payment--refunded' },
     failed: { label: 'Fehlgeschlagen', class: 'portal-payment--failed' },

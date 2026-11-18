@@ -13,6 +13,7 @@ describe('FeatureRelatedSlider localization', () => {
     });
 
     expect(html).toContain('View feature');
+    expect(html).toContain('More features');
     expect(html).toContain('aria-label="Previous slide"');
     expect(html).toContain('aria-label="Next slide"');
     expect(html).toContain('title="Show previous slide"');

@@ -133,4 +133,23 @@ describe('calculatePricing', () => {
     expect(result.depositAmount).toBe(60);
     expect(result.amountToCharge).toBe(60);
   });
+
+  it('keeps deposit cents instead of rounding to whole euros', () => {
+    const result = calculatePricing({
+      service: { price: 99.9, price_type: 'per_total', service_type: 'hourly', deposit_enabled: true, deposit_percent: 25 },
+      start_time: '2026-03-20T10:00:00.000Z',
+      end_time: '2026-03-20T11:00:00.000Z',
+    });
+
+    expect(result.depositAmount).toBe(24.98);
+    expect(result.amountToCharge).toBe(24.98);
+  });
+
+  it('charges the full amount when deposit is 100 percent or disabled', () => {
+    const base = { price: 100, price_type: 'per_total', service_type: 'hourly' };
+    const times = { start_time: '2026-03-20T10:00:00.000Z', end_time: '2026-03-20T11:00:00.000Z' };
+
+    expect(calculatePricing({ service: { ...base, deposit_enabled: true, deposit_percent: 100 }, ...times }).depositAmount).toBeNull();
+    expect(calculatePricing({ service: { ...base, deposit_enabled: false, deposit_percent: 30 }, ...times }).amountToCharge).toBe(100);
+  });
 });

@@ -4,6 +4,8 @@ import { resolve } from 'path';
 export default defineConfig({
   appType: 'spa',
   build: {
+    // postbuild-marketing-seo.mjs reads the manifest to map prerendered asset URLs to hashed files.
+    manifest: true,
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),

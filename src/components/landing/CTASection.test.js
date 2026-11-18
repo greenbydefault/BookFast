@@ -17,6 +17,7 @@ describe('CTASection', () => {
 
     expect(primary?.getAttribute('href')).toBe('/en');
     expect(primary?.textContent?.trim()).toBe('Start live demo');
+    expect(document.querySelector('.landing-cta-illustration')?.getAttribute('alt')).toContain('call-to-action');
     expect(secondary?.textContent?.trim()).toBe('Join the waitlist');
     expect(secondary?.hasAttribute('data-landing-waitlist')).toBe(true);
     expect(secondary?.getAttribute('data-landing-link')).toBeNull();

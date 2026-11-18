@@ -20,8 +20,8 @@ describe('landing language switch', () => {
     const nav = renderNavAt('/en');
     const links = Array.from(nav.querySelectorAll('.landing-nav-links .landing-nav-link'));
 
-    expect(links.map((link) => link.textContent?.trim())).toEqual(['Product', 'Features', 'Pricing']);
-    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/en/product', '/en/features', '/en/pricing']);
+    expect(links.map((link) => link.textContent?.trim())).toEqual(['Product', 'Features', 'Compare', 'Pricing']);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/en/product', '/en/features', '/en/compare/flowbookings', '/en/pricing']);
     expect(nav.querySelector('.landing-nav-links > .landing-nav-link')?.getAttribute('href')).toBe('/en/product');
     expect(nav.querySelector('.landing-nav-mega-wrap')).not.toBeNull();
     expect(nav.querySelector('#mega-features')).not.toBeNull();
@@ -59,5 +59,25 @@ describe('landing language switch', () => {
     expect(enLink?.classList.contains('is-active')).toBe(true);
     expect(deLink?.classList.contains('is-active')).toBe(false);
     expect(logoLink?.getAttribute('href')).toBe('/en');
+  });
+
+  it('rebuilds labels and waitlist chrome when switching locale from DE to EN', () => {
+    const app = document.getElementById('app');
+    history.replaceState({}, '', '/');
+    renderNavigation(app);
+
+    expect(app.querySelector('.landing-nav-link')?.textContent?.trim()).toBe('Produkt');
+    expect(app.querySelector('[data-landing-waitlist]')?.textContent).toContain('Zur Warteliste anmelden');
+
+    history.pushState({}, '', '/en');
+    syncLandingNavigationChrome();
+
+    const nav = app.querySelector('.landing-nav');
+    const links = Array.from(nav.querySelectorAll('.landing-nav-links .landing-nav-link'));
+    expect(links.map((link) => link.textContent?.trim())).toEqual(['Product', 'Features', 'Compare', 'Pricing']);
+    expect(nav.querySelector('[data-landing-waitlist]')?.textContent).toContain('Join the waitlist');
+    expect(nav.dataset.locale).toBe('en');
+    expect(nav.querySelector('.landing-lang-switch')?.getAttribute('role')).toBe('group');
+    expect(nav.querySelector('.landing-nav-mobile-toggle')?.getAttribute('aria-controls')).toBe('mobile-menu');
   });
 });

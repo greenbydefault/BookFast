@@ -1,6 +1,7 @@
 import { escapeAttr, escapeHtml } from '../../lib/sanitize.js';
 import { resolveSvgAssetUrl, svgAssetUrl } from '../../lib/landingAssets.js';
 import { deFeatureSlugToEn } from '../../lib/featureSlugLocale.js';
+import { getUiChrome } from '../../locales/uiChrome.js';
 import './FeatureRelatedSlider.css';
 
 const FALLBACK_ILLUSTRATION = svgAssetUrl('illustrations/landingpage/features/ft_objektverwaltung.svg');
@@ -46,27 +47,43 @@ const getFeatureHref = (slug, locale) => {
   return `/features/${slug}`;
 };
 
-const createCardHTML = (feature, locale = 'de') => {
+const normalizeSliderCard = (item, copy) => {
+  if (item?.meta || item?.hero) {
+    return {
+      title: item?.meta?.title || item?.hero?.headline || copy.featureFallback,
+      subtext: item?.hero?.subheadline || '',
+      illustration: item?.hero?.illustration || FALLBACK_ILLUSTRATION,
+      slug: item?.slug || '',
+    };
+  }
+
+  return {
+    title: item?.title || copy.featureFallback,
+    subtext: item?.subtext || item?.description || '',
+    illustration: item?.illustration || FALLBACK_ILLUSTRATION,
+    slug: item?.slug || '',
+  };
+};
+
+const createCardHTML = (item, locale = 'de') => {
   const copy = getSliderCopy(locale);
-  const title = feature?.meta?.title || feature?.hero?.headline || copy.featureFallback;
-  const subtext = feature?.hero?.subheadline || '';
-  const rawIllustration = feature?.hero?.illustration || FALLBACK_ILLUSTRATION;
-  const resolvedIllustration = resolveSvgAssetUrl(rawIllustration);
+  const card = normalizeSliderCard(item, copy);
+  const resolvedIllustration = resolveSvgAssetUrl(card.illustration);
   const illustration = resolvedIllustration || FALLBACK_ILLUSTRATION;
-  const href = getFeatureHref(feature?.slug, locale);
+  const href = getFeatureHref(card.slug, locale);
   const buttonLabel = copy.buttonLabel;
-  const buttonTitle = copy.buttonTitle(title);
+  const buttonTitle = copy.buttonTitle(card.title);
 
   return `
     <article class="feature-related-slider__card">
       <div class="feature-related-slider__text">
-        <h3 class="feature-related-slider__card-title">${escapeHtml(title)}</h3>
-        <p class="feature-related-slider__card-subtext">${escapeHtml(subtext)}</p>
+        <h3 class="feature-related-slider__card-title">${escapeHtml(card.title)}</h3>
+        <p class="feature-related-slider__card-subtext">${escapeHtml(card.subtext)}</p>
       </div>
       <div class="feature-related-slider__footer">
         <a href="${escapeAttr(href)}" class="landing-btn landing-btn-primary feature-related-slider__card-btn" data-landing-link data-related-card-link title="${escapeAttr(buttonTitle)}">${escapeHtml(buttonLabel)}</a>
         <div class="feature-related-slider__media">
-          <img src="${escapeAttr(illustration)}" alt="${escapeAttr(copy.illustrationAlt(title))}" loading="eager" decoding="async" />
+          <img src="${escapeAttr(illustration)}" alt="${escapeAttr(copy.illustrationAlt(card.title))}" loading="lazy" decoding="async" />
         </div>
       </div>
     </article>
@@ -76,31 +93,40 @@ const createCardHTML = (feature, locale = 'de') => {
 export const createFeatureRelatedSlider = ({
   currentTitle = '',
   features = [],
-  label = 'Mehr entdecken',
+  cards,
+  label,
   headline = '',
+  intro = '',
   locale = 'de',
 } = {}) => {
-  if (!Array.isArray(features) || !features.length) return '';
+  const items = Array.isArray(cards) && cards.length ? cards : features;
+  if (!Array.isArray(items) || !items.length) return '';
   const copy = getSliderCopy(locale);
+  const chrome = getUiChrome(locale);
+  const resolvedLabel = label ?? chrome.feature.relatedLabel;
   const titleLabel = currentTitle || copy.titleLabelFallback;
-  const headlineText = headline || copy.headlineFallback(escapeHtml(titleLabel));
+  const headlineText = headline ? escapeHtml(headline) : copy.headlineFallback(escapeHtml(titleLabel));
+  const introHTML = intro
+    ? `<p class="feature-related-slider__intro">${escapeHtml(intro)}</p>`
+    : '';
 
   return `
     <section class="landing-section feature-related-slider-section">
       <div class="landing-container">
         <div class="feature-related-slider__header">
           <div>
-            <p class="landing-label landing-label--pill">${escapeHtml(label)}</p>
+            <p class="landing-label landing-label--pill">${escapeHtml(resolvedLabel)}</p>
             <h2 class="landing-h2">${headlineText}</h2>
           </div>
+          ${introHTML}
         </div>
 
         <div class="feature-related-slider" data-feature-related-slider data-related-locale="${escapeAttr(locale)}">
           <div class="feature-related-slider__viewport" data-related-viewport>
             <div class="feature-related-slider__track" data-related-track>
-              ${features.map((feature, index) => `
+              ${items.map((item, index) => `
                 <div class="feature-related-slider__slide" data-related-slide-original data-original-index="${index}">
-                  ${createCardHTML(feature, locale)}
+                  ${createCardHTML(item, locale)}
                 </div>
               `).join('')}
             </div>

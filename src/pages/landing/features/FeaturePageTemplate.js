@@ -17,6 +17,8 @@ import { getHowItWorksPreviewHtml } from '../../../lib/howItWorksPreviewSlice.js
 import { getFeaturePage } from '../../../lib/getLocaleContent.js';
 import { getFeatureDemoModuleContent } from '../../../lib/getLocaleDemoModule.js';
 import { deFeatureSlugToEn } from '../../../lib/featureSlugLocale.js';
+import { getUiChrome } from '../../../locales/uiChrome.js';
+import { setLandingContent } from '../../../lib/landingContent.js';
 
 /**
  * Render a feature page by slug
@@ -27,15 +29,17 @@ export const renderFeaturePage = (slug, locale = 'de') => {
   const content = document.getElementById('landing-content');
   if (!content) return;
 
+  const chrome = getUiChrome(locale);
   const page = getFeaturePage(slug, locale);
   if (!page) {
+    const featuresHref = locale === 'en' ? '/en/features' : '/features';
     content.innerHTML = `
       <section class="landing-hero">
         <div class="landing-container landing-hero-centered">
-          <h1 class="landing-h1">Feature nicht gefunden</h1>
-          <p class="landing-text-lg">Das Feature "${escapeHtml(slug)}" existiert noch nicht.</p>
+          <h1 class="landing-h1">${chrome.feature.notFoundTitle}</h1>
+          <p class="landing-text-lg">${chrome.feature.notFoundBody(escapeHtml(slug))}</p>
           <div class="landing-hero-ctas" style="justify-content: center;">
-            <a href="/features" class="landing-btn landing-btn-secondary" data-landing-link title="Alle Features anzeigen">Alle Features</a>
+            <a href="${featuresHref}" class="landing-btn landing-btn-secondary" data-landing-link title="${chrome.feature.allFeaturesTitle}">${chrome.feature.allFeatures}</a>
           </div>
         </div>
       </section>`;
@@ -65,8 +69,8 @@ export const renderFeaturePage = (slug, locale = 'de') => {
   const hasInteractiveHowItWorks = Boolean(page.interactiveHowItWorks && page.steps?.length);
   const interactiveHowItWorksHTML = hasInteractiveHowItWorks
     ? createHowItWorksInteractive({
-        label: page.interactiveHowItWorksLabel || "So funktioniert's",
-        headline: page.interactiveHowItWorksHeadline || `${page.meta.title} in ${page.steps.length} Schritten.`,
+        label: page.interactiveHowItWorksLabel || chrome.feature.howItWorksLabel,
+        headline: page.interactiveHowItWorksHeadline || chrome.feature.howItWorksHeadline(page.meta.title, page.steps.length),
         steps: page.steps,
         previewHTML: '',
       })
@@ -81,10 +85,12 @@ export const renderFeaturePage = (slug, locale = 'de') => {
     headline: page.hero.headline,
     subheadline: page.hero.subheadline,
     illustrationSrc: resolveSvgAssetUrl(page.hero.illustration) || defaultIllustration,
-    illustrationAlt: `Illustration zum Feature ${page.meta.title} in BookFast`,
-    breadcrumb: ['Home', 'Features', page.meta.title],
+    illustrationAlt: chrome.feature.illustrationAlt(page.meta.title),
+    breadcrumb: [chrome.feature.breadcrumbHome, chrome.feature.breadcrumbFeatures, page.meta.title],
+    breadcrumbHrefs: [homePath, featuresPath],
+    locale,
     demoModuleHTML: demoMod && demoModuleContent ? demoMod.create({ content: demoModuleContent, locale }) : '',
-    demoHint: demoMod ? "Tippe, klicke & probier's aus — ganz ohne Account." : '',
+    demoHint: demoMod ? chrome.feature.demoHint : '',
   });
   const relatedFeatures = getRelatedFeaturesFor(slug, { limit: 5, locale });
   const relatedFeaturesHTML = createFeatureRelatedSlider({
@@ -95,7 +101,7 @@ export const renderFeaturePage = (slug, locale = 'de') => {
 
   setFAQSchema(page.faq || []);
 
-  content.innerHTML = `
+  setLandingContent(content, `
     <!-- 1. Hero -->
     ${heroHTML}
 
@@ -125,11 +131,12 @@ export const renderFeaturePage = (slug, locale = 'de') => {
 
     <!-- 8. FAQ (nur Feature-spezifisch, kein allgemeines FAQ) -->
     ${createFAQSection({
+      locale,
       pageFaq: page.faq || [],
       pageTitle: page.meta.title,
       featureOnly: true,
     })}
-  `;
+  `);
 
   // Init interactive demo module (if present)
   if (demoMod && demoModuleContent) demoMod.init(content, { content: demoModuleContent, locale });

@@ -175,7 +175,7 @@ export const initObjectPreviewCard = (heroContainer, { content = DEFAULT_CONTENT
   };
 
   body.innerHTML = `
-    <div class="modal-content-section">
+    <div class="modal-content-section" data-demo-section="obj-basics">
       <input
         type="text"
         class="modal-form-input modal-input-large"
@@ -193,9 +193,7 @@ export const initObjectPreviewCard = (heroContainer, { content = DEFAULT_CONTENT
           id="object-preview-input-desc"
         >${escapeAttr(state.description)}</textarea>
       </div>
-    </div>
 
-    <div class="modal-content-section">
       <div class="modal-row">
         <div class="modal-label">${getIconString('users-2')} ${content.labels.capacity}</div>
         <div class="modal-controls">
@@ -204,7 +202,9 @@ export const initObjectPreviewCard = (heroContainer, { content = DEFAULT_CONTENT
           </div>
         </div>
       </div>
+    </div>
 
+    <div class="modal-content-section" data-demo-section="obj-availability">
       <div class="modal-row">
         <div class="modal-label">${getIconString('calender-days-date')} ${content.labels.bookableDays}</div>
         <div class="modal-controls">
@@ -243,7 +243,7 @@ export const initObjectPreviewCard = (heroContainer, { content = DEFAULT_CONTENT
       <div id="object-preview-custom-hours-container" class="custom-hours-container" style="display:none;"></div>
     </div>
 
-    <div class="modal-content-section">
+    <div class="modal-content-section" data-demo-section="obj-buffer">
       <div class="modal-row">
         <div class="modal-label">${getIconString('clean')} ${content.labels.cleaningBuffer}</div>
         <div class="modal-controls modal-controls-column">
@@ -262,6 +262,23 @@ export const initObjectPreviewCard = (heroContainer, { content = DEFAULT_CONTENT
             <span class="text-small">${content.labels.minutes} ⌄</span>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="modal-content-section" data-demo-section="obj-services">
+      <div class="modal-row">
+        <div class="modal-label">${getIconString('list')} ${content.labels.linkedServices}</div>
+      </div>
+      <div class="linked-services-container">
+        ${(content.linkedServices || []).map((service) => `
+          <div class="linked-service-item">
+            <div class="linked-service-info">
+              ${getIconString('list')}
+              <span class="linked-service-name">${service}</span>
+            </div>
+            <button class="linked-service-delete" type="button" tabindex="-1">${getIconString('trash')}</button>
+          </div>
+        `).join('')}
       </div>
     </div>
   `;

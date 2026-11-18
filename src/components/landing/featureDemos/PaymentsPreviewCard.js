@@ -1,5 +1,5 @@
 /**
- * PaymentsPreviewCard – Landing-only mirror of Stripe setup, deposits and payouts.
+ * PaymentsPreviewCard – Landing-only mirror of Stripe setup, checkout amount and payouts.
  * Focuses on the commercial flow, not the full checkout implementation.
  */
 import { getIconString } from '../../Icons/Icon.js';
@@ -8,40 +8,53 @@ import './featureDemos.css';
 const DEFAULT_CONTENT = {
   card: {
     title: 'Zahlungen',
-    subtitle: 'Stripe Connect, Anzahlung und Auszahlung wie im Zahlungs-Setup verdichtet.',
+    subtitle: 'Stripe Connect, Checkout-Betrag und Auszahlung wie in der App.',
     footerSecondary: 'Später',
     footerPrimary: 'Stripe starten',
   },
   connectStates: [
-    { id: 'inactive', label: 'Nicht eingerichtet', tone: 'pending', title: 'Konto starten' },
-    { id: 'pending', label: 'In Prüfung', tone: 'pending', title: 'Verifizierung läuft' },
-    { id: 'active', label: 'Aktiv', tone: 'confirmed', title: 'Zahlungen bereit' },
+    { id: 'inactive', label: 'Nicht eingerichtet', tone: 'pending', title: 'Stripe Konto erstellen' },
+    { id: 'pending', label: 'In Prüfung', tone: 'pending', title: 'Verifizierung' },
+    { id: 'active', label: 'Aktiv', tone: 'confirmed', title: 'Bereit' },
   ],
   payouts: [],
   sections: {
     connect: 'Stripe verbinden',
-    deposit: 'Anzahlungen pro Service',
+    checkout: 'Betrag im Checkout',
     payouts: 'Auszahlung & Refund',
   },
   serviceLabel: 'Service',
   serviceName: 'Workshop Raum',
-  splitLabels: {
-    deposit: 'Anzahlung bei Buchung',
-    remainder: 'Restbetrag',
-  },
+  checkoutLines: [
+    { label: 'Workshop Raum, 4 Std.', amount: 180 },
+    { label: 'Reinigungsgebühr', amount: 40 },
+    { label: 'Beamer', amount: 15 },
+  ],
+  voucher: { label: 'Gutschein SPRING', amount: -20 },
+  deposit: { percent: 30, now: 'Jetzt fällig, Anzahlung 30 %', later: 'Später im Kundenportal' },
+  decimalSeparator: ',',
+  checkoutHint: 'Der Kunde zahlt bei der Buchung per Karte.',
   statusDescriptions: {
-    inactive: 'Onboarding-Link direkt aus den Einstellungen starten.',
-    pending: 'Stripe prüft noch Angaben, BookFast hält den Workspace synchron.',
-    active: 'Karte, Wallet und Checkout sind freigeschaltet.',
+    inactive: 'Onboarding startest du unter Einstellungen → Integration.',
+    pending: 'Stripe prüft deine Angaben. Mit "Status prüfen" holst du den aktuellen Stand.',
+    active: 'Kartenzahlung im Widget ist freigeschaltet.',
   },
   actions: {
-    refund: 'Refund simulieren',
-    refundReset: 'Refund zurücksetzen',
+    refund: 'Ablehnung simulieren',
+    refundReset: 'Zurücksetzen',
     next: 'Nächsten Schritt zeigen',
     active: 'Aktiv',
     refundedBadge: 'Erstattet',
+    voucherApply: 'Gutschein anwenden',
+    voucherRemove: 'Gutschein entfernen',
+    depositOn: 'Anzahlung 30 % an',
+    depositOff: 'Anzahlung aus',
   },
 };
+
+const formatAmount = (value, separator = ',') => (
+  Number.isInteger(value) ? String(value) : value.toFixed(2).replace('.', separator)
+);
 
 const getConnectMeta = (content, status) => (
   (content.connectStates || DEFAULT_CONTENT.connectStates).find((item) => item.id === status)
@@ -70,15 +83,22 @@ export const initPaymentsPreviewCard = (heroContainer, { content = DEFAULT_CONTE
 
   const state = {
     connectStatus: 'inactive',
-    depositPercent: 30,
-    totalAmount: 240,
+    voucherApplied: true,
+    depositEnabled: false,
     refunded: false,
   };
 
   const render = () => {
     const connect = getConnectMeta(content, state.connectStatus);
-    const depositAmount = Math.round((state.totalAmount * state.depositPercent) / 100);
-    const remainingAmount = state.totalAmount - depositAmount;
+    const lines = [
+      ...(content.checkoutLines || DEFAULT_CONTENT.checkoutLines),
+      ...(state.voucherApplied ? [content.voucher || DEFAULT_CONTENT.voucher] : []),
+    ];
+    const checkoutTotal = lines.reduce((sum, line) => sum + line.amount, 0);
+    const deposit = content.deposit || DEFAULT_CONTENT.deposit;
+    const depositNow = Math.round(checkoutTotal * deposit.percent) / 100;
+    const separator = content.decimalSeparator || DEFAULT_CONTENT.decimalSeparator;
+    const actions = { ...DEFAULT_CONTENT.actions, ...content.actions };
 
     body.innerHTML = `
       <div class="modal-content-section" data-demo-section="pay-connect">
@@ -104,35 +124,43 @@ export const initPaymentsPreviewCard = (heroContainer, { content = DEFAULT_CONTE
         </div>
       </div>
 
-      <div class="modal-content-section" data-demo-section="pay-deposit">
-        <p class="pay-preview-section-label">${getIconString('receipt-euro')} ${content.sections.deposit}</p>
+      <div class="modal-content-section" data-demo-section="pay-checkout">
+        <p class="pay-preview-section-label">${getIconString('receipt-euro')} ${content.sections.checkout}</p>
         <div class="payments-demo__deposit-card">
           <div class="payments-demo__deposit-top">
             <div>
               <span class="booking-demo__mini-label">${content.serviceLabel}</span>
               <strong>${content.serviceName}</strong>
             </div>
-            <span class="payments-demo__deposit-value">${state.depositPercent} %</span>
+            <span class="payments-demo__deposit-value">${checkoutTotal} EUR</span>
           </div>
-          <input
-            type="range"
-            min="10"
-            max="100"
-            step="10"
-            value="${state.depositPercent}"
-            id="payments-demo-deposit-range"
-            class="payments-demo__range"
-          >
-          <div class="payments-demo__split">
-            <div>
-              <span>${content.splitLabels.deposit}</span>
-              <strong>${depositAmount} EUR</strong>
-            </div>
-            <div>
-              <span>${content.splitLabels.remainder}</span>
-              <strong>${remainingAmount} EUR</strong>
-            </div>
+          <div class="payments-demo__lines">
+            ${lines.map((line) => `
+              <div class="payments-demo__line">
+                <span>${line.label}</span>
+                <strong>${line.amount < 0 ? '−' : ''}${Math.abs(line.amount)} EUR</strong>
+              </div>
+            `).join('')}
+            ${state.depositEnabled ? `
+              <div class="payments-demo__line payments-demo__line--due">
+                <span>${deposit.now}</span>
+                <strong>${formatAmount(depositNow, separator)} EUR</strong>
+              </div>
+              <div class="payments-demo__line">
+                <span>${deposit.later}</span>
+                <strong>${formatAmount(checkoutTotal - depositNow, separator)} EUR</strong>
+              </div>
+            ` : ''}
           </div>
+          <div class="payments-demo__payout-actions">
+            <button type="button" class="payments-demo__action" id="payments-demo-voucher">
+              ${state.voucherApplied ? actions.voucherRemove : actions.voucherApply}
+            </button>
+            <button type="button" class="payments-demo__action" id="payments-demo-deposit">
+              ${state.depositEnabled ? actions.depositOff : actions.depositOn}
+            </button>
+          </div>
+          <p class="payments-demo__hint">${content.checkoutHint}</p>
         </div>
       </div>
 
@@ -167,8 +195,13 @@ export const initPaymentsPreviewCard = (heroContainer, { content = DEFAULT_CONTE
       });
     });
 
-    body.querySelector('#payments-demo-deposit-range')?.addEventListener('input', (event) => {
-      state.depositPercent = Number(event.target.value) || 30;
+    body.querySelector('#payments-demo-voucher')?.addEventListener('click', () => {
+      state.voucherApplied = !state.voucherApplied;
+      render();
+    });
+
+    body.querySelector('#payments-demo-deposit')?.addEventListener('click', () => {
+      state.depositEnabled = !state.depositEnabled;
       render();
     });
 

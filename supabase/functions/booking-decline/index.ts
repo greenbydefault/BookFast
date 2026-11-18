@@ -45,6 +45,7 @@ serve(async (req: Request) => {
         status, 
         payment_status, 
         payment_intent_id,
+        balance_payment_intent_id,
         total_price,
         amount_deposit,
         workspace_id,
@@ -70,7 +71,7 @@ serve(async (req: Request) => {
       );
     }
 
-    if (booking.payment_status !== 'paid') {
+    if (!['paid', 'deposit_paid'].includes(booking.payment_status)) {
       return new Response(
         JSON.stringify({ error: 'No payment to refund' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -85,12 +86,13 @@ serve(async (req: Request) => {
       );
     }
 
-    // Process refund via Stripe on the connected account (Direct Charges)
-    let refund;
-    if (booking.payment_intent_id) {
+    // Anzahlung und Restzahlung sind getrennte PaymentIntents.
+    const paymentIntentIds = [booking.payment_intent_id, booking.balance_payment_intent_id].filter(Boolean);
+    const refunds = [];
+    for (const paymentIntentId of paymentIntentIds) {
       try {
-        refund = await stripe.refunds.create({
-          payment_intent: booking.payment_intent_id,
+        refunds.push(await stripe.refunds.create({
+          payment_intent: paymentIntentId,
           reason: 'requested_by_customer',
           metadata: {
             booking_id,
@@ -98,7 +100,7 @@ serve(async (req: Request) => {
           },
         }, {
           stripeAccount: connectedAccountId,
-        });
+        }));
       } catch (stripeError) {
         console.error('Stripe refund error:', stripeError);
         return new Response(
@@ -107,9 +109,14 @@ serve(async (req: Request) => {
         );
       }
     }
+    const refund = refunds[0];
 
-    // Update booking
-    const refundAmount = refund ? refund.amount / 100 : booking.total_price;
+    const paidAmount = booking.payment_status === 'deposit_paid'
+      ? Number(booking.amount_deposit) || 0
+      : Number(booking.total_price) || 0;
+    const refundAmount = refunds.length
+      ? refunds.reduce((sum, item) => sum + item.amount, 0) / 100
+      : paidAmount;
     
     const { error: updateError } = await supabaseAdmin
       .from('bookings')

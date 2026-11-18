@@ -6,6 +6,8 @@ import { renderNavigation } from '../../components/landing/Navigation.js';
 import { renderFooter } from '../../components/landing/Footer.js';
 import { initLandingRouter } from '../../lib/landingRouter.js';
 import { registerAllLandingPages } from './registry.js';
+import { getLocaleFromPath, normalizeLandingPath } from '../../lib/landingLocale.js';
+import { getUiChrome } from '../../locales/uiChrome.js';
 import '../../locales/en/features/index.js';
 import '../../locales/en/featureDemoModules/index.js';
 
@@ -26,20 +28,33 @@ const createFooterElement = () => {
   return container.firstElementChild;
 };
 
+const createSkipLink = () => {
+  const locale = getLocaleFromPath(
+    normalizeLandingPath(window.location.pathname === '/index.html' ? '/' : window.location.pathname),
+  );
+  const skip = document.createElement('a');
+  skip.href = '#landing-content';
+  skip.className = 'landing-skip-link';
+  skip.textContent = getUiChrome(locale).skipLink;
+  return skip;
+};
+
 const ensureLandingContent = (existingContent) => {
   const content = existingContent || document.createElement('main');
   content.id = 'landing-content';
   content.style.minHeight = '60vh';
+  content.tabIndex = -1;
   return content;
 };
 
 const ensureLandingShell = (app, { isLoggedIn = false } = {}) => {
+  const skipLink = app.querySelector('.landing-skip-link') || createSkipLink();
   const navigation = createNavigationElement({ isLoggedIn });
   const content = ensureLandingContent(app.querySelector('#landing-content'));
   const footer = app.querySelector('.landing-footer') || createFooterElement();
 
   if (!navigation || !footer) return;
-  app.replaceChildren(navigation, content, footer);
+  app.replaceChildren(skipLink, navigation, content, footer);
 };
 
 /**

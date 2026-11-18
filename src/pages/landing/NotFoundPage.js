@@ -25,7 +25,7 @@ export const renderNotFoundPage = (locale = 'de') => {
     ? '404 illustration for a BookFast page that was not found'
     : '404 Illustration für eine nicht gefundene BookFast Seite';
   const h1 = isEn ? 'This page no longer exists.' : 'Diese Seite ist leider nicht mehr da.';
-  const lead = isEn ? 'No problem — you can get back to the homepage from here.' : "Kein Problem – hier geht's zurück zur Startseite.";
+  const lead = isEn ? 'Back to the homepage from here.' : "Hier geht's zurück zur Startseite.";
   const linkText = isEn ? 'Go to homepage' : 'Zur Startseite';
   const linkTitle = isEn ? 'Go to homepage' : 'Zur Startseite wechseln';
 

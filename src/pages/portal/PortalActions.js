@@ -16,8 +16,13 @@ const CANCELLABLE = ['confirmed', 'pending_approval', 'pending'];
  */
 export const renderPortalActions = (booking, workspace) => {
     const canCancel = CANCELLABLE.includes(booking.status);
-    const canPayOnline = booking.payment_status === 'unpaid' && workspace?.payout_status === 'active';
-    const showPaymentUnavailable = booking.payment_status === 'unpaid' && !canPayOnline;
+    const isBalanceDue = booking.payment_status === 'deposit_paid';
+    const hasOpenAmount = booking.payment_status === 'unpaid' || isBalanceDue;
+    const openAmount = isBalanceDue
+        ? Number(booking.total_price) - (Number(booking.amount_deposit) || 0)
+        : Number(booking.total_price);
+    const canPayOnline = hasOpenAmount && openAmount > 0 && workspace?.payout_status === 'active';
+    const showPaymentUnavailable = hasOpenAmount && !canPayOnline;
 
     return `
         <div class="portal-card portal-actions-card">
@@ -53,10 +58,12 @@ export const renderPortalActions = (booking, workspace) => {
 
             ${canPayOnline ? `
             <div class="portal-pay-section mt-6 border-t pt-6">
-                <h4 class="font-bold mb-2">Zahlung offen</h4>
-                <p class="mb-4 text-sm">Bitte begleichen Sie den offenen Betrag von <strong>${Number(booking.total_price).toFixed(2)} €</strong>.</p>
+                <h4 class="font-bold mb-2">${isBalanceDue ? 'Restbetrag offen' : 'Zahlung offen'}</h4>
+                <p class="mb-4 text-sm">${isBalanceDue
+                    ? `Ihre Anzahlung von <strong>${Number(booking.amount_deposit).toFixed(2)} €</strong> ist eingegangen. Offen sind noch <strong>${openAmount.toFixed(2)} €</strong>.`
+                    : `Bitte begleichen Sie den offenen Betrag von <strong>${openAmount.toFixed(2)} €</strong>.`}</p>
                 <button class="portal-btn portal-btn-primary w-full" id="portal-pay-now">
-                    Jetzt online bezahlen
+                    ${isBalanceDue ? 'Restbetrag online bezahlen' : 'Jetzt online bezahlen'}
                 </button>
                 <p id="portal-pay-error" class="text-red-600 text-sm mt-2 hidden"></p>
             </div>
@@ -76,6 +83,8 @@ export const renderPortalActions = (booking, workspace) => {
  * Initialize event handlers for portal actions
  */
 export const initPortalActions = (booking, workspace, token) => {
+    const isBalanceDue = booking.payment_status === 'deposit_paid';
+
     // PDF Download
     const downloadBtn = document.getElementById('portal-download-pdf');
     if (downloadBtn) {
@@ -208,7 +217,7 @@ export const initPortalActions = (booking, workspace, token) => {
                     payError.classList.remove('hidden');
                 }
                 payBtn.disabled = false;
-                payBtn.textContent = 'Jetzt online bezahlen';
+                payBtn.textContent = isBalanceDue ? 'Restbetrag online bezahlen' : 'Jetzt online bezahlen';
             }
         });
     }

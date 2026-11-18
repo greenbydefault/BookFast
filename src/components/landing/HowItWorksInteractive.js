@@ -57,7 +57,7 @@ export const createHowItWorksInteractive = ({
               const panelId = `${uid}-panel-${index}`;
               const triggerId = `${uid}-trigger-${index}`;
               return `
-                <article class="how-it-works__item ${isActive ? 'is-active' : ''}" data-how-step-item>
+                <div class="how-it-works__item ${isActive ? 'is-active' : ''}" data-how-step-item>
                   <button
                     type="button"
                     class="how-it-works__trigger"
@@ -85,7 +85,7 @@ export const createHowItWorksInteractive = ({
                       ${createBulletsHTML(step.bullets)}
                     </div>
                   </div>
-                </article>
+                </div>
               `;
             }).join('')}
           </div>

@@ -17,9 +17,11 @@ export const getEffectiveBookingStatus = (booking, now = new Date()) => {
     return status;
 };
 
+export const OPEN_PAYMENT_STATUSES = ['unpaid', 'deposit_paid'];
+
 export const bookingMatchesFilter = (booking, filter, now = new Date()) => {
     if (!filter || filter === 'all') return true;
-    if (filter === 'unpaid') return booking?.payment_status === 'unpaid';
+    if (filter === 'unpaid') return OPEN_PAYMENT_STATUSES.includes(booking?.payment_status);
 
     const effectiveStatus = getEffectiveBookingStatus(booking, now);
     return effectiveStatus === filter;
@@ -38,7 +40,7 @@ export const applyBookingFilterToQuery = (query, filter, nowIso = new Date().toI
         return query.or(`status.eq.completed,and(status.eq.confirmed,end_time.lt.${nowIso})`);
     }
     if (filter === 'unpaid') {
-        return query.eq('payment_status', 'unpaid');
+        return query.in('payment_status', OPEN_PAYMENT_STATUSES);
     }
 
     return query.eq('status', filter);

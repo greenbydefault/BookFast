@@ -97,7 +97,7 @@ const createFooterHTML = (locale) => {
     </div>
 
     <div class="landing-footer-stage">
-      <img src="${FOOTER_ILLUSTRATION_URL}" alt="${chrome.illustrationAlt}" class="landing-footer-illustration" width="1725" height="535">
+      <img src="${FOOTER_ILLUSTRATION_URL}" alt="${chrome.illustrationAlt}" class="landing-footer-illustration" width="1725" height="535" loading="lazy" decoding="async">
     </div>
 
     <div class="landing-container">

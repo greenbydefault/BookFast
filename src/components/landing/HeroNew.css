@@ -213,6 +213,7 @@
 
 /* ── Form visibility during expansion ── */
 .hero-new__form {
+    margin: 0;
     text-align: left;
     opacity: 1;
     transform: translateY(0);

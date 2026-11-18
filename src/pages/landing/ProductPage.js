@@ -10,90 +10,91 @@ import { iconImg } from '../../lib/landingAssets.js';
 import { setPageMeta, setFAQSchema, setBreadcrumbSchema, setHreflangAlternates } from '../../lib/seoHelper.js';
 import { getFeaturePage } from '../../lib/getLocaleContent.js';
 import { escapeHtml } from '../../lib/sanitize.js';
+import { setLandingContent } from '../../lib/landingContent.js';
 
-const PRODUCT_FEATURE_SLUGS = ['buchungen', 'objekte', 'services', 'zahlungen', 'integration', 'analytics'];
+const PRODUCT_FEATURE_SLUGS = ['buchungen', 'objekte', 'services', 'zahlungen', 'rechnungen', 'integration', 'analytics'];
 
 const PRODUCT_OVERVIEW_DE = [
   {
     question: 'Was muss ich auf einen Blick wissen?',
-    answer: 'BookFast verbindet Buchungswidget, Dashboard, Zahlungen, Rechnungen und Analytics in einem Flow. Deine Kunden bleiben auf deiner Website, du behältst Kontrolle über Conversion, Daten und Zahlungseingänge.',
+    answer: 'Widget auf deiner Website, Dashboard für dich, Stripe fürs Geld, Rechnungen und Funnel-Zahlen im selben System. Kunden verlassen deine Domain nicht.',
   },
   {
     question: 'Für wen ist BookFast gemacht?',
-    answer: 'Für Unternehmen mit Webflow-Website, die Termine, Räume, Kurse, Tagesmieten oder Übernachtungen direkt auf der eigenen Seite verkaufen wollen, statt Leads an externe Tools oder Redirect-Strecken zu verlieren.',
+    answer: 'Für Webflow-Seiten, die Termine, Räume, Kurse, Tagesmieten oder Nächte verkaufen. Nicht für Leute, die Anfragen in Calendly oder einem fremden Portal versenken wollen.',
   },
   {
     question: 'Wie schnell bin ich live?',
-    answer: 'Typisch in wenigen Minuten: Services und Objekte anlegen, Stripe verbinden, Widget per Embed-Script einbauen oder den Flow per Template-Copy in Webflow einsetzen.',
+    answer: 'Services und Objekte anlegen, Stripe verbinden, Embed-Script plus Template-Copy in Webflow. Wenn die Seite steht, oft unter 5 Minuten.',
   },
   {
-    question: 'Wo ist der Unterschied zu klassischen Scheduling-Tools?',
-    answer: 'Kein iFrame-Gefühl, kein Fremdportal, keine Provision pro Buchung. Stattdessen nativer Einbau, konfigurierbare Zahlungslogik, automatische Rechnungen und echte Funnel-Daten zu Drop-offs und Abschlüssen.',
+    question: 'Wo ist der Unterschied zu Calendly und Co.?',
+    answer: 'Kein iFrame, kein Fremdportal, keine Provision pro Buchung. Zahlung vor dem Termin, Rechnung automatisch, im Dashboard siehst du, wo Leute abspringen.',
   },
 ];
 
 const PRODUCT_OVERVIEW_EN = [
   {
-    question: 'What matters at a glance?',
-    answer: 'BookFast combines booking widget, dashboard, payments, invoices, and analytics in one flow. Customers stay on your website while you keep control over conversion, data, and payouts.',
+    question: 'What do I need to know first?',
+    answer: 'Widget on your site, dashboard for you, Stripe for money, invoices and funnel numbers in the same system. Customers never leave your domain.',
   },
   {
     question: 'Who is BookFast for?',
-    answer: 'For teams with a Webflow website that want to sell appointments, rooms, classes, day rentals, or overnight stays directly on their own site instead of losing demand to external tools and redirects.',
+    answer: 'Webflow sites that sell appointments, rooms, classes, day rentals, or nights. Not for sending demand into Calendly or a third-party portal.',
   },
   {
     question: 'How fast can I go live?',
-    answer: 'Usually in a few minutes: create services and resources, connect Stripe, then embed the widget with a script tag or use template copy inside Webflow.',
+    answer: 'Create services and objects, connect Stripe, add the embed script and the Webflow template. If the site is ready, often under 5 minutes.',
   },
   {
-    question: 'How is this different from classic scheduling tools?',
-    answer: 'No iframe feel, no external portal, no commission per booking. Instead you get native embed, configurable payment logic, automatic invoices, and real funnel visibility for drop-offs and completions.',
+    question: 'How is this different from Calendly and the rest?',
+    answer: 'No iframe, no third-party portal, no commission per booking. Payment before the slot, invoices generated for you, dashboard shows where people drop off.',
   },
 ];
 
 const PRODUCT_FAQ_DE = [
   {
     question: 'Läuft BookFast nur mit Webflow?',
-    answer: 'BookFast ist Webflow-first. Das Embed-Script funktioniert grundsätzlich auf jeder Website. Template-Copy, Datenattribute und der schnellste Setup-Weg sind aber klar auf Webflow optimiert.',
+    answer: 'Gebaut für Webflow. Das Script braucht das Markup aus dem Webflow-Template. Auf anderen Systemen müsstest du es selbst nachbauen.',
   },
   {
-    question: 'Welche Zahlungslogik kann ich abbilden?',
-    answer: 'Du kannst Stripe Connect anbinden, Anzahlungen definieren, komplette Zahlungen vor Buchung einziehen und Rückerstattungen sauber im Prozess abbilden.',
+    question: 'Wie kommt das Geld rein?',
+    answer: 'Stripe Connect. Der Kunde zahlt bei der Buchung per Karte. Ablehnung löst die Rückerstattung aus.',
   },
   {
-    question: 'Kann ich verschiedene Buchungsmodelle anbieten?',
-    answer: 'Ja. Stundenbuchungen, Tagesmieten, Übernachtungen, Add-ons, Buffer, Zeitfenster, Check-in/out und Freigabe-Workflows lassen sich pro Angebot konfigurieren.',
+    question: 'Kann ich Stunden, Tage und Nächte mischen?',
+    answer: 'Ja. Pro Service: Typ, Preis, Dauer, Add-ons, Puffer, Zeitfenster, Check-in und Check-out. Bezahlte Buchungen gibst du vor dem Termin frei.',
   },
   {
-    question: 'Bekomme ich auch operative Transparenz?',
-    answer: 'Ja. Du siehst Buchungsstatus, Conversion-Funnel, Drop-offs, Kundenhistorie sowie Zahlungs- und Rechnungsdaten an einem Ort.',
+    question: 'Sehe ich, wo Buchungen hängen bleiben?',
+    answer: 'Ja. Status, Funnel, Absprünge, Kundendaten, Zahlungen und Rechnungen liegen im Dashboard.',
   },
   {
     question: 'Was ist mit Google Calendar, Zapier oder Make?',
-    answer: 'Weitere Integrationen sind geplant. Heute decken Webflow, Stripe und Webhooks bereits den Kern ab, damit du live gehen und eigene Automationen anbinden kannst.',
+    answer: 'Noch nicht. Live sind Webflow und Stripe. Webhooks, Google Calendar, Zapier und Make stehen auf der Liste.',
   },
 ];
 
 const PRODUCT_FAQ_EN = [
   {
     question: 'Is BookFast Webflow-only?',
-    answer: 'BookFast is Webflow-first. The embed script can technically run on any website. Template copy, data attributes, and the fastest setup path are clearly optimized for Webflow.',
+    answer: 'Built for Webflow. The script needs the markup from the Webflow template. On other platforms you would have to rebuild it yourself.',
   },
   {
-    question: 'What payment logic can I support?',
-    answer: 'You can connect Stripe Connect, define deposits, collect full payment before booking, and handle refunds cleanly inside the same flow.',
+    question: 'How do payments work?',
+    answer: 'Stripe Connect. Customers pay by card at booking. A decline triggers the refund.',
   },
   {
-    question: 'Can I support different booking models?',
-    answer: 'Yes. Hourly bookings, day rentals, overnight stays, add-ons, buffers, time slots, check-in/out, and approval workflows can be configured per offer.',
+    question: 'Can I mix hours, days, and nights?',
+    answer: 'Yes. Per service: type, price, duration, add-ons, buffers, time windows, check-in and check-out. You approve paid bookings before the slot.',
   },
   {
-    question: 'Do I also get operational visibility?',
-    answer: 'Yes. You see booking statuses, conversion funnel, drop-offs, customer history, and payment plus invoice data in one place.',
+    question: 'Can I see where bookings stall?',
+    answer: 'Yes. Status, funnel, drop-offs, customer data, payments, and invoices live in the dashboard.',
   },
   {
     question: 'What about Google Calendar, Zapier, or Make?',
-    answer: 'More integrations are planned. Today Webflow, Stripe, and webhooks already cover the core setup so you can launch and connect your own automations.',
+    answer: 'Not yet. Live today: Webflow and Stripe. Webhooks, Google Calendar, Zapier, and Make are on the list.',
   },
 ];
 
@@ -153,10 +154,10 @@ export const renderProductPage = (locale = 'de') => {
   const relatedFeatures = getProductSliderFeatures(locale);
 
   setPageMeta(
-    isEn ? 'Booking for Webflow - Product' : 'Buchungssystem fuer Webflow - Produkt',
+    isEn ? 'Booking for Webflow. Product.' : 'Buchungssystem für Webflow. Produkt.',
     isEn
-      ? 'BookFast is the central booking product for Webflow: booking widget, payments, invoices, webhooks, and analytics in one flow.'
-      : 'BookFast ist das zentrale Buchungssystem fuer Webflow: Booking-Widget, Zahlungen, Rechnungen, Webhooks und Analytics in einem Flow.',
+      ? 'Widget, Stripe, invoices, and funnel numbers. Bookings stay on your Webflow site. 0% BookFast commission.'
+      : 'Widget, Stripe, Rechnungen und Funnel-Zahlen. Buchungen bleiben auf deiner Webflow-Seite. 0 % BookFast-Provision.',
     { locale },
   );
   setFAQSchema(pageFaq);
@@ -171,72 +172,73 @@ export const renderProductPage = (locale = 'de') => {
 
   const heroDemoCards = isEn
     ? [
-        { icon: iconImg('Globe.svg'), title: 'On your site', text: 'No redirect or iframe break.' },
-        { icon: iconImg('Bank-card.svg'), title: 'Paid online', text: 'Deposits, payments, refunds via Stripe.' },
-        { icon: iconImg('chart.svg'), title: 'Visible funnel', text: 'See drop-offs and completions.' },
-        { icon: iconImg('receipt-euro.svg'), title: 'Operationally clean', text: 'Invoices and statuses in one place.' },
+        { icon: iconImg('Globe.svg'), title: 'On your site', text: 'No redirect. No iframe.' },
+        { icon: iconImg('Bank-card.svg'), title: 'Paid online', text: 'Card payment and refunds via Stripe.' },
+        { icon: iconImg('chart.svg'), title: 'Funnel', text: 'See drop-offs and completed bookings.' },
+        { icon: iconImg('receipt-euro.svg'), title: 'Invoices', text: 'Status and PDFs in one dashboard.' },
       ]
     : [
-        { icon: iconImg('Globe.svg'), title: 'Auf deiner Website', text: 'Kein Redirect und kein iFrame-Bruch.' },
-        { icon: iconImg('Bank-card.svg'), title: 'Online bezahlt', text: 'Anzahlung, Zahlung und Refund via Stripe.' },
-        { icon: iconImg('chart.svg'), title: 'Funnel sichtbar', text: 'Drop-offs und Abschluesse messen.' },
-        { icon: iconImg('receipt-euro.svg'), title: 'Operativ sauber', text: 'Rechnungen und Status an einem Ort.' },
+        { icon: iconImg('Globe.svg'), title: 'Auf deiner Website', text: 'Kein Redirect. Kein iFrame.' },
+        { icon: iconImg('Bank-card.svg'), title: 'Online bezahlt', text: 'Kartenzahlung und Erstattung über Stripe.' },
+        { icon: iconImg('chart.svg'), title: 'Funnel', text: 'Absprünge und Abschlüsse im Dashboard.' },
+        { icon: iconImg('receipt-euro.svg'), title: 'Rechnungen', text: 'Status und PDFs an einem Ort.' },
       ];
 
-  content.innerHTML = `
+  setLandingContent(content, `
     ${createFeatureHero({
       headline: isEn
-        ? 'The product page for teams that want bookings to close on their own website.'
-        : 'Die Produktseite fuer Teams, die Buchungen direkt auf ihrer eigenen Website abschliessen wollen.',
+        ? 'Bookings that finish on your own website.'
+        : 'Buchungen, die auf deiner Website zu Ende gehen.',
       subheadline: isEn
-        ? 'BookFast combines booking widget, dashboard, payments, invoices, and analytics in one Webflow-first system. Customers stay on your site while your team gets operational control.'
-        : 'BookFast verbindet Booking-Widget, Dashboard, Zahlungen, Rechnungen und Analytics in einem Webflow-first System. Deine Kunden bleiben auf deiner Seite und dein Team behaelt die Kontrolle.',
+        ? 'Widget in Webflow, Stripe at checkout, invoices and funnel in the dashboard. Guests stay on your domain.'
+        : 'Widget in Webflow, Stripe im Checkout, Rechnungen und Funnel im Dashboard. Gäste bleiben auf deiner Domain.',
       illustrationAlt: isEn
-        ? 'Product overview for BookFast with bookings, payments, and analytics'
-        : 'Produktueberblick fuer BookFast mit Buchungen, Zahlungen und Analytics',
+        ? 'BookFast product: bookings, payments, and analytics'
+        : 'BookFast Produkt: Buchungen, Zahlungen und Analytics',
       breadcrumb: isEn ? ['Home', 'Product'] : ['Home', 'Produkt'],
       breadcrumbHrefs: isEn ? ['/en'] : ['/'],
+      locale,
       demoModuleHTML: createMetricCards(heroDemoCards),
       demoHint: isEn
-        ? 'What users need to know first: it closes on your site, gets paid online, and stays measurable.'
-        : 'Das Wichtigste zuerst: Es schliesst auf deiner Website ab, kassiert online und bleibt messbar.',
+        ? 'On your site. Paid before the slot. Visible in the dashboard.'
+        : 'Auf deiner Seite. Bezahlt vor dem Termin. Sichtbar im Dashboard.',
     })}
 
     ${createAccordionSection({
       label: isEn ? 'At a glance' : 'Auf einen Blick',
       headline: isEn
-        ? 'The decision layer before someone dives into features.'
-        : 'Die Entscheidungsebene, bevor jemand in einzelne Features eintaucht.',
+        ? 'Four questions before the feature list.'
+        : 'Vier Fragen, bevor die Feature-Liste kommt.',
       items: overviewItems,
     })}
 
     <section class="landing-section">
       <div class="landing-container">
         ${createFeatureSection({
-          title: isEn ? '1. Webflow-first booking experience.' : '1. Webflow-first Buchungserlebnis.',
+          title: isEn ? '1. The widget sits in Webflow.' : '1. Das Widget sitzt in Webflow.',
           description: isEn
-            ? 'The core promise is simple: bookings should feel like part of your website, not like an external tool bolted on afterward.'
-            : 'Das Kernversprechen ist einfach: Buchungen sollen sich wie Teil deiner Website anfuehlen und nicht wie ein nachtraeglich aufgesetztes Fremdtool.',
+            ? 'Guests book on your page. Not on a BookFast URL. Not in a box that ignores your type and color.'
+            : 'Gäste buchen auf deiner Seite. Nicht auf einer BookFast-URL. Nicht in einer Box, die deine Schrift ignoriert.',
           bullets: isEn
             ? [
-                { title: 'Native embed instead of iframe feel.', description: 'Customers stay inside your brand and flow.' },
-                { title: 'Two setup paths.', description: 'Embed script for speed, template copy for more design control.' },
-                { title: 'Built for Webflow operations.', description: 'Fastest setup and strongest UX live there.' },
+                { title: 'Template plus script.', description: 'The template brings the elements into the Designer, the script connects them to your workspace.' },
+                { title: 'Embed, not iframe.', description: 'You style the widget like any other element.' },
+                { title: 'Webflow is the path.', description: 'On other platforms you would have to rebuild the markup yourself.' },
               ]
             : [
-                { title: 'Nativer Einbau statt iFrame-Gefuehl.', description: 'Kunden bleiben in deiner Marke und in deinem Flow.' },
-                { title: 'Zwei Setup-Wege.', description: 'Embed-Script fuer Geschwindigkeit, Template-Copy fuer mehr Designkontrolle.' },
-                { title: 'Fuer Webflow-Betrieb gebaut.', description: 'Dort ist Setup und Nutzererlebnis am staerksten.' },
+                { title: 'Template plus Script.', description: 'Das Template bringt die Elemente in den Designer, das Script verbindet sie mit deinem Workspace.' },
+                { title: 'Embed, kein iFrame.', description: 'Du gestaltest das Widget wie jedes andere Element.' },
+                { title: 'Webflow ist der Weg.', description: 'Auf anderen Systemen müsstest du das Markup selbst nachbauen.' },
               ],
           imageHTML: createMetricCards(
             isEn
               ? [
-                  { icon: iconImg('Globe.svg'), title: 'Embed script', text: 'Go live fast with one script tag.' },
-                  { icon: iconImg('blocks-integration.svg'), title: 'Template copy', text: 'Bring the flow directly into Webflow Designer.' },
+                  { icon: iconImg('blocks-integration.svg'), title: 'Template copy', text: 'Paste the flow into the Webflow Designer.' },
+                  { icon: iconImg('Globe.svg'), title: 'Embed script', text: 'data-site-id connects the page to your workspace.' },
                 ]
               : [
-                  { icon: iconImg('Globe.svg'), title: 'Embed-Script', text: 'Mit einem Script-Tag schnell live gehen.' },
-                  { icon: iconImg('blocks-integration.svg'), title: 'Template-Copy', text: 'Den Flow direkt in den Webflow Designer bringen.' },
+                  { icon: iconImg('blocks-integration.svg'), title: 'Template-Copy', text: 'Den Flow in den Webflow Designer holen.' },
+                  { icon: iconImg('Globe.svg'), title: 'Embed-Script', text: 'data-site-id verbindet die Seite mit deinem Workspace.' },
                 ],
           ),
         })}
@@ -246,30 +248,30 @@ export const renderProductPage = (locale = 'de') => {
     <section class="landing-section landing-section-alt">
       <div class="landing-container">
         ${createFeatureSection({
-          title: isEn ? '2. Payments that support the booking flow.' : '2. Zahlungen, die den Buchungsflow tragen.',
+          title: isEn ? '2. Money moves with the booking.' : '2. Geld läuft mit der Buchung.',
           description: isEn
-            ? 'Instead of sending users to separate tools, BookFast keeps payment logic close to the booking decision.'
-            : 'Statt Nutzer in getrennte Tools zu schicken, haelt BookFast die Zahlungslogik nah an der eigentlichen Buchungsentscheidung.',
+            ? 'Stripe Connect sits in the same flow. No second checkout tab. No chasing invoices the night before.'
+            : 'Stripe Connect sitzt im selben Ablauf. Kein zweiter Checkout-Tab. Kein Rechnungen-hinterherlaufen am Vorabend.',
           bullets: isEn
             ? [
-                { title: 'Stripe Connect built in.', description: 'Handle payouts, deposits, and refunds in one setup.' },
-                { title: 'Configurable commercial rules.', description: 'Charge now, reserve with deposit, or adapt to your model.' },
-                { title: 'Automatic invoices.', description: 'Operational follow-up starts without manual busywork.' },
+                { title: 'Stripe Connect.', description: 'Card payments, payouts, refunds from one setup.' },
+                { title: 'One amount, everything in it.', description: 'Service, cleaning fee, extras, and voucher in one checkout.' },
+                { title: 'Invoices without extra software.', description: 'A PDF for every booking.' },
               ]
             : [
-                { title: 'Stripe Connect integriert.', description: 'Auszahlungen, Anzahlungen und Refunds in einem Setup.' },
-                { title: 'Konfigurierbare Geschaeftslogik.', description: 'Jetzt kassieren, mit Anzahlung reservieren oder an dein Modell anpassen.' },
-                { title: 'Automatische Rechnungen.', description: 'Die operative Nacharbeit startet ohne manuelle Fummelei.' },
+                { title: 'Stripe Connect.', description: 'Kartenzahlung, Auszahlung, Erstattung aus einem Setup.' },
+                { title: 'Ein Betrag, alles drin.', description: 'Service, Reinigungsgebühr, Extras und Gutschein in einem Checkout.' },
+                { title: 'Rechnung ohne Extra-Tool.', description: 'Zu jeder Buchung ein PDF.' },
               ],
           imageHTML: createMetricCards(
             isEn
               ? [
-                  { icon: iconImg('Bank-card.svg'), title: 'Deposits', text: 'Secure high-intent bookings before the appointment.' },
-                  { icon: iconImg('receipt-euro.svg'), title: 'Invoices', text: 'Generate follow-up documents automatically.' },
+                  { icon: iconImg('Bank-card.svg'), title: 'Prepayment', text: 'In full or as a deposit, before the slot starts.' },
+                  { icon: iconImg('receipt-euro.svg'), title: 'Invoices', text: 'Line items, add-ons, your company details.' },
                 ]
               : [
-                  { icon: iconImg('Bank-card.svg'), title: 'Anzahlungen', text: 'Hochintente Buchungen schon vor dem Termin absichern.' },
-                  { icon: iconImg('receipt-euro.svg'), title: 'Rechnungen', text: 'Folgedokumente automatisch erzeugen.' },
+                  { icon: iconImg('Bank-card.svg'), title: 'Vorauszahlung', text: 'Voll oder als Anzahlung, bevor der Termin startet.' },
+                  { icon: iconImg('receipt-euro.svg'), title: 'Rechnungen', text: 'Positionen, Add-ons, deine Firmendaten.' },
                 ],
           ),
           reverse: true,
@@ -280,30 +282,30 @@ export const renderProductPage = (locale = 'de') => {
     <section class="landing-section">
       <div class="landing-container">
         ${createFeatureSection({
-          title: isEn ? '3. Automations and integrations without losing control.' : '3. Automationen und Integrationen ohne Kontrollverlust.',
+          title: isEn ? '3. Webflow and Stripe. No integration bazaar.' : '3. Webflow und Stripe. Kein Integrations-Basar.',
           description: isEn
-            ? 'The point is not “more integrations” as decoration. The point is to connect the few things that directly move revenue and operations.'
-            : 'Es geht nicht um moeglichst viele Integrationen als Deko. Es geht darum, genau die Verbindungen zu schaffen, die Umsatz und Betrieb direkt bewegen.',
+            ? 'Live today: Webflow and Stripe. Not a marketplace of 40 logos. Webhooks, Google Calendar, Zapier, and Make are next.'
+            : 'Live sind Webflow und Stripe. Kein Marktplatz mit 40 Logos. Webhooks, Google Calendar, Zapier und Make kommen als Nächstes.',
           bullets: isEn
             ? [
-                { title: 'Webhooks for custom workflows.', description: 'React to bookings, confirmations, payments, and refunds.' },
-                { title: 'Webflow + Stripe cover the core stack today.', description: 'Enough to launch and run production bookings.' },
-                { title: 'More integrations are planned.', description: 'Google Calendar, Zapier, and Make stay on the roadmap.' },
+                { title: 'Webflow for the widget.', description: 'Template elements on your page, connected by one script.' },
+                { title: 'Stripe for the money.', description: 'Connect, card payment, refund on decline.' },
+                { title: 'Calendar sync is not live.', description: 'Do not promise it to a client this week.' },
               ]
             : [
-                { title: 'Webhooks fuer eigene Workflows.', description: 'Auf Buchungen, Bestaetigungen, Zahlungen und Refunds reagieren.' },
-                { title: 'Webflow + Stripe decken heute den Kernstack ab.', description: 'Genug, um produktive Buchungen live zu fahren.' },
-                { title: 'Weitere Integrationen sind geplant.', description: 'Google Calendar, Zapier und Make bleiben auf der Roadmap.' },
+                { title: 'Webflow für das Widget.', description: 'Template-Elemente auf deiner Seite, verbunden über ein Script.' },
+                { title: 'Stripe für das Geld.', description: 'Connect, Kartenzahlung, Erstattung bei Ablehnung.' },
+                { title: 'Kalender-Sync ist nicht live.', description: 'Versprich das keinem Kunden für diese Woche.' },
               ],
           imageHTML: createMetricCards(
             isEn
               ? [
-                  { icon: iconImg('blocks-integration.svg'), title: 'Webhooks', text: 'Trigger your own backend, CRM, or ops workflows.' },
-                  { icon: iconImg('gear.svg'), title: 'Roadmap', text: 'Expand only where integrations create real leverage.' },
+                  { icon: iconImg('blocks-integration.svg'), title: 'Webflow + Stripe', text: 'Covers booking and money today.' },
+                  { icon: iconImg('gear.svg'), title: 'Roadmap', text: 'Webhooks, calendar, Zapier, Make.' },
                 ]
               : [
-                  { icon: iconImg('blocks-integration.svg'), title: 'Webhooks', text: 'Eigenes Backend, CRM oder Ops-Workflows antriggern.' },
-                  { icon: iconImg('gear.svg'), title: 'Roadmap', text: 'Nur dort ausbauen, wo Integrationen echten Hebel schaffen.' },
+                  { icon: iconImg('blocks-integration.svg'), title: 'Webflow + Stripe', text: 'Deckt Buchung und Geld heute ab.' },
+                  { icon: iconImg('gear.svg'), title: 'Roadmap', text: 'Webhooks, Kalender, Zapier, Make.' },
                 ],
           ),
         })}
@@ -313,30 +315,30 @@ export const renderProductPage = (locale = 'de') => {
     <section class="landing-section landing-section-alt">
       <div class="landing-container">
         ${createFeatureSection({
-          title: isEn ? '4. Operate from one system, not five tabs.' : '4. Operativ aus einem System arbeiten, nicht aus fuenf Tabs.',
+          title: isEn ? '4. One dashboard, not five tabs.' : '4. Ein Dashboard, nicht fünf Tabs.',
           description: isEn
-            ? 'When bookings increase, the value is not just the widget. The value is that your team can actually run the operation.'
-            : 'Sobald Buchungen skalieren, ist nicht nur das Widget wichtig. Entscheidend ist, dass dein Team den Betrieb wirklich sauber steuern kann.',
+            ? 'Once volume goes up, the widget is the easy part. The inbox, the refund, the second location, that is the work.'
+            : 'Wenn die Menge steigt, ist das Widget der einfache Teil. Posteingang, Refund, zweiter Standort, das ist die Arbeit.',
           bullets: isEn
             ? [
-                { title: 'Booking statuses and approval flows.', description: 'Keep edge cases manageable instead of improvising in inboxes.' },
-                { title: 'Customer and conversion visibility.', description: 'Know where users drop and what actually closes.' },
-                { title: 'Multi-workspace ready.', description: 'Useful once you run several locations, teams, or brands.' },
+                { title: 'Approve or decline.', description: 'Pending bookings in one list, not in three inboxes.' },
+                { title: 'Funnel numbers.', description: 'Widget view, start, checkout, pay. See the leak.' },
+                { title: 'More than one workspace.', description: 'Second site, second brand, same login.' },
               ]
             : [
-                { title: 'Buchungsstatus und Freigabe-Workflows.', description: 'Sonderfaelle steuerbar halten statt ueber Postfaecher zu improvisieren.' },
-                { title: 'Kunden- und Conversion-Sichtbarkeit.', description: 'Verstehen, wo Nutzer abspringen und was wirklich abschliesst.' },
-                { title: 'Multi-Workspace-faehig.', description: 'Sinnvoll, sobald mehrere Standorte, Teams oder Marken laufen.' },
+                { title: 'Bestätigen oder ablehnen.', description: 'Offene Buchungen in einer Liste, nicht in drei Postfächern.' },
+                { title: 'Funnel-Zahlen.', description: 'Widget, Start, Checkout, Zahlung. Das Leck siehst du.' },
+                { title: 'Mehr als ein Workspace.', description: 'Zweite Seite, zweite Marke, ein Login.' },
               ],
           imageHTML: createMetricCards(
             isEn
               ? [
-                  { icon: iconImg('chart.svg'), title: 'Analytics', text: 'See funnel quality instead of guessing.' },
-                  { icon: iconImg('home.svg'), title: 'Multi-workspace', text: 'Manage several setups inside one account.' },
+                  { icon: iconImg('chart.svg'), title: 'Analytics', text: 'Funnel counts, not a vanity dashboard.' },
+                  { icon: iconImg('home.svg'), title: 'Workspaces', text: 'Several setups in one account.' },
                 ]
               : [
-                  { icon: iconImg('chart.svg'), title: 'Analytics', text: 'Funnel-Qualitaet sehen statt raten.' },
-                  { icon: iconImg('home.svg'), title: 'Multi-Workspace', text: 'Mehrere Setups in einem Account verwalten.' },
+                  { icon: iconImg('chart.svg'), title: 'Analytics', text: 'Funnel-Zahlen, kein Vanity-Dashboard.' },
+                  { icon: iconImg('home.svg'), title: 'Workspaces', text: 'Mehrere Setups in einem Account.' },
                 ],
           ),
           reverse: true,
@@ -348,20 +350,20 @@ export const renderProductPage = (locale = 'de') => {
       currentTitle: isEn ? 'Product' : 'Produkt',
       features: relatedFeatures,
       locale,
-      label: isEn ? 'Explore the core capabilities' : 'Die wichtigsten Funktionen dazu',
+      label: isEn ? 'Open a feature page' : 'Eine Feature-Seite öffnen',
       headline: isEn
-        ? 'Dive into the features that matter most after the product overview.'
-        : 'Steig nach dem Produktueberblick in die Funktionen ein, die wirklich zaehlen.',
+        ? 'Widget, payments, objects, services, invoices, analytics.'
+        : 'Widget, Zahlungen, Objekte, Services, Rechnungen, Analytics.',
     })}
 
     ${createCTASection({
       locale,
       headline: isEn
-        ? 'Put bookings, payments, and operations into one flow.'
-        : 'Bring Buchungen, Zahlungen und Betrieb in einen einzigen Flow.',
+        ? 'Put the widget on a page and take a booking.'
+        : 'Widget auf die Seite, eine Buchung durchklicken.',
       subheadline: isEn
-        ? 'Start with the product story, then go deeper only where your team actually needs detail.'
-        : 'Starte mit der Produkterklaerung und geh nur dort tiefer rein, wo dein Team wirklich Details braucht.',
+        ? '3-day trial. No card. Details live on the feature pages if you need them.'
+        : '3 Tage testen. Keine Karte. Details stehen auf den Feature-Seiten, wenn du sie brauchst.',
       ...(isEn ? {
         primaryCTA: 'Start live demo',
       } : {}),
@@ -370,11 +372,11 @@ export const renderProductPage = (locale = 'de') => {
     ${createProductFaqSection({
       label: 'FAQ',
       headline: isEn
-        ? 'Questions that usually decide whether the product fits.'
-        : 'Die Fragen, die meistens ueber den Produkt-Fit entscheiden.',
+        ? 'Questions that usually kill the deal.'
+        : 'Fragen, an denen es meistens hängt.',
       items: pageFaq,
     })}
-  `;
+  `);
 
   initFeatureRelatedSlider(content);
   initFAQAccordion(content);

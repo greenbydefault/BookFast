@@ -9,7 +9,10 @@ const ICON_ALIASES = {
     briefcase: 'gear',
     hash: 'chart',
     'refresh-cw': 'cirlce-refresh',
-    layers: 'gear'
+    layers: 'gear',
+    'credit-card': 'bank-card',
+    'x-circle': 'stop',
+    sparkles: 'clean'
 };
 
 const resolveIconName = (iconName) => ICON_ALIASES[iconName] ?? iconName;

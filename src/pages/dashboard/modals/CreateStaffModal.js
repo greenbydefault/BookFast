@@ -34,6 +34,7 @@ export const openCreateStaffModal = async (onSuccess) => {
 
         const newStaff = await createEntity('staff', {
             name: state.name,
+            description: state.description || null,
             image_url: state.imageUrl || null,
             bookable_days: toBookableDaysObject(state.bookableDays),
             status: isDraft ? 'draft' : 'active'

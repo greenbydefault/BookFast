@@ -42,7 +42,7 @@ describe('routeConfig', () => {
   it('includes all known marketing routes', () => {
     const expectedDePaths = [
       '/', '/produkt', '/preise', '/integrationen', '/ressourcen',
-      '/ueber-uns', '/kontakt', '/features', '/impressum',
+      '/ueber-uns', '/kontakt', '/features', '/vergleich/flowbookings', '/impressum',
       '/datenschutz', '/agb', '/waitlist/confirm',
     ];
     for (const p of expectedDePaths) {

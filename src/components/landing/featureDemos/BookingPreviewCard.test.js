@@ -19,7 +19,7 @@ describe('BookingPreviewCard localization', () => {
     expect(root.textContent).toContain('Bookings');
     expect(root.textContent).toContain('Inbox & status');
     expect(root.textContent).toContain('Widget booking');
-    expect(root.textContent).toContain('Send magic link');
+    expect(root.textContent).toContain('Send confirmation email');
   });
 
   it('keeps interaction labels localized after state changes', () => {

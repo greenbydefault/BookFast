@@ -13,16 +13,16 @@ const DEFAULT_CONTENT = {
     footerPrimary: 'Neue Buchung',
   },
   filters: [
-    { id: 'pending_approval', label: 'Wartend' },
+    { id: 'pending_approval', label: 'Wartet' },
+    { id: 'payment_pending', label: 'Offene Zahlungen' },
     { id: 'confirmed', label: 'Bestätigt' },
-    { id: 'completed', label: 'Abgeschlossen' },
   ],
   bookings: [],
   statuses: {
-    pending_approval: { label: 'Wartend', tone: 'pending' },
+    pending_approval: { label: 'Wartet', tone: 'pending' },
+    payment_pending: { label: 'Zahlung offen', tone: 'pending' },
     confirmed: { label: 'Bestätigt', tone: 'confirmed' },
-    completed: { label: 'Abgeschlossen', tone: 'completed' },
-    cancelled: { label: 'Abgelehnt', tone: 'cancelled' },
+    rejected: { label: 'Abgelehnt', tone: 'cancelled' },
   },
   paymentStatuses: {
     paid: { label: 'Bezahlt', tone: 'confirmed' },
@@ -32,7 +32,7 @@ const DEFAULT_CONTENT = {
   sections: {
     inbox: 'Eingang & Status',
     magicLink: 'Manuell anlegen & Magic Link',
-    review: 'Prüfen & Entscheiden',
+    review: 'Prüfen & entscheiden',
   },
   emptyState: 'Keine Buchungen in diesem Status.',
   labels: {
@@ -51,20 +51,21 @@ const DEFAULT_CONTENT = {
   magicLinkState: {
     ready: 'Magic Link bereit',
     sent: 'Magic Link versendet',
-    actionReady: 'Magic Link senden',
-    actionSent: 'Erneut senden',
-    manualDescription: 'Nach dem Anlegen geht die Mail direkt raus.',
-    widgetDescription: 'Auch Widget-Buchungen landen im selben Flow.',
-    portalReady: 'Ein Klick reicht, damit der Kunde selbst weiterkommt.',
-    portalSent: 'Kunde sieht Rechnung, Zahlung und Status sofort im Portal.',
+    actionReady: 'Bestätigung per E-Mail senden',
+    actionSent: 'Mail versendet',
+    manualDescription: 'Beim Anlegen setzt du das Häkchen, die Mail geht mit Magic Link und PIN raus.',
+    widgetDescription: 'Bezahlte Widget-Buchungen bekommen den Link, sobald du bestätigst.',
+    portalReady: 'Der Kunde zahlt im Portal und sieht dort seine Rechnung.',
+    portalSent: 'Kunde sieht Rechnung, Zahlung und Status im Portal.',
   },
   actions: {
     decline: 'Ablehnen',
     approve: 'Bestätigen',
   },
   notes: {
-    default: 'Nach Bestätigung läuft Mail + Portal-Handoff automatisch weiter.',
-    refunded: 'Refund wurde automatisch angestoßen.',
+    default: 'Nach der Bestätigung geht die Mail mit Magic Link und PIN automatisch raus.',
+    paymentPending: 'Zahlt der Kunde im Portal, springt die Buchung auf Bestätigt.',
+    refunded: 'Stripe erstattet den vollen Betrag automatisch.',
   },
 };
 
@@ -140,6 +141,8 @@ export const initBookingPreviewCard = (heroContainer, { content = DEFAULT_CONTEN
     const status = statusMeta[selected?.status] || statusMeta.pending_approval;
     const payment = paymentMeta[selected?.paymentStatus] || paymentMeta.unpaid;
     const sourceKey = selected?.source || 'widget';
+    const canDecide = selected?.status === 'pending_approval';
+    const notes = { ...DEFAULT_CONTENT.notes, ...content.notes };
 
     body.innerHTML = `
       <div class="modal-content-section" data-demo-section="bk-inbox">
@@ -204,13 +207,13 @@ export const initBookingPreviewCard = (heroContainer, { content = DEFAULT_CONTEN
             <div><span>${content.labels.source}</span><strong>${content.sourceLabels[sourceKey] || '-'}</strong></div>
           </div>
           <div class="booking-demo__detail-actions">
-            <button type="button" class="booking-demo__action" id="booking-demo-decline">${content.actions.decline}</button>
-            <button type="button" class="booking-demo__action booking-demo__action--primary" id="booking-demo-approve">${content.actions.approve}</button>
+            <button type="button" class="booking-demo__action" id="booking-demo-decline" ${canDecide ? '' : 'disabled'}>${content.actions.decline}</button>
+            <button type="button" class="booking-demo__action booking-demo__action--primary" id="booking-demo-approve" ${canDecide ? '' : 'disabled'}>${content.actions.approve}</button>
           </div>
           <p class="booking-demo__detail-note">
             ${selected?.paymentStatus === 'refunded'
-              ? content.notes.refunded
-              : content.notes.default}
+              ? notes.refunded
+              : selected?.status === 'payment_pending' ? notes.paymentPending : notes.default}
           </p>
         </div>
       </div>
@@ -237,20 +240,17 @@ export const initBookingPreviewCard = (heroContainer, { content = DEFAULT_CONTEN
 
     body.querySelector('#booking-demo-approve')?.addEventListener('click', () => {
       const selectedBooking = state.bookings.find((booking) => booking.id === state.selectedId);
-      if (!selectedBooking) return;
+      if (!selectedBooking || selectedBooking.status !== 'pending_approval') return;
       selectedBooking.status = 'confirmed';
-      if (selectedBooking.paymentStatus === 'unpaid') {
-        selectedBooking.paymentStatus = 'paid';
-      }
-      state.sentMagicLink = true;
+      if (selectedBooking.paymentStatus === 'paid') state.sentMagicLink = true;
       state.activeFilter = 'confirmed';
       render();
     });
 
     body.querySelector('#booking-demo-decline')?.addEventListener('click', () => {
       const selectedBooking = state.bookings.find((booking) => booking.id === state.selectedId);
-      if (!selectedBooking) return;
-      selectedBooking.status = 'cancelled';
+      if (!selectedBooking || selectedBooking.status !== 'pending_approval') return;
+      selectedBooking.status = 'rejected';
       selectedBooking.paymentStatus = selectedBooking.paymentStatus === 'paid' ? 'refunded' : 'unpaid';
       state.activeFilter = 'pending_approval';
       render();

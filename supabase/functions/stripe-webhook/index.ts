@@ -153,19 +153,22 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, request
 
     const { data: existingBooking } = await supabaseAdmin
       .from('bookings')
-      .select('status')
+      .select('status, payment_status')
       .eq('id', bookingId)
       .single();
 
+    const isBalancePayment = existingBooking?.payment_status === 'deposit_paid';
     const updatePayload: Record<string, string> = {
       payment_status: 'paid',
-      checkout_session_id: session.id,
     };
     if (existingBooking?.status === 'payment_pending') {
       updatePayload.status = 'confirmed';
     }
     if (session.payment_intent) {
-      updatePayload.payment_intent_id = session.payment_intent as string;
+      updatePayload[isBalancePayment ? 'balance_payment_intent_id' : 'payment_intent_id'] = session.payment_intent as string;
+    }
+    if (!isBalancePayment) {
+      updatePayload.checkout_session_id = session.id;
     }
 
     const { error: updateError } = await supabaseAdmin
@@ -226,7 +229,10 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, request
   const addonsPrice = parseMoney(metadata.addons_price || '0', 'addons_price', requestId);
   const discountAmount = parseMoney(metadata.discount_amount || '0', 'discount_amount', requestId);
   const totalPrice = parseMoney(metadata.total_price, 'total_price', requestId);
+  const depositAmount = metadata.amount_deposit ? parseMoney(metadata.amount_deposit, 'amount_deposit', requestId) : null;
+  const isDeposit = depositAmount !== null && depositAmount < totalPrice;
   const guestCount = metadata.guest_count ? parseInt(metadata.guest_count) : 1;
+  const nights = metadata.nights ? parseInt(metadata.nights) : null;
 
   const { data: booking, error: bookingError } = await supabaseAdmin
     .from('bookings')
@@ -240,12 +246,12 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, request
       customer_email: metadata.customer_email,
       customer_phone: metadata.customer_phone || null,
       status: 'pending_approval',
-      payment_status: 'paid',
+      payment_status: isDeposit ? 'deposit_paid' : 'paid',
       service_price: servicePrice + cleaningFee,
       addons_price: addonsPrice,
       discount_amount: discountAmount,
       total_price: totalPrice,
-      amount_deposit: metadata.amount_deposit ? parseFloat(metadata.amount_deposit) : null,
+      amount_deposit: isDeposit ? depositAmount : null,
       voucher_id: metadata.voucher_id || null,
       staff_id: metadata.staff_id || null,
       payment_intent_id: session.payment_intent as string,
@@ -286,6 +292,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, request
           addon,
           guestCount,
           addonSelectionsById.get(addon.id) || null,
+          nights,
         );
         return {
           booking_id: booking.id,
@@ -344,6 +351,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, request
     p_metadata: {
       booking_id: booking.id,
       total_price: parseFloat(metadata.total_price),
+      amount_paid: isDeposit ? depositAmount : totalPrice,
       currency: 'EUR',
     },
   });
@@ -410,24 +418,26 @@ async function handleAccountUpdated(account: Stripe.Account, requestId: string) 
 // Handle refund (Direct Charges - refund processed on connected account)
 async function handleChargeRefunded(charge: Stripe.Charge, requestId: string) {
   // Find booking by payment intent
+  const paymentIntentId = typeof charge.payment_intent === 'string' ? charge.payment_intent : charge.payment_intent?.id;
   const { data: booking } = await supabaseAdmin
     .from('bookings')
-    .select('id, total_price, amount_refunded, workspace_id')
-    .eq('payment_intent_id', charge.payment_intent)
-    .single();
+    .select('id, total_price, amount_deposit, amount_refunded, balance_payment_intent_id, workspace_id')
+    .or(`payment_intent_id.eq.${paymentIntentId},balance_payment_intent_id.eq.${paymentIntentId}`)
+    .maybeSingle();
 
   if (!booking) {
     console.log(`[${requestId}] No booking found for charge`, { charge_id: charge.id });
     return;
   }
 
-  // Calculate refunded amount
-  const refundedCents = charge.amount_refunded;
-  const refundedAmount = refundedCents / 100;
-
-  // Determine payment status
-  const totalRefunded = (booking.amount_refunded || 0) + refundedAmount;
-  const isFullRefund = totalRefunded >= booking.total_price;
+  // charge.amount_refunded ist kumulativ pro Charge, nicht pro Event.
+  const refundedAmount = charge.amount_refunded / 100;
+  const previousRefunded = Number(booking.amount_refunded) || 0;
+  const totalRefunded = Math.max(previousRefunded, refundedAmount);
+  const paidAmount = booking.amount_deposit && !booking.balance_payment_intent_id
+    ? Number(booking.amount_deposit) || 0
+    : Number(booking.total_price) || 0;
+  const isFullRefund = totalRefunded >= paidAmount;
 
   await supabaseAdmin
     .from('bookings')

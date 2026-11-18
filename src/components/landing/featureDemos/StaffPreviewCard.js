@@ -51,7 +51,7 @@ export const initStaffPreviewCard = (heroContainer, { content = DEFAULT_CONTENT 
       services: card.services || DEFAULT_CONTENT.card.services,
       showImage: false,
       showDescription: true,
-      showTimeWindows: true,
+      showTimeWindows: false,
     },
     copy: card.formCopy || DEFAULT_CONTENT.card.formCopy,
   });

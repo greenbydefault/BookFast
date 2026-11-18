@@ -96,7 +96,7 @@ serve(async (req: Request) => {
       );
     }
 
-    if (booking.payment_status !== 'paid') {
+    if (!['paid', 'deposit_paid'].includes(booking.payment_status)) {
       return new Response(
         JSON.stringify({ error: 'Cannot approve booking without payment' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
